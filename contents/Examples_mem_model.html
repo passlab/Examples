@@ -1,0 +1,1637 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The OpenMP Memory Model &#8212; OpenMP Application Programming Interface Examples</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Memory Allocators" href="Examples_allocators.html" />
+    <link rel="prev" title="Memory Model" href="Chap_memory_model.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OpenMP Application Programming Interface Examples</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to OMP Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Foreword_Chapt.html">
+   Foreword
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Introduction_Chapt.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Examples_Chapt.html">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_ploop.html">
+     A Simple Parallel Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_parallel.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_host_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Construct on Host
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nthrs_nesting.html">
+     Controlling the Number of Threads on Multiple Nesting Levels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nthrs_dynamic.html">
+     Interaction Between the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       num_threads
+      </span>
+     </code>
+     Clause and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_do.html">
+     Fortran Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       do
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nowait.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_collapse.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       collapse
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_linear_in_loop.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause in Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_psections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fpriv_sections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_single.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       single
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_workshare.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       workshare
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_master.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       master
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_loop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       loop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_pra_iterator.html">
+     Parallel Random Access Iterator Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_set_dynamic_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_num_threads
+      </span>
+     </code>
+     Routines
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_get_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_get_num_threads
+      </span>
+     </code>
+     Routine
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       proc_bind
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_affinity.html">
+     Task Affinity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity_display.html">
+     Affinity Display
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity_query.html">
+     Affinity Query Functions
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_tasking.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       task
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_priority.html">
+     Task Priority
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_dep.html">
+     Task Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskgroup.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskgroup
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskyield.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_parallel_master_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+      <span class="pre">
+       master
+      </span>
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_devices.html">
+   Devices
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_defaultmap.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       defaultmap
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_pointer_mapping.html">
+     Pointer mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_structure_mapping.html">
+     Structure mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_array_sections.html">
+     Array Sections in Device Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_array_shaping.html">
+     Array Shaping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_mapper.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+      <span class="pre">
+       mapper
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_unstructured_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       enter
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       exit
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
+     Simple target enter data and target exit data Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_update.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       update
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_declare_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Execution and Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_with_tasks.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with Tasks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_nowait.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_nowait_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depend
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_device.html">
+     Device Routines
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html#inbranch-and-notinbranch-clauses">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       inbranch
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       notinbranch
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html#loop-carried-lexical-forward-dependence">
+     Loop-Carried Lexical Forward Dependence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_linear_modifier.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ref
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       val
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       uval
+      </span>
+     </code>
+     Modifiers for
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_critical.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_worksharing_critical.html">
+     Worksharing Constructs Inside a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_barrier_regions.html">
+     Binding of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_atomic.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_atomic_restrict.html">
+     Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_flush_nolist.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     Construct without a List
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_acquire_release.html">
+     Synchronization Based on Acquire/Release Semantics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_ordered.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_depobj.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depobj
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_doacross.html">
+     Doacross Loop Nest
+    </a>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="Examples_locks.html">
+     Lock Routines
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_init_lock.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_init_lock_with_hint.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock_with_hint
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_lock_owner.html">
+       Ownership of Locks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_simple_lock.html">
+       Simple Lock Routines
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_nestable_lock.html">
+       Nestable Lock Routines
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_threadprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       threadprivate
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_default_none.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       default(none)
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_private.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_loopvar.html">
+     Fortran Private Loop Iteration Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_sp_common.html">
+     Fortran Restrictions on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       shared
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clauses with Common Blocks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_sa_private.html">
+     Fortran Restrictions on Storage Association with the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_carrays_fpriv.html">
+     C/C++ Arrays in a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_lastprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       lastprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_reduction.html">
+     Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_udr.html">
+     User-Defined Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_scan.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scan
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_copyin.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyin
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_copyprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cpp_reference.html">
+     C++ Reference in Data-Sharing Clauses
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     The OpenMP Memory Model
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_allocators.html">
+     Memory Allocators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_race.html">
+     Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cond_comp.html">
+     Conditional Compilation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_icv.html">
+     Internal Control Variables (ICVs)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cancellation.html">
+     Cancellation Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_requires.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       requires
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_variant.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     ~
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       variant
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_metadirective.html">
+     Metadirective Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nested_loop.html">
+     Nested Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nesting_restrict.html">
+     Restrictions on Nesting of Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_offload.html">
+     Target Offload
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="History.html">
+   Document Revision History
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/Examples_mem_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/passlab/Examples"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Examples_mem_model.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Examples_mem_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="the-openmp-memory-model">
+<h1>The OpenMP Memory Model<a class="headerlink" href="#the-openmp-memory-model" title="Permalink to this headline">¶</a></h1>
+<p>The following examples illustrate two major concerns for concurrent thread execution: ordering of thread execution and memory accesses that may or may not lead to race conditions.</p>
+<p>In the following example, at Print 1, the value of  <code class="docutils literal notranslate"><span class="pre">xval</span></code>  could be either 2 or 5, depending on the timing of the threads. The  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directives are necessary for the accesses to  <code class="docutils literal notranslate"><span class="pre">x</span></code>  by threads 1 and 2 to avoid a data race. If the atomic write completes before the atomic read, thread 1 is guaranteed to see 5 in  <code class="docutils literal notranslate"><span class="pre">xval</span></code> . Otherwise, thread 1 is guaranteed to see 2 in  <code class="docutils literal notranslate"><span class="pre">xval</span></code> .</p>
+<p>The barrier after Print 1 contains implicit flushes on all threads, as well as a thread synchronization, so the programmer is guaranteed that the value 5 will be printed by both Print 2 and Print 3. Since neither Print 2 or Print 3 are modifying  <code class="docutils literal notranslate"><span class="pre">x</span></code> , they may concurrently access  <code class="docutils literal notranslate"><span class="pre">x</span></code>  without requiring  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directives to avoid a data race.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: mem_model.1c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_3.1</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+
+  <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="cp">#pragma omp parallel num_threads(2) shared(x)</span>
+  <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+       <span class="cp">#pragma omp atomic write</span>
+       <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="kt">int</span> <span class="n">xval</span><span class="p">;</span>
+      <span class="cp">#pragma omp atomic read</span>
+      <span class="n">xval</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+    <span class="cm">/* Print 1: xval can be 2 or 5 */</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;1: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">xval</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="cp">#pragma omp barrier</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* Print 2 */</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;2: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="cm">/* Print 3 */</span>
+      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;3: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">x</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">mem_model</span><span class="mf">.1f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
+<span class="n">PROGRAM</span> <span class="n">MEMMODEL</span>
+  <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>      <span class="o">!</span> <span class="n">or</span> <span class="n">USE</span> <span class="n">OMP_LIB</span>
+  <span class="n">INTEGER</span> <span class="n">X</span><span class="p">,</span> <span class="n">XVAL</span>
+
+  <span class="n">X</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">NUM_THREADS</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+    <span class="n">IF</span> <span class="p">(</span><span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="o">!</span><span class="n">$OMP</span> <span class="n">ATOMIC</span> <span class="n">WRITE</span>
+       <span class="n">X</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">ELSE</span>
+    <span class="o">!</span><span class="n">$OMP</span> <span class="n">ATOMIC</span> <span class="n">READ</span>
+      <span class="n">XVAL</span> <span class="o">=</span> <span class="n">X</span>
+    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">1</span><span class="o">:</span> <span class="n">XVAL</span> <span class="n">can</span> <span class="n">be</span> <span class="mi">2</span> <span class="n">or</span> <span class="mi">5</span>
+      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;1: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">XVAL</span>
+    <span class="n">ENDIF</span>
+
+ <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
+
+    <span class="n">IF</span> <span class="p">(</span><span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
+    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">2</span>
+      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;2: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">X</span>
+    <span class="n">ELSE</span>
+    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">3</span>
+      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;3: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">X</span>
+    <span class="n">ENDIF</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+
+<span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">MEMMODEL</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates why synchronization is difficult to perform correctly through variables. The write to  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  on thread 0 and the read from  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the loop on thread 1 must be atomic to avoid a data race. When thread 1 breaks out of the loop,  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  will have the value of 1. However,  <code class="docutils literal notranslate"><span class="pre">data</span></code>  will still be undefined at the first print statement. Only after the flush of both  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  and  <code class="docutils literal notranslate"><span class="pre">data</span></code>  after the first print statement will  <code class="docutils literal notranslate"><span class="pre">data</span></code>  have the well-defined value of 42.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: mem_model.2c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_3.1</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">flag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+    <span class="cp">#pragma omp parallel num_threads(2)</span>
+    <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+      <span class="p">{</span>
+      <span class="cm">/* Write to the data buffer that will be</span>
+<span class="cm">       * read by thread */</span>
+          <span class="n">data</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+      <span class="cm">/* Flush data to thread 1 and strictly order</span>
+<span class="cm">       * the write to data relative to the write to the flag */</span>
+          <span class="cp">#pragma omp flush(flag, data)</span>
+      <span class="cm">/* Set flag to release thread 1 */</span>
+          <span class="cp">#pragma omp atomic write</span>
+          <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+      <span class="p">{</span>
+      <span class="cm">/* Loop until we see the update to the flag */</span>
+          <span class="cp">#pragma omp flush(flag, data)</span>
+          <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+          <span class="k">while</span> <span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
+          <span class="p">{</span>
+             <span class="cp">#pragma omp atomic read</span>
+             <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
+          <span class="p">}</span>
+      <span class="cm">/* Value of flag is 1; value of data is undefined */</span>
+          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;flag=%d data=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+          <span class="cp">#pragma omp flush(flag, data)</span>
+      <span class="cm">/* Value of flag is 1; value of data is 42 */</span>
+          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;flag=%d data=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.2f
+! type: F-fixed
+! version: omp_3.1
+       PROGRAM EXAMPLE
+       INCLUDE &quot;omp_lib.h&quot; ! or USE OMP_LIB
+       INTEGER DATA
+       INTEGER FLAG, FLAG_VAL
+
+       FLAG = 0
+!$OMP  PARALLEL NUM_THREADS(2)
+         IF(OMP_GET_THREAD_NUM() .EQ. 0) THEN
+         ! Write to the data buffer that will be read by thread 1
+            DATA = 42
+
+         ! Flush DATA to thread 1 and strictly order the write to DATA
+         ! relative to the write to the FLAG
+!$OMP       FLUSH(FLAG, DATA)
+
+         ! Set FLAG to release thread 1
+!$OMP       ATOMIC WRITE
+            FLAG = 1
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 1) THEN
+         ! Loop until we see the update to the FLAG
+!$OMP       FLUSH(FLAG, DATA)
+            FLAG_VAL = 0
+            DO WHILE(FLAG_VAL .LT. 1)
+!$OMP          ATOMIC READ
+               FLAG_VAL = FLAG
+            ENDDO
+
+         ! Value of FLAG is 1; value of DATA is undefined
+            PRINT *, &#39;FLAG=&#39;, FLAG, &#39; DATA=&#39;, DATA
+
+!$OMP       FLUSH(FLAG, DATA)
+         ! Value of FLAG is 1; value of DATA is 42
+            PRINT *, &#39;FLAG=&#39;, FLAG, &#39; DATA=&#39;, DATA
+
+         ENDIF
+!$OMP  END PARALLEL
+       END
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The next example demonstrates why synchronization is difficult to perform correctly through variables. As in the preceding example, the updates to  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  and the reading of  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the loops on threads 1 and 2 are performed atomically to avoid data races on  <code class="docutils literal notranslate"><span class="pre">flag</span></code> . However, the  still contains data race due to the incorrect use of “flush with a list’’ after the assignment to  <code class="docutils literal notranslate"><span class="pre">data1</span></code>  on thread 1. By not including  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the flush-set of that  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive, the assignment can be reordered with respect to the subsequent atomic update to  <code class="docutils literal notranslate"><span class="pre">flag</span></code> . Consequentially,  <code class="docutils literal notranslate"><span class="pre">data1</span></code>  is undefined at the print statement on thread 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: mem_model.3c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_3.1</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="n">data0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">flag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+    <span class="cp">#pragma omp parallel num_threads(3)</span>
+    <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+     <span class="n">data0</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
+            <span class="cp">#pragma omp flush</span>
+        <span class="cm">/* Set flag to release thread 1 */</span>
+            <span class="cp">#pragma omp atomic update</span>
+            <span class="n">flag</span><span class="o">++</span><span class="p">;</span>
+        <span class="cm">/* Flush of flag is implied by the atomic directive */</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">{</span>
+     <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="cm">/* Loop until we see that flag reaches 1*/</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="cp">#pragma omp atomic read</span>
+         <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
+            <span class="p">}</span>
+     <span class="cp">#pragma omp flush(data0)</span>
+ <span class="cm">/* data0 is 17 here */</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Thread 1 awoken (data0 = %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">data0</span><span class="p">);</span>
+     <span class="n">data1</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+            <span class="cp">#pragma omp flush(data1)</span>
+        <span class="cm">/* Set flag to release thread 2 */</span>
+            <span class="cp">#pragma omp atomic update</span>
+            <span class="n">flag</span><span class="o">++</span><span class="p">;</span>
+        <span class="cm">/* Flush of flag is implied by the atomic directive */</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
+        <span class="p">{</span>
+     <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="cm">/* Loop until we see that flag reaches 2 */</span>
+            <span class="k">while</span><span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="cp">#pragma omp atomic read</span>
+                <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
+            <span class="p">}</span>
+     <span class="cp">#pragma omp flush(data0,data1)</span>
+ <span class="cm">/* there is a data race here; data0 is 17 and data1 is undefined */</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Thread 2 awoken (data0 = %d, data1 = %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">data0</span><span class="p">,</span> <span class="n">data1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.3f
+! type: F-fixed
+! version: omp_3.1
+       PROGRAM EXAMPLE
+       INCLUDE &quot;omp_lib.h&quot; ! or USE OMP_LIB
+       INTEGER FLAG, FLAG_VAL
+       INTEGER DATA0, DATA1
+
+       FLAG = 0
+!$OMP  PARALLEL NUM_THREADS(3)
+         IF(OMP_GET_THREAD_NUM() .EQ. 0) THEN
+             DATA0 = 17
+!$OMP        FLUSH
+
+         ! Set flag to release thread 1
+!$OMP        ATOMIC UPDATE
+             FLAG = FLAG + 1
+         ! Flush of FLAG is implied by the atomic directive
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 1) THEN
+         ! Loop until we see that FLAG reaches 1
+!$OMP        FLUSH(FLAG, DATA)
+             FLAG_VAL = 0
+             DO WHILE(FLAG_VAL .LT. 1)
+!$OMP           ATOMIC READ
+                FLAG_VAL = FLAG
+             ENDDO
+!$OMP        FLUSH
+
+         ! DATA0 is 17 here
+             PRINT *, &#39;Thread 1 awoken. DATA0 = &#39;, DATA0
+
+             DATA1 = 42
+!$OMP        FLUSH(DATA1)
+
+         ! Set FLAG to release thread 2
+!$OMP        ATOMIC UPDATE
+             FLAG = FLAG + 1
+         ! Flush of FLAG is implied by the atomic directive
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 2) THEN
+         ! Loop until we see that FLAG reaches 2
+             FLAG_VAL = 0
+             DO WHILE(FLAG_VAL .LT. 2)
+!$OMP           ATOMIC READ
+                FLAG_VAL = FLAG
+             ENDDO
+!$OMP        FLUSH(DATA0, DATA1)
+
+         ! There is a data race here; data0 is 17 and data1 is undefined
+             PRINT *, &#39;Thread 2 awoken. DATA0 = &#39;, DATA0,
+     &amp;                &#39; and DATA1 = &#39;, DATA1
+
+         ENDIF
+!$OMP  END PARALLEL
+       END
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "native"
+        },
+        kernelOptions: {
+            kernelName: "native",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'native'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="Chap_memory_model.html" title="previous page">Memory Model</a>
+    <a class='right-next' id="next-link" href="Examples_allocators.html" title="next page">Memory Allocators</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The OpenMP Community<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

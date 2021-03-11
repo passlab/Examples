@@ -1,0 +1,1420 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Python Script for OpenMP Application Programming Interface Examples-version 5.0.1-June 2020 &#8212; OpenMP Application Programming Interface Examples</title>
+    
+  <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="index.html">
+  
+  <img src="_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OpenMP Application Programming Interface Examples</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Welcome to OMP Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/Foreword_Chapt.html">
+   Foreword
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/Introduction_Chapt.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/Examples_Chapt.html">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_ploop.html">
+     A Simple Parallel Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_parallel.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_host_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Construct on Host
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_nthrs_nesting.html">
+     Controlling the Number of Threads on Multiple Nesting Levels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_nthrs_dynamic.html">
+     Interaction Between the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       num_threads
+      </span>
+     </code>
+     Clause and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fort_do.html">
+     Fortran Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       do
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_nowait.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_collapse.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       collapse
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_linear_in_loop.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause in Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_psections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fpriv_sections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_single.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       single
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_workshare.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       workshare
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_master.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       master
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_loop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       loop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_pra_iterator.html">
+     Parallel Random Access Iterator Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_set_dynamic_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_num_threads
+      </span>
+     </code>
+     Routines
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_get_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_get_num_threads
+      </span>
+     </code>
+     Routine
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_affinity.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       proc_bind
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_task_affinity.html">
+     Task Affinity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_affinity_display.html">
+     Affinity Display
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_affinity_query.html">
+     Affinity Query Functions
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_tasking.html">
+   Tasking
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_tasking.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       task
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_task_priority.html">
+     Task Priority
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_task_dep.html">
+     Task Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_taskgroup.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskgroup
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_taskyield.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_parallel_master_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+      <span class="pre">
+       master
+      </span>
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_devices.html">
+   Devices
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_defaultmap.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       defaultmap
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_pointer_mapping.html">
+     Pointer mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_structure_mapping.html">
+     Structure mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_array_sections.html">
+     Array Sections in Device Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_array_shaping.html">
+     Array Shaping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_mapper.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+      <span class="pre">
+       mapper
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_unstructured_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       enter
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       exit
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
+     Simple target enter data and target exit data Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_update.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       update
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_declare_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_async_target_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Execution and Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_async_target_with_tasks.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with Tasks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_async_target_nowait.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_async_target_nowait_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depend
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_device.html">
+     Device Routines
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_SIMD.html">
+   SIMD
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_SIMD.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_SIMD.html#inbranch-and-notinbranch-clauses">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       inbranch
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       notinbranch
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_SIMD.html#loop-carried-lexical-forward-dependence">
+     Loop-Carried Lexical Forward Dependence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_linear_modifier.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ref
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       val
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       uval
+      </span>
+     </code>
+     Modifiers for
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_synchronization.html">
+   Synchronization
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_critical.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_worksharing_critical.html">
+     Worksharing Constructs Inside a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_barrier_regions.html">
+     Binding of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_atomic.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_atomic_restrict.html">
+     Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_flush_nolist.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     Construct without a List
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_acquire_release.html">
+     Synchronization Based on Acquire/Release Semantics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_ordered.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_depobj.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depobj
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_doacross.html">
+     Doacross Loop Nest
+    </a>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="contents/Examples_locks.html">
+     Lock Routines
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="contents/Examples_init_lock.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="contents/Examples_init_lock_with_hint.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock_with_hint
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="contents/Examples_lock_owner.html">
+       Ownership of Locks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="contents/Examples_simple_lock.html">
+       Simple Lock Routines
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="contents/Examples_nestable_lock.html">
+       Nestable Lock Routines
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_data_environment.html">
+   Data Environment
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_threadprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       threadprivate
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_default_none.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       default(none)
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_private.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fort_loopvar.html">
+     Fortran Private Loop Iteration Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fort_sp_common.html">
+     Fortran Restrictions on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       shared
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clauses with Common Blocks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fort_sa_private.html">
+     Fortran Restrictions on Storage Association with the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_carrays_fpriv.html">
+     C/C++ Arrays in a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_lastprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       lastprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_reduction.html">
+     Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_udr.html">
+     User-Defined Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_scan.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scan
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_copyin.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyin
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_copyprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_cpp_reference.html">
+     C++ Reference in Data-Sharing Clauses
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_memory_model.html">
+   Memory Model
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_mem_model.html">
+     The OpenMP Memory Model
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_allocators.html">
+     Memory Allocators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_fort_race.html">
+     Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="contents/Chap_program_control.html">
+   Program Control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_cond_comp.html">
+     Conditional Compilation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_icv.html">
+     Internal Control Variables (ICVs)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_cancellation.html">
+     Cancellation Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_requires.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       requires
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_variant.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     ~
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       variant
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_metadirective.html">
+     Metadirective Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_nested_loop.html">
+     Nested Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_nesting_restrict.html">
+     Restrictions on Nesting of Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contents/Examples_target_offload.html">
+     Target Offload
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contents/History.html">
+   Document Revision History
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/README.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/passlab/Examples"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2FREADME.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#pre-requests">
+   Pre-requests
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-jupyter-book">
+   Build Jupyter Book
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#file-structure">
+   File Structure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-details">
+   Other Details
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#notebook-copyright">
+   Notebook Copyright
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#acknowledgement">
+   Acknowledgement
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="python-script-for-openmp-application-programming-interface-examples-version-5-0-1-june-2020">
+<h1>Python Script for OpenMP Application Programming Interface Examples-version 5.0.1-June 2020<a class="headerlink" href="#python-script-for-openmp-application-programming-interface-examples-version-5-0-1-june-2020" title="Permalink to this headline">¶</a></h1>
+<p>The <a class="reference external" href="http://tex2notebook.py">tex2notebook.py</a> script generates Jupyter Notebooks from the tex files of the OpenMP document and thus build a Jupyter Book.</p>
+<div class="section" id="pre-requests">
+<h2>Pre-requests<a class="headerlink" href="#pre-requests" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="o">.</span><span class="mi">6</span><span class="o">/</span><span class="mf">3.8</span>
+<span class="n">Jupyter</span><span class="o">-</span><span class="n">notebook</span><span class="o">/</span><span class="n">Jupyter</span><span class="o">-</span><span class="n">lab</span>
+<span class="n">Jupyter</span><span class="o">-</span><span class="n">Book</span>
+<span class="n">Web</span> <span class="n">browser</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-jupyter-book">
+<h2>Build Jupyter Book<a class="headerlink" href="#build-jupyter-book" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd examples-internal-main
+$ cd notebook
+$ mkdir contents
+</pre></div>
+</div>
+<p>There are 2 choices for users, considering whether the users want the content of the source code file to be included in Jupyter notebook cells or use the <code class="docutils literal notranslate"><span class="pre">%load</span></code> magic.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python tex2notebook.py
+</pre></div>
+</div>
+<p>This is default choice, and the content of code are copied to the cells directly.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python tex2notebook.py -use-load
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">-use-load</span></code> flag is for using <code class="docutils literal notranslate"><span class="pre">%load</span></code> magic with the file name in the code cell so users can click to load the file content into the cell.
+Plus, for both choices, filename, code language version, and OpenMP version is shown in the comments of corresponding code pieces.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ jb build --path-output ../docs .
+</pre></div>
+</div>
+<p>This is used for building Jupyter Book</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ rm -rf ./contents ./_build _toc.yml
+</pre></div>
+</div>
+<p>This is used to clean all the generated materials.</p>
+</div>
+<div class="section" id="file-structure">
+<h2>File Structure<a class="headerlink" href="#file-structure" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span><span class="n">examples</span><span class="o">-</span><span class="n">internal</span><span class="o">-</span><span class="n">main</span><span class="o">/</span>
+<span class="o">--</span> <span class="n">notebook</span><span class="o">/</span>
+   <span class="o">--</span> <span class="n">_build</span><span class="o">/</span>
+      <span class="o">--</span> <span class="o">*.</span><span class="n">html</span>      <span class="o">&lt;=</span> <span class="n">HTML</span> <span class="n">index</span>
+   <span class="o">--</span> <span class="n">contents</span><span class="o">/</span>
+      <span class="o">--</span> <span class="o">*.</span><span class="n">ipynb</span>     <span class="o">&lt;=</span> <span class="n">Jupyter</span> <span class="n">notebooks</span>
+   <span class="o">--</span> <span class="n">_config</span><span class="o">.</span><span class="n">yml</span>
+   <span class="o">--</span> <span class="n">_toc</span><span class="o">.</span><span class="n">yml</span>
+   <span class="o">--</span> <span class="n">requirement</span><span class="o">.</span><span class="n">txt</span>
+   <span class="o">--</span> <span class="n">intro</span><span class="o">.</span><span class="n">md</span>
+   <span class="o">--</span> <span class="n">logo</span><span class="o">.</span><span class="n">jpg</span>
+   <span class="o">--</span> <span class="n">PythonScript</span>
+   <span class="o">--</span> <span class="n">Makefile</span>
+   <span class="o">--</span> <span class="n">README</span><span class="o">.</span><span class="n">md</span>
+<span class="o">--</span> <span class="n">source</span><span class="o">/</span>           <span class="o">&lt;=</span> <span class="n">C</span><span class="o">/</span><span class="n">C</span><span class="o">++</span> <span class="ow">and</span> <span class="n">Fortran</span> <span class="n">codes</span>
+   <span class="o">--</span> <span class="o">*.</span><span class="n">c</span>
+   <span class="o">--</span> <span class="o">*.</span><span class="n">cpp</span>
+   <span class="o">--</span> <span class="o">*.</span><span class="n">f</span>
+   <span class="o">--</span> <span class="o">*.</span><span class="n">f90</span>
+<span class="o">--</span> <span class="o">*.</span><span class="n">tex</span>             <span class="o">&lt;=</span> <span class="n">TeX</span> <span class="n">files</span> 
+</pre></div>
+</div>
+</div>
+<div class="section" id="other-details">
+<h2>Other Details<a class="headerlink" href="#other-details" title="Permalink to this headline">¶</a></h2>
+<p>All the notebooks will be generated under the <code class="docutils literal notranslate"><span class="pre">contents</span></code> folder. The title page is replaced by the welcome page and TOC page are transformed to <code class="docutils literal notranslate"><span class="pre">_toc.yml</span></code> for Jyputer Book. The TOC file is mainly come from <code class="docutils literal notranslate"><span class="pre">openmp-examples.tex</span></code> which is the backbone of the whole book.</p>
+<p>Each tex file is processed by the script which generates a single Jupyter notebook file. The textual content of the tex file is converted to markdown-formatted content enclosed in a notebook cell. A reference to a program source file (example source code in the example document) that appears in the tex file is converted to a cell that uses Jupyter <code class="docutils literal notranslate"><span class="pre">%load</span></code> magic, e.g. <code class="docutils literal notranslate"><span class="pre">%load</span> <span class="pre">../sources/Example_parallel.1.c</span></code> such that running the cell causes loading the content of the file and then replacing the cell with the content. <code class="docutils literal notranslate"><span class="pre">%load</span></code> recognizes both absolute path and related path. Now the default one is <code class="docutils literal notranslate"><span class="pre">../sources/Example_*</span></code>.</p>
+<p>Since all the OpenMP example source files are either C/C++ and Fortran. The correct setting for the notebook kernel
+should be a kernel that can recognize C/C++ and Fortran.</p>
+</div>
+<div class="section" id="notebook-copyright">
+<h2>Notebook Copyright<a class="headerlink" href="#notebook-copyright" title="Permalink to this headline">¶</a></h2>
+<p>The generated notebooks have the same copyright as the orginal tex file and the official OpenMP document.</p>
+<p><strong>Copyright © 1997-2016 OpenMP Architecture Review Board.
+Permission to copy without fee all or part of this material is granted,
+provided the OpenMP Architecture Review Board copyright notice and
+the title of this document appear. Notice is given that copying is by
+permission of OpenMP Architecture Review Board.</strong></p>
+</div>
+<div class="section" id="acknowledgement">
+<h2>Acknowledgement<a class="headerlink" href="#acknowledgement" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://github.com/ambipomyan">Kewei Yan</a> from HPCAS lab (<a class="reference external" href="https://passlab.github.io">https://passlab.github.io</a>) of
+UNC Charlotte is the main developer of this script. When this becomes a question,
+the script is licensed with 3-clause BSD License,
+and Copyrighted &#64; 2019 by HPCAS (<a class="reference external" href="https://passlab.github.io">https://passlab.github.io</a>)
+from University of North Carolina at Charlotte. All rights reserved.
+To contact, reach Kewei or Yonghong Yan (yanyh15&#64;github or gmail).</p>
+<p>Funding for this development has been provided by the National Science Foundation
+under award number <a class="reference external" href="https://www.nsf.gov/awardsearch/showAward?AWD_ID=1833332">CISE CCF 1833332</a>. Please also
+acknowledge OpenMP cOMPunity, one of the OpenMP ARB members.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The OpenMP Community<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

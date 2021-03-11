@@ -1,0 +1,2748 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reduction &#8212; OpenMP Application Programming Interface Examples</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.c441f2ba0852f4cabcb80105e3a46ae6.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User-Defined Reduction" href="Examples_udr.html" />
+    <link rel="prev" title="The lastprivate Clause" href="Examples_lastprivate.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OpenMP Application Programming Interface Examples</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Welcome to OMP Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Foreword_Chapt.html">
+   Foreword
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Introduction_Chapt.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Examples_Chapt.html">
+   Examples
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_ploop.html">
+     A Simple Parallel Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_parallel.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_host_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Construct on Host
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nthrs_nesting.html">
+     Controlling the Number of Threads on Multiple Nesting Levels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nthrs_dynamic.html">
+     Interaction Between the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       num_threads
+      </span>
+     </code>
+     Clause and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_do.html">
+     Fortran Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       do
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nowait.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_collapse.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       collapse
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_linear_in_loop.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause in Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_psections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fpriv_sections.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       sections
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_single.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       single
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_workshare.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       workshare
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_master.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       master
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_loop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       loop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_pra_iterator.html">
+     Parallel Random Access Iterator Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_set_dynamic_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_dynamic
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_set_num_threads
+      </span>
+     </code>
+     Routines
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_get_nthrs.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       omp_get_num_threads
+      </span>
+     </code>
+     Routine
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       proc_bind
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_affinity.html">
+     Task Affinity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity_display.html">
+     Affinity Display
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_affinity_query.html">
+     Affinity Query Functions
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_tasking.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       task
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_priority.html">
+     Task Priority
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_task_dep.html">
+     Task Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskgroup.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskgroup
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskyield.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_parallel_master_taskloop.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       parallel
+      </span>
+      <span class="pre">
+       master
+      </span>
+      <span class="pre">
+       taskloop
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_devices.html">
+   Devices
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_defaultmap.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       defaultmap
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_pointer_mapping.html">
+     Pointer mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_structure_mapping.html">
+     Structure mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_array_sections.html">
+     Array Sections in Device Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_array_shaping.html">
+     Array Shaping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_mapper.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+      <span class="pre">
+       mapper
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_unstructured_data.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       enter
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       exit
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       data
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
+     Simple target enter data and target exit data Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_update.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       update
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_declare_target.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_teams.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       teams
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Execution and Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_with_tasks.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with Tasks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_nowait.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     Clause on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_async_target_nowait_depend.html">
+     Asynchronous
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       target
+      </span>
+     </code>
+     with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       nowait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depend
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_device.html">
+     Device Routines
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       simd
+      </span>
+     </code>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html#inbranch-and-notinbranch-clauses">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       inbranch
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       notinbranch
+      </span>
+     </code>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_SIMD.html#loop-carried-lexical-forward-dependence">
+     Loop-Carried Lexical Forward Dependence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_linear_modifier.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ref
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       val
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       uval
+      </span>
+     </code>
+     Modifiers for
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       linear
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_critical.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_worksharing_critical.html">
+     Worksharing Constructs Inside a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       critical
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_barrier_regions.html">
+     Binding of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_atomic.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_atomic_restrict.html">
+     Restrictions on the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       atomic
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_flush_nolist.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     Construct without a List
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_acquire_release.html">
+     Synchronization Based on Acquire/Release Semantics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_ordered.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Clause and the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       ordered
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_depobj.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       depobj
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_doacross.html">
+     Doacross Loop Nest
+    </a>
+   </li>
+   <li class="toctree-l2 collapsible-parent">
+    <a class="reference internal" href="Examples_locks.html">
+     Lock Routines
+    </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_init_lock.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_init_lock_with_hint.html">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         omp_init_lock_with_hint
+        </span>
+       </code>
+       Routine
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_lock_owner.html">
+       Ownership of Locks
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_simple_lock.html">
+       Simple Lock Routines
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_nestable_lock.html">
+       Nestable Lock Routines
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_threadprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       threadprivate
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_default_none.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       default(none)
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_private.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_loopvar.html">
+     Fortran Private Loop Iteration Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_sp_common.html">
+     Fortran Restrictions on
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       shared
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clauses with Common Blocks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_sa_private.html">
+     Fortran Restrictions on Storage Association with the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       private
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_carrays_fpriv.html">
+     C/C++ Arrays in a
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       firstprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_lastprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       lastprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_udr.html">
+     User-Defined Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_scan.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scan
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_copyin.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyin
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_copyprivate.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       copyprivate
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cpp_reference.html">
+     C++ Reference in Data-Sharing Clauses
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_mem_model.html">
+     The OpenMP Memory Model
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_allocators.html">
+     Memory Allocators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_fort_race.html">
+     Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cond_comp.html">
+     Conditional Compilation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_icv.html">
+     Internal Control Variables (ICVs)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_cancellation.html">
+     Cancellation Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_requires.html">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       requires
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_variant.html">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       declare
+      </span>
+     </code>
+     ~
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       variant
+      </span>
+     </code>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_metadirective.html">
+     Metadirective Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nested_loop.html">
+     Nested Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_nesting_restrict.html">
+     Restrictions on Nesting of Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_target_offload.html">
+     Target Offload
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="History.html">
+   Document Revision History
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/contents/Examples_reduction.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/passlab/Examples"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Examples_reduction.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Examples_reduction.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-reduction-clause">
+   The
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     reduction
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-reduction">
+   Task Reduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reduction-on-combined-target-constructs">
+   Reduction on Combined Target Constructs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#task-reduction-with-target-constructs">
+   Task Reduction with Target Constructs
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#taskloop-reduction">
+   Taskloop Reduction
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="reduction">
+<h1>Reduction<a class="headerlink" href="#reduction" title="Permalink to this headline">¶</a></h1>
+<p>This section covers ways to perform reductions in parallel, task, taskloop, and SIMD regions.</p>
+<div class="section" id="the-reduction-clause">
+<h2>The  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  Clause<a class="headerlink" href="#the-reduction-clause" title="Permalink to this headline">¶</a></h2>
+<p>The following example demonstrates the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause; note that some  reductions can be expressed in the loop in several ways, as shown for the  <code class="docutils literal notranslate"><span class="pre">max</span></code>   and  <code class="docutils literal notranslate"><span class="pre">min</span></code>  reductions below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: reduction.1c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_3.1</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">reduction1</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
+  <span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
+  <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+  <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="cp">#pragma omp parallel for private(i) shared(x, y, n) \</span>
+<span class="cp">                          reduction(+:a) reduction(^:b) \</span>
+<span class="cp">                          reduction(min:c) reduction(max:d)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">a</span> <span class="o">+=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="n">b</span> <span class="o">^=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">c</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">c</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="n">d</span> <span class="o">=</span> <span class="n">fmaxf</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.1f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="n">SUBROUTINE</span> <span class="n">REDUCTION1</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">REAL</span> <span class="o">::</span> <span class="n">X</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">A</span><span class="p">,</span> <span class="n">D</span>
+    <span class="n">INTEGER</span> <span class="o">::</span> <span class="n">Y</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">N</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
+    <span class="n">INTEGER</span> <span class="o">::</span> <span class="n">I</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">Y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="o">+:</span><span class="n">A</span><span class="p">)</span> <span class="o">&amp;</span>
+    <span class="o">!</span><span class="n">$OMP</span><span class="o">&amp;</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">IEOR</span><span class="p">:</span><span class="n">B</span><span class="p">)</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">MIN</span><span class="p">:</span><span class="n">C</span><span class="p">)</span>  <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">MAX</span><span class="p">:</span><span class="n">D</span><span class="p">)</span>
+      <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">IEOR</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+        <span class="n">IF</span> <span class="p">(</span><span class="n">D</span> <span class="o">&lt;</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">))</span> <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+      <span class="n">END</span> <span class="n">DO</span>
+
+<span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">REDUCTION1</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>A common implementation of the preceding example is to treat it as if it had been  written as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: reduction.2c</span>
+<span class="cm">* type: C</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">reduction2</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">b_p</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">c_p</span><span class="p">;</span>
+  <span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="n">a_p</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">d_p</span><span class="p">;</span>
+  <span class="n">a</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+  <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="n">c</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="n">d</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="cp">#pragma omp parallel shared(a, b, c, d, x, y, n) \</span>
+<span class="cp">                          private(a_p, b_p, c_p, d_p)</span>
+  <span class="p">{</span>
+    <span class="n">a_p</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="n">b_p</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">c_p</span> <span class="o">=</span> <span class="n">INT_MAX</span><span class="p">;</span>
+    <span class="n">d_p</span> <span class="o">=</span> <span class="o">-</span><span class="n">HUGE_VALF</span><span class="p">;</span>
+    <span class="cp">#pragma omp for private(i)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">a_p</span> <span class="o">+=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="n">b_p</span> <span class="o">^=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">c_p</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="n">c_p</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+      <span class="n">d_p</span> <span class="o">=</span> <span class="n">fmaxf</span><span class="p">(</span><span class="n">d_p</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="p">}</span>
+    <span class="cp">#pragma omp critical</span>
+    <span class="p">{</span>
+      <span class="n">a</span> <span class="o">+=</span> <span class="n">a_p</span><span class="p">;</span>
+      <span class="n">b</span> <span class="o">^=</span> <span class="n">b_p</span><span class="p">;</span>
+      <span class="k">if</span><span class="p">(</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="n">c_p</span> <span class="p">)</span> <span class="n">c</span> <span class="o">=</span> <span class="n">c_p</span><span class="p">;</span>
+      <span class="n">d</span> <span class="o">=</span> <span class="n">fmaxf</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">d_p</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.2f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+  <span class="n">SUBROUTINE</span> <span class="n">REDUCTION2</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    <span class="n">REAL</span> <span class="o">::</span> <span class="n">X</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">A</span><span class="p">,</span> <span class="n">D</span>
+    <span class="n">INTEGER</span> <span class="o">::</span> <span class="n">Y</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">N</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
+    <span class="n">REAL</span> <span class="o">::</span> <span class="n">A_P</span><span class="p">,</span> <span class="n">D_P</span>
+    <span class="n">INTEGER</span> <span class="o">::</span> <span class="n">I</span><span class="p">,</span> <span class="n">B_P</span><span class="p">,</span> <span class="n">C_P</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">Y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">&amp;</span>
+    <span class="o">!</span><span class="n">$OMP</span><span class="o">&amp;</span>         <span class="n">PRIVATE</span><span class="p">(</span><span class="n">A_P</span><span class="p">,</span> <span class="n">B_P</span><span class="p">,</span> <span class="n">C_P</span><span class="p">,</span> <span class="n">D_P</span><span class="p">)</span>
+      <span class="n">A_P</span> <span class="o">=</span> <span class="mf">0.0</span>
+      <span class="n">B_P</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="n">C_P</span> <span class="o">=</span> <span class="n">HUGE</span><span class="p">(</span><span class="n">C_P</span><span class="p">)</span>
+      <span class="n">D_P</span> <span class="o">=</span> <span class="o">-</span><span class="n">HUGE</span><span class="p">(</span><span class="n">D_P</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+      <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
+        <span class="n">A_P</span> <span class="o">=</span> <span class="n">A_P</span> <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+        <span class="n">B_P</span> <span class="o">=</span> <span class="n">IEOR</span><span class="p">(</span><span class="n">B_P</span><span class="p">,</span> <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+        <span class="n">C_P</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">C_P</span><span class="p">,</span> <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+        <span class="n">IF</span> <span class="p">(</span><span class="n">D_P</span> <span class="o">&lt;</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">))</span> <span class="n">D_P</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+      <span class="n">END</span> <span class="n">DO</span>
+      <span class="o">!</span><span class="n">$OMP</span> <span class="n">CRITICAL</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">A_P</span>
+        <span class="n">B</span> <span class="o">=</span> <span class="n">IEOR</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">B_P</span><span class="p">)</span>
+        <span class="n">C</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">C_P</span><span class="p">)</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D_P</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">CRITICAL</span>
+    <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+  <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">REDUCTION2</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following program is non-conforming because the reduction is on the  {intrinsic procedure name}  <code class="docutils literal notranslate"><span class="pre">MAX</span></code>  but that name has been redefined to be the variable  named  <code class="docutils literal notranslate"><span class="pre">MAX</span></code> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.3f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+ <span class="n">PROGRAM</span> <span class="n">REDUCTION_WRONG</span>
+ <span class="n">MAX</span> <span class="o">=</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+ <span class="n">M</span> <span class="o">=</span> <span class="mi">0</span>
+
+ <span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">MAX</span><span class="p">:</span> <span class="n">M</span><span class="p">)</span>
+<span class="o">!</span> <span class="n">MAX</span> <span class="n">is</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">the</span> <span class="n">intrinsic</span> <span class="n">so</span> <span class="n">this</span> <span class="n">is</span> <span class="n">non</span><span class="o">-</span><span class="n">conforming</span>
+ <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span>
+    <span class="n">CALL</span> <span class="n">SUB</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+ <span class="n">END</span> <span class="n">DO</span>
+
+ <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">REDUCTION_WRONG</span>
+
+ <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+ <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following conforming program performs the reduction using the  {intrinsic procedure name}  <code class="docutils literal notranslate"><span class="pre">MAX</span></code>  even though the intrinsic  <code class="docutils literal notranslate"><span class="pre">MAX</span></code>  has been renamed  to  <code class="docutils literal notranslate"><span class="pre">REN</span></code> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.4f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="n">MODULE</span> <span class="n">M</span>
+   <span class="n">INTRINSIC</span> <span class="n">MAX</span>
+<span class="n">END</span> <span class="n">MODULE</span> <span class="n">M</span>
+
+<span class="n">PROGRAM</span> <span class="n">REDUCTION3</span>
+   <span class="n">USE</span> <span class="n">M</span><span class="p">,</span> <span class="n">REN</span> <span class="o">=&gt;</span> <span class="n">MAX</span>
+   <span class="n">N</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">REN</span><span class="p">:</span> <span class="n">N</span><span class="p">)</span>     <span class="o">!</span> <span class="n">still</span> <span class="n">does</span> <span class="n">MAX</span>
+   <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span>
+      <span class="n">N</span> <span class="o">=</span> <span class="n">MAX</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">I</span><span class="p">)</span>
+   <span class="n">END</span> <span class="n">DO</span>
+<span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">REDUCTION3</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following conforming program performs the reduction using   <em>intrinsic procedure name</em>   <code class="docutils literal notranslate"><span class="pre">MAX</span></code>  even though the intrinsic  <code class="docutils literal notranslate"><span class="pre">MAX</span></code>  has been renamed  to  <code class="docutils literal notranslate"><span class="pre">MIN</span></code> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.5f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="n">MODULE</span> <span class="n">MOD</span>
+   <span class="n">INTRINSIC</span> <span class="n">MAX</span><span class="p">,</span> <span class="n">MIN</span>
+<span class="n">END</span> <span class="n">MODULE</span> <span class="n">MOD</span>
+
+<span class="n">PROGRAM</span> <span class="n">REDUCTION4</span>
+   <span class="n">USE</span> <span class="n">MOD</span><span class="p">,</span> <span class="n">MIN</span><span class="o">=&gt;</span><span class="n">MAX</span><span class="p">,</span> <span class="n">MAX</span><span class="o">=&gt;</span><span class="n">MIN</span>
+   <span class="n">REAL</span> <span class="o">::</span> <span class="n">R</span>
+   <span class="n">R</span> <span class="o">=</span> <span class="o">-</span><span class="n">HUGE</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="nl">MIN</span><span class="p">:</span> <span class="n">R</span><span class="p">)</span>     <span class="o">!</span> <span class="n">still</span> <span class="n">does</span> <span class="n">MAX</span>
+   <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span>
+      <span class="n">R</span> <span class="o">=</span> <span class="n">MIN</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">SIN</span><span class="p">(</span><span class="n">REAL</span><span class="p">(</span><span class="n">I</span><span class="p">)))</span>
+   <span class="n">END</span> <span class="n">DO</span>
+   <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">R</span>
+<span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">REDUCTION4</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is non-conforming because the initialization ( <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span>&#160; <span class="pre">0</span></code> ) of the original list item  <code class="docutils literal notranslate"><span class="pre">a</span></code>  is not synchronized with the update of   <code class="docutils literal notranslate"><span class="pre">a</span></code>  as a result of the reduction computation in the  <code class="docutils literal notranslate"><span class="pre">for</span></code>  loop. Therefore,  the example may print an incorrect value for  <code class="docutils literal notranslate"><span class="pre">a</span></code> .</p>
+<p>To avoid this problem, the initialization of the original list item  <code class="docutils literal notranslate"><span class="pre">a</span></code>   should complete before any update of  <code class="docutils literal notranslate"><span class="pre">a</span></code>  as a result of the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>   clause. This can be achieved by adding an explicit barrier after the assignment   <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code> , or by enclosing the assignment  <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code>  in a  <code class="docutils literal notranslate"><span class="pre">single</span></code>   directive (which has an implied barrier), or by initializing  <code class="docutils literal notranslate"><span class="pre">a</span></code>  before  the start of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: reduction.6c</span>
+<span class="cm">* type: C</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+
+  <span class="cp">#pragma omp parallel shared(a) private(i)</span>
+  <span class="p">{</span>
+    <span class="cp">#pragma omp master</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="c1">// To avoid race conditions, add a barrier here.</span>
+
+    <span class="cp">#pragma omp for reduction(+:a)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">a</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cp">#pragma omp single</span>
+    <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Sum is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.6f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
+      <span class="n">INTEGER</span> <span class="n">A</span><span class="p">,</span> <span class="n">I</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">A</span><span class="p">)</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">MASTER</span>
+      <span class="n">A</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">MASTER</span>
+
+      <span class="o">!</span> <span class="n">To</span> <span class="n">avoid</span> <span class="n">race</span> <span class="n">conditions</span><span class="p">,</span> <span class="n">add</span> <span class="n">a</span> <span class="n">barrier</span> <span class="n">here</span><span class="p">.</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="o">+:</span><span class="n">A</span><span class="p">)</span>
+      <span class="n">DO</span> <span class="n">I</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span>
+         <span class="n">A</span> <span class="o">=</span> <span class="n">A</span> <span class="o">+</span> <span class="n">I</span>
+      <span class="n">END</span> <span class="n">DO</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">SINGLE</span>
+      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Sum is &quot;</span><span class="p">,</span> <span class="n">A</span>
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">SINGLE</span>
+
+<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+      <span class="n">END</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates the reduction of array  <em>a</em> .  In C/C++ this is illustrated by the explicit use of an array section  <em>a[0:N]</em>  in the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause.  The corresponding Fortran example uses array syntax supported in the base language.  As of the OpenMP 4.5 specification the explicit use of array section in the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause in Fortran is not permitted.  But this oversight has been fixed in the OpenMP 5.0 specification.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: reduction.7c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_4.5</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="cp">#define N 100</span>
+<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span> <span class="p">(</span><span class="o">*</span><span class="n">b</span><span class="p">)[</span><span class="n">N</span><span class="p">]);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">;</span>
+  <span class="kt">float</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
+
+  <span class="n">init</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">b</span><span class="p">);</span>
+
+  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0e0</span><span class="p">;</span>
+
+  <span class="cp">#pragma omp parallel for reduction(+:a[0:N]) private(j)</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+       <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span>  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; a[0] a[N-1]: %f %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
+
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">reduction</span><span class="mf">.7f</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="n">program</span> <span class="n">array_red</span>
+
+  <span class="n">integer</span><span class="p">,</span><span class="n">parameter</span> <span class="o">::</span> <span class="n">n</span><span class="o">=</span><span class="mi">100</span>
+  <span class="n">integer</span>           <span class="o">::</span> <span class="n">j</span>
+  <span class="n">real</span>              <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">)</span>
+
+  <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
+
+  <span class="n">a</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0e0</span>
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">a</span><span class="p">)</span>
+  <span class="k">do</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
+     <span class="n">a</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="o">:</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+  <span class="n">end</span> <span class="k">do</span>
+
+  <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot; a(1) a(n): &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">end</span> <span class="n">program</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="task-reduction">
+<h2>Task Reduction<a class="headerlink" href="#task-reduction" title="Permalink to this headline">¶</a></h2>
+<p>In OpenMP 5.0 the  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause was created for the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct,  to allow reductions among explicit tasks that have an  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause.</p>
+<p>In the  <em>task_reduction.1</em>  example below a reduction is performed as the algorithm traverses a linked list. The reduction statement is assigned to be an explicit task using a  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct and is specified to be a reduction participant with  the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause. A  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct encloses the tasks participating in the reduction, and specifies, with the  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause, that the taskgroup has tasks participating in a reduction.  After the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region the original variable will contain  the final value of the reduction.</p>
+<p>Note: The  <em>res</em>  variable is private in the  <em>linked_list_sum</em>  routine and is not required to be shared (as in the case of a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct reduction).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name:       task_reduction.1c</span>
+<span class="cm">* type:       C</span>
+<span class="cm">*/</span>
+
+<span class="cp">#include</span><span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#define N 10</span>
+
+<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">node_tag</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
+    <span class="k">struct</span> <span class="nc">node_tag</span> <span class="o">*</span><span class="n">next</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">node_t</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">linked_list_sum</span><span class="p">(</span><span class="n">node_t</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cp">#pragma omp taskgroup task_reduction(+: res)</span>
+    <span class="p">{</span>
+        <span class="n">node_t</span><span class="o">*</span> <span class="n">aux</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">aux</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="cp">#pragma omp task in_reduction(+: res)</span>
+            <span class="n">res</span> <span class="o">+=</span> <span class="n">aux</span><span class="o">-&gt;</span><span class="n">val</span><span class="p">;</span>
+
+            <span class="n">aux</span> <span class="o">=</span> <span class="n">aux</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<span class="c1">//                           Create the root node.</span>
+    <span class="n">node_t</span><span class="o">*</span> <span class="n">root</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">node_t</span><span class="p">));</span>
+    <span class="n">root</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="n">node_t</span><span class="o">*</span> <span class="n">aux</span> <span class="o">=</span> <span class="n">root</span><span class="p">;</span>
+
+<span class="c1">//                           Create N-1 more nodes.</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;=</span><span class="n">N</span><span class="p">;</span><span class="o">++</span><span class="n">i</span><span class="p">){</span>
+        <span class="n">aux</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="p">(</span><span class="n">node_t</span><span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">node_t</span><span class="p">));</span>
+        <span class="n">aux</span> <span class="o">=</span> <span class="n">aux</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+        <span class="n">aux</span><span class="o">-&gt;</span><span class="n">val</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">aux</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cp">#pragma omp parallel</span>
+    <span class="cp">#pragma omp single</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">linked_list_sum</span><span class="p">(</span><span class="n">root</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span> <span class="s">&quot;Calculated: %d  Analytic:%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">task_reduction</span><span class="mf">.1f</span><span class="mi">90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+
+<span class="n">module</span> <span class="n">m</span>
+    <span class="n">type</span> <span class="n">node_t</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">val</span>
+        <span class="n">type</span><span class="p">(</span><span class="n">node_t</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">next</span>
+    <span class="n">end</span> <span class="n">type</span>
+<span class="n">end</span> <span class="n">module</span> <span class="n">m</span>
+
+<span class="n">function</span> <span class="n">linked_list_sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="n">use</span> <span class="n">m</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">type</span><span class="p">(</span><span class="n">node_t</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">p</span>
+    <span class="n">type</span><span class="p">(</span><span class="n">node_t</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">aux</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span> <span class="n">task_reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span>
+        <span class="n">aux</span> <span class="o">=&gt;</span> <span class="n">p</span>
+        <span class="k">do</span> <span class="k">while</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">aux</span><span class="p">))</span>
+            <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span>
+                <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">aux</span><span class="o">%</span><span class="n">val</span>
+            <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+            <span class="n">aux</span> <span class="o">=&gt;</span> <span class="n">aux</span><span class="o">%</span><span class="n">next</span>
+        <span class="n">end</span> <span class="k">do</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span>
+<span class="n">end</span> <span class="n">function</span> <span class="n">linked_list_sum</span>
+
+
+<span class="n">program</span> <span class="n">main</span>
+    <span class="n">use</span> <span class="n">m</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">type</span><span class="p">(</span><span class="n">node_t</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">root</span><span class="p">,</span> <span class="n">aux</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span><span class="p">,</span> <span class="n">i</span>
+    <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span>
+
+    <span class="n">interface</span>
+        <span class="n">function</span> <span class="n">linked_list_sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <span class="n">use</span> <span class="n">m</span>
+            <span class="n">implicit</span> <span class="n">none</span>
+            <span class="n">type</span><span class="p">(</span><span class="n">node_t</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">p</span>
+            <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+        <span class="n">end</span> <span class="n">function</span>
+    <span class="n">end</span> <span class="n">interface</span>
+<span class="o">!</span>                       <span class="n">Create</span> <span class="n">the</span> <span class="n">root</span> <span class="n">node</span><span class="p">.</span>
+    <span class="n">allocate</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="n">root</span><span class="o">%</span><span class="n">val</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">aux</span> <span class="o">=&gt;</span> <span class="n">root</span>
+
+<span class="o">!</span>                       <span class="n">Create</span> <span class="n">N</span><span class="mi">-1</span> <span class="n">more</span> <span class="n">nodes</span><span class="p">.</span>
+    <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span><span class="n">N</span>
+        <span class="n">allocate</span><span class="p">(</span><span class="n">aux</span><span class="o">%</span><span class="n">next</span><span class="p">)</span>
+        <span class="n">aux</span> <span class="o">=&gt;</span> <span class="n">aux</span><span class="o">%</span><span class="n">next</span>
+        <span class="n">aux</span><span class="o">%</span><span class="n">val</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">end</span> <span class="k">do</span>
+
+    <span class="n">aux</span><span class="o">%</span><span class="n">next</span> <span class="o">=&gt;</span> <span class="n">null</span><span class="p">()</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">linked_list_sum</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Calculated:&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="s">&quot; Analytic:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+
+<span class="n">end</span> <span class="n">program</span> <span class="n">main</span>
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In OpenMP 5.0 the  <code class="docutils literal notranslate"><span class="pre">task</span></code>   <em>reduction-modifier</em>  for the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause was introduced to provide a means of performing reductions among implicit and explicit tasks.</p>
+<p>The  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause of a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  or worksharing construct may specify the  <code class="docutils literal notranslate"><span class="pre">task</span></code>   <em>reduction-modifier</em>  to include explicit task reductions within their region, provided the reduction operators ( <em>reduction-identifiers</em> ) and variables ( <em>list items</em> ) of the participating tasks match those of the implicit tasks.</p>
+<p>There are 2 reduction use cases (identified by USE CASE #) in the  <em>task_reduction.2</em>  example below.</p>
+<p>In USE CASE 1 a  <code class="docutils literal notranslate"><span class="pre">task</span></code>  modifier in the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause  of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct is used to include the reductions of any  participating tasks, those with an  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause and matching   <em>reduction-identifiers</em>  ( <code class="docutils literal notranslate"><span class="pre">+</span></code> ) and list items ( <code class="docutils literal notranslate"><span class="pre">x</span></code> ).</p>
+<p>Note, a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct (with a  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause) in not necessary to scope the explicit task reduction (as seen in the example above).  Hence, even without the implicit task reduction statement (without the C  <code class="docutils literal notranslate"><span class="pre">x++;</span></code>    and Fortran  <code class="docutils literal notranslate"><span class="pre">x=x+1</span></code>  statements), the  <code class="docutils literal notranslate"><span class="pre">task</span></code>   <em>reduction-modifier</em>   in a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct can be used to avoid having to create a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct  (and its  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause) around the task generating structure.</p>
+<p>In USE CASE 2 tasks participating in the reduction are within a worksharing region (a parallel worksharing-loop construct). Here, too, no  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  is required, and the  <em>reduction-identifier</em>  ( <code class="docutils literal notranslate"><span class="pre">+</span></code> ) and list item (variable  <code class="docutils literal notranslate"><span class="pre">x</span></code> ) match as required.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name:       task_reduction.2.c</span>
+<span class="cm">* type:       C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+   <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">10</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">;</span>
+
+<span class="c1">// USE CASE 1  explicit-task reduction + parallel reduction clause</span>
+   <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="cp">#pragma omp parallel num_threads(M) reduction(task,+:x)</span>
+   <span class="p">{</span>
+
+     <span class="n">x</span><span class="o">++</span><span class="p">;</span>                <span class="c1">// implicit task reduction statement</span>
+
+     <span class="cp">#pragma omp single</span>
+     <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+       <span class="cp">#pragma omp task in_reduction(+:x)</span>
+       <span class="n">x</span><span class="o">++</span><span class="p">;</span>
+
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x=%d  =M+N</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>  <span class="c1">// x= 110  =M+N</span>
+
+
+<span class="c1">// USE CASE 2  task reduction +  worksharing reduction clause</span>
+   <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="cp">#pragma omp parallel for num_threads(M) reduction(task,+:x)</span>
+   <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+
+      <span class="n">x</span><span class="o">++</span><span class="p">;</span>
+
+      <span class="k">if</span><span class="p">(</span> <span class="n">i</span><span class="o">%</span><span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+       <span class="cp">#pragma omp task in_reduction(+:x)</span>
+       <span class="n">x</span><span class="o">--</span><span class="p">;</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x=%d  =N-N/2</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>  <span class="c1">// x= 50  =N-N/2</span>
+
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+! name:       task_reduction.2.f90
+! type:       F-free
+! version:    omp_5.0
+
+program task_modifier
+
+   integer :: N=100, M=10
+   integer :: i, x
+
+! USE CASE 1  explicit-task reduction + parallel reduction clause
+   x=0
+   !$omp parallel num_threads(M) reduction(task,+:x)
+
+     x=x+1                   !! implicit task reduction statement
+
+     !$omp single
+       do i = 1,N
+         !$omp task in_reduction(+:x)
+           x=x+1
+         !$omp end task
+       end do
+     !$omp end single
+
+   !$omp end parallel
+   write(*,&#39;(&quot;x=&quot;,I0,&quot; =M+N&quot;)&#39;) x   ! x= 110 =M+N
+
+
+! USE CASE 2  task reduction +  worksharing reduction clause
+   x=0
+   !$omp parallel do num_threads(M) reduction(task,+:x)
+     do i = 1,N
+
+        x=x+1
+
+        if( mod(i,2) == 0) then
+           !$omp task in_reduction(+:x)
+             x=x-1
+           !$omp end task
+        endif
+
+     end do
+   write(*,&#39;(&quot;x=&quot;,I0,&quot;  =N-N/2&quot;)&#39;) x   ! x= 50 =N-N/2
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="reduction-on-combined-target-constructs">
+<h2>Reduction on Combined Target Constructs<a class="headerlink" href="#reduction-on-combined-target-constructs" title="Permalink to this headline">¶</a></h2>
+<p>When a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause appears on a combined construct that combines  a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct with another construct, there is an implicit map  of the list items with a  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  map type for the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.  Otherwise, the list items (if they are scalar variables) would be  treated as firstprivate by default in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, which  is unlikely to provide the intended behavior since the result of the reduction that is in the firstprivate variable would be discarded  at the end of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region.</p>
+<p>In the following example, the use of the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause on  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  or  <code class="docutils literal notranslate"><span class="pre">sum2</span></code>  should, by default, result in an implicit  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  map for that variable. So long as neither  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  nor  <code class="docutils literal notranslate"><span class="pre">sum2</span></code>  were already present on the device, the mapping behavior ensures the value for  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  computed in the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct is used in the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: target_reduction.1.c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum2</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+   <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+
+   <span class="cp">#pragma omp target teams distribute reduction(+:sum1)</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">sum1</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+   <span class="p">}</span>
+
+   <span class="cp">#pragma omp target teams distribute reduction(+:sum2)</span>
+   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">sum2</span> <span class="o">+=</span> <span class="n">g</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">sum1</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="n">printf</span><span class="p">(</span>  <span class="s">&quot;sum1 = %d, sum2 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sum1</span><span class="p">,</span> <span class="n">sum2</span><span class="p">);</span>
+   <span class="c1">//OUTPUT: sum1 = 9900, sum2 = 147015000</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">res</span><span class="p">){</span> <span class="k">return</span> <span class="n">res</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span> <span class="n">res</span><span class="p">){</span> <span class="k">return</span> <span class="n">res</span><span class="o">*</span><span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_reduction</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<span class="n">program</span> <span class="n">target_reduction_ex1</span>
+   <span class="n">interface</span>
+      <span class="n">function</span> <span class="n">f</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+             <span class="n">integer</span> <span class="o">::</span> <span class="n">f</span><span class="p">,</span> <span class="n">res</span>
+          <span class="n">end</span> <span class="n">function</span>
+      <span class="n">function</span> <span class="n">g</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+             <span class="n">integer</span> <span class="o">::</span> <span class="n">g</span><span class="p">,</span> <span class="n">res</span>
+          <span class="n">end</span> <span class="n">function</span>
+   <span class="n">end</span> <span class="n">interface</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum1</span><span class="p">,</span> <span class="n">sum2</span><span class="p">,</span> <span class="n">i</span>
+   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+   <span class="n">sum1</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="n">sum2</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">distribute</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum1</span><span class="p">)</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+          <span class="n">sum1</span> <span class="o">=</span> <span class="n">sum1</span> <span class="o">+</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+       <span class="n">end</span> <span class="k">do</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">distribute</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum2</span><span class="p">)</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+          <span class="n">sum2</span> <span class="o">=</span> <span class="n">sum2</span> <span class="o">+</span> <span class="n">g</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">sum1</span>
+       <span class="n">end</span> <span class="k">do</span>
+   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;sum1 = &quot;</span><span class="p">,</span> <span class="n">sum1</span><span class="p">,</span> <span class="s">&quot;, sum2 = &quot;</span><span class="p">,</span> <span class="n">sum2</span>
+   <span class="o">!!</span><span class="nl">OUTPUT</span><span class="p">:</span> <span class="n">sum1</span> <span class="o">=</span>     <span class="mi">10100</span> <span class="p">,</span> <span class="n">sum2</span> <span class="o">=</span> <span class="mi">153015000</span>
+<span class="n">end</span> <span class="n">program</span>
+
+
+<span class="n">integer</span> <span class="n">function</span> <span class="n">f</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+   <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">end</span> <span class="n">function</span>
+<span class="n">integer</span> <span class="n">function</span> <span class="n">g</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+   <span class="n">g</span> <span class="o">=</span> <span class="n">res</span><span class="o">*</span><span class="mi">3</span>
+<span class="n">end</span> <span class="n">function</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In next example,  the variables  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  and  <code class="docutils literal notranslate"><span class="pre">sum2</span></code>  remain on the device for the duration of the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  region so that it is their device copies that are updated by the reductions. Note the significance of mapping  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  on the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct; otherwise, it would be treated by default as firstprivate and the result computed for  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  in the prior  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region may not be used. Alternatively, a  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  construct could be used between the two  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs to update the host version of  <code class="docutils literal notranslate"><span class="pre">sum1</span></code>  with the value that is in the corresponding device version after the completion of the first construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: target_reduction.2.c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sum2</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+   <span class="k">const</span> <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+
+   <span class="cp">#pragma omp target data map(sum1,sum2)</span>
+   <span class="p">{</span>
+      <span class="cp">#pragma omp target teams distribute reduction(+:sum1)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">sum1</span> <span class="o">+=</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+      <span class="p">}</span>
+
+      <span class="cp">#pragma omp target teams distribute map(sum1) reduction(+:sum2)</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+         <span class="n">sum2</span> <span class="o">+=</span> <span class="n">g</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">sum1</span><span class="p">;</span>
+      <span class="p">}</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span>  <span class="s">&quot;sum1 = %d, sum2 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sum1</span><span class="p">,</span> <span class="n">sum2</span><span class="p">);</span>
+   <span class="c1">//OUTPUT: sum1 = 9900, sum2 = 147015000</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">res</span><span class="p">){</span> <span class="k">return</span> <span class="n">res</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">int</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span> <span class="n">res</span><span class="p">){</span> <span class="k">return</span> <span class="n">res</span><span class="o">*</span><span class="mi">3</span><span class="p">;</span> <span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_reduction</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+
+<span class="n">program</span> <span class="n">target_reduction_ex2</span>
+   <span class="n">interface</span>
+      <span class="n">function</span> <span class="n">f</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+             <span class="n">integer</span> <span class="o">::</span> <span class="n">f</span><span class="p">,</span> <span class="n">res</span>
+          <span class="n">end</span> <span class="n">function</span>
+      <span class="n">function</span> <span class="n">g</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+             <span class="n">integer</span> <span class="o">::</span> <span class="n">g</span><span class="p">,</span> <span class="n">res</span>
+          <span class="n">end</span> <span class="n">function</span>
+   <span class="n">end</span> <span class="n">interface</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum1</span><span class="p">,</span> <span class="n">sum2</span><span class="p">,</span> <span class="n">i</span>
+   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">100</span>
+   <span class="n">sum1</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="n">sum2</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="n">sum1</span><span class="p">,</span> <span class="n">sum2</span><span class="p">)</span>
+       <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">distribute</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum1</span><span class="p">)</span>
+           <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+              <span class="n">sum1</span> <span class="o">=</span> <span class="n">sum1</span> <span class="o">+</span> <span class="n">f</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+           <span class="n">end</span> <span class="k">do</span>
+       <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">distribute</span> <span class="n">map</span><span class="p">(</span><span class="n">sum1</span><span class="p">)</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum2</span><span class="p">)</span>
+           <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span>
+              <span class="n">sum2</span> <span class="o">=</span> <span class="n">sum2</span> <span class="o">+</span> <span class="n">g</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">sum1</span>
+           <span class="n">end</span> <span class="k">do</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
+   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;sum1 = &quot;</span><span class="p">,</span> <span class="n">sum1</span><span class="p">,</span> <span class="s">&quot;, sum2 = &quot;</span><span class="p">,</span> <span class="n">sum2</span>
+   <span class="o">!!</span><span class="nl">OUTPUT</span><span class="p">:</span> <span class="n">sum1</span> <span class="o">=</span>     <span class="mi">10100</span> <span class="p">,</span> <span class="n">sum2</span> <span class="o">=</span> <span class="mi">153015000</span>
+<span class="n">end</span> <span class="n">program</span>
+
+
+<span class="n">integer</span> <span class="n">function</span> <span class="n">f</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+   <span class="n">f</span> <span class="o">=</span> <span class="n">res</span><span class="o">*</span><span class="mi">2</span>
+<span class="n">end</span> <span class="n">function</span>
+<span class="n">integer</span> <span class="n">function</span> <span class="n">g</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+   <span class="n">g</span> <span class="o">=</span> <span class="n">res</span><span class="o">*</span><span class="mi">3</span>
+<span class="n">end</span> <span class="n">function</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="task-reduction-with-target-constructs">
+<h2>Task Reduction with Target Constructs<a class="headerlink" href="#task-reduction-with-target-constructs" title="Permalink to this headline">¶</a></h2>
+<p>The following examples illustrate how task reductions can apply to target tasks that result from a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct with the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause. Here, the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause specifies that the target task participates in the task reduction defined in the scope of the enclosing  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct. Partial results from all tasks participating in the task reduction will be combined (in some order) into the original variable listed in the  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause before exiting the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: target_task_reduction.1.c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#pragma omp declare target to(device_compute)</span>
+<span class="kt">void</span> <span class="nf">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+   <span class="cp">#pragma omp parallel master</span>
+   <span class="cp">#pragma omp taskgroup task_reduction(+:sum)</span>
+   <span class="p">{</span>
+      <span class="cp">#pragma omp target in_reduction(+:sum) nowait</span>
+          <span class="n">device_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+
+      <span class="cp">#pragma omp task in_reduction(+:sum)</span>
+          <span class="n">host_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span>  <span class="s">&quot;sum = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sum</span><span class="p">);</span>
+   <span class="c1">//OUTPUT: sum = 2</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span>   <span class="nf">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_task_reduction</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<span class="n">program</span> <span class="n">target_task_reduction_ex1</span>
+   <span class="n">interface</span>
+      <span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="n">to</span><span class="p">(</span><span class="n">device_compute</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">device_compute</span>
+      <span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">host_compute</span>
+   <span class="n">end</span> <span class="n">interface</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">master</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span> <span class="n">task_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span> <span class="n">nowait</span>
+            <span class="n">call</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span>
+            <span class="n">call</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="n">master</span>
+   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;sum = &quot;</span><span class="p">,</span> <span class="n">sum</span>
+   <span class="o">!!</span><span class="nl">OUTPUT</span><span class="p">:</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">end</span> <span class="n">program</span>
+
+<span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+<span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the next pair of examples, the task reduction is defined by a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause with the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  modifier, rather than a  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause on a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct. Again, the partial results from the participating tasks will be combined in some order into the original reduction variable,  <code class="docutils literal notranslate"><span class="pre">sum</span></code> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: target_task_reduction.2.c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#pragma omp declare target to(device_compute)</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+   <span class="cp">#pragma omp parallel sections reduction(task, +:sum)</span>
+   <span class="p">{</span>
+      <span class="cp">#pragma omp section</span>
+          <span class="p">{</span>
+             <span class="cp">#pragma omp target in_reduction(+:sum)</span>
+             <span class="n">device_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+          <span class="p">}</span>
+      <span class="cp">#pragma omp section</span>
+          <span class="p">{</span>
+             <span class="n">host_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+          <span class="p">}</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span>  <span class="s">&quot;sum = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sum</span><span class="p">);</span>
+   <span class="c1">//OUTPUT: sum = 2</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span>   <span class="nf">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_task_reduction</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<span class="n">program</span> <span class="n">target_task_reduction_ex2</span>
+   <span class="n">interface</span>
+      <span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="n">to</span><span class="p">(</span><span class="n">device_compute</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">device_compute</span>
+      <span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">host_compute</span>
+   <span class="n">end</span> <span class="n">interface</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">sections</span> <span class="n">reduction</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">section</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span> <span class="n">nowait</span>
+           <span class="n">call</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">section</span>
+         <span class="n">call</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="n">sections</span>
+   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;sum = &quot;</span><span class="p">,</span> <span class="n">sum</span>
+   <span class="o">!!</span><span class="nl">OUTPUT</span><span class="p">:</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">end</span> <span class="n">program</span>
+
+<span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+<span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  modifier is again used to define a task reduction over participating tasks. This time, the participating tasks are a target task resulting from a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct with the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause, and the implicit task (executing on the master thread) that calls  <code class="docutils literal notranslate"><span class="pre">host_compute</span></code> . As before, the partial results from these paricipating tasks are combined in some order into the original reduction variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: target_task_reduction.2b.c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#pragma omp declare target to(device_compute)</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="k">extern</span> <span class="kt">void</span> <span class="n">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">);</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+   <span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+   <span class="cp">#pragma omp parallel master reduction(task, +:sum)</span>
+   <span class="p">{</span>
+       <span class="cp">#pragma omp target in_reduction(+:sum) nowait</span>
+       <span class="n">device_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+
+       <span class="n">host_compute</span><span class="p">(</span><span class="o">&amp;</span><span class="n">sum</span><span class="p">);</span>
+   <span class="p">}</span>
+   <span class="n">printf</span><span class="p">(</span>  <span class="s">&quot;sum = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">sum</span><span class="p">);</span>
+   <span class="c1">//OUTPUT: sum = 2</span>
+   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">device_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+<span class="kt">void</span>   <span class="nf">host_compute</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">sum</span><span class="p">){</span> <span class="o">*</span><span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_task_reduction</span><span class="mf">.2</span><span class="n">b</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<span class="n">program</span> <span class="n">target_task_reduction_ex2b</span>
+   <span class="n">interface</span>
+      <span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+      <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="n">to</span><span class="p">(</span><span class="n">device_compute</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">device_compute</span>
+      <span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+        <span class="n">integer</span> <span class="o">::</span> <span class="n">res</span>
+      <span class="n">end</span> <span class="n">subroutine</span> <span class="n">host_compute</span>
+   <span class="n">end</span> <span class="n">interface</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">master</span> <span class="n">reduction</span><span class="p">(</span><span class="n">task</span><span class="p">,</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span> <span class="n">nowait</span>
+           <span class="n">call</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+         <span class="n">call</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="n">sections</span>
+   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;sum = &quot;</span><span class="p">,</span> <span class="n">sum</span>
+   <span class="o">!!</span><span class="nl">OUTPUT</span><span class="p">:</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">end</span> <span class="n">program</span>
+
+
+<span class="n">subroutine</span> <span class="n">device_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+<span class="n">subroutine</span> <span class="n">host_compute</span><span class="p">(</span><span class="n">sum</span><span class="p">)</span>
+   <span class="n">integer</span> <span class="o">::</span> <span class="n">sum</span>
+   <span class="n">sum</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">end</span> <span class="n">subroutine</span>
+
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="taskloop-reduction">
+<h2>Taskloop Reduction<a class="headerlink" href="#taskloop-reduction" title="Permalink to this headline">¶</a></h2>
+<p>In the OpenMP 5.0 Specification the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct was extended to include the reductions.</p>
+<p>The following two examples show how to implement a reduction over an array using taskloop reduction in two different ways. In the first example we apply the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause to the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct. As it was explained above in the task reduction examples, a reduction over tasks is divided in two components: the scope of the reduction, which is defined by a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region, and the tasks that participate in the reduction. In this example, the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause defines both semantics. First, it specifies that the implicit  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region associated with the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct is the scope of the reduction, and second, it defines all tasks created by the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct as participants of the reduction. About the first property, it is important to note that if we add the  <code class="docutils literal notranslate"><span class="pre">nogroup</span></code>  clause to the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct the  will be nonconforming, basically because we have a set of tasks that participate in a reduction that has not been defined.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name:       taskloop_reduction.1.c</span>
+<span class="cm">* type:       C</span>
+<span class="cm">* version:    omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">array_sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cp">#pragma omp taskloop reduction(+: res)</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">};</span>
+
+    <span class="cp">#pragma omp parallel</span>
+    <span class="cp">#pragma omp single</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The result is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">taskloop_reduction</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+
+<span class="n">function</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">res</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskloop</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">end</span> <span class="k">do</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskoop</span>
+
+<span class="n">end</span> <span class="n">function</span> <span class="n">array_sum</span>
+
+<span class="n">program</span> <span class="n">main</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">res</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+
+    <span class="n">integer</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">array_sum</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
+        <span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">end</span> <span class="k">do</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;The result is&quot;</span><span class="p">,</span> <span class="n">res</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+<span class="n">end</span> <span class="n">program</span> <span class="n">main</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the second example, we are computing exactly the same
+value but we do it in a very different way. The first thing that we do in the
+<em>array_sum</em>  function is to create a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region that defines the scope of a
+new reduction using the  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause.
+After that, we specify that a task and also the tasks generated
+by a taskloop will participate in that reduction using the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause
+on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  and  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  constructs, respectively. Note that
+we also added the  <code class="docutils literal notranslate"><span class="pre">nogroup</span></code>  clause to the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct. This is allowed
+because what we are expressing with the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause is different
+from what we were expressing with the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. In one case we specify
+that the generated tasks will participate in a previously declared reduction
+( <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause) whereas in the other case we specify that we want to
+create a new reduction and also that all tasks generated by the taskloop will
+participate on it.</p>
+<p>The second example computes exactly the same value as in the preceding <em>taskloop_reduction.1</em>   section, but in a very different way. First, in the  <em>array_sum</em>  function a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  region is created  that defines the scope of a new reduction using the  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause. After that, a task and also the tasks generated by a taskloop participate in  that reduction by using the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  and  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  constructs, respectively.  Note that the  <code class="docutils literal notranslate"><span class="pre">nogroup</span></code>  clause was added to the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct. This is allowed because what is expressed with the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause is different from what is expressed with the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. In one case the generated tasks are specified to participate in a previously  declared reduction ( <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause) whereas in the other case creation of a new reduction is specified and also that all tasks generated  by the taskloop will participate on it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name:       taskloop_reduction.2.c</span>
+<span class="cm">* type:       C</span>
+<span class="cm">* version:    omp_5.0</span>
+<span class="cm">*/</span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="nf">array_sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="cp">#pragma omp taskgroup task_reduction(+: res)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+            <span class="cp">#pragma omp task in_reduction(+: res)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+            <span class="cp">#pragma omp taskloop in_reduction(+: res) nogroup</span>
+            <span class="k">for</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">res</span> <span class="o">+=</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">v</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">10</span><span class="p">};</span>
+
+    <span class="cp">#pragma omp parallel</span>
+    <span class="cp">#pragma omp single</span>
+    <span class="p">{</span>
+        <span class="kt">int</span> <span class="n">res</span> <span class="o">=</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The result is %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">res</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">taskloop_reduction</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+
+<span class="n">function</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">res</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+
+    <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span> <span class="n">task_reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
+        <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+
+        <span class="o">!</span><span class="n">$omp</span> <span class="n">taskloop</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span> <span class="n">res</span><span class="p">)</span> <span class="n">nogroup</span>
+        <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">res</span> <span class="o">+</span> <span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="n">end</span> <span class="k">do</span>
+        <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskoop</span>
+    <span class="n">endif</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span>
+
+<span class="n">end</span> <span class="n">function</span> <span class="n">array_sum</span>
+
+<span class="n">program</span> <span class="n">main</span>
+    <span class="n">implicit</span> <span class="n">none</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="mi">10</span><span class="p">),</span> <span class="n">res</span>
+    <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+
+    <span class="n">integer</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">array_sum</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
+        <span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="n">end</span> <span class="k">do</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">array_sum</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;The result is&quot;</span><span class="p">,</span> <span class="n">res</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+<span class="n">end</span> <span class="n">program</span> <span class="n">main</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the OpenMP 5.0 Specification,  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clauses for the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"> <span class="pre">simd</span></code>  construct were also added.</p>
+<p>The examples below compare reductions for the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  and the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  constructs. These examples illustrate the use of  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clauses within  ‘stand-alone’  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  constructs, and the use of  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clauses for tasks of taskloops to participate with other reductions within the scope of a parallel region.</p>
+<p>{taskloop reductions:}</p>
+<p>In the  <em>taskloop reductions</em>  section of the example below,   <em>taskloop 1</em>  uses the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause  in a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct for a sum reduction, accumulated in  <em>asum</em> .  The behavior is as though a  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct encloses the  taskloop region with a  <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code>  clause, and each taskloop task has an  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause with the specifications  of the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. At the end of the taskloop region  <em>asum</em>  contains the result of the reduction.</p>
+<p>The next taskloop,  <em>taskloop 2</em> , illustrates the use of the   <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause to participate in a previously defined reduction scope of a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct.</p>
+<p>The task reductions of  <em>task 2</em>  and  <em>taskloop 2</em>  are combined across the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct and the single  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct, as specified in the  <code class="docutils literal notranslate"><span class="pre">reduction(task,</span></code> ~ <code class="docutils literal notranslate"><span class="pre">+:asum)</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct. At the end of the parallel region  <em>asum</em>  contains the combined result of all reductions.</p>
+<p>{taskloop simd reductions:}</p>
+<p>Reductions for the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct are shown in the second half of the . Since each component construct,  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  and  <code class="docutils literal notranslate"><span class="pre">simd</span></code> ,  can accept a reduction-type clause, the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct is a composite construct, and the specific application of the reduction clause is defined within the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct section of the OpenMP 5.0 Specification. The  below illustrates use cases for these reductions.</p>
+<p>In the  <em>taskloop simd reduction</em>  section of the example below,  <em>taskloop simd 3</em>  uses the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause  in a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct for a sum reduction within a loop. For this case a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause is used, as one would use  for a  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct. The SIMD reductions of each task are combined, and the results of these tasks are further  combined just as in the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct with the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause for  <em>taskloop 1</em> . At the end of the taskloop region  <em>asum</em>  contains the combined result of all reductions.</p>
+<p>If a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct is to participate in a previously defined  reduction scope, the reduction participation should be specified with a  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause, as shown in the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region enclosing  <em>task 4</em>  and  <em>taskloop simd 4</em>   sections.</p>
+<p>Here the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct’s   <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause specifies participation of the construct’s tasks as  a task reduction within the scope of the parallel region.   That is, the results of each task of the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct component  contribute to the reduction in a broader level, just as in  <em>parallel reduction a</em>   section above. Also, each  <code class="docutils literal notranslate"><span class="pre">simd</span></code> -component construct occurs as if it has a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause, and the SIMD results of each task are combined as though to form a single result for each task (that participates in the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause). At the end of the parallel region  <em>asum</em>  contains the combined result of all reductions.</p>
+<p>Just as in  <em>parallel reduction a</em>  the
+<code class="docutils literal notranslate"><span class="pre">taskloop</span> <span class="pre">simd</span></code>  construct reduction results are combined<br />
+with the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct reduction results
+as specified by the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct
+and the  <em>task</em>  reduction-modifier of the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause of<br />
+the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct.
+At the end of the parallel region  <em>asum</em>  contains the combined result of all reductions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="cm">/*</span>
+<span class="cm">* name: taskloop_simd_reduction.1c</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.0</span>
+<span class="cm">*/</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#define N 100</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">asum</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+
+  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
+
+<span class="c1">// taskloop reductions</span>
+
+  <span class="cp">#pragma omp parallel master</span>
+  <span class="cp">#pragma omp taskloop reduction(+:asum)                </span><span class="c1">//taskloop 1</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+
+
+  <span class="cp">#pragma omp parallel reduction(task, +:asum)          </span><span class="c1">// parallel reduction a</span>
+  <span class="p">{</span>
+     <span class="cp">#pragma omp master</span>
+     <span class="cp">#pragma omp task            in_reduction(+:asum)    </span><span class="c1">//task 2</span>
+       <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+
+     <span class="cp">#pragma omp master taskloop in_reduction(+:asum)    </span><span class="c1">//taskloop 2</span>
+       <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+  <span class="p">}</span>
+
+<span class="c1">// taskloop simd reductions</span>
+
+  <span class="cp">#pragma omp parallel master</span>
+  <span class="cp">#pragma omp taskloop simd reduction(+:asum)            </span><span class="c1">//taskloop simd 3</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+
+
+  <span class="cp">#pragma omp parallel reduction(task, +:asum)          </span><span class="c1">// parallel reduction b</span>
+  <span class="p">{</span>
+     <span class="cp">#pragma omp master</span>
+     <span class="cp">#pragma omp task                 in_reduction(+:asum) </span><span class="c1">//task 4</span>
+       <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+
+     <span class="cp">#pragma omp master taskloop simd in_reduction(+:asum) </span><span class="c1">//taskloop simd 4</span>
+       <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">asum</span> <span class="o">+=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+
+  <span class="p">}</span>
+
+  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;asum=%d </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">asum</span><span class="p">);</span> <span class="c1">// output: asum=29700</span>
+<span class="p">}</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">taskloop_simd_reduction</span><span class="mf">.1f</span><span class="mi">90</span>
+<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
+<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+
+<span class="n">program</span> <span class="n">main</span>
+
+  <span class="n">use</span> <span class="n">omp_lib</span>
+  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span>  <span class="n">N</span><span class="o">=</span><span class="mi">100</span>
+  <span class="n">integer</span>            <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">asum</span><span class="o">=</span><span class="mi">0</span>
+
+  <span class="n">a</span> <span class="o">=</span> <span class="p">[(</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span> <span class="p">)]</span>    <span class="o">!!</span> <span class="n">initialize</span>
+
+<span class="o">!!</span> <span class="n">taskloop</span> <span class="n">reductions</span>
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">master</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">taskloop</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>                     <span class="o">!!</span> <span class="n">taskloop</span> <span class="mi">1</span>
+    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskloop</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="n">master</span>
+
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">reduction</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="o">+:</span><span class="n">asum</span><span class="p">)</span>               <span class="o">!!</span> <span class="n">parallel</span> <span class="n">reduction</span> <span class="n">a</span>
+
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">master</span>
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>            <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>        <span class="o">!!</span> <span class="n">task</span> <span class="mi">2</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span>
+
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">master</span> <span class="n">taskloop</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>        <span class="o">!!</span> <span class="n">taskloop</span> <span class="mi">2</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+     <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span> <span class="n">taskloop</span>
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+
+<span class="o">!!</span> <span class="n">taskloop</span> <span class="n">simd</span> <span class="n">reductions</span>
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">master</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">taskloop</span> <span class="n">simd</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>                <span class="o">!!</span> <span class="n">taskloop</span> <span class="n">simd</span> <span class="mi">3</span>
+    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskloop</span> <span class="n">simd</span>
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="n">master</span>
+
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">reduction</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="o">+:</span><span class="n">asum</span><span class="p">)</span>               <span class="o">!!</span> <span class="n">parallel</span> <span class="n">reduction</span> <span class="n">b</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">master</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>                 <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>    <span class="o">!!</span> <span class="n">task</span> <span class="mi">4</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span>
+
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">master</span> <span class="n">taskloop</span> <span class="n">simd</span> <span class="n">in_reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">asum</span><span class="p">)</span>    <span class="o">!!</span> <span class="n">taskloop</span> <span class="n">simd</span> <span class="mi">4</span>
+       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">asum</span> <span class="o">=</span> <span class="n">asum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>  <span class="n">enddo</span>
+    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span> <span class="n">taskloop</span> <span class="n">simd</span>
+
+  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+
+  <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot;asum=&quot;</span><span class="p">,</span><span class="n">asum</span>   <span class="o">!!</span> <span class="nl">output</span><span class="p">:</span> <span class="n">asum</span><span class="o">=</span><span class="mi">30300</span>
+
+<span class="n">end</span> <span class="n">program</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "native"
+        },
+        kernelOptions: {
+            kernelName: "native",
+            path: "./contents"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'native'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="Examples_lastprivate.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  Clause</a>
+    <a class='right-next' id="next-link" href="Examples_udr.html" title="next page">User-Defined Reduction</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By The OpenMP Community<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
