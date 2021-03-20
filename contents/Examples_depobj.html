@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,90 +1290,91 @@
               <div>
                 
   <div class="section" id="the-depobj-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  Construct<a class="headerlink" href="#the-depobj-construct" title="Permalink to this headline">¶</a></h1>
-<p>The stand-alone  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct provides a mechanism  to create a  <em>depend object</em>  that expresses a dependence to be  used subsequently in the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of another construct. The dependence is created from a dependence type and a storage location, within a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of an  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct;<br />
-just as one would find directly on a  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.   and it is stored in the depend object. The depend object is represented by a variable of type  <code class="docutils literal notranslate"><span class="pre">omp_depend_t</span></code>   in C/C++ (by a scalar variable of integer kind  <code class="docutils literal notranslate"><span class="pre">omp_depend_kind</span></code>  in Fortran).</p>
-<p>In the example below the stand-alone  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct uses the   <code class="docutils literal notranslate"><span class="pre">depend</span></code> ,  <code class="docutils literal notranslate"><span class="pre">update</span></code>  and  <code class="docutils literal notranslate"><span class="pre">destroy</span></code>  clauses to   <em>initialize</em> ,  <em>update</em>  and  <em>uninitialize</em>  a depend object ( <code class="docutils literal notranslate"><span class="pre">obj</span></code> ).</p>
-<p>The first  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct initializes the  <code class="docutils literal notranslate"><span class="pre">obj</span></code>   depend object with  an  <code class="docutils literal notranslate"><span class="pre">inout</span></code>  dependence type with a storage  location defined by variable  <code class="docutils literal notranslate"><span class="pre">a</span></code> .   This dependence is passed into the  <em>driver</em>   routine via the  <code class="docutils literal notranslate"><span class="pre">obj</span></code>  depend object.</p>
-<p>In the first  <em>driver</em>  routine call, {Task 1} uses the dependence of the object ( <code class="docutils literal notranslate"><span class="pre">inout</span></code> ),  while {Task 2} uses an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence specified  directly in a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause. For these task dependences {Task 1} must execute and  complete before {Task 2} begins.</p>
-<p>Before the second call to  <em>driver</em> ,  <code class="docutils literal notranslate"><span class="pre">obj</span></code>  is updated  using the  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct to represent an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence.  Hence, in the second call to  <em>driver</em> , {Task 1} will have an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence; and {Task 1} and  {Task 2} can execute simultaneously. Note: in an  <code class="docutils literal notranslate"><span class="pre">update</span></code>  clause, only the dependence type can be (is) updated.</p>
-<p>The third  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct uses the  <code class="docutils literal notranslate"><span class="pre">destroy</span></code>  clause. It frees resources as it puts the depend object in an uninitialized state– effectively destroying the depend object. After an object has been uninitialized it can be initialized again with a new dependence type {and} a new variable.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">depobj</span></code> Construct<a class="headerlink" href="#the-depobj-construct" title="Permalink to this headline">¶</a></h1>
+<p>The stand-alone <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct provides a mechanism  to create a  <em>depend object</em>  that expresses a dependence to be  used subsequently in the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of another construct. The dependence is created from a dependence type and a storage location, within a <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of an <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct;  and it is stored in the depend object. The depend object is represented by a variable of type <code class="docutils literal notranslate"><span class="pre">omp_depend_t</span></code>  in C/C++ (by a scalar variable of integer kind <code class="docutils literal notranslate"><span class="pre">omp_depend_kind</span></code> in Fortran).</p>
+<p>In the example below the stand-alone <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct uses the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>, <code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy</span></code> clauses to   <em>initialize</em> ,  <em>update</em>  and  <em>uninitialize</em>  a depend object (<code class="docutils literal notranslate"><span class="pre">obj</span></code>).</p>
+<p>The first <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct initializes the <code class="docutils literal notranslate"><span class="pre">obj</span></code>  depend object with  an <code class="docutils literal notranslate"><span class="pre">inout</span></code> dependence type with a storage  location defined by variable <code class="docutils literal notranslate"><span class="pre">a</span></code>.   This dependence is passed into the  <em>driver</em>   routine via the <code class="docutils literal notranslate"><span class="pre">obj</span></code> depend object.</p>
+<p>In the first  <em>driver</em>  routine call, <strong>Task 1</strong> uses the dependence of the object (<code class="docutils literal notranslate"><span class="pre">inout</span></code>),  while <strong>Task 2</strong> uses an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence specified  directly in a <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause. For these task dependences <strong>Task 1</strong> must execute and  complete before <strong>Task 2</strong> begins.</p>
+<p>Before the second call to  <em>driver</em> , <code class="docutils literal notranslate"><span class="pre">obj</span></code> is updated  using the <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct to represent an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence.  Hence, in the second call to  <em>driver</em> , <strong>Task 1</strong> will have an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence; and <strong>Task 1</strong> and  <strong>Task 2</strong> can execute simultaneously. Note: in an <code class="docutils literal notranslate"><span class="pre">update</span></code> clause, only the dependence type can be (is) updated.</p>
+<p>The third <code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct uses the <code class="docutils literal notranslate"><span class="pre">destroy</span></code> clause. It frees resources as it puts the depend object in an uninitialized state– effectively destroying the depend object. After an object has been uninitialized it can be initialized again with a new dependence type <strong>and</strong> a new variable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       depobj.1c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version:    omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+/*
+* name:       depobj.1c
+* type:       C
+* version:    omp_5.0
+*/
 
-<span class="cp">#define N 100</span>
-<span class="cp">#define TRUE  1</span>
-<span class="cp">#define FALSE 0</span>
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-<span class="kt">void</span> <span class="nf">driver</span><span class="p">(</span><span class="kt">int</span> <span class="n">update</span><span class="p">,</span> <span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">float</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">omp_depend_t</span> <span class="o">*</span><span class="n">obj</span><span class="p">);</span>
+#define N 100
+#define TRUE  1
+#define FALSE 0
 
-<span class="kt">void</span> <span class="nf">update_copy</span><span class="p">(</span><span class="kt">int</span> <span class="n">update</span><span class="p">,</span> <span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">float</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">checkpoint</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">[],</span><span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
+void driver(int update, float a[], float b[], int n, omp_depend_t *obj);
+
+void update_copy(int update, float a[], float b[], int n);
+void checkpoint(float a[],int n);
+void init(float a[], int n);
 
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+int main(){
 
-   <span class="kt">float</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-   <span class="n">omp_depend_t</span> <span class="n">obj</span><span class="p">;</span>
+   float a[N],b[N];
+   omp_depend_t obj;
 
-   <span class="n">init</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+   init(a, N);
 
-   <span class="cp">#pragma omp depobj(obj) depend(inout: a)</span>
+   #pragma omp depobj(obj) depend(inout: a)
 
-   <span class="n">driver</span><span class="p">(</span><span class="n">TRUE</span><span class="p">,</span>  <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">);</span>  <span class="c1">// updating a occurs</span>
+   driver(TRUE,  a,b,N, &amp;obj);  // updating a occurs
 
-   <span class="cp">#pragma omp depobj(obj) update(in)</span>
+   #pragma omp depobj(obj) update(in)
 
-   <span class="n">driver</span><span class="p">(</span><span class="n">FALSE</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">N</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">obj</span><span class="p">);</span>  <span class="c1">// no updating of a</span>
+   driver(FALSE, a,b,N, &amp;obj);  // no updating of a
 
-   <span class="cp">#pragma omp depobj(obj) destroy  </span><span class="c1">// obj is set to uninitilized state,</span>
-                                    <span class="c1">// resources are freed</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+   #pragma omp depobj(obj) destroy  // obj is set to uninitilized state,
+                                    // resources are freed
+   return 0;
 
-<span class="p">}</span>
+}
 
-<span class="kt">void</span> <span class="nf">driver</span><span class="p">(</span><span class="kt">int</span> <span class="n">update</span><span class="p">,</span> <span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">float</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="n">omp_depend_t</span> <span class="o">*</span><span class="n">obj</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
+void driver(int update, float a[], float b[], int n, omp_depend_t *obj)
+{
+   #pragma omp parallel num_threads(2)
+   #pragma omp single
+   {
 
-     <span class="cp">#pragma omp task depend(depobj: *obj) </span><span class="c1">// Task 1, uses depend object</span>
-       <span class="n">update_copy</span><span class="p">(</span><span class="n">update</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>       <span class="c1">// update a or not, always copy a to b</span>
+     #pragma omp task depend(depobj: *obj) // Task 1, uses depend object
+       update_copy(update, a,b,n);       // update a or not, always copy a to b
 
-     <span class="cp">#pragma omp task depend(in: a[:n])    </span><span class="c1">// Task 2, only read a</span>
-       <span class="n">checkpoint</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+     #pragma omp task depend(in: a[:n])    // Task 2, only read a
+       checkpoint(a,n);
 
-   <span class="p">}</span>
-<span class="p">}</span>
+   }
+}
 
-<span class="kt">void</span> <span class="nf">update_copy</span><span class="p">(</span><span class="kt">int</span> <span class="n">update</span><span class="p">,</span> <span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">float</span> <span class="n">b</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">if</span><span class="p">(</span><span class="n">update</span><span class="p">)</span> <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+=</span><span class="mf">1.0f</span><span class="p">;</span>
+void update_copy(int update, float a[], float b[], int n)
+{
+   if(update) for(int i=0;i&lt;n;i++) a[i]+=1.0f;
 
-   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="p">}</span>
+   for(int i=0;i&lt;n;i++) b[i]=a[i];
+}
 
-<span class="kt">void</span> <span class="nf">checkpoint</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %f &quot;</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
+void checkpoint(float a[], int n)
+{
+   for(int i=0;i&lt;n;i++) printf(&quot; %f &quot;,a[i]);
+   printf(&quot;\n&quot;);
+}
 
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
+void init(float a[], int n)
+{
+   for(int i=0;i&lt;n;i++) a[i]=i;
+}
 
 
 </pre></div>
@@ -1344,7 +1383,7 @@ just as one would find directly on a  <code class="docutils literal notranslate"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name:       depobj.1f90
 ! type:       F-free
 ! version: omp_5.0
@@ -1459,7 +1498,7 @@ end subroutine
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_ordered.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Clause and the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_ordered.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Clause and the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_doacross.html" title="next page">Doacross Loop Nest</a>
 
         </div>

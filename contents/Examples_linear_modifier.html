@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ref , val , uval Modifiers for linear Clause &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>ref, val, uval Modifiers for linear Clause &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,55 +1290,57 @@
               <div>
                 
   <div class="section" id="ref-val-uval-modifiers-for-linear-clause">
-<h1><code class="docutils literal notranslate"><span class="pre">ref</span></code> ,  <code class="docutils literal notranslate"><span class="pre">val</span></code> ,  <code class="docutils literal notranslate"><span class="pre">uval</span></code>  Modifiers for  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  Clause<a class="headerlink" href="#ref-val-uval-modifiers-for-linear-clause" title="Permalink to this headline">¶</a></h1>
-<p>When generating vector functions from  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directives, it is important for a compiler to know the proper types of function arguments in order to generate efficient s. This is especially true for C++ reference types and Fortran arguments.</p>
-<p>In the following example, the function  <em>add_one2</em>  has a C++ reference parameter (or Fortran argument)  <em>p</em> .  Variable  <em>p</em>  gets incremented by 1 in the function. The caller loop  <em>i</em>  in the main program passes  a variable  <em>k</em>  as a reference to the function  <em>add_one2</em>  call.    The  <code class="docutils literal notranslate"><span class="pre">ref</span></code>  modifier for the  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause on the   <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive is used to annotate the  reference-type parameter  <em>p</em>  to match the property of the variable   <em>k</em>  in the loop.   This use of reference type is equivalent to the second call to   <em>add_one2</em>  with a direct passing of the array element  <em>a[i]</em> .   In the example, the preferred vector  length 8 is specified for both the caller loop and the callee function.</p>
-<p>When  <code class="docutils literal notranslate"><span class="pre">linear(ref(p))</span></code>  is applied to an argument passed by reference,  it tells the compiler that the addresses in its vector argument are consecutive, and so the compiler can generate a single vector load or store instead of  a gather or scatter. This allows more efficient SIMD  to be generated with  less source changes.</p>
+<h1><code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">uval</span></code> Modifiers for <code class="docutils literal notranslate"><span class="pre">linear</span></code> Clause<a class="headerlink" href="#ref-val-uval-modifiers-for-linear-clause" title="Permalink to this headline">¶</a></h1>
+<p>When generating vector functions from <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directives, it is important for a compiler to know the proper types of function arguments in order to generate efficient codes. This is especially true for C++ reference types and Fortran arguments.</p>
+<p>In the following example, the function  <em>add_one2</em>  has a C++ reference parameter (or Fortran argument)  <em>p</em> .  Variable  <em>p</em>  gets incremented by 1 in the function. The caller loop  <em>i</em>  in the main program passes  a variable  <em>k</em>  as a reference to the function  <em>add_one2</em>  call.    The <code class="docutils literal notranslate"><span class="pre">ref</span></code> modifier for the <code class="docutils literal notranslate"><span class="pre">linear</span></code> clause on the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directive is used to annotate the  reference-type parameter  <em>p</em>  to match the property of the variable   <em>k</em>  in the loop.   This use of reference type is equivalent to the second call to   <em>add_one2</em>  with a direct passing of the array element  <em>a[i]</em> .   In the example, the preferred vector  length 8 is specified for both the caller loop and the callee function.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">linear(ref(p))</span></code> is applied to an argument passed by reference,  it tells the compiler that the addresses in its vector argument are consecutive, and so the compiler can generate a single vector load or store instead of  a gather or scatter. This allows more efficient SIMD code to be generated with  less source changes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: linear_modifier.1cpp</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#define NN 1023</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">NN</span><span class="p">];</span>
+/*
+* name: linear_modifier.1cpp
+* type: C++
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
 
-<span class="cp">#pragma omp declare simd linear(ref(p)) simdlen(8)</span>
-<span class="kt">void</span> <span class="nf">add_one2</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="n">p</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="p">}</span>
+#define NN 1023
+int a[NN];
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
+#pragma omp declare simd linear(ref(p)) simdlen(8)
+void add_one2(int&amp; p)
+{
+   p += 1;
+}
 
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-   <span class="p">}</span>
+int main(void)
+{
+   int i;
+   int* p = a;
 
-<span class="cp">#pragma omp simd linear(p) simdlen(8)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kt">int</span><span class="o">&amp;</span> <span class="n">k</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-      <span class="n">add_one2</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
-      <span class="n">add_one2</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="n">p</span><span class="o">++</span><span class="p">;</span>
-   <span class="p">}</span>
+   for (i = 0; i &lt; NN; i++) {
+      a[i] = i;
+   }
 
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-         <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;passed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+#pragma omp simd linear(p) simdlen(8)
+   for (i = 0; i &lt; NN; i++) {
+      int&amp; k = *p;
+      add_one2(k);
+      add_one2(a[i]);
+      p++;
+   }
+
+   for (i = 0; i &lt; NN; i++) {
+      if (a[i] != i+2) {
+         printf(&quot;failed\n&quot;);
+         return 1;
+      }
+   }
+   printf(&quot;passed\n&quot;);
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1308,206 +1348,106 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">linear_modifier</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">module</span> <span class="n">m</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">NN</span> <span class="o">=</span> <span class="mi">1023</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">NN</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: linear_modifier.1.f90
+! type: F-free
+! version: omp_4.5
+module m
+   integer, parameter :: NN = 1023
+   integer :: a(NN)
 
- <span class="n">contains</span>
-   <span class="n">subroutine</span> <span class="n">add_one2</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">add_one2</span><span class="p">)</span> <span class="n">linear</span><span class="p">(</span><span class="n">ref</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="n">simdlen</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">p</span>
+ contains
+   subroutine add_one2(p)
+   !$omp declare simd(add_one2) linear(ref(p)) simdlen(8)
+   implicit none
+   integer :: p
 
-   <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
-   <span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
+   p = p + 1
+   end subroutine
+end module
 
-<span class="n">program</span> <span class="n">main</span>
-   <span class="n">use</span> <span class="n">m</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span>
+program main
+   use m
+   implicit none
+   integer :: i, p
 
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
-   <span class="n">end</span> <span class="k">do</span>
+   do i = 1, NN
+      a(i) = i
+   end do
 
-   <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">linear</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="n">simdlen</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="n">associate</span><span class="p">(</span><span class="n">k</span> <span class="o">=&gt;</span> <span class="n">a</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
-         <span class="n">call</span> <span class="n">add_one2</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-      <span class="n">end</span> <span class="n">associate</span>
-      <span class="n">call</span> <span class="n">add_one2</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-      <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
-   <span class="n">end</span> <span class="k">do</span>
+   p = 1
+   !$omp simd linear(p) simdlen(8)
+   do i = 1, NN
+      associate(k =&gt; a(p))
+         call add_one2(k)
+      end associate
+      call add_one2(a(i))
+      p = p + 1
+   end do
 
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/=</span> <span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;failed&quot;</span>
-         <span class="n">stop</span>
-      <span class="n">endif</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;passed&quot;</span>
-<span class="n">end</span> <span class="n">program</span>
+   do i = 1, NN
+      if (a(i) /= i+2) then
+         print *, &quot;failed&quot;
+         stop
+      endif
+   end do
+   print *, &quot;passed&quot;
+end program
 
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example is a variant of the above example. The function  <em>add_one2</em>  in the C++  includes an additional C++ reference parameter  <em>i</em> .  The loop index  <em>i</em>  of the caller loop  <em>i</em>  in the main program  is passed as a reference to the function  <em>add_one2</em>  call.    The loop index  <em>i</em>  has a uniform address with linear value of step 1 across SIMD lanes.  Thus, the  <code class="docutils literal notranslate"><span class="pre">uval</span></code>  modifier is used for the  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause  to annotate the C++ reference-type parameter  <em>i</em>  to match  the property of loop index  <em>i</em> .</p>
-<p>In the correponding Fortran  the arguments  <em>p</em>  and  <em>i</em>  in the routine  <em>add_on2</em>  are passed by references.  Similar modifiers are used for these variables in the  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clauses to match with the property at the caller loop in the main program.</p>
-<p>When  <code class="docutils literal notranslate"><span class="pre">linear(uval(i))</span></code>  is applied to an argument passed by reference, it  tells the compiler that its addresses in the vector argument are uniform  so that the compiler can generate a scalar load or scalar store and create  linear values. This allows more efficient SIMD  to be generated with  less source changes.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: linear_modifier.2cpp</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#define NN 1023</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">NN</span><span class="p">];</span>
-
-<span class="cp">#pragma omp declare simd linear(ref(p)) linear(uval(i))</span>
-<span class="kt">void</span> <span class="nf">add_one2</span><span class="p">(</span><span class="kt">int</span><span class="o">&amp;</span> <span class="n">p</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span><span class="o">&amp;</span> <span class="n">i</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="n">p</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="kt">int</span><span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span>
-
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-   <span class="p">}</span>
-
-   <span class="cp">#pragma omp simd linear(p)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="kt">int</span><span class="o">&amp;</span> <span class="n">k</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-      <span class="n">add_one2</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-      <span class="n">p</span><span class="o">++</span><span class="p">;</span>
-   <span class="p">}</span>
-
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">NN</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-         <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;passed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>The following example is a variant of the above example. The function  <em>add_one2</em>  in the C++ code includes an additional C++ reference parameter  <em>i</em> .  The loop index  <em>i</em>  of the caller loop  <em>i</em>  in the main program  is passed as a reference to the function  <em>add_one2</em>  call.    The loop index  <em>i</em>  has a uniform address with linear value of step 1 across SIMD lanes.  Thus, the <code class="docutils literal notranslate"><span class="pre">uval</span></code> modifier is used for the <code class="docutils literal notranslate"><span class="pre">linear</span></code> clause  to annotate the C++ reference-type parameter  <em>i</em>  to match  the property of loop index  <em>i</em> .</p>
+<p>In the correponding Fortran code the arguments  <em>p</em>  and  <em>i</em>  in the routine  <em>add_on2</em>  are passed by references.  Similar modifiers are used for these variables in the <code class="docutils literal notranslate"><span class="pre">linear</span></code> clauses to match with the property at the caller loop in the main program.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">linear(uval(i))</span></code> is applied to an argument passed by reference, it  tells the compiler that its addresses in the vector argument are uniform  so that the compiler can generate a scalar load or scalar store and create  linear values. This allows more efficient SIMD code to be generated with  less source changes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">linear_modifier</span><span class="mf">.2f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">module</span> <span class="n">m</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">NN</span> <span class="o">=</span> <span class="mi">1023</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">NN</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
- <span class="n">contains</span>
-   <span class="n">subroutine</span> <span class="n">add_one2</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">add_one2</span><span class="p">)</span> <span class="n">linear</span><span class="p">(</span><span class="n">ref</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="n">linear</span><span class="p">(</span><span class="n">uval</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">p</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">i</span>
+/*
+* name: linear_modifier.2cpp
+* type: C++
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
 
-   <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="n">i</span>
-   <span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
+#define NN 1023
+int a[NN];
 
-<span class="n">program</span> <span class="n">main</span>
-   <span class="n">use</span> <span class="n">m</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span>
+#pragma omp declare simd linear(ref(p)) linear(uval(i))
+void add_one2(int&amp; p, const int&amp; i)
+{
+   p += i;
+}
 
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
-   <span class="n">end</span> <span class="k">do</span>
+int main(void)
+{
+   int i;
+   int* p = a;
 
-   <span class="n">p</span> <span class="o">=</span> <span class="mi">1</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">linear</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="n">call</span> <span class="n">add_one2</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">p</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span>
-      <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
-   <span class="n">end</span> <span class="k">do</span>
+   for (i = 0; i &lt; NN; i++) {
+      a[i] = i;
+   }
 
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">NN</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/=</span> <span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;failed&quot;</span>
-         <span class="n">stop</span>
-      <span class="n">endif</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;passed&quot;</span>
-<span class="n">end</span> <span class="n">program</span>
+   #pragma omp simd linear(p)
+   for (i = 0; i &lt; NN; i++) {
+      int&amp; k = *p;
+      add_one2(k, i);
+      p++;
+   }
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the following example, the function  <em>func</em>  takes arrays  <em>x</em>  and  <em>y</em>  as arguments, and accesses the array elements referenced by  the index  <em>i</em> . The caller loop  <em>i</em>  in the main program passes a linear copy of the variable  <em>k</em>  to the function  <em>func</em> . The  <code class="docutils literal notranslate"><span class="pre">val</span></code>  modifier is used for the  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause  in the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive for the function  <em>func</em>  to annotate argument  <em>i</em>  to match the property of  the actual argument  <em>k</em>  passed in the SIMD loop. Arrays  <em>x</em>  and  <em>y</em>  have uniform addresses across SIMD lanes.</p>
-<p>When  <code class="docutils literal notranslate"><span class="pre">linear(val(i):1)</span></code>  is applied to an argument,  it tells the compiler that its addresses in the vector argument may not be  consecutive, however, their values are linear (with stride 1 here). When the value of  <em>i</em>  is used  in subscript of array references (e.g.,  <em>x[i]</em> ), the compiler can generate  a vector load or store instead of a gather or scatter. This allows more  efficient SIMD  to be generated with less source changes.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: linear_modifier.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#define N 128</span>
-
-<span class="cp">#pragma omp declare simd simdlen(4) uniform(x, y) linear(val(i):1)</span>
-<span class="kt">double</span> <span class="nf">func</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">[],</span> <span class="kt">double</span> <span class="n">y</span><span class="p">[],</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">return</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">double</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">z1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">z2</span><span class="p">;</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">i</span><span class="p">;</span>
-      <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">;</span>
-   <span class="p">}</span>
-
-   <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="cp">#pragma omp simd linear(k)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">z1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
-      <span class="n">k</span><span class="o">++</span><span class="p">;</span>
-   <span class="p">}</span>
-
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">z2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="n">i</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">z1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">z2</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;failed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-         <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;passed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   for (i = 0; i &lt; NN; i++) {
+      if (a[i] != i*2) {
+         printf(&quot;failed\n&quot;);
+         return 1;
+      }
+   }
+   printf(&quot;passed\n&quot;);
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1515,7 +1455,111 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: linear_modifier.2f90
+! type: F-free
+! version: omp_4.5
+module m
+   integer, parameter :: NN = 1023
+   integer :: a(NN)
+
+ contains
+   subroutine add_one2(p, i)
+   !$omp declare simd(add_one2) linear(ref(p)) linear(uval(i))
+   implicit none
+   integer :: p
+   integer, intent(in) :: i
+
+   p = p + i
+   end subroutine
+end module
+
+program main
+   use m
+   implicit none
+   integer :: i, p
+
+   do i = 1, NN
+      a(i) = i
+   end do
+
+   p = 1
+   !$omp simd linear(p)
+   do i = 1, NN
+      call add_one2(a(p), i)
+      p = p + 1
+   end do
+
+   do i = 1, NN
+      if (a(i) /= i*2) then
+         print *, &quot;failed&quot;
+         stop
+      endif
+   end do
+   print *, &quot;passed&quot;
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the following example, the function  <em>func</em>  takes arrays  <em>x</em>  and  <em>y</em>  as arguments, and accesses the array elements referenced by  the index  <em>i</em> . The caller loop  <em>i</em>  in the main program passes a linear copy of the variable  <em>k</em>  to the function  <em>func</em> . The <code class="docutils literal notranslate"><span class="pre">val</span></code> modifier is used for the <code class="docutils literal notranslate"><span class="pre">linear</span></code> clause  in the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directive for the function  <em>func</em>  to annotate argument  <em>i</em>  to match the property of  the actual argument  <em>k</em>  passed in the SIMD loop. Arrays  <em>x</em>  and  <em>y</em>  have uniform addresses across SIMD lanes.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">linear(val(i):1)</span></code> is applied to an argument,  it tells the compiler that its addresses in the vector argument may not be  consecutive, however, their values are linear (with stride 1 here). When the value of  <em>i</em>  is used  in subscript of array references (e.g.,  <em>x[i]</em> ), the compiler can generate  a vector load or store instead of a gather or scatter. This allows more  efficient SIMD code to be generated with less source changes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: linear_modifier.3c
+* type: C
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
+
+#define N 128
+
+#pragma omp declare simd simdlen(4) uniform(x, y) linear(val(i):1)
+double func(double x[], double y[], int i)
+{
+   return (x[i] + y[i]);
+}
+
+int main(void)
+{
+   double x[N], y[N], z1[N], z2;
+   int i, k;
+
+   for (i = 0; i &lt; N; i++) {
+      x[i] = (double)i;
+      y[i] = (double)i*2;
+   }
+
+   k = 0;
+#pragma omp simd linear(k)
+   for (i = 0; i &lt; N; i++) {
+      z1[i] = func(x, y, k);
+      k++;
+   }
+
+   for (i = 0; i &lt; N; i++) {
+      z2 = (double)(i + i*2);
+      if (z1[i] != z2) {
+         printf(&quot;failed\n&quot;);
+         return 1;
+      }
+   }
+   printf(&quot;passed\n&quot;);
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: linear_modifier.3f
 ! type: F-free
 ! version: omp_4.5
@@ -1592,7 +1636,7 @@ end program main
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_SIMD.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">simd</span></code>  and  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  Constructs</a>
+    <a class='left-prev' id="prev-link" href="Examples_SIMD.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">simd</span></code> and <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> Constructs</a>
     <a class='right-next' id="next-link" href="Chap_synchronization.html" title="next page">Synchronization</a>
 
         </div>

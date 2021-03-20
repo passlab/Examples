@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1254,49 +1292,51 @@
   <div class="section" id="the-openmp-memory-model">
 <h1>The OpenMP Memory Model<a class="headerlink" href="#the-openmp-memory-model" title="Permalink to this headline">¶</a></h1>
 <p>The following examples illustrate two major concerns for concurrent thread execution: ordering of thread execution and memory accesses that may or may not lead to race conditions.</p>
-<p>In the following example, at Print 1, the value of  <code class="docutils literal notranslate"><span class="pre">xval</span></code>  could be either 2 or 5, depending on the timing of the threads. The  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directives are necessary for the accesses to  <code class="docutils literal notranslate"><span class="pre">x</span></code>  by threads 1 and 2 to avoid a data race. If the atomic write completes before the atomic read, thread 1 is guaranteed to see 5 in  <code class="docutils literal notranslate"><span class="pre">xval</span></code> . Otherwise, thread 1 is guaranteed to see 2 in  <code class="docutils literal notranslate"><span class="pre">xval</span></code> .</p>
-<p>The barrier after Print 1 contains implicit flushes on all threads, as well as a thread synchronization, so the programmer is guaranteed that the value 5 will be printed by both Print 2 and Print 3. Since neither Print 2 or Print 3 are modifying  <code class="docutils literal notranslate"><span class="pre">x</span></code> , they may concurrently access  <code class="docutils literal notranslate"><span class="pre">x</span></code>  without requiring  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directives to avoid a data race.</p>
+<p>In the following example, at Print 1, the value of <code class="docutils literal notranslate"><span class="pre">xval</span></code> could be either 2 or 5, depending on the timing of the threads. The <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directives are necessary for the accesses to <code class="docutils literal notranslate"><span class="pre">x</span></code> by threads 1 and 2 to avoid a data race. If the atomic write completes before the atomic read, thread 1 is guaranteed to see 5 in <code class="docutils literal notranslate"><span class="pre">xval</span></code>. Otherwise, thread 1 is guaranteed to see 2 in <code class="docutils literal notranslate"><span class="pre">xval</span></code>.</p>
+<p>The barrier after Print 1 contains implicit flushes on all threads, as well as a thread synchronization, so the programmer is guaranteed that the value 5 will be printed by both Print 2 and Print 3. Since neither Print 2 or Print 3 are modifying <code class="docutils literal notranslate"><span class="pre">x</span></code>, they may concurrently access <code class="docutils literal notranslate"><span class="pre">x</span></code> without requiring <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directives to avoid a data race.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: mem_model.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
+/*
+* name: mem_model.1c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-  <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel num_threads(2) shared(x)</span>
-  <span class="p">{</span>
+int main(){
+  int x;
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-       <span class="cp">#pragma omp atomic write</span>
-       <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">xval</span><span class="p">;</span>
-      <span class="cp">#pragma omp atomic read</span>
-      <span class="n">xval</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
-    <span class="cm">/* Print 1: xval can be 2 or 5 */</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;1: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">xval</span><span class="p">);</span>
-    <span class="p">}</span>
+  x = 2;
+  #pragma omp parallel num_threads(2) shared(x)
+  {
 
-    <span class="cp">#pragma omp barrier</span>
+    if (omp_get_thread_num() == 0) {
+       #pragma omp atomic write
+       x = 5;
+    } else {
+      int xval;
+      #pragma omp atomic read
+      xval = x;
+    /* Print 1: xval can be 2 or 5 */
+      printf(&quot;1: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), xval);
+    }
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="cm">/* Print 2 */</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;2: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">x</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="cm">/* Print 3 */</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;3: Thread# %d: x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">omp_get_thread_num</span><span class="p">(),</span> <span class="n">x</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    #pragma omp barrier
+
+    if (omp_get_thread_num() == 0) {
+    /* Print 2 */
+      printf(&quot;2: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), x);
+    } else {
+    /* Print 3 */
+      printf(&quot;3: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), x);
+    }
+  }
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1304,101 +1344,103 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">mem_model</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">PROGRAM</span> <span class="n">MEMMODEL</span>
-  <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>      <span class="o">!</span> <span class="n">or</span> <span class="n">USE</span> <span class="n">OMP_LIB</span>
-  <span class="n">INTEGER</span> <span class="n">X</span><span class="p">,</span> <span class="n">XVAL</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.1f
+! type: F-free
+! version: omp_3.1
+PROGRAM MEMMODEL
+  INCLUDE &quot;omp_lib.h&quot;      ! or USE OMP_LIB
+  INTEGER X, XVAL
 
-  <span class="n">X</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">NUM_THREADS</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+  X = 2
+!$OMP PARALLEL NUM_THREADS(2) SHARED(X)
 
-    <span class="n">IF</span> <span class="p">(</span><span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">ATOMIC</span> <span class="n">WRITE</span>
-       <span class="n">X</span> <span class="o">=</span> <span class="mi">5</span>
-    <span class="n">ELSE</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">ATOMIC</span> <span class="n">READ</span>
-      <span class="n">XVAL</span> <span class="o">=</span> <span class="n">X</span>
-    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">1</span><span class="o">:</span> <span class="n">XVAL</span> <span class="n">can</span> <span class="n">be</span> <span class="mi">2</span> <span class="n">or</span> <span class="mi">5</span>
-      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;1: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">XVAL</span>
-    <span class="n">ENDIF</span>
+    IF (OMP_GET_THREAD_NUM() .EQ. 0) THEN
+    !$OMP ATOMIC WRITE
+       X = 5
+    ELSE
+    !$OMP ATOMIC READ
+      XVAL = X
+    ! PRINT 1: XVAL can be 2 or 5
+      PRINT *,&quot;1: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, XVAL
+    ENDIF
 
- <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
+ !$OMP BARRIER
 
-    <span class="n">IF</span> <span class="p">(</span><span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span> <span class="p">.</span><span class="n">EQ</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">2</span>
-      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;2: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">X</span>
-    <span class="n">ELSE</span>
-    <span class="o">!</span> <span class="n">PRINT</span> <span class="mi">3</span>
-      <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="s">&quot;3: THREAD# &quot;</span><span class="p">,</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">(),</span> <span class="s">&quot;X = &quot;</span><span class="p">,</span> <span class="n">X</span>
-    <span class="n">ENDIF</span>
+    IF (OMP_GET_THREAD_NUM() .EQ. 0) THEN
+    ! PRINT 2
+      PRINT *,&quot;2: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, X
+    ELSE
+    ! PRINT 3
+      PRINT *,&quot;3: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, X
+    ENDIF
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP END PARALLEL
 
-<span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">MEMMODEL</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example demonstrates why synchronization is difficult to perform correctly through variables. The write to  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  on thread 0 and the read from  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the loop on thread 1 must be atomic to avoid a data race. When thread 1 breaks out of the loop,  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  will have the value of 1. However,  <code class="docutils literal notranslate"><span class="pre">data</span></code>  will still be undefined at the first print statement. Only after the flush of both  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  and  <code class="docutils literal notranslate"><span class="pre">data</span></code>  after the first print statement will  <code class="docutils literal notranslate"><span class="pre">data</span></code>  have the well-defined value of 42.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: mem_model.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">flag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="cp">#pragma omp parallel num_threads(2)</span>
-    <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-      <span class="p">{</span>
-      <span class="cm">/* Write to the data buffer that will be</span>
-<span class="cm">       * read by thread */</span>
-          <span class="n">data</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
-      <span class="cm">/* Flush data to thread 1 and strictly order</span>
-<span class="cm">       * the write to data relative to the write to the flag */</span>
-          <span class="cp">#pragma omp flush(flag, data)</span>
-      <span class="cm">/* Set flag to release thread 1 */</span>
-          <span class="cp">#pragma omp atomic write</span>
-          <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
-      <span class="p">{</span>
-      <span class="cm">/* Loop until we see the update to the flag */</span>
-          <span class="cp">#pragma omp flush(flag, data)</span>
-          <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-          <span class="k">while</span> <span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)</span>
-          <span class="p">{</span>
-             <span class="cp">#pragma omp atomic read</span>
-             <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
-          <span class="p">}</span>
-      <span class="cm">/* Value of flag is 1; value of data is undefined */</span>
-          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;flag=%d data=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-          <span class="cp">#pragma omp flush(flag, data)</span>
-      <span class="cm">/* Value of flag is 1; value of data is 42 */</span>
-          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;flag=%d data=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+END PROGRAM MEMMODEL
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>The following example demonstrates why synchronization is difficult to perform correctly through variables. The write to <code class="docutils literal notranslate"><span class="pre">flag</span></code> on thread 0 and the read from <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the loop on thread 1 must be atomic to avoid a data race. When thread 1 breaks out of the loop, <code class="docutils literal notranslate"><span class="pre">flag</span></code> will have the value of 1. However, <code class="docutils literal notranslate"><span class="pre">data</span></code> will still be undefined at the first print statement. Only after the flush of both <code class="docutils literal notranslate"><span class="pre">flag</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> after the first print statement will <code class="docutils literal notranslate"><span class="pre">data</span></code> have the well-defined value of 42.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.2c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+int main()
+{
+    int data;
+    int flag=0;
+    #pragma omp parallel num_threads(2)
+    {
+      if (omp_get_thread_num()==0)
+      {
+      /* Write to the data buffer that will be
+       * read by thread */
+          data = 42;
+      /* Flush data to thread 1 and strictly order
+       * the write to data relative to the write to the flag */
+          #pragma omp flush(flag, data)
+      /* Set flag to release thread 1 */
+          #pragma omp atomic write
+          flag = 1;
+      }
+      else if(omp_get_thread_num()==1)
+      {
+      /* Loop until we see the update to the flag */
+          #pragma omp flush(flag, data)
+          int flag_val = 0;
+          while (flag_val &lt; 1)
+          {
+             #pragma omp atomic read
+             flag_val = flag;
+          }
+      /* Value of flag is 1; value of data is undefined */
+          printf(&quot;flag=%d data=%d\n&quot;, flag, data);
+          #pragma omp flush(flag, data)
+      /* Value of flag is 1; value of data is 42 */
+          printf(&quot;flag=%d data=%d\n&quot;, flag, data);
+      }
+    }
+    return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: mem_model.2f
 ! type: F-fixed
 ! version: omp_3.1
@@ -1445,70 +1487,72 @@
 </div>
 </div>
 </div>
-<p>The next example demonstrates why synchronization is difficult to perform correctly through variables. As in the preceding example, the updates to  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  and the reading of  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the loops on threads 1 and 2 are performed atomically to avoid data races on  <code class="docutils literal notranslate"><span class="pre">flag</span></code> . However, the  still contains data race due to the incorrect use of “flush with a list’’ after the assignment to  <code class="docutils literal notranslate"><span class="pre">data1</span></code>  on thread 1. By not including  <code class="docutils literal notranslate"><span class="pre">flag</span></code>  in the flush-set of that  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive, the assignment can be reordered with respect to the subsequent atomic update to  <code class="docutils literal notranslate"><span class="pre">flag</span></code> . Consequentially,  <code class="docutils literal notranslate"><span class="pre">data1</span></code>  is undefined at the print statement on thread 2.</p>
+<p>The next example demonstrates why synchronization is difficult to perform correctly through variables. As in the preceding example, the updates to <code class="docutils literal notranslate"><span class="pre">flag</span></code> and the reading of <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the loops on threads 1 and 2 are performed atomically to avoid data races on <code class="docutils literal notranslate"><span class="pre">flag</span></code>. However, the code still contains data race due to the incorrect use of “flush with a list’’ after the assignment to <code class="docutils literal notranslate"><span class="pre">data1</span></code> on thread 1. By not including <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the flush-set of that <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive, the assignment can be reordered with respect to the subsequent atomic update to <code class="docutils literal notranslate"><span class="pre">flag</span></code>. Consequentially, <code class="docutils literal notranslate"><span class="pre">data1</span></code> is undefined at the print statement on thread 2.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: mem_model.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="n">data0</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+/*
+* name: mem_model.3c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">flag</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+int data0 = 0, data1 = 0;
 
-    <span class="cp">#pragma omp parallel num_threads(3)</span>
-    <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-        <span class="p">{</span>
-     <span class="n">data0</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
-            <span class="cp">#pragma omp flush</span>
-        <span class="cm">/* Set flag to release thread 1 */</span>
-            <span class="cp">#pragma omp atomic update</span>
-            <span class="n">flag</span><span class="o">++</span><span class="p">;</span>
-        <span class="cm">/* Flush of flag is implied by the atomic directive */</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">1</span><span class="p">)</span>
-        <span class="p">{</span>
-     <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="cm">/* Loop until we see that flag reaches 1*/</span>
-            <span class="k">while</span><span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="cp">#pragma omp atomic read</span>
-         <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
-            <span class="p">}</span>
-     <span class="cp">#pragma omp flush(data0)</span>
- <span class="cm">/* data0 is 17 here */</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Thread 1 awoken (data0 = %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">data0</span><span class="p">);</span>
-     <span class="n">data1</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
-            <span class="cp">#pragma omp flush(data1)</span>
-        <span class="cm">/* Set flag to release thread 2 */</span>
-            <span class="cp">#pragma omp atomic update</span>
-            <span class="n">flag</span><span class="o">++</span><span class="p">;</span>
-        <span class="cm">/* Flush of flag is implied by the atomic directive */</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
-        <span class="p">{</span>
-     <span class="kt">int</span> <span class="n">flag_val</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-        <span class="cm">/* Loop until we see that flag reaches 2 */</span>
-            <span class="k">while</span><span class="p">(</span><span class="n">flag_val</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="cp">#pragma omp atomic read</span>
-                <span class="n">flag_val</span> <span class="o">=</span> <span class="n">flag</span><span class="p">;</span>
-            <span class="p">}</span>
-     <span class="cp">#pragma omp flush(data0,data1)</span>
- <span class="cm">/* there is a data race here; data0 is 17 and data1 is undefined */</span>
-            <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Thread 2 awoken (data0 = %d, data1 = %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">data0</span><span class="p">,</span> <span class="n">data1</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+    int flag=0;
+
+    #pragma omp parallel num_threads(3)
+    {
+        if(omp_get_thread_num()==0)
+        {
+     data0 = 17;
+            #pragma omp flush
+        /* Set flag to release thread 1 */
+            #pragma omp atomic update
+            flag++;
+        /* Flush of flag is implied by the atomic directive */
+        }
+        else if(omp_get_thread_num()==1)
+        {
+     int flag_val = 0;
+        /* Loop until we see that flag reaches 1*/
+            while(flag_val &lt; 0)
+            {
+                #pragma omp atomic read
+         flag_val = flag;
+            }
+     #pragma omp flush(data0)
+ /* data0 is 17 here */
+            printf(&quot;Thread 1 awoken (data0 = %d)\n&quot;, data0);
+     data1 = 42;
+            #pragma omp flush(data1)
+        /* Set flag to release thread 2 */
+            #pragma omp atomic update
+            flag++;
+        /* Flush of flag is implied by the atomic directive */
+        }
+        else if(omp_get_thread_num()==2)
+        {
+     int flag_val = 0;
+        /* Loop until we see that flag reaches 2 */
+            while(flag_val &lt; 2)
+            {
+                #pragma omp atomic read
+                flag_val = flag;
+            }
+     #pragma omp flush(data0,data1)
+ /* there is a data race here; data0 is 17 and data1 is undefined */
+            printf(&quot;Thread 2 awoken (data0 = %d, data1 = %d)\n&quot;, data0, data1);
+        }
+    }
+    return 0;
+}
 
 </pre></div>
 </div>
@@ -1516,7 +1560,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: mem_model.3f
 ! type: F-fixed
 ! version: omp_3.1

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,40 +1290,42 @@
               <div>
                 
   <div class="section" id="the-private-clause">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">private</span></code>  Clause<a class="headerlink" href="#the-private-clause" title="Permalink to this headline">¶</a></h1>
-<p>In the following example, the values of original list items  <em>i</em>  and  <em>j</em>   are retained on exit from the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, while the private list  items  <em>i</em>  and  <em>j</em>  are modified within the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">private</span></code> Clause<a class="headerlink" href="#the-private-clause" title="Permalink to this headline">¶</a></h1>
+<p>In the following example, the values of original list items  <em>i</em>  and  <em>j</em>   are retained on exit from the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, while the private list  items  <em>i</em>  and  <em>j</em>  are modified within the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: private.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="o">*</span><span class="n">ptr_i</span><span class="p">,</span> <span class="o">*</span><span class="n">ptr_j</span><span class="p">;</span>
+/*
+* name: private.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
 
-  <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="n">j</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+int main()
+{
+  int i, j;
+  int *ptr_i, *ptr_j;
 
-  <span class="n">ptr_i</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">i</span><span class="p">;</span>
-  <span class="n">ptr_j</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">j</span><span class="p">;</span>
+  i = 1;
+  j = 2;
 
-  <span class="cp">#pragma omp parallel private(i) firstprivate(j)</span>
-  <span class="p">{</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="n">assert</span> <span class="p">(</span><span class="o">*</span><span class="n">ptr_i</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">*</span><span class="n">ptr_j</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
-  <span class="p">}</span>
+  ptr_i = &amp;i;
+  ptr_j = &amp;j;
 
-  <span class="n">assert</span><span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">2</span><span class="p">);</span>
+  #pragma omp parallel private(i) firstprivate(j)
+  {
+    i = 3;
+    j = j + 2;
+    assert (*ptr_i == 1 &amp;&amp; *ptr_j == 2);
+  }
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  assert(i == 1 &amp;&amp; j == 2);
+
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1293,22 +1333,22 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">private</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">PROGRAM</span> <span class="n">PRIV_EXAMPLE</span>
-        <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">J</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.1f
+! type: F-fixed
+      PROGRAM PRIV_EXAMPLE
+        INTEGER I, J
 
-        <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">J</span> <span class="o">=</span> <span class="mi">2</span>
+        I = 1
+        J = 2
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="n">FIRSTPRIVATE</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-          <span class="n">I</span> <span class="o">=</span> <span class="mi">3</span>
-          <span class="n">J</span> <span class="o">=</span> <span class="n">J</span> <span class="o">+</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL PRIVATE(I) FIRSTPRIVATE(J)
+          I = 3
+          J = J + 2
+!$OMP   END PARALLEL
 
-        <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">J</span>  <span class="o">!</span> <span class="n">I</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">1</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">J</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="mi">2</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_EXAMPLE</span>
+        PRINT *, I, J  ! I .eq. 1 .and. J .eq. 2
+      END PROGRAM PRIV_EXAMPLE
 
 </pre></div>
 </div>
@@ -1317,94 +1357,31 @@
 <p>In the following example, all uses of the variable  <em>a</em>  within the loop construct  in the routine  <em>f</em>  refer to a private list item  <em>a</em> , while it is  unspecified whether references to  <em>a</em>  in the routine  <em>g</em>  are to a  private list item or the original list item.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: private.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">a</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="cm">/* Accessed in the region but outside of the construct;</span>
-<span class="cm">          * therefore unspecified whether original or private list</span>
-<span class="cm">          * item is modified. */</span>
-<span class="p">}</span>
+/*
+* name: private.2c
+* type: C
+*/
+int a;
+
+void g(int k) {
+  a = k; /* Accessed in the region but outside of the construct;
+          * therefore unspecified whether original or private list
+          * item is modified. */
+}
 
 
-<span class="kt">void</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+void f(int n) {
+  int a = 0;
 
-  <span class="cp">#pragma omp parallel for private(a)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-       <span class="n">a</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-       <span class="n">g</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="mi">2</span><span class="p">);</span>     <span class="cm">/* Private copy of &quot;a&quot; */</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">private</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">MODULE</span> <span class="n">PRIV_EXAMPLE2</span>
-        <span class="n">REAL</span> <span class="n">A</span>
-
-        <span class="n">CONTAINS</span>
-
-          <span class="n">SUBROUTINE</span> <span class="n">G</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-            <span class="n">REAL</span> <span class="n">K</span>
-            <span class="n">A</span> <span class="o">=</span> <span class="n">K</span>  <span class="o">!</span> <span class="n">Accessed</span> <span class="n">in</span> <span class="n">the</span> <span class="n">region</span> <span class="n">but</span> <span class="n">outside</span> <span class="n">of</span> <span class="n">the</span>
-                   <span class="o">!</span> <span class="n">construct</span><span class="p">;</span> <span class="n">therefore</span> <span class="n">unspecified</span> <span class="n">whether</span>
-                   <span class="o">!</span> <span class="n">original</span> <span class="n">or</span> <span class="n">private</span> <span class="n">list</span> <span class="n">item</span> <span class="n">is</span> <span class="n">modified</span><span class="p">.</span>
-          <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">G</span>
-
-          <span class="n">SUBROUTINE</span> <span class="n">F</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-          <span class="n">INTEGER</span> <span class="n">N</span>
-          <span class="n">REAL</span> <span class="n">A</span>
-
-            <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-              <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-                <span class="n">A</span> <span class="o">=</span> <span class="n">I</span>
-                <span class="n">CALL</span> <span class="n">G</span><span class="p">(</span><span class="n">A</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
-              <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>
-          <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">F</span>
-
-      <span class="n">END</span> <span class="n">MODULE</span> <span class="n">PRIV_EXAMPLE2</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example demonstrates that a list item that appears in a  <code class="docutils literal notranslate"><span class="pre">private</span></code>    clause in a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct may also appear in a  <code class="docutils literal notranslate"><span class="pre">private</span></code>    clause in an enclosed worksharing construct, which results in an additional private  copy.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: private.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;assert.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">priv_example3</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">;</span>
-
-  <span class="cp">#pragma omp parallel private(a)</span>
-  <span class="p">{</span>
-     <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="cp">#pragma omp parallel for private(a)</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="p">{</span>
-       <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-     <span class="p">}</span>
-    <span class="n">assert</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="mi">1</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  #pragma omp parallel for private(a)
+   for (int i=1; i&lt;n; i++) {
+       a = i;
+       g(a*2);     /* Private copy of &quot;a&quot; */
+    }
+}
 
 </pre></div>
 </div>
@@ -1412,22 +1389,89 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">private</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">PRIV_EXAMPLE3</span><span class="p">()</span>
-        <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">A</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.2f
+! type: F-fixed
+      MODULE PRIV_EXAMPLE2
+        REAL A
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-         <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span>
-            <span class="n">A</span> <span class="o">=</span> <span class="mi">2</span>
-          <span class="n">END</span> <span class="n">DO</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>
-        <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">A</span> <span class="o">!</span> <span class="n">Outer</span> <span class="n">A</span> <span class="n">still</span> <span class="n">has</span> <span class="n">value</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">PRIV_EXAMPLE3</span>
+        CONTAINS
+
+          SUBROUTINE G(K)
+            REAL K
+            A = K  ! Accessed in the region but outside of the
+                   ! construct; therefore unspecified whether
+                   ! original or private list item is modified.
+          END SUBROUTINE G
+
+          SUBROUTINE F(N)
+          INTEGER N
+          REAL A
+
+            INTEGER I
+!$OMP       PARALLEL DO PRIVATE(A)
+              DO I = 1,N
+                A = I
+                CALL G(A*2)
+              ENDDO
+!$OMP       END PARALLEL DO
+          END SUBROUTINE F
+
+      END MODULE PRIV_EXAMPLE2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates that a list item that appears in a <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause in a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct may also appear in a <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause in an enclosed worksharing construct, which results in an additional private  copy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: private.3c
+* type: C
+*/
+#include &lt;assert.h&gt;
+void priv_example3()
+{
+  int i, a;
+
+  #pragma omp parallel private(a)
+  {
+     a = 1;
+    #pragma omp parallel for private(a)
+      for (i=0; i&lt;10; i++)
+     {
+       a = 2;
+     }
+    assert(a == 1);
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.3f
+! type: F-fixed
+      SUBROUTINE PRIV_EXAMPLE3()
+        INTEGER I, A
+
+!$OMP   PARALLEL PRIVATE(A)
+         A = 1
+!$OMP     PARALLEL DO PRIVATE(A)
+          DO I = 1, 10
+            A = 2
+          END DO
+!$OMP     END PARALLEL DO
+        PRINT *, A ! Outer A still has value 1
+!$OMP   END PARALLEL
+      END SUBROUTINE PRIV_EXAMPLE3
 
 </pre></div>
 </div>
@@ -1460,7 +1504,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_default_none.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">default(none)</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_default_none.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">default(none)</span></code> Clause</a>
     <a class='right-next' id="next-link" href="Examples_fort_loopvar.html" title="next page">Fortran Private Loop Iteration Variables</a>
 
         </div>

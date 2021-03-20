@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,56 +1290,58 @@
               <div>
                 
   <div class="section" id="the-atomic-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct<a class="headerlink" href="#the-atomic-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following example avoids race conditions (simultaneous updates of an element  of  <em>x</em>  by multiple threads) by using the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct .</p>
-<p>The advantage of using the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct in this example is that it  allows updates of two different elements of  <em>x</em>  to occur in parallel. If  a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct were used instead, then all updates to elements of   <em>x</em>  would be executed serially (though not in any guaranteed order).</p>
-<p>Note that the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directive applies only to the statement immediately  following it. As a result, elements of  <em>y</em>  are not updated atomically in  this example.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct<a class="headerlink" href="#the-atomic-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following example avoids race conditions (simultaneous updates of an element  of  <em>x</em>  by multiple threads) by using the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct .</p>
+<p>The advantage of using the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct in this example is that it  allows updates of two different elements of  <em>x</em>  to occur in parallel. If  a <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct were used instead, then all updates to elements of   <em>x</em>  would be executed serially (though not in any guaranteed order).</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directive applies only to the statement immediately  following it. As a result, elements of  <em>y</em>  are not updated atomically in  this example.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: atomic.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">float</span> <span class="nf">work1</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">float</span> <span class="nf">work2</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">return</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
-<span class="p">}</span>
+/*
+* name: atomic.1c
+* type: C
+* version: omp_3.1
+*/
+float work1(int i)
+{
+  return 1.0 * i;
+}
 
-<span class="kt">void</span> <span class="nf">atomic_example</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">index</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+float work2(int i)
+{
+   return 2.0 * i;
+}
 
-  <span class="cp">#pragma omp parallel for shared(x, y, index, n)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="cp">#pragma omp atomic update</span>
-      <span class="n">x</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+=</span> <span class="n">work1</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-      <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">work2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-     <span class="p">}</span>
-<span class="p">}</span>
+void atomic_example(float *x, float *y, int *index, int n)
+{
+  int i;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">float</span> <span class="n">x</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
-  <span class="kt">float</span> <span class="n">y</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
-  <span class="kt">int</span> <span class="n">index</span><span class="p">[</span><span class="mi">10000</span><span class="p">];</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+  #pragma omp parallel for shared(x, y, index, n)
+    for (i=0; i&lt;n; i++) {
+      #pragma omp atomic update
+      x[index[i]] += work1(i);
+      y[i] += work2(i);
+     }
+}
 
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">1000</span><span class="p">;</span>
-    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="n">atomic_example</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="mi">10000</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+  float x[1000];
+  float y[10000];
+  int index[10000];
+  int i;
+
+  for (i = 0; i &lt; 10000; i++) {
+    index[i] = i % 1000;
+    y[i]=0.0;
+  }
+  for (i = 0; i &lt; 1000; i++)
+    x[i] = 0.0;
+  atomic_example(x, y, index, 10000);
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1309,169 +1349,90 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-      <span class="n">REAL</span> <span class="n">FUNCTION</span> <span class="n">WORK1</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-        <span class="n">WORK1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">I</span>
-        <span class="n">RETURN</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">WORK1</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic.1f
+! type: F-fixed
+! version: omp_3.1
+      REAL FUNCTION WORK1(I)
+        INTEGER I
+        WORK1 = 1.0 * I
+        RETURN
+      END FUNCTION WORK1
 
-      <span class="n">REAL</span> <span class="n">FUNCTION</span> <span class="n">WORK2</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-        <span class="n">WORK2</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">I</span>
-        <span class="n">RETURN</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">WORK2</span>
+      REAL FUNCTION WORK2(I)
+        INTEGER I
+        WORK2 = 2.0 * I
+        RETURN
+      END FUNCTION WORK2
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">INDEX</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-        <span class="n">REAL</span> <span class="n">X</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">Y</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">INDEX</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">N</span>
+      SUBROUTINE SUB(X, Y, INDEX, N)
+        REAL X(*), Y(*)
+        INTEGER INDEX(*), N
 
-        <span class="n">INTEGER</span> <span class="n">I</span>
+        INTEGER I
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">INDEX</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-              <span class="n">X</span><span class="p">(</span><span class="n">INDEX</span><span class="p">(</span><span class="n">I</span><span class="p">))</span> <span class="o">=</span> <span class="n">X</span><span class="p">(</span><span class="n">INDEX</span><span class="p">(</span><span class="n">I</span><span class="p">))</span> <span class="o">+</span> <span class="n">WORK1</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-            <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">+</span> <span class="n">WORK2</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-          <span class="n">ENDDO</span>
+!$OMP   PARALLEL DO SHARED(X, Y, INDEX, N)
+          DO I=1,N
+!$OMP       ATOMIC UPDATE
+              X(INDEX(I)) = X(INDEX(I)) + WORK1(I)
+            Y(I) = Y(I) + WORK2(I)
+          ENDDO
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
+      END SUBROUTINE SUB
 
-      <span class="n">PROGRAM</span> <span class="n">ATOMIC_EXAMPLE</span>
-        <span class="n">REAL</span> <span class="n">X</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="n">Y</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">INDEX</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
+      PROGRAM ATOMIC_EXAMPLE
+        REAL X(1000), Y(10000)
+        INTEGER INDEX(10000)
+        INTEGER I
 
-        <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000</span>
-          <span class="n">INDEX</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">MOD</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-          <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">ENDDO</span>
+        DO I=1,10000
+          INDEX(I) = MOD(I, 1000) + 1
+          Y(I) = 0.0
+        ENDDO
 
-        <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1000</span>
-          <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="n">ENDDO</span>
+        DO I = 1,1000
+          X(I) = 0.0
+        ENDDO
 
-        <span class="n">CALL</span> <span class="n">SUB</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">INDEX</span><span class="p">,</span> <span class="mi">10000</span><span class="p">)</span>
+        CALL SUB(X, Y, INDEX, 10000)
 
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">ATOMIC_EXAMPLE</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example illustrates the  <code class="docutils literal notranslate"><span class="pre">read</span></code>  and  <code class="docutils literal notranslate"><span class="pre">write</span></code>   clauses  for the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directive. These clauses ensure that the given variable  is read or written, respectively, as a whole. Otherwise, some other thread might  read or write part of the variable while the current thread was reading or writing  another part of the variable. Note that most hardware provides atomic reads and  writes for some set of properly aligned variables of specific sizes, but not necessarily  for all the variable types supported by the OpenMP API.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: atomic.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="nf">atomic_read</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
-<span class="cm">/* Guarantee that the entire value of *p is read atomically. No part of</span>
-<span class="cm"> * *p can change during the read operation.</span>
-<span class="cm"> */</span>
-<span class="cp">#pragma omp atomic read</span>
-     <span class="n">value</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-     <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">atomic_write</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="cm">/* Guarantee that value is stored atomically into *p. No part of *p can</span>
-<span class="cm">change</span>
-<span class="cm"> * until after the entire write operation is completed.</span>
-<span class="cm"> */</span>
-<span class="cp">#pragma omp atomic write</span>
-    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span>
-<span class="p">}</span>
+      END PROGRAM ATOMIC_EXAMPLE
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>The following example illustrates the <code class="docutils literal notranslate"><span class="pre">read</span></code> and <code class="docutils literal notranslate"><span class="pre">write</span></code>  clauses  for the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directive. These clauses ensure that the given variable  is read or written, respectively, as a whole. Otherwise, some other thread might  read or write part of the variable while the current thread was reading or writing  another part of the variable. Note that most hardware provides atomic reads and  writes for some set of properly aligned variables of specific sizes, but not necessarily  for all the variable types supported by the OpenMP API.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-       <span class="n">function</span> <span class="n">atomic_read</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-       <span class="n">integer</span> <span class="o">::</span> <span class="n">atomic_read</span>
-       <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
-<span class="o">!</span> <span class="n">Guarantee</span> <span class="n">that</span> <span class="n">the</span> <span class="n">entire</span> <span class="n">value</span> <span class="n">of</span> <span class="n">p</span> <span class="n">is</span> <span class="n">read</span> <span class="n">atomically</span><span class="p">.</span> <span class="n">No</span> <span class="n">part</span> <span class="n">of</span>
-<span class="o">!</span> <span class="n">p</span> <span class="n">can</span> <span class="n">change</span> <span class="n">during</span> <span class="n">the</span> <span class="n">read</span> <span class="n">operation</span><span class="p">.</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">read</span>
-       <span class="n">atomic_read</span> <span class="o">=</span> <span class="n">p</span>
-       <span class="k">return</span>
-       <span class="n">end</span> <span class="n">function</span> <span class="n">atomic_read</span>
+/*
+* name: atomic.2c
+* type: C
+* version: omp_3.1
+*/
+int atomic_read(const int *p)
+{
+    int value;
+/* Guarantee that the entire value of *p is read atomically. No part of
+ * *p can change during the read operation.
+ */
+#pragma omp atomic read
+     value = *p;
+     return value;
+}
 
-       <span class="n">subroutine</span> <span class="n">atomic_write</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-       <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
-       <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">value</span>
-<span class="o">!</span> <span class="n">Guarantee</span> <span class="n">that</span> <span class="n">value</span> <span class="n">is</span> <span class="n">stored</span> <span class="n">atomically</span> <span class="n">into</span> <span class="n">p</span><span class="p">.</span> <span class="n">No</span> <span class="n">part</span> <span class="n">of</span> <span class="n">p</span> <span class="n">can</span> <span class="n">change</span>
-<span class="o">!</span> <span class="n">until</span> <span class="n">after</span> <span class="n">the</span> <span class="n">entire</span> <span class="n">write</span> <span class="n">operation</span> <span class="n">is</span> <span class="n">completed</span><span class="p">.</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">write</span>
-       <span class="n">p</span> <span class="o">=</span> <span class="n">value</span>
-       <span class="n">end</span> <span class="n">subroutine</span> <span class="n">atomic_write</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example illustrates the  <code class="docutils literal notranslate"><span class="pre">capture</span></code>  clause for the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>   directive. In this case the value of a variable is captured, and then the variable  is incremented. These operations occur atomically. This particular example could  be implemented using the fetch-and-add instruction available on many kinds of hardware.  The example also shows a way to implement a spin lock using the  <code class="docutils literal notranslate"><span class="pre">capture</span></code>    and  <code class="docutils literal notranslate"><span class="pre">read</span></code>  clauses.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: atomic.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="nf">fetch_and_add</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="cm">/* Atomically read the value of *p and then increment it. The previous value</span>
-<span class="cm">is</span>
-<span class="cm"> * returned. This can be used to implement a simple lock as shown below.</span>
-<span class="cm"> */</span>
-    <span class="kt">int</span> <span class="n">old</span><span class="p">;</span>
-<span class="cp">#pragma omp atomic capture</span>
-    <span class="p">{</span> <span class="n">old</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span> <span class="p">(</span><span class="o">*</span><span class="n">p</span><span class="p">)</span><span class="o">++</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">return</span> <span class="n">old</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cm">/*</span>
-<span class="cm"> * Use fetch_and_add to implement a lock</span>
-<span class="cm"> */</span>
-<span class="k">struct</span> <span class="nc">locktype</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">ticketnumber</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">turn</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="kt">void</span> <span class="nf">do_locked_work</span><span class="p">(</span><span class="k">struct</span> <span class="nc">locktype</span> <span class="o">*</span><span class="n">lock</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">atomic_read</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">);</span>
-    <span class="kt">void</span> <span class="n">work</span><span class="p">();</span>
-
-    <span class="c1">// Obtain the lock</span>
-    <span class="kt">int</span> <span class="n">myturn</span> <span class="o">=</span> <span class="n">fetch_and_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="o">-&gt;</span><span class="n">ticketnumber</span><span class="p">);</span>
-    <span class="k">while</span> <span class="p">(</span><span class="n">atomic_read</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="o">-&gt;</span><span class="n">turn</span><span class="p">)</span> <span class="o">!=</span> <span class="n">myturn</span><span class="p">)</span>
-       <span class="p">;</span>
-    <span class="c1">// Do some work. The flush is needed to ensure visibility of</span>
-    <span class="c1">// variables not involved in atomic directives</span>
-
-<span class="cp">#pragma omp flush</span>
-    <span class="n">work</span><span class="p">();</span>
-<span class="cp">#pragma omp flush</span>
-    <span class="c1">// Release the lock</span>
-    <span class="n">fetch_and_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="o">-&gt;</span><span class="n">turn</span><span class="p">);</span>
-<span class="p">}</span>
+void atomic_write(int *p, int value)
+{
+/* Guarantee that value is stored atomically into *p. No part of *p can
+change
+ * until after the entire write operation is completed.
+ */
+#pragma omp atomic write
+    *p = value;
+}
 
 </pre></div>
 </div>
@@ -1479,55 +1440,138 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-       <span class="n">function</span> <span class="n">fetch_and_add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-       <span class="n">integer</span><span class="o">::</span> <span class="n">fetch_and_add</span>
-       <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic.2f
+! type: F-fixed
+! version: omp_3.1
+       function atomic_read(p)
+       integer :: atomic_read
+       integer, intent(in) :: p
+! Guarantee that the entire value of p is read atomically. No part of
+! p can change during the read operation.
 
-<span class="o">!</span> <span class="n">Atomically</span> <span class="n">read</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">p</span> <span class="n">and</span> <span class="n">then</span> <span class="n">increment</span> <span class="n">it</span><span class="p">.</span> <span class="n">The</span> <span class="n">previous</span> <span class="n">value</span> <span class="n">is</span>
-<span class="o">!</span> <span class="n">returned</span><span class="p">.</span> <span class="n">This</span> <span class="n">can</span> <span class="n">be</span> <span class="n">used</span> <span class="n">to</span> <span class="n">implement</span> <span class="n">a</span> <span class="n">simple</span> <span class="n">lock</span> <span class="n">as</span> <span class="n">shown</span> <span class="n">below</span><span class="p">.</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">capture</span>
-       <span class="n">fetch_and_add</span> <span class="o">=</span> <span class="n">p</span>
-       <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-       <span class="n">end</span> <span class="n">function</span> <span class="n">fetch_and_add</span>
-       <span class="n">module</span> <span class="n">m</span>
-       <span class="n">interface</span>
-         <span class="n">function</span> <span class="n">fetch_and_add</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-           <span class="n">integer</span> <span class="o">::</span> <span class="n">fetch_and_add</span>
-           <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
-         <span class="n">end</span> <span class="n">function</span>
-         <span class="n">function</span> <span class="n">atomic_read</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-           <span class="n">integer</span> <span class="o">::</span> <span class="n">atomic_read</span>
-           <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
-         <span class="n">end</span> <span class="n">function</span>
-       <span class="n">end</span> <span class="n">interface</span>
-       <span class="n">type</span> <span class="n">locktype</span>
-          <span class="n">integer</span> <span class="n">ticketnumber</span>
-          <span class="n">integer</span> <span class="n">turn</span>
-       <span class="n">end</span> <span class="n">type</span>
-       <span class="n">contains</span>
-       <span class="n">subroutine</span> <span class="n">do_locked_work</span><span class="p">(</span><span class="n">lock</span><span class="p">)</span>
-       <span class="n">type</span><span class="p">(</span><span class="n">locktype</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="o">::</span> <span class="n">lock</span>
-       <span class="n">integer</span> <span class="n">myturn</span>
-       <span class="n">integer</span> <span class="n">junk</span>
-<span class="o">!</span> <span class="n">obtain</span> <span class="n">the</span> <span class="n">lock</span>
-        <span class="n">myturn</span> <span class="o">=</span> <span class="n">fetch_and_add</span><span class="p">(</span><span class="n">lock</span><span class="o">%</span><span class="n">ticketnumber</span><span class="p">)</span>
-        <span class="k">do</span> <span class="k">while</span> <span class="p">(</span><span class="n">atomic_read</span><span class="p">(</span><span class="n">lock</span><span class="o">%</span><span class="n">turn</span><span class="p">)</span> <span class="p">.</span><span class="n">ne</span><span class="p">.</span> <span class="n">myturn</span><span class="p">)</span>
-          <span class="k">continue</span>
-        <span class="n">enddo</span>
-<span class="o">!</span> <span class="n">Do</span> <span class="n">some</span> <span class="n">work</span><span class="p">.</span> <span class="n">The</span> <span class="n">flush</span> <span class="n">is</span> <span class="n">needed</span> <span class="n">to</span> <span class="n">ensure</span> <span class="n">visibility</span> <span class="n">of</span> <span class="n">variables</span>
-<span class="o">!</span> <span class="n">not</span> <span class="n">involved</span> <span class="n">in</span> <span class="n">atomic</span> <span class="n">directives</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">flush</span>
-       <span class="n">call</span> <span class="n">work</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">flush</span>
-<span class="o">!</span> <span class="n">Release</span> <span class="n">the</span> <span class="n">lock</span>
-       <span class="n">junk</span> <span class="o">=</span> <span class="n">fetch_and_add</span><span class="p">(</span><span class="n">lock</span><span class="o">%</span><span class="n">turn</span><span class="p">)</span>
-       <span class="n">end</span> <span class="n">subroutine</span>
-       <span class="n">end</span> <span class="n">module</span>
+!$omp atomic read
+       atomic_read = p
+       return
+       end function atomic_read
+
+       subroutine atomic_write(p, value)
+       integer, intent(out) :: p
+       integer, intent(in) :: value
+! Guarantee that value is stored atomically into p. No part of p can change
+! until after the entire write operation is completed.
+!$omp atomic write
+       p = value
+       end subroutine atomic_write
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates the <code class="docutils literal notranslate"><span class="pre">capture</span></code> clause for the <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directive. In this case the value of a variable is captured, and then the variable  is incremented. These operations occur atomically. This particular example could  be implemented using the fetch-and-add instruction available on many kinds of hardware.  The example also shows a way to implement a spin lock using the <code class="docutils literal notranslate"><span class="pre">capture</span></code>   and <code class="docutils literal notranslate"><span class="pre">read</span></code> clauses.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: atomic.3c
+* type: C
+* version: omp_3.1
+*/
+int fetch_and_add(int *p)
+{
+/* Atomically read the value of *p and then increment it. The previous value
+is
+ * returned. This can be used to implement a simple lock as shown below.
+ */
+    int old;
+#pragma omp atomic capture
+    { old = *p; (*p)++; }
+    return old;
+}
+
+/*
+ * Use fetch_and_add to implement a lock
+ */
+struct locktype {
+    int ticketnumber;
+    int turn;
+};
+void do_locked_work(struct locktype *lock)
+{
+    int atomic_read(const int *p);
+    void work();
+
+    // Obtain the lock
+    int myturn = fetch_and_add(&amp;lock-&gt;ticketnumber);
+    while (atomic_read(&amp;lock-&gt;turn) != myturn)
+       ;
+    // Do some work. The flush is needed to ensure visibility of
+    // variables not involved in atomic directives
+
+#pragma omp flush
+    work();
+#pragma omp flush
+    // Release the lock
+    fetch_and_add(&amp;lock-&gt;turn);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic.3f
+! type: F-fixed
+! version: omp_3.1
+       function fetch_and_add(p)
+       integer:: fetch_and_add
+       integer, intent(inout) :: p
+
+! Atomically read the value of p and then increment it. The previous value is
+! returned. This can be used to implement a simple lock as shown below.
+!$omp atomic capture
+       fetch_and_add = p
+       p = p + 1
+!$omp end atomic
+       end function fetch_and_add
+       module m
+       interface
+         function fetch_and_add(p)
+           integer :: fetch_and_add
+           integer, intent(inout) :: p
+         end function
+         function atomic_read(p)
+           integer :: atomic_read
+           integer, intent(in) :: p
+         end function
+       end interface
+       type locktype
+          integer ticketnumber
+          integer turn
+       end type
+       contains
+       subroutine do_locked_work(lock)
+       type(locktype), intent(inout) :: lock
+       integer myturn
+       integer junk
+! obtain the lock
+        myturn = fetch_and_add(lock%ticketnumber)
+        do while (atomic_read(lock%turn) .ne. myturn)
+          continue
+        enddo
+! Do some work. The flush is needed to ensure visibility of variables
+! not involved in atomic directives
+!$omp flush
+       call work
+!$omp flush
+! Release the lock
+       junk = fetch_and_add(lock%turn)
+       end subroutine
+       end module
 
 </pre></div>
 </div>
@@ -1560,8 +1604,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_barrier_regions.html" title="previous page">Binding of  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  Regions</a>
-    <a class='right-next' id="next-link" href="Examples_atomic_restrict.html" title="next page">Restrictions on the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_barrier_regions.html" title="previous page">Binding of <code class="docutils literal notranslate"><span class="pre">barrier</span></code> Regions</a>
+    <a class='right-next' id="next-link" href="Examples_atomic_restrict.html" title="next page">Restrictions on the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct</a>
 
         </div>
         

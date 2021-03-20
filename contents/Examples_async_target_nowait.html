@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,49 +1290,51 @@
               <div>
                 
   <div class="section" id="nowait-clause-on-target-construct">
-<h1><code class="docutils literal notranslate"><span class="pre">nowait</span></code>  Clause on  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct<a class="headerlink" href="#nowait-clause-on-target-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following example shows how to execute  asynchronously on a  device without an explicit task. The  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause on a  <code class="docutils literal notranslate"><span class="pre">target</span></code>   construct allows the thread of the  <em>target task</em>  to perform other work while waiting for the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region execution to complete.  Hence, the the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region can execute asynchronously on the  device (without requiring a host thread to idle while waiting for  the  <em>target task</em>  execution to complete).</p>
+<h1><code class="docutils literal notranslate"><span class="pre">nowait</span></code> Clause on <code class="docutils literal notranslate"><span class="pre">target</span></code> Construct<a class="headerlink" href="#nowait-clause-on-target-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following example shows how to execute code asynchronously on a  device without an explicit task. The <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause on a <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct allows the thread of the  <em>target task</em>  to perform other work while waiting for the <code class="docutils literal notranslate"><span class="pre">target</span></code> region execution to complete.  Hence, the the <code class="docutils literal notranslate"><span class="pre">target</span></code> region can execute asynchronously on the  device (without requiring a host thread to idle while waiting for  the  <em>target task</em>  execution to complete).</p>
 <p>In this example the product of two vectors (arrays),  <em>v1</em>  and  <em>v2</em> , is formed. One half of the operations is performed on the device, and the last half on the host, concurrently.</p>
-<p>After a team of threads is formed the master thread generates  the  <em>target task</em>  while the other threads can continue on, without a barrier, to the execution of the host portion of the vector product. The completion of the  <em>target task</em>  (asynchronous target execution) is  guaranteed by the synchronization in the implicit barrier at the end of the  host vector-product worksharing loop region. See the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>   glossary entry in the OpenMP specification for details.</p>
-<p>The host loop scheduling is  <code class="docutils literal notranslate"><span class="pre">dynamic</span></code> , to balance the host thread executions, since  one thread is being used for offload generation. In the situation where  little time is spent by the  <em>target task</em>  in setting  up and tearing down the the target execution,  <code class="docutils literal notranslate"><span class="pre">static</span></code>  scheduling may be desired.</p>
+<p>After a team of threads is formed the master thread generates  the  <em>target task</em>  while the other threads can continue on, without a barrier, to the execution of the host portion of the vector product. The completion of the  <em>target task</em>  (asynchronous target execution) is  guaranteed by the synchronization in the implicit barrier at the end of the  host vector-product worksharing loop region. See the <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  glossary entry in the OpenMP specification for details.</p>
+<p>The host loop scheduling is <code class="docutils literal notranslate"><span class="pre">dynamic</span></code>, to balance the host thread executions, since  one thread is being used for offload generation. In the situation where  little time is spent by the  <em>target task</em>  in setting  up and tearing down the the target execution, <code class="docutils literal notranslate"><span class="pre">static</span></code> scheduling may be desired.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: async_target.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+/*
+* name: async_target.3c
+* type: C
+* version: omp_4.5
+*/
 
-<span class="cp">#define N 1000000      </span><span class="c1">//N must be even</span>
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">);</span>
+#include &lt;stdio.h&gt;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-   <span class="kt">int</span>   <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">N</span><span class="p">;</span>
-   <span class="kt">int</span>   <span class="n">chunk</span><span class="o">=</span><span class="mi">1000</span><span class="p">;</span>
-   <span class="kt">float</span> <span class="n">v1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">v2</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="n">vxv</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+#define N 1000000      //N must be even
+void init(int n, float *v1, float *v2);
 
-   <span class="n">init</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">);</span>
+int main(){
+   int   i, n=N;
+   int   chunk=1000;
+   float v1[N],v2[N],vxv[N];
 
-   <span class="cp">#pragma omp parallel</span>
-   <span class="p">{</span>
+   init(n, v1,v2);
 
-      <span class="cp">#pragma omp master</span>
-      <span class="cp">#pragma omp target teams distribute parallel for nowait \</span>
-<span class="cp">                                map(to: v1[0:n/2]) \</span>
-<span class="cp">                                map(to: v2[0:n/2]) \</span>
-<span class="cp">                                map(from: vxv[0:n/2])</span>
-      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">vxv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+   #pragma omp parallel
+   {
 
-      <span class="cp">#pragma omp for schedule(dynamic,chunk)</span>
-      <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">vxv</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
+      #pragma omp master
+      #pragma omp target teams distribute parallel for nowait \
+                                map(to: v1[0:n/2]) \
+                                map(to: v2[0:n/2]) \
+                                map(from: vxv[0:n/2])
+      for(i=0; i&lt;n/2; i++){ vxv[i] = v1[i]*v2[i]; }
 
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot; vxv[0] vxv[n-1] %f %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">vxv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vxv</span><span class="p">[</span><span class="n">n</span><span class="mi">-1</span><span class="p">]);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+      #pragma omp for schedule(dynamic,chunk)
+      for(i=n/2; i&lt;n; i++){ vxv[i] = v1[i]*v2[i]; }
+
+   }
+   printf(&quot; vxv[0] vxv[n-1] %f %f\n&quot;, vxv[0], vxv[n-1]);
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1302,37 +1342,37 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">async_target</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: async_target.3f
+! type: F-free
+! version: omp_4.5
 
-<span class="n">program</span> <span class="n">concurrent_async</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span><span class="p">,</span><span class="n">parameter</span> <span class="o">::</span> <span class="n">n</span><span class="o">=</span><span class="mi">1000000</span>  <span class="o">!!</span><span class="n">n</span> <span class="n">must</span> <span class="n">be</span> <span class="n">even</span>
-   <span class="n">integer</span>           <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">chunk</span><span class="o">=</span><span class="mi">1000</span>
-   <span class="n">real</span>              <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">v2</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">vxv</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+program concurrent_async
+   use omp_lib
+   integer,parameter :: n=1000000  !!n must be even
+   integer           :: i, chunk=1000
+   real              :: v1(n),v2(n),vxv(n)
 
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+   call init(n, v1,v2)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
+   !$omp parallel
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">master</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">distribute</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">nowait</span> <span class="o">&amp;</span>
-      <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                    <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>   <span class="o">&amp;</span>
-      <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                    <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v2</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>   <span class="o">&amp;</span>
-      <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                    <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">vxv</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>    <span class="n">vxv</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span>
+      !$omp master
+      !$omp target teams distribute parallel do nowait &amp;
+      !$omp&amp;                    map(to: v1(1:n/2))   &amp;
+      !$omp&amp;                    map(to: v2(1:n/2))   &amp;
+      !$omp&amp;                    map(from: vxv(1:n/2))
+      do i = 1,n/2;    vxv(i) = v1(i)*v2(i); end do
+      !$omp end master
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">schedule</span><span class="p">(</span><span class="n">dynamic</span><span class="p">,</span><span class="n">chunk</span><span class="p">)</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="n">n</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">;</span>  <span class="n">vxv</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">*</span><span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="n">end</span> <span class="k">do</span>
+      !$omp do schedule(dynamic,chunk)
+      do i = n/2+1,n;  vxv(i) = v1(i)*v2(i); end do
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+   !$omp end parallel
 
-   <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot; vxv(1) vxv(n) :&quot;</span><span class="p">,</span> <span class="n">vxv</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">vxv</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+   print*, &quot; vxv(1) vxv(n) :&quot;, vxv(1), vxv(n)
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
@@ -1365,8 +1405,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_async_target_with_tasks.html" title="previous page">Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  with Tasks</a>
-    <a class='right-next' id="next-link" href="Examples_async_target_nowait_depend.html" title="next page">Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  with  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  and  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  Clauses</a>
+    <a class='left-prev' id="prev-link" href="Examples_async_target_with_tasks.html" title="previous page">Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> with Tasks</a>
+    <a class='right-next' id="next-link" href="Examples_async_target_nowait_depend.html" title="next page">Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> with <code class="docutils literal notranslate"><span class="pre">nowait</span></code> and <code class="docutils literal notranslate"><span class="pre">depend</span></code> Clauses</a>
 
         </div>
         

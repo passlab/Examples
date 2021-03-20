@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,26 +1290,28 @@
               <div>
                 
   <div class="section" id="the-copyprivate-clause">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  Clause<a class="headerlink" href="#the-copyprivate-clause" title="Permalink to this headline">¶</a></h1>
-<p>The  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  clause can be used to broadcast values acquired by a single  thread directly to all instances of the private variables in the other threads.  In this example, if the routine is called from the sequential part, its behavior  is not affected by the presence of the directives. If it is called from a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region, then the actual arguments with which  <code class="docutils literal notranslate"><span class="pre">a</span></code>  and  <code class="docutils literal notranslate"><span class="pre">b</span></code>  are associated  must be private.</p>
-<p>The thread that executes the structured block associated with the  <code class="docutils literal notranslate"><span class="pre">single</span></code>    construct broadcasts the values of the private variables  <code class="docutils literal notranslate"><span class="pre">a</span></code> ,  <code class="docutils literal notranslate"><span class="pre">b</span></code> ,   <code class="docutils literal notranslate"><span class="pre">x</span></code> , and   <code class="docutils literal notranslate"><span class="pre">y</span></code>  from its implicit task’s data environment to the data environments  of the other implicit tasks in the thread team. The broadcast completes before  any of the threads have left the barrier at the end of the construct.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> Clause<a class="headerlink" href="#the-copyprivate-clause" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause can be used to broadcast values acquired by a single  thread directly to all instances of the private variables in the other threads.  In this example, if the routine is called from the sequential part, its behavior  is not affected by the presence of the directives. If it is called from a <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, then the actual arguments with which <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> are associated  must be private.</p>
+<p>The thread that executes the structured block associated with the <code class="docutils literal notranslate"><span class="pre">single</span></code>   construct broadcasts the values of the private variables <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>,  <code class="docutils literal notranslate"><span class="pre">x</span></code>, and  <code class="docutils literal notranslate"><span class="pre">y</span></code> from its implicit task’s data environment to the data environments  of the other implicit tasks in the thread team. The broadcast completes before  any of the threads have left the barrier at the end of the construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: copyprivate.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">float</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(x, y)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="n">b</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="cp">#pragma omp single copyprivate(a,b,x,y)</span>
-    <span class="p">{</span>
-        <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f %f %f %f&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">a</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: copyprivate.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+float x, y;
+#pragma omp threadprivate(x, y)
+
+void init(float a, float b ) {
+    #pragma omp single copyprivate(a,b,x,y)
+    {
+        scanf(&quot;%f %f %f %f&quot;, &amp;a, &amp;b, &amp;x, &amp;y);
+    }
+}
 
 </pre></div>
 </div>
@@ -1279,119 +1319,63 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">copyprivate</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">INIT</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-      <span class="n">REAL</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">XY</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span> <span class="p">(</span><span class="o">/</span><span class="n">XY</span><span class="o">/</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.1f
+! type: F-fixed
+      SUBROUTINE INIT(A,B)
+      REAL A, B
+        COMMON /XY/ X,Y
+!$OMP   THREADPRIVATE (/XY/)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">READ</span> <span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">COPYPRIVATE</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="o">/</span><span class="n">XY</span><span class="o">/</span><span class="p">)</span>
+!$OMP   SINGLE
+          READ (11) A,B,X,Y
+!$OMP   END SINGLE COPYPRIVATE (A,B,/XY/)
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INIT</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In this example, assume that the input must be performed by the master thread.  Since the  <code class="docutils literal notranslate"><span class="pre">master</span></code>  construct does not support the  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  clause,  it cannot broadcast the input value that is read. However,  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>   is used to broadcast an address where the input value is stored.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: copyprivate.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-
-<span class="kt">float</span> <span class="nf">read_next</span><span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
-  <span class="kt">float</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">;</span>
-  <span class="kt">float</span> <span class="n">return_val</span><span class="p">;</span>
-
-  <span class="cp">#pragma omp single copyprivate(tmp)</span>
-  <span class="p">{</span>
-    <span class="n">tmp</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
-  <span class="p">}</span>  <span class="cm">/* copies the pointer only */</span>
-
-
-  <span class="cp">#pragma omp master</span>
-  <span class="p">{</span>
-    <span class="n">scanf</span><span class="p">(</span><span class="s">&quot;%f&quot;</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="cp">#pragma omp barrier</span>
-  <span class="n">return_val</span> <span class="o">=</span> <span class="o">*</span><span class="n">tmp</span><span class="p">;</span>
-  <span class="cp">#pragma omp barrier</span>
-
-  <span class="cp">#pragma omp single nowait</span>
-  <span class="p">{</span>
-    <span class="n">free</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="n">return_val</span><span class="p">;</span>
-<span class="p">}</span>
+      END SUBROUTINE INIT
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In this example, assume that the input must be performed by the master thread.  Since the <code class="docutils literal notranslate"><span class="pre">master</span></code> construct does not support the <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause,  it cannot broadcast the input value that is read. However, <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  is used to broadcast an address where the input value is stored.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">copyprivate</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-        <span class="n">REAL</span> <span class="n">FUNCTION</span> <span class="n">READ_NEXT</span><span class="p">()</span>
-        <span class="n">REAL</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">TMP</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">ALLOCATE</span> <span class="p">(</span><span class="n">TMP</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">COPYPRIVATE</span> <span class="p">(</span><span class="n">TMP</span><span class="p">)</span>  <span class="o">!</span> <span class="n">copies</span> <span class="n">the</span> <span class="n">pointer</span> <span class="n">only</span>
+/*
+* name: copyprivate.2c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">MASTER</span>
-          <span class="n">READ</span> <span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="n">TMP</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">MASTER</span>
+float read_next( ) {
+  float * tmp;
+  float return_val;
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
-          <span class="n">READ_NEXT</span> <span class="o">=</span> <span class="n">TMP</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
+  #pragma omp single copyprivate(tmp)
+  {
+    tmp = (float *) malloc(sizeof(float));
+  }  /* copies the pointer only */
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">DEALLOCATE</span> <span class="p">(</span><span class="n">TMP</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">NOWAIT</span>
-        <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">READ_NEXT</span>
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>Suppose that the number of lock variables required within a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region  cannot easily be determined prior to entering it. The  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  clause  can be used to provide access to shared lock variables that are allocated within  that  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: copyprivate.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+  #pragma omp master
+  {
+    scanf(&quot;%f&quot;, tmp);
+  }
 
-<span class="n">omp_lock_t</span> <span class="o">*</span><span class="nf">new_lock</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">omp_lock_t</span> <span class="o">*</span><span class="n">lock_ptr</span><span class="p">;</span>
+  #pragma omp barrier
+  return_val = *tmp;
+  #pragma omp barrier
 
-  <span class="cp">#pragma omp single copyprivate(lock_ptr)</span>
-  <span class="p">{</span>
-    <span class="n">lock_ptr</span> <span class="o">=</span> <span class="p">(</span><span class="n">omp_lock_t</span> <span class="o">*</span><span class="p">)</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">omp_lock_t</span><span class="p">));</span>
-    <span class="n">omp_init_lock</span><span class="p">(</span> <span class="n">lock_ptr</span> <span class="p">);</span>
-  <span class="p">}</span>
+  #pragma omp single nowait
+  {
+    free(tmp);
+  }
 
-  <span class="k">return</span> <span class="n">lock_ptr</span><span class="p">;</span>
-<span class="p">}</span>
+  return return_val;
+}
 
 </pre></div>
 </div>
@@ -1399,49 +1383,109 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">copyprivate</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">FUNCTION</span> <span class="n">NEW_LOCK</span><span class="p">()</span>
-      <span class="n">USE</span> <span class="n">OMP_LIB</span>       <span class="o">!</span> <span class="n">or</span> <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>
-        <span class="n">INTEGER</span><span class="p">(</span><span class="n">OMP_LOCK_KIND</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">NEW_LOCK</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.2f
+! type: F-fixed
+        REAL FUNCTION READ_NEXT()
+        REAL, POINTER :: TMP
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">ALLOCATE</span><span class="p">(</span><span class="n">NEW_LOCK</span><span class="p">)</span>
-          <span class="n">CALL</span> <span class="n">OMP_INIT_LOCK</span><span class="p">(</span><span class="n">NEW_LOCK</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">COPYPRIVATE</span><span class="p">(</span><span class="n">NEW_LOCK</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">NEW_LOCK</span>
+!$OMP   SINGLE
+          ALLOCATE (TMP)
+!$OMP   END SINGLE COPYPRIVATE (TMP)  ! copies the pointer only
+
+!$OMP   MASTER
+          READ (11) TMP
+!$OMP   END MASTER
+
+!$OMP   BARRIER
+          READ_NEXT = TMP
+!$OMP   BARRIER
+
+!$OMP   SINGLE
+          DEALLOCATE (TMP)
+!$OMP   END SINGLE NOWAIT
+        END FUNCTION READ_NEXT
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Note that the effect of the  <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  clause on a variable with the   <code class="docutils literal notranslate"><span class="pre">allocatable</span></code>  attribute is different than on a variable with the  <code class="docutils literal notranslate"><span class="pre">pointer</span></code>   attribute. The value of  <code class="docutils literal notranslate"><span class="pre">A</span></code>  is copied (as if by intrinsic assignment) and  the pointer  <code class="docutils literal notranslate"><span class="pre">B</span></code>  is copied (as if by pointer assignment) to the corresponding  list items in the other implicit tasks belonging to the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
+<p>Suppose that the number of lock variables required within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region  cannot easily be determined prior to entering it. The <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause  can be used to provide access to shared lock variables that are allocated within  that <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">copyprivate</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">S</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-        <span class="n">REAL</span><span class="p">,</span> <span class="n">DIMENSION</span><span class="p">(</span><span class="o">:</span><span class="p">),</span> <span class="n">ALLOCATABLE</span> <span class="o">::</span> <span class="n">A</span>
-        <span class="n">REAL</span><span class="p">,</span> <span class="n">DIMENSION</span><span class="p">(</span><span class="o">:</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">B</span>
+/*
+* name: copyprivate.3c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
 
-        <span class="n">ALLOCATE</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">ALLOCATE</span> <span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-          <span class="n">READ</span> <span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="n">A</span><span class="p">,</span><span class="n">B</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">COPYPRIVATE</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">)</span>
-        <span class="o">!</span> <span class="n">Variable</span> <span class="n">A</span> <span class="n">is</span> <span class="n">private</span> <span class="n">and</span> <span class="n">is</span>
-        <span class="o">!</span> <span class="n">assigned</span> <span class="n">the</span> <span class="n">same</span> <span class="n">value</span> <span class="n">in</span> <span class="n">each</span> <span class="kr">thread</span>
-        <span class="o">!</span> <span class="n">Variable</span> <span class="n">B</span> <span class="n">is</span> <span class="n">shared</span>
+omp_lock_t *new_lock()
+{
+  omp_lock_t *lock_ptr;
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SINGLE</span>
-          <span class="n">DEALLOCATE</span> <span class="p">(</span><span class="n">B</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">NOWAIT</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">S</span>
+  #pragma omp single copyprivate(lock_ptr)
+  {
+    lock_ptr = (omp_lock_t *) malloc(sizeof(omp_lock_t));
+    omp_init_lock( lock_ptr );
+  }
+
+  return lock_ptr;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.3f
+! type: F-fixed
+      FUNCTION NEW_LOCK()
+      USE OMP_LIB       ! or INCLUDE &quot;omp_lib.h&quot;
+        INTEGER(OMP_LOCK_KIND), POINTER :: NEW_LOCK
+
+!$OMP   SINGLE
+          ALLOCATE(NEW_LOCK)
+          CALL OMP_INIT_LOCK(NEW_LOCK)
+!$OMP   END SINGLE COPYPRIVATE(NEW_LOCK)
+      END FUNCTION NEW_LOCK
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the effect of the <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause on a variable with the  <code class="docutils literal notranslate"><span class="pre">allocatable</span></code> attribute is different than on a variable with the <code class="docutils literal notranslate"><span class="pre">pointer</span></code>  attribute. The value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is copied (as if by intrinsic assignment) and  the pointer <code class="docutils literal notranslate"><span class="pre">B</span></code> is copied (as if by pointer assignment) to the corresponding  list items in the other implicit tasks belonging to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.4f
+! type: F-fixed
+      SUBROUTINE S(N)
+      INTEGER N
+
+        REAL, DIMENSION(:), ALLOCATABLE :: A
+        REAL, DIMENSION(:), POINTER :: B
+
+        ALLOCATE (A(N))
+!$OMP   SINGLE
+          ALLOCATE (B(N))
+          READ (11) A,B
+!$OMP   END SINGLE COPYPRIVATE(A,B)
+        ! Variable A is private and is
+        ! assigned the same value in each thread
+        ! Variable B is shared
+
+!$OMP   BARRIER
+!$OMP   SINGLE
+          DEALLOCATE (B)
+!$OMP   END SINGLE NOWAIT
+      END SUBROUTINE S
 
 </pre></div>
 </div>
@@ -1474,7 +1518,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_copyin.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">copyin</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_copyin.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">copyin</span></code> Clause</a>
     <a class='right-next' id="next-link" href="Examples_cpp_reference.html" title="next page">C++ Reference in Data-Sharing Clauses</a>
 
         </div>

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,31 +1290,33 @@
               <div>
                 
   <div class="section" id="the-nowait-clause">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  Clause<a class="headerlink" href="#the-nowait-clause" title="Permalink to this headline">¶</a></h1>
-<p>If there are multiple independent loops within a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, you  can use the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause to avoid the implied barrier at the end of the  loop construct, as follows:</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">nowait</span></code> Clause<a class="headerlink" href="#the-nowait-clause" title="Permalink to this headline">¶</a></h1>
+<p>If there are multiple independent loops within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, you  can use the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause to avoid the implied barrier at the end of the  loop construct, as follows:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: nowait.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">nowait_example</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">z</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp for nowait</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">;</span>
+/*
+* name: nowait.1c
+* type: C
+*/
+#include &lt;math.h&gt;
 
-    <span class="cp">#pragma omp for nowait</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+void nowait_example(int n, int m, float *a, float *b, float *y, float *z)
+{
+  int i;
+  #pragma omp parallel
+  {
+    #pragma omp for nowait
+      for (i=1; i&lt;n; i++)
+        b[i] = (a[i] + a[i-1]) / 2.0;
+
+    #pragma omp for nowait
+      for (i=0; i&lt;m; i++)
+        y[i] = sqrt(z[i]);
+  }
+}
 
 </pre></div>
 </div>
@@ -1284,98 +1324,100 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">nowait</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-        <span class="n">SUBROUTINE</span> <span class="n">NOWAIT_EXAMPLE</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: nowait.1f
+! type: F-fixed
+        SUBROUTINE NOWAIT_EXAMPLE(N, M, A, B, Y, Z)
 
-        <span class="n">INTEGER</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span>
-        <span class="n">REAL</span> <span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">Y</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">Z</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+        INTEGER N, M
+        REAL A(*), B(*), Y(*), Z(*)
 
-        <span class="n">INTEGER</span> <span class="n">I</span>
+        INTEGER I
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span>
+!$OMP PARALLEL
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span>
-        <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span>
-          <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="mi">-1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
-        <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">DO</span> <span class="n">NOWAIT</span>
+!$OMP DO
+        DO I=2,N
+          B(I) = (A(I) + A(I-1)) / 2.0
+        ENDDO
+!$OMP END DO NOWAIT
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span>
-        <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span>
-          <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">Z</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
-        <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">DO</span> <span class="n">NOWAIT</span>
+!$OMP DO
+        DO I=1,M
+          Y(I) = SQRT(Z(I))
+        ENDDO
+!$OMP END DO NOWAIT
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP END PARALLEL
 
-        <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">NOWAIT_EXAMPLE</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the following example, static scheduling distributes the same logical iteration  numbers to the threads that execute the three loop regions. This allows the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>   clause to be used, even though there is a data dependence between the loops. The  dependence is satisfied as long the same thread executes the same logical iteration  numbers in each loop.</p>
-<p>Note that the iteration count of the loops must be the same. The example satisfies  this requirement, since the iteration space of the first two loops is from  <code class="docutils literal notranslate"><span class="pre">0</span></code>   to  <code class="docutils literal notranslate"><span class="pre">n-1</span></code>  (from  <code class="docutils literal notranslate"><span class="pre">1</span></code>  to  <code class="docutils literal notranslate"><span class="pre">N</span></code>  in the Fortran version), while the  iteration space of the last loop is from  <code class="docutils literal notranslate"><span class="pre">1</span></code>  to  <code class="docutils literal notranslate"><span class="pre">n</span></code>  ( <code class="docutils literal notranslate"><span class="pre">2</span></code>  to   <code class="docutils literal notranslate"><span class="pre">N+1</span></code>  in the Fortran version).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: nowait.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">nowait_example2</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">float</span>
-<span class="o">*</span><span class="n">z</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-<span class="cp">#pragma omp parallel</span>
-   <span class="p">{</span>
-<span class="cp">#pragma omp for schedule(static) nowait</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0f</span><span class="p">;</span>
-<span class="cp">#pragma omp for schedule(static) nowait</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrtf</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="cp">#pragma omp for schedule(static) nowait</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;=</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+        END SUBROUTINE NOWAIT_EXAMPLE
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In the following example, static scheduling distributes the same logical iteration  numbers to the threads that execute the three loop regions. This allows the <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause to be used, even though there is a data dependence between the loops. The  dependence is satisfied as long the same thread executes the same logical iteration  numbers in each loop.</p>
+<p>Note that the iteration count of the loops must be the same. The example satisfies  this requirement, since the iteration space of the first two loops is from <code class="docutils literal notranslate"><span class="pre">0</span></code>  to <code class="docutils literal notranslate"><span class="pre">n-1</span></code> (from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">N</span></code> in the Fortran version), while the  iteration space of the last loop is from <code class="docutils literal notranslate"><span class="pre">1</span></code> to <code class="docutils literal notranslate"><span class="pre">n</span></code> (<code class="docutils literal notranslate"><span class="pre">2</span></code> to  <code class="docutils literal notranslate"><span class="pre">N+1</span></code> in the Fortran version).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">nowait</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-   <span class="n">SUBROUTINE</span> <span class="n">NOWAIT_EXAMPLE2</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">)</span>
-   <span class="n">INTEGER</span> <span class="n">N</span>
-   <span class="n">REAL</span> <span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">C</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">Y</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">Z</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-   <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">SCHEDULE</span><span class="p">(</span><span class="n">STATIC</span><span class="p">)</span>
-   <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">C</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">+</span> <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
-   <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">DO</span> <span class="n">NOWAIT</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">SCHEDULE</span><span class="p">(</span><span class="n">STATIC</span><span class="p">)</span>
-   <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">Z</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">SQRT</span><span class="p">(</span><span class="n">C</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
-   <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">DO</span> <span class="n">NOWAIT</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">SCHEDULE</span><span class="p">(</span><span class="n">STATIC</span><span class="p">)</span>
-   <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span>
-      <span class="n">Y</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">Z</span><span class="p">(</span><span class="n">I</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-   <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">DO</span> <span class="n">NOWAIT</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
-   <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">NOWAIT_EXAMPLE2</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: nowait.2c
+* type: C
+*/
+
+#include &lt;math.h&gt;
+void nowait_example2(int n, float *a, float *b, float *c, float *y, float
+*z)
+{
+   int i;
+#pragma omp parallel
+   {
+#pragma omp for schedule(static) nowait
+   for (i=0; i&lt;n; i++)
+      c[i] = (a[i] + b[i]) / 2.0f;
+#pragma omp for schedule(static) nowait
+   for (i=0; i&lt;n; i++)
+      z[i] = sqrtf(c[i]);
+#pragma omp for schedule(static) nowait
+   for (i=1; i&lt;=n; i++)
+      y[i] = z[i-1] + a[i];
+   }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: nowait.2f
+! type: F-free
+   SUBROUTINE NOWAIT_EXAMPLE2(N, A, B, C, Y, Z)
+   INTEGER N
+   REAL A(*), B(*), C(*), Y(*), Z(*)
+   INTEGER I
+!$OMP PARALLEL
+!$OMP DO SCHEDULE(STATIC)
+   DO I=1,N
+      C(I) = (A(I) + B(I)) / 2.0
+   ENDDO
+!$OMP END DO NOWAIT
+!$OMP DO SCHEDULE(STATIC)
+   DO I=1,N
+      Z(I) = SQRT(C(I))
+   ENDDO
+!$OMP END DO NOWAIT
+!$OMP DO SCHEDULE(STATIC)
+   DO I=2,N+1
+      Y(I) = Z(I-1) + A(I)
+   ENDDO
+!$OMP END DO NOWAIT
+!$OMP END PARALLEL
+   END SUBROUTINE NOWAIT_EXAMPLE2
 
 </pre></div>
 </div>
@@ -1408,8 +1450,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_fort_do.html" title="previous page">Fortran Restrictions on the  <code class="docutils literal notranslate"><span class="pre">do</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_collapse.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">collapse</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_fort_do.html" title="previous page">Fortran Restrictions on the <code class="docutils literal notranslate"><span class="pre">do</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_collapse.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">collapse</span></code> Clause</a>
 
         </div>
         

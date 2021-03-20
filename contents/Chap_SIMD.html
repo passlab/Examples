@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1254,16 +1292,10 @@
   <div class="section" id="simd">
 <h1>SIMD<a class="headerlink" href="#simd" title="Permalink to this headline">¶</a></h1>
 <p>Single instruction, multiple data (SIMD) is a form of parallel execution  in which the same operation is performed on multiple data elements  independently in hardware vector processing units (VPU), also called SIMD units. The addition of two vectors to form a third vector is a SIMD operation. Many processors have SIMD (vector) units that can perform simultaneously  2, 4, 8 or more executions of the same operation (by a single SIMD unit).</p>
-<p>Loops without loop-carried backward dependency (or with dependency preserved using  ordered simd) are candidates for vectorization by the compiler for  execution with SIMD units. In addition, with state-of-the-art vectorization  technology and  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code>  construct extensions for function vectorization in the OpenMP 4.5 specification, loops with function calls can be vectorized as well.  The basic idea is that a scalar function call in a loop can be replaced by a vector version  of the function, and the loop can be vectorized simultaneously by combining a loop  vectorization ( <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive on the loop) and a function  vectorization ( <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code>  directive on the function).</p>
-<p>A  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct states that SIMD operations be performed on the data within the loop.  A number of clauses are available to provide data-sharing attributes ( <code class="docutils literal notranslate"><span class="pre">private</span></code> ,  <code class="docutils literal notranslate"><span class="pre">linear</span></code> ,  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  and   <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> ).  Other clauses provide vector length preference/restrictions  ( <code class="docutils literal notranslate"><span class="pre">simdlen</span></code>  /  <code class="docutils literal notranslate"><span class="pre">safelen</span></code> ), loop fusion ( <code class="docutils literal notranslate"><span class="pre">collapse</span></code> ), and data  alignment ( <code class="docutils literal notranslate"><span class="pre">aligned</span></code> ).</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code>  directive designates that a vector version of the function should also be constructed for  execution within loops that contain the function and have a  <code class="docutils literal notranslate"><span class="pre">simd</span></code>   directive.  Clauses provide argument specifications ( <code class="docutils literal notranslate"><span class="pre">linear</span></code> ,  <code class="docutils literal notranslate"><span class="pre">uniform</span></code> , and  <code class="docutils literal notranslate"><span class="pre">aligned</span></code> ), a requested vector length  ( <code class="docutils literal notranslate"><span class="pre">simdlen</span></code> ), and designate whether the function is always/never  called conditionally in a loop ( <code class="docutils literal notranslate"><span class="pre">branch</span></code> / <code class="docutils literal notranslate"><span class="pre">inbranch</span></code> ).  The latter is for optimizing performance.</p>
-<p>Also, the  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct has been combined with the worksharing loop  constructs ( <code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">simd</span></code>  and  <code class="docutils literal notranslate"><span class="pre">do</span> <span class="pre">simd</span></code> ) to enable simultaneous thread  execution in different SIMD units.<br />
-Hence, the  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct can be<br />
-used alone on a loop to direct vectorization (SIMD execution), or in<br />
-combination with a parallel loop construct to include thread parallelism<br />
-(a parallel loop sequentially followed by a  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct,
-or a combined construct such as  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">do</span> <span class="pre">simd</span></code>  or<br />
-<code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">for</span> <span class="pre">simd</span></code> ).</p>
+<p>Loops without loop-carried backward dependency (or with dependency preserved using  ordered simd) are candidates for vectorization by the compiler for  execution with SIMD units. In addition, with state-of-the-art vectorization  technology and <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> construct extensions for function vectorization in the OpenMP 4.5 specification, loops with function calls can be vectorized as well.  The basic idea is that a scalar function call in a loop can be replaced by a vector version  of the function, and the loop can be vectorized simultaneously by combining a loop  vectorization (<code class="docutils literal notranslate"><span class="pre">simd</span></code> directive on the loop) and a function  vectorization (<code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> directive on the function).</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct states that SIMD operations be performed on the data within the loop.  A number of clauses are available to provide data-sharing attributes (<code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">linear</span></code>, <code class="docutils literal notranslate"><span class="pre">reduction</span></code> and  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>).  Other clauses provide vector length preference/restrictions  (<code class="docutils literal notranslate"><span class="pre">simdlen</span></code> / <code class="docutils literal notranslate"><span class="pre">safelen</span></code>), loop fusion (<code class="docutils literal notranslate"><span class="pre">collapse</span></code>), and data  alignment (<code class="docutils literal notranslate"><span class="pre">aligned</span></code>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> directive designates that a vector version of the function should also be constructed for  execution within loops that contain the function and have a <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive.  Clauses provide argument specifications (<code class="docutils literal notranslate"><span class="pre">linear</span></code>, <code class="docutils literal notranslate"><span class="pre">uniform</span></code>, and <code class="docutils literal notranslate"><span class="pre">aligned</span></code>), a requested vector length  (<code class="docutils literal notranslate"><span class="pre">simdlen</span></code>), and designate whether the function is always/never  called conditionally in a loop (<code class="docutils literal notranslate"><span class="pre">branch</span></code>/<code class="docutils literal notranslate"><span class="pre">inbranch</span></code>).  The latter is for optimizing performance.</p>
+<p>Also, the <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct has been combined with the worksharing loop  constructs (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">simd</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span> <span class="pre">simd</span></code>) to enable simultaneous thread  execution in different SIMD units.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1294,7 +1326,7 @@ or a combined construct such as  <code class="docutils literal notranslate"><spa
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_device.html" title="previous page">Device Routines</a>
-    <a class='right-next' id="next-link" href="Examples_SIMD.html" title="next page"><code class="docutils literal notranslate"><span class="pre">simd</span></code>  and  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  Constructs</a>
+    <a class='right-next' id="next-link" href="Examples_SIMD.html" title="next page"><code class="docutils literal notranslate"><span class="pre">simd</span></code> and <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> Constructs</a>
 
         </div>
         

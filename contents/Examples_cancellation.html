@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The requires Directive" href="Examples_requires.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="Examples_standalone.html" />
+    <link rel="prev" title="Placement of flush, barrier, taskwait and taskyield Directives" href="Examples_standalone.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1084,6 +1094,35 @@
      Internal Control Variables (ICVs)
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Cancellation Constructs
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,159 +1291,163 @@
                 
   <div class="section" id="cancellation-constructs">
 <h1>Cancellation Constructs<a class="headerlink" href="#cancellation-constructs" title="Permalink to this headline">¶</a></h1>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  directive can be used to terminate  an OpenMP region. Although the  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  construct terminates the OpenMP  worksharing region, programmers must still track the exception through the pointer  ex and issue a cancellation for the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region if an exception has  been raised. The master thread checks the exception pointer to make sure that the  exception is properly handled in the sequential part. If cancellation of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region has been requested, some threads might have executed  <code class="docutils literal notranslate"><span class="pre">phase_1()</span></code> .  However, it is guaranteed that none of the threads executed  <code class="docutils literal notranslate"><span class="pre">phase_2()</span></code> .</p>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">cancel</span></code> directive can be used to terminate  an OpenMP region. Although the <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct terminates the OpenMP  worksharing region, programmers must still track the exception through the pointer  ex and issue a cancellation for the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region if an exception has  been raised. The master thread checks the exception pointer to make sure that the  exception is properly handled in the sequential part. If cancellation of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region has been requested, some threads might have executed <code class="docutils literal notranslate"><span class="pre">phase_1()</span></code>.  However, it is guaranteed that none of the threads executed <code class="docutils literal notranslate"><span class="pre">phase_2()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: cancellation.1c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;exception&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;cstddef&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#define N 10000</span>
+/*
+* name: cancellation.1c
+* type: C++
+* version: omp_4.0
+*/
+#include &lt;iostream&gt;
+#include &lt;exception&gt;
+#include &lt;cstddef&gt;
 
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">causes_an_exception</span><span class="p">();</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">phase_1</span><span class="p">();</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">phase_2</span><span class="p">();</span>
+#define N 10000
 
-<span class="kt">void</span> <span class="nf">example</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">*</span><span class="n">ex</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="cp">#pragma omp parallel shared(ex)</span>
-    <span class="p">{</span>
-<span class="cp">#pragma omp for</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">// no &#39;if&#39; that prevents compiler optimizations</span>
-            <span class="n">try</span> <span class="p">{</span>
-                <span class="n">causes_an_exception</span><span class="p">();</span>
-            <span class="p">}</span>
-            <span class="n">catch</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span> <span class="o">*</span><span class="n">e</span><span class="p">)</span> <span class="p">{</span>
-                <span class="c1">// still must remember exception for later handling</span>
-<span class="cp">#pragma omp atomic write</span>
-                <span class="n">ex</span> <span class="o">=</span> <span class="n">e</span><span class="p">;</span>
-    <span class="c1">// cancel worksharing construct</span>
-<span class="cp">#pragma omp cancel for</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-   <span class="c1">// if an exception has been raised, cancel parallel region</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
-<span class="cp">#pragma omp cancel parallel</span>
-        <span class="p">}</span>
-        <span class="n">phase_1</span><span class="p">();</span>
-<span class="cp">#pragma omp barrier</span>
-        <span class="n">phase_2</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="c1">// continue here if an exception has been thrown in the worksharing loop</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// handle exception stored in ex</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+extern void causes_an_exception();
+extern void phase_1();
+extern void phase_2();
+
+void example() {
+    std::exception *ex = NULL;
+#pragma omp parallel shared(ex)
+    {
+#pragma omp for
+        for (int i = 0; i &lt; N; i++) {
+            // no &#39;if&#39; that prevents compiler optimizations
+            try {
+                causes_an_exception();
+            }
+            catch (std::exception *e) {
+                // still must remember exception for later handling
+#pragma omp atomic write
+                ex = e;
+    // cancel worksharing construct
+#pragma omp cancel for
+            }
+        }
+   // if an exception has been raised, cancel parallel region
+        if (ex) {
+#pragma omp cancel parallel
+        }
+        phase_1();
+#pragma omp barrier
+        phase_2();
+    }
+    // continue here if an exception has been thrown in the worksharing loop
+    if (ex) {
+        // handle exception stored in ex
+    }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates the use of the  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  construct in error  handling. If there is an error condition from the  <code class="docutils literal notranslate"><span class="pre">allocate</span></code>  statement,  the cancellation is activated. The encountering thread sets the shared variable   <code class="docutils literal notranslate"><span class="pre">err</span></code>  and other threads of the binding thread set proceed to the end of  the worksharing construct after the cancellation has been activated.</p>
+<p>The following example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct in error  handling. If there is an error condition from the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> statement,  the cancellation is activated. The encountering thread sets the shared variable  <code class="docutils literal notranslate"><span class="pre">err</span></code> and other threads of the binding thread set proceed to the end of  the worksharing construct after the cancellation has been activated.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">cancellation</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">example</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">dim</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">err</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">allocatable</span> <span class="o">::</span> <span class="n">B</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-  <span class="n">err</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">shared</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-<span class="o">!</span> <span class="p">...</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">private</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">cancellation</span> <span class="n">point</span> <span class="k">do</span>
-    <span class="n">allocate</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">dim</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span> <span class="n">stat</span><span class="o">=</span><span class="n">s</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">s</span> <span class="p">.</span><span class="n">gt</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">write</span>
-      <span class="n">err</span> <span class="o">=</span> <span class="n">s</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">cancel</span> <span class="k">do</span>
-    <span class="n">endif</span>
-<span class="o">!</span>   <span class="p">...</span>
-<span class="o">!</span> <span class="n">deallocate</span> <span class="n">private</span> <span class="n">array</span> <span class="n">B</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">allocated</span><span class="p">(</span><span class="n">B</span><span class="p">))</span> <span class="n">then</span>
-      <span class="n">deallocate</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-    <span class="n">endif</span>
-  <span class="n">enddo</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: cancellation.1f
+! type: F-free
+! version: omp_4.0
+subroutine example(n, dim)
+  integer, intent(in) :: n, dim(n)
+  integer :: i, s, err
+  real, allocatable :: B(:)
+  err = 0
+!$omp parallel shared(err)
+! ...
+!$omp do private(s, B)
+  do i=1, n
+!$omp cancellation point do
+    allocate(B(dim(i)), stat=s)
+    if (s .gt. 0) then
+!$omp atomic write
+      err = s
+!$omp cancel do
+    endif
+!   ...
+! deallocate private array B
+    if (allocated(B)) then
+      deallocate(B)
+    endif
+  enddo
+!$omp end parallel
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows how to cancel a parallel search on a binary tree as  soon as the search value has been detected. The  creates a task to descend  into the child nodes of the current tree node. If the search value has been found,  the  remembers the tree node with the found value through an  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>   write to the result variable and then cancels execution of all search tasks. The  function  <code class="docutils literal notranslate"><span class="pre">search_tree_parallel</span></code>  groups all search tasks into a single  task group to control the effect of the  <code class="docutils literal notranslate"><span class="pre">cancel</span> <span class="pre">taskgroup</span></code>  directive. The   <em>level</em>  argument is used to create undeferred tasks after the first ten  levels of the tree.</p>
+<p>The following example shows how to cancel a parallel search on a binary tree as  soon as the search value has been detected. The code creates a task to descend  into the child nodes of the current tree node. If the search value has been found,  the code remembers the tree node with the found value through an <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  write to the result variable and then cancels execution of all search tasks. The  function <code class="docutils literal notranslate"><span class="pre">search_tree_parallel</span></code> groups all search tasks into a single  task group to control the effect of the <code class="docutils literal notranslate"><span class="pre">cancel</span> <span class="pre">taskgroup</span></code> directive. The   <em>level</em>  argument is used to create undeferred tasks after the first ten  levels of the tree.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: cancellation.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stddef.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">binary_tree_s</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">value</span><span class="p">;</span>
-   <span class="k">struct</span> <span class="nc">binary_tree_s</span> <span class="o">*</span><span class="n">left</span><span class="p">,</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">binary_tree_t</span><span class="p">;</span>
+/*
+* name: cancellation.2c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stddef.h&gt;
 
-<span class="n">binary_tree_t</span> <span class="o">*</span><span class="nf">search_tree</span><span class="p">(</span><span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">,</span> <span class="kt">int</span> <span class="n">level</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">found</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">found</span> <span class="o">=</span> <span class="n">tree</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-<span class="cp">#pragma omp task shared(found) if(level &lt; 10)</span>
-            <span class="p">{</span>
-                <span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">found_left</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                <span class="n">found_left</span> <span class="o">=</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">found_left</span><span class="p">)</span> <span class="p">{</span>
-<span class="cp">#pragma omp atomic write</span>
-                    <span class="n">found</span> <span class="o">=</span> <span class="n">found_left</span><span class="p">;</span>
-<span class="cp">#pragma omp cancel taskgroup</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-<span class="cp">#pragma omp task shared(found) if(level &lt; 10)</span>
-            <span class="p">{</span>
-                <span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">found_right</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-                <span class="n">found_right</span> <span class="o">=</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">found_right</span><span class="p">)</span> <span class="p">{</span>
-<span class="cp">#pragma omp atomic write</span>
-                    <span class="n">found</span> <span class="o">=</span> <span class="n">found_right</span><span class="p">;</span>
-<span class="cp">#pragma omp cancel taskgroup</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-<span class="cp">#pragma omp taskwait</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">found</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="n">binary_tree_t</span> <span class="o">*</span><span class="nf">search_tree_parallel</span><span class="p">(</span><span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">tree</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">binary_tree_t</span> <span class="o">*</span><span class="n">found</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-<span class="cp">#pragma omp parallel shared(found, tree, value)</span>
-    <span class="p">{</span>
-<span class="cp">#pragma omp master</span>
-        <span class="p">{</span>
-<span class="cp">#pragma omp taskgroup</span>
-            <span class="p">{</span>
-                <span class="n">found</span> <span class="o">=</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="n">found</span><span class="p">;</span>
-<span class="p">}</span>
+typedef struct binary_tree_s {
+   int value;
+   struct binary_tree_s *left, *right;
+} binary_tree_t;
+
+binary_tree_t *search_tree(binary_tree_t *tree, int value, int level) {
+    binary_tree_t *found = NULL;
+    if (tree) {
+        if (tree-&gt;value == value) {
+            found = tree;
+        }
+        else {
+#pragma omp task shared(found) if(level &lt; 10)
+            {
+                binary_tree_t *found_left = NULL;
+                found_left = search_tree(tree-&gt;left, value, level + 1);
+                if (found_left) {
+#pragma omp atomic write
+                    found = found_left;
+#pragma omp cancel taskgroup
+                }
+            }
+#pragma omp task shared(found) if(level &lt; 10)
+            {
+                binary_tree_t *found_right = NULL;
+                found_right = search_tree(tree-&gt;right, value, level + 1);
+                if (found_right) {
+#pragma omp atomic write
+                    found = found_right;
+#pragma omp cancel taskgroup
+                }
+            }
+#pragma omp taskwait
+        }
+    }
+    return found;
+}
+binary_tree_t *search_tree_parallel(binary_tree_t *tree, int value) {
+    binary_tree_t *found = NULL;
+#pragma omp parallel shared(found, tree, value)
+    {
+#pragma omp master
+        {
+#pragma omp taskgroup
+            {
+                found = search_tree(tree, value, 0);
+            }
+        }
+    }
+    return found;
+}
 
 </pre></div>
 </div>
@@ -1414,71 +1456,71 @@
 <p>The following is the equivalent parallel search example in Fortran.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">cancellation</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">parallel_search</span>
-  <span class="n">type</span> <span class="n">binary_tree</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">value</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">right</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">left</span>
-  <span class="n">end</span> <span class="n">type</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: cancellation.2f
+! type: F-free
+! version: omp_4.0
+module parallel_search
+  type binary_tree
+    integer :: value
+    type(binary_tree), pointer :: right
+    type(binary_tree), pointer :: left
+  end type
 
-<span class="n">contains</span>
-  <span class="n">recursive</span> <span class="n">subroutine</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">tree</span>
-    <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">found</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">found_left</span> <span class="o">=&gt;</span> <span class="nb">NULL</span><span class="p">(),</span> <span class="n">found_right</span> <span class="o">=&gt;</span> <span class="nb">NULL</span><span class="p">()</span>
+contains
+  recursive subroutine search_tree(tree, value, level, found)
+    type(binary_tree), intent(in), pointer :: tree
+    integer, intent(in) :: value, level
+    type(binary_tree), pointer :: found
+    type(binary_tree), pointer :: found_left =&gt; NULL(), found_right =&gt; NULL()
 
-    <span class="k">if</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">tree</span><span class="p">))</span> <span class="n">then</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">value</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="n">value</span><span class="p">)</span> <span class="n">then</span>
-        <span class="n">found</span> <span class="o">=&gt;</span> <span class="n">tree</span>
-      <span class="k">else</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">found</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">level</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">call</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">left</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">found_left</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">found_left</span><span class="p">))</span> <span class="n">then</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-          <span class="n">found</span> <span class="o">=&gt;</span> <span class="n">found_left</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
+    if (associated(tree)) then
+      if (tree%value .eq. value) then
+        found =&gt; tree
+      else
+!$omp task shared(found) if(level&lt;10)
+        call search_tree(tree%left, value, level+1, found_left)
+        if (associated(found_left)) then
+!$omp critical
+          found =&gt; found_left
+!$omp end critical
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">cancel</span> <span class="n">taskgroup</span>
-        <span class="n">endif</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+!$omp cancel taskgroup
+        endif
+!$omp end task
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">found</span><span class="p">)</span> <span class="k">if</span><span class="p">(</span><span class="n">level</span><span class="o">&lt;</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">call</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">right</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">level</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">found_right</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">found_right</span><span class="p">))</span> <span class="n">then</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-          <span class="n">found</span> <span class="o">=&gt;</span> <span class="n">found_right</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
+!$omp task shared(found) if(level&lt;10)
+        call search_tree(tree%right, value, level+1, found_right)
+        if (associated(found_right)) then
+!$omp critical
+          found =&gt; found_right
+!$omp end critical
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">cancel</span> <span class="n">taskgroup</span>
-        <span class="n">endif</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+!$omp cancel taskgroup
+        endif
+!$omp end task
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-      <span class="n">endif</span>
-    <span class="n">endif</span>
-  <span class="n">end</span> <span class="n">subroutine</span>
+!$omp taskwait
+      endif
+    endif
+  end subroutine
 
-  <span class="n">subroutine</span> <span class="n">search_tree_parallel</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">tree</span>
-    <span class="n">integer</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">value</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">binary_tree</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">found</span>
+  subroutine search_tree_parallel(tree, value, found)
+    type(binary_tree), intent(in), pointer :: tree
+    integer, intent(in) :: value
+    type(binary_tree), pointer :: found
 
-    <span class="n">found</span> <span class="o">=&gt;</span> <span class="nb">NULL</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">shared</span><span class="p">(</span><span class="n">found</span><span class="p">,</span> <span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">master</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span>
-    <span class="n">call</span> <span class="n">search_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">found</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-  <span class="n">end</span> <span class="n">subroutine</span>
+    found =&gt; NULL()
+!$omp parallel shared(found, tree, value)
+!$omp master
+!$omp taskgroup
+    call search_tree(tree, value, 0, found)
+!$omp end taskgroup
+!$omp end master
+!$omp end parallel
+  end subroutine
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">parallel_search</span>
+end module parallel_search
 
 </pre></div>
 </div>
@@ -1511,8 +1553,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_standalone.html" title="previous page">&lt;no title&gt;</a>
-    <a class='right-next' id="next-link" href="Examples_requires.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">requires</span></code>  Directive</a>
+    <a class='left-prev' id="prev-link" href="Examples_standalone.html" title="previous page">Placement of <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> Directives</a>
+    <a class='right-next' id="next-link" href="Examples_requires.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">requires</span></code> Directive</a>
 
         </div>
         

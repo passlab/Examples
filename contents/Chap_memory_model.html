@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The OpenMP Memory Model" href="Examples_mem_model.html" />
-    <link rel="prev" title="C++ Reference in Data-Sharing Clauses" href="Examples_cpp_reference.html" />
+    <link rel="prev" title="Fortran ASSOCIATE Construct" href="Examples_associate.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,18 +1291,11 @@
                 
   <div class="section" id="memory-model">
 <h1>Memory Model<a class="headerlink" href="#memory-model" title="Permalink to this headline">¶</a></h1>
-<p>OpenMP provides a shared-memory model that allows all threads on a given device shared access to {memory}. For a given OpenMP region that may be executed by more than one thread or SIMD lane, variables in memory may be {shared} or {private} with respect to those threads or SIMD lanes. A variable’s data-sharing attribute indicates whether it is shared (the {shared} attribute) or private (the {private}, {firstprivate}, {lastprivate}, {linear}, and {reduction} attributes) in the data environment of an OpenMP region. While private variables in an OpenMP region are new copies of the original variable (with same name) that may then be concurrently accessed or modified by their respective threads or SIMD lanes, a shared variable in an OpenMP region is the same as the variable of the same name in the enclosing region. Concurrent accesses or modifications to a shared variable may therefore require synchronization to avoid data races.</p>
-<p>OpenMP’s memory model also includes a {temporary view} of memory that is associated with each thread. Two different threads may see different values for a given variable in their respective temporary views. Threads may employ flush operations for the purposes of making their temporary view of a variable consistent with the value of the variable in memory. The effect of a given flush operation is characterized by its flush properties – some combination of {strong}, {release}, and {acquire} – and, for {strong} flushes, a {flush-set}.</p>
-<p>A {strong} flush will force consistency between the temporary view and the memory for all variables in its {flush-set}.  Furthermore all strong flushes in a program that have intersecting flush-sets will execute in some total order, and within a thread strong flushes may not be reordered with respect to other memory operations on variables in its flush-set. {Release} and {acquire} flushes operate in pairs. A release flush may “synchronize’’ with an acquire flush, and when it does so the local memory operations that precede the release flush will appear to have been completed before the local memory operations on the same variables that follow the acquire flush.</p>
-<p>Flush operations arise from explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directives, implicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directives, and also from the execution of  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs. The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive forces a  consistent view of local variables of the thread executing the  <code class="docutils literal notranslate"><span class="pre">flush</span></code> .  When a list is supplied on the directive, only the items (variables) in the list are guaranteed to be flushed.  Implied flushes exist at prescribed locations of certain constructs. For the complete list of these locations and associated constructs, please refer to the  <em>flush Construct</em>  section of the OpenMP Specifications document.</p>
-<p>In this chapter, examples illustrate how race conditions may arise for accesses to variables with a  <em>shared</em>  data-sharing attribute when flush operations are not properly employed.  A race condition can exist when two or more threads are involved in accessing a variable and at least one of the accesses modifies the variable.  In particular, a data race will arise when conflicting accesses do not have a well-defined {completion order}.  The existence of data races in OpenMP programs result in undefined behavior, and so they should generally be avoided for programs to be correct.  The completion order of accesses to a shared variable is guaranteed in OpenMP through a set of memory consistency rules that are described in the  <em>OpenMP Memory Consitency</em>  section of the OpenMP Specifications document.</p>
-<p>This chapter also includes examples that exhibit non-sequentially consistent
-({non-SC}) behavior. Sequential consistency ({SC}) is the desirable
-property that the results of a multi-threaded program are as if all operations
-are performed in some total order, consistent with the program order of
-operations performed by each thread. OpenMP guarantees that a correct program
-(i.e. a program that does not have a data race) will exhibit SC behavior
-so long as the only  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs it uses are SC atomic directives.</p>
+<p>OpenMP provides a shared-memory model that allows all threads on a given device shared access to <strong>memory</strong>. For a given OpenMP region that may be executed by more than one thread or SIMD lane, variables in memory may be <strong>shared</strong> or <strong>private</strong> with respect to those threads or SIMD lanes. A variable’s data-sharing attribute indicates whether it is shared (the <strong>shared</strong> attribute) or private (the <strong>private</strong>, <strong>firstprivate</strong>, <strong>lastprivate</strong>, <strong>linear</strong>, and <strong>reduction</strong> attributes) in the data environment of an OpenMP region. While private variables in an OpenMP region are new copies of the original variable (with same name) that may then be concurrently accessed or modified by their respective threads or SIMD lanes, a shared variable in an OpenMP region is the same as the variable of the same name in the enclosing region. Concurrent accesses or modifications to a shared variable may therefore require synchronization to avoid data races.</p>
+<p>OpenMP’s memory model also includes a <strong>temporary view</strong> of memory that is associated with each thread. Two different threads may see different values for a given variable in their respective temporary views. Threads may employ flush operations for the purposes of making their temporary view of a variable consistent with the value of the variable in memory. The effect of a given flush operation is characterized by its flush properties – some combination of <strong>strong</strong>, <strong>release</strong>, and <strong>acquire</strong> – and, for <strong>strong</strong> flushes, a <strong>flush-set</strong>.</p>
+<p>A <strong>strong</strong> flush will force consistency between the temporary view and the memory for all variables in its <strong>flush-set</strong>.  Furthermore all strong flushes in a program that have intersecting flush-sets will execute in some total order, and within a thread strong flushes may not be reordered with respect to other memory operations on variables in its flush-set. <strong>Release</strong> and <strong>acquire</strong> flushes operate in pairs. A release flush may “synchronize’’ with an acquire flush, and when it does so the local memory operations that precede the release flush will appear to have been completed before the local memory operations on the same variables that follow the acquire flush.</p>
+<p>Flush operations arise from explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, implicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, and also from the execution of <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs. The <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive forces a  consistent view of local variables of the thread executing the <code class="docutils literal notranslate"><span class="pre">flush</span></code>.  When a list is supplied on the directive, only the items (variables) in the list are guaranteed to be flushed.  Implied flushes exist at prescribed locations of certain constructs. For the complete list of these locations and associated constructs, please refer to the  <em>flush Construct</em>  section of the OpenMP Specifications document.</p>
+<p>In this chapter, examples illustrate how race conditions may arise for accesses to variables with a  <em>shared</em>  data-sharing attribute when flush operations are not properly employed.  A race condition can exist when two or more threads are involved in accessing a variable and at least one of the accesses modifies the variable.  In particular, a data race will arise when conflicting accesses do not have a well-defined <strong>completion order</strong>.  The existence of data races in OpenMP programs result in undefined behavior, and so they should generally be avoided for programs to be correct.  The completion order of accesses to a shared variable is guaranteed in OpenMP through a set of memory consistency rules that are described in the  <em>OpenMP Memory Consitency</em>  section of the OpenMP Specifications document.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1294,7 +1325,7 @@ so long as the only  <code class="docutils literal notranslate"><span class="pre
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_cpp_reference.html" title="previous page">C++ Reference in Data-Sharing Clauses</a>
+    <a class='left-prev' id="prev-link" href="Examples_associate.html" title="previous page">Fortran <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_mem_model.html" title="next page">The OpenMP Memory Model</a>
 
         </div>

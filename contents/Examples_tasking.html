@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,34 +1290,36 @@
               <div>
                 
   <div class="section" id="the-task-and-taskwait-constructs">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">task</span></code>  and  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  Constructs<a class="headerlink" href="#the-task-and-taskwait-constructs" title="Permalink to this headline">¶</a></h1>
-<p>The following example shows how to traverse a tree-like structure using explicit  tasks. Note that the  <code class="docutils literal notranslate"><span class="pre">traverse</span></code>  function should be called from within a  parallel region for the different specified tasks to be executed in parallel. Also  note that the tasks will be executed in no specified order because there are no  synchronization directives. Thus, assuming that the traversal will be done in post  order, as in the sequential , is wrong.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">task</span></code> and <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> Constructs<a class="headerlink" href="#the-task-and-taskwait-constructs" title="Permalink to this headline">¶</a></h1>
+<p>The following example shows how to traverse a tree-like structure using explicit  tasks. Note that the <code class="docutils literal notranslate"><span class="pre">traverse</span></code> function should be called from within a  parallel region for the different specified tasks to be executed in parallel. Also  note that the tasks will be executed in no specified order because there are no  synchronization directives. Thus, assuming that the traversal will be done in post  order, as in the sequential code, is wrong.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">struct</span> <span class="nc">node</span> <span class="p">{</span>
-  <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">left</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
-<span class="p">};</span>
+/*
+* name: tasking.1c
+* type: C
+* version: omp_3.0
+*/
 
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="p">);</span>
+struct node {
+  struct node *left;
+  struct node *right;
+};
 
-<span class="kt">void</span> <span class="nf">traverse</span><span class="p">(</span> <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">p</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
-<span class="cp">#pragma omp task   </span><span class="c1">// p is firstprivate by default</span>
-      <span class="n">traverse</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
-<span class="cp">#pragma omp task    </span><span class="c1">// p is firstprivate by default</span>
-      <span class="n">traverse</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-  <span class="n">process</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-<span class="p">}</span>
+extern void process(struct node *);
+
+void traverse( struct node *p )
+{
+  if (p-&gt;left)
+#pragma omp task   // p is firstprivate by default
+      traverse(p-&gt;left);
+  if (p-&gt;right)
+#pragma omp task    // p is firstprivate by default
+      traverse(p-&gt;right);
+  process(p);
+}
 
 </pre></div>
 </div>
@@ -1287,130 +1327,61 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.1f
+! type: F-free
+! version:    omp_3.0
 
-       <span class="n">RECURSIVE</span> <span class="n">SUBROUTINE</span> <span class="n">traverse</span> <span class="p">(</span> <span class="n">P</span> <span class="p">)</span>
-          <span class="n">TYPE</span> <span class="n">Node</span>
-             <span class="n">TYPE</span><span class="p">(</span><span class="n">Node</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span>
-          <span class="n">END</span> <span class="n">TYPE</span> <span class="n">Node</span>
-          <span class="n">TYPE</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
+       RECURSIVE SUBROUTINE traverse ( P )
+          TYPE Node
+             TYPE(Node), POINTER :: left, right
+          END TYPE Node
+          TYPE(Node) :: P
 
-          <span class="n">IF</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">left</span><span class="p">))</span> <span class="n">THEN</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span>     <span class="o">!</span> <span class="n">P</span> <span class="n">is</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-                 <span class="n">CALL</span> <span class="n">traverse</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">left</span><span class="p">)</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-          <span class="n">ENDIF</span>
-          <span class="n">IF</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">right</span><span class="p">))</span> <span class="n">THEN</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span>     <span class="o">!</span> <span class="n">P</span> <span class="n">is</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-                 <span class="n">CALL</span> <span class="n">traverse</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">right</span><span class="p">)</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-          <span class="n">ENDIF</span>
-          <span class="n">CALL</span> <span class="n">process</span> <span class="p">(</span> <span class="n">P</span> <span class="p">)</span>
+          IF (associated(P%left)) THEN
+             !$OMP TASK     ! P is firstprivate by default
+                 CALL traverse(P%left)
+             !$OMP END TASK
+          ENDIF
+          IF (associated(P%right)) THEN
+             !$OMP TASK     ! P is firstprivate by default
+                 CALL traverse(P%right)
+             !$OMP END TASK
+          ENDIF
+          CALL process ( P )
 
-       <span class="n">END</span> <span class="n">SUBROUTINE</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the next example, we force a postorder traversal of the tree by adding a  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>   directive. Now, we can safely assume that the left and right sons have been executed  before we process the current node.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-<span class="k">struct</span> <span class="nc">node</span> <span class="p">{</span>
-  <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">left</span><span class="p">;</span>
-  <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">postorder_traverse</span><span class="p">(</span> <span class="k">struct</span> <span class="nc">node</span> <span class="o">*</span><span class="n">p</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
-       <span class="cp">#pragma omp task    </span><span class="c1">// p is firstprivate by default</span>
-           <span class="n">postorder_traverse</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
-       <span class="cp">#pragma omp task   </span><span class="c1">// p is firstprivate by default</span>
-           <span class="n">postorder_traverse</span><span class="p">(</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-    <span class="cp">#pragma omp taskwait</span>
-    <span class="n">process</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-<span class="p">}</span>
+       END SUBROUTINE
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In the next example, we force a postorder traversal of the tree by adding a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  directive. Now, we can safely assume that the left and right sons have been executed  before we process the current node.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.0</span>
-      <span class="n">RECURSIVE</span> <span class="n">SUBROUTINE</span> <span class="n">traverse</span> <span class="p">(</span> <span class="n">P</span> <span class="p">)</span>
-         <span class="n">TYPE</span> <span class="n">Node</span>
-             <span class="n">TYPE</span><span class="p">(</span><span class="n">Node</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span>
-         <span class="n">END</span> <span class="n">TYPE</span> <span class="n">Node</span>
-         <span class="n">TYPE</span><span class="p">(</span><span class="n">Node</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
-         <span class="n">IF</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">left</span><span class="p">))</span> <span class="n">THEN</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span>    <span class="o">!</span> <span class="n">P</span> <span class="n">is</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-                 <span class="n">CALL</span> <span class="n">traverse</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">left</span><span class="p">)</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-         <span class="n">ENDIF</span>
-         <span class="n">IF</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">right</span><span class="p">))</span> <span class="n">THEN</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span>    <span class="o">!</span> <span class="n">P</span> <span class="n">is</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-                 <span class="n">CALL</span> <span class="n">traverse</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">right</span><span class="p">)</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-         <span class="n">ENDIF</span>
-         <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
-         <span class="n">CALL</span> <span class="n">process</span> <span class="p">(</span> <span class="n">P</span> <span class="p">)</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example demonstrates how to use the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct to process  elements of a linked list in parallel. The thread executing the  <code class="docutils literal notranslate"><span class="pre">single</span></code>   region generates all of the explicit tasks, which are then executed by the threads  in the current team. The pointer  <em>p</em>  is  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  by default  on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct so it is not necessary to specify it in a  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>   clause.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">node</span> <span class="n">node</span><span class="p">;</span>
-<span class="k">struct</span> <span class="nc">node</span> <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">data</span><span class="p">;</span>
-      <span class="n">node</span> <span class="o">*</span> <span class="n">next</span><span class="p">;</span>
-<span class="p">};</span>
-
-<span class="kt">void</span> <span class="nf">process</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="cm">/* do work here */</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">increment_list_items</span><span class="p">(</span><span class="n">node</span> <span class="o">*</span> <span class="n">head</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="cp">#pragma omp parallel</span>
-    <span class="p">{</span>
-        <span class="cp">#pragma omp single</span>
-            <span class="p">{</span>
-               <span class="n">node</span> <span class="o">*</span> <span class="n">p</span> <span class="o">=</span> <span class="n">head</span><span class="p">;</span>
-               <span class="k">while</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="cp">#pragma omp task</span>
-                     <span class="c1">// p is firstprivate by default</span>
-                           <span class="n">process</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-                     <span class="n">p</span> <span class="o">=</span> <span class="n">p</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
-                  <span class="p">}</span>
-            <span class="p">}</span>
-     <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: tasking.2c
+* type: C
+* version: omp_3.0
+*/
+struct node {
+  struct node *left;
+  struct node *right;
+};
+extern void process(struct node *);
+void postorder_traverse( struct node *p ) {
+    if (p-&gt;left)
+       #pragma omp task    // p is firstprivate by default
+           postorder_traverse(p-&gt;left);
+    if (p-&gt;right)
+       #pragma omp task   // p is firstprivate by default
+           postorder_traverse(p-&gt;right);
+    #pragma omp taskwait
+    process(p);
+}
 
 </pre></div>
 </div>
@@ -1418,71 +1389,72 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.0</span>
-
-      <span class="n">MODULE</span> <span class="n">LIST</span>
-          <span class="n">TYPE</span> <span class="n">NODE</span>
-             <span class="n">INTEGER</span> <span class="o">::</span> <span class="n">PAYLOAD</span>
-             <span class="n">TYPE</span> <span class="p">(</span><span class="n">NODE</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">NEXT</span>
-          <span class="n">END</span> <span class="n">TYPE</span> <span class="n">NODE</span>
-      <span class="n">CONTAINS</span>
-
-          <span class="n">SUBROUTINE</span> <span class="n">PROCESS</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
-             <span class="n">TYPE</span> <span class="p">(</span><span class="n">NODE</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-                 <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-          <span class="n">END</span> <span class="n">SUBROUTINE</span>
-
-          <span class="n">SUBROUTINE</span> <span class="n">INCREMENT_LIST_ITEMS</span> <span class="p">(</span><span class="n">HEAD</span><span class="p">)</span>
-
-             <span class="n">TYPE</span> <span class="p">(</span><span class="n">NODE</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">HEAD</span>
-             <span class="n">TYPE</span> <span class="p">(</span><span class="n">NODE</span><span class="p">),</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-                 <span class="o">!</span><span class="n">$OMP</span> <span class="n">SINGLE</span>
-                     <span class="n">P</span> <span class="o">=&gt;</span> <span class="n">HEAD</span>
-                     <span class="n">DO</span>
-                        <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span>
-                            <span class="o">!</span> <span class="n">P</span> <span class="n">is</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-                            <span class="n">CALL</span> <span class="n">PROCESS</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-                        <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-                        <span class="n">P</span> <span class="o">=&gt;</span> <span class="n">P</span><span class="o">%</span><span class="n">NEXT</span>
-                        <span class="n">IF</span> <span class="p">(</span> <span class="p">.</span><span class="n">NOT</span><span class="p">.</span> <span class="n">ASSOCIATED</span> <span class="p">(</span><span class="n">P</span><span class="p">)</span> <span class="p">)</span> <span class="n">EXIT</span>
-                     <span class="n">END</span> <span class="n">DO</span>
-                 <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">SINGLE</span>
-             <span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
-
-          <span class="n">END</span> <span class="n">SUBROUTINE</span>
-
-      <span class="n">END</span> <span class="n">MODULE</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.2f
+! type: F-free
+! version:    omp_3.0
+      RECURSIVE SUBROUTINE traverse ( P )
+         TYPE Node
+             TYPE(Node), POINTER :: left, right
+         END TYPE Node
+         TYPE(Node) :: P
+         IF (associated(P%left)) THEN
+             !$OMP TASK    ! P is firstprivate by default
+                 CALL traverse(P%left)
+             !$OMP END TASK
+         ENDIF
+         IF (associated(P%right)) THEN
+             !$OMP TASK    ! P is firstprivate by default
+                 CALL traverse(P%right)
+             !$OMP END TASK
+         ENDIF
+         !$OMP TASKWAIT
+         CALL process ( P )
+      END SUBROUTINE
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The  <code class="docutils literal notranslate"><span class="pre">fib()</span></code>  function should be called from within a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region  for the different specified tasks to be executed in parallel. Also, only one thread  of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region should call  <code class="docutils literal notranslate"><span class="pre">fib()</span></code>  unless multiple concurrent  Fibonacci computations are desired.</p>
+<p>The following example demonstrates how to use the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct to process  elements of a linked list in parallel. The thread executing the <code class="docutils literal notranslate"><span class="pre">single</span></code>  region generates all of the explicit tasks, which are then executed by the threads  in the current team. The pointer  <em>p</em>  is <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> by default  on the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct so it is not necessary to specify it in a <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  clause.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-     <span class="kt">int</span> <span class="nf">fib</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span>
-          <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
-        <span class="k">else</span> <span class="p">{</span>
-           <span class="cp">#pragma omp task shared(i)</span>
-              <span class="n">i</span><span class="o">=</span><span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">);</span>
-           <span class="cp">#pragma omp task shared(j)</span>
-              <span class="n">j</span><span class="o">=</span><span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">);</span>
-           <span class="cp">#pragma omp taskwait</span>
-              <span class="k">return</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
-        <span class="p">}</span>
-     <span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.3c
+* type: C
+* version: omp_3.0
+*/
+
+typedef struct node node;
+struct node {
+      int data;
+      node * next;
+};
+
+void process(node * p)
+{
+    /* do work here */
+}
+
+void increment_list_items(node * head)
+{
+    #pragma omp parallel
+    {
+        #pragma omp single
+            {
+               node * p = head;
+               while (p) {
+                    #pragma omp task
+                     // p is firstprivate by default
+                           process(p);
+                     p = p-&gt;next;
+                  }
+            }
+     }
+}
 
 </pre></div>
 </div>
@@ -1490,57 +1462,133 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.0</span>
-      <span class="n">RECURSIVE</span> <span class="n">INTEGER</span> <span class="n">FUNCTION</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">RESULT</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
-      <span class="n">IF</span> <span class="p">(</span> <span class="n">n</span> <span class="p">.</span><span class="n">LT</span><span class="p">.</span> <span class="mi">2</span><span class="p">)</span> <span class="n">THEN</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">n</span>
-      <span class="n">ELSE</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span> <span class="n">n</span><span class="mi">-1</span> <span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">TASK</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span> <span class="n">n</span><span class="mi">-2</span> <span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">TASK</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span>
-      <span class="n">END</span> <span class="n">IF</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.3f
+! type: F-free
+! version:    omp_3.0
+
+      MODULE LIST
+          TYPE NODE
+             INTEGER :: PAYLOAD
+             TYPE (NODE), POINTER :: NEXT
+          END TYPE NODE
+      CONTAINS
+
+          SUBROUTINE PROCESS(p)
+             TYPE (NODE), POINTER :: P
+                 ! do work here
+          END SUBROUTINE
+
+          SUBROUTINE INCREMENT_LIST_ITEMS (HEAD)
+
+             TYPE (NODE), POINTER :: HEAD
+             TYPE (NODE), POINTER :: P
+             !$OMP PARALLEL PRIVATE(P)
+                 !$OMP SINGLE
+                     P =&gt; HEAD
+                     DO
+                        !$OMP TASK
+                            ! P is firstprivate by default
+                            CALL PROCESS(P)
+                        !$OMP END TASK
+                        P =&gt; P%NEXT
+                        IF ( .NOT. ASSOCIATED (P) ) EXIT
+                     END DO
+                 !$OMP END SINGLE
+             !$OMP END PARALLEL
+
+          END SUBROUTINE
+
+      END MODULE
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">fib()</span></code> function should be called from within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region  for the different specified tasks to be executed in parallel. Also, only one thread  of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region should call <code class="docutils literal notranslate"><span class="pre">fib()</span></code> unless multiple concurrent  Fibonacci computations are desired.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.4c
+* type: C
+* version: omp_3.0
+*/
+     int fib(int n) {
+        int i, j;
+        if (n&lt;2)
+          return n;
+        else {
+           #pragma omp task shared(i)
+              i=fib(n-1);
+           #pragma omp task shared(j)
+              j=fib(n-2);
+           #pragma omp taskwait
+              return i+j;
+        }
+     }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.4f
+! type: F-fixed
+! version: omp_3.0
+      RECURSIVE INTEGER FUNCTION fib(n) RESULT(res)
+      INTEGER n, i, j
+      IF ( n .LT. 2) THEN
+        res = n
+      ELSE
+!$OMP TASK SHARED(i)
+        i = fib( n-1 )
+!$OMP END TASK
+!$OMP TASK SHARED(j)
+        j = fib( n-2 )
+!$OMP END TASK
+!$OMP TASKWAIT
+        res = i+j
+      END IF
+      END FUNCTION
 
 </pre></div>
 </div>
 </div>
 </div>
 <p>Note: There are more efficient algorithms for computing Fibonacci numbers. This  classic recursion algorithm is for illustrative purposes.</p>
-<p>The following example demonstrates a way to generate a large number of tasks with  one thread and execute them with the threads in the team. While generating these  tasks, the implementation may reach its limit on unassigned tasks.  If it does,  the implementation is allowed to cause the thread executing the task generating  loop to suspend its task at the task scheduling point in the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  directive,  and start executing unassigned tasks.  Once the number of unassigned tasks is sufficiently  low, the thread may resume execution of the task generating loop.</p>
+<p>The following example demonstrates a way to generate a large number of tasks with  one thread and execute them with the threads in the team. While generating these  tasks, the implementation may reach its limit on unassigned tasks.  If it does,  the implementation is allowed to cause the thread executing the task generating  loop to suspend its task at the task scheduling point in the <code class="docutils literal notranslate"><span class="pre">task</span></code> directive,  and start executing unassigned tasks.  Once the number of unassigned tasks is sufficiently  low, the thread may resume execution of the task generating loop.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.5c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define LARGE_NUMBER 10000000</span>
-<span class="kt">double</span> <span class="n">item</span><span class="p">[</span><span class="n">LARGE_NUMBER</span><span class="p">];</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">LARGE_NUMBER</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-             <span class="cp">#pragma omp task    </span><span class="c1">// i is firstprivate, item is shared</span>
-                  <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: tasking.5c
+* type: C
+* version: omp_3.0
+*/
+#define LARGE_NUMBER 10000000
+double item[LARGE_NUMBER];
+extern void process(double);
+
+int main()
+{
+#pragma omp parallel
+  {
+    #pragma omp single
+    {
+      int i;
+      for (i=0; i&lt;LARGE_NUMBER; i++)
+             #pragma omp task    // i is firstprivate, item is shared
+                  process(item[i]);
+    }
+  }
+}
 
 </pre></div>
 </div>
@@ -1548,60 +1596,62 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.0</span>
-       <span class="n">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">item</span><span class="p">(</span><span class="mi">10000000</span><span class="p">)</span>
-       <span class="n">integer</span> <span class="n">i</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.5f
+! type: F-fixed
+! version: omp_3.0
+       real*8 item(10000000)
+       integer i
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">single</span> <span class="o">!</span> <span class="n">loop</span> <span class="n">iteration</span> <span class="n">variable</span> <span class="n">i</span> <span class="n">is</span> <span class="n">private</span>
-       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000000</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-         <span class="o">!</span> <span class="n">i</span> <span class="n">is</span> <span class="n">firstprivate</span><span class="p">,</span> <span class="n">item</span> <span class="n">is</span> <span class="n">shared</span>
-          <span class="n">call</span> <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-       <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+!$omp parallel
+!$omp single ! loop iteration variable i is private
+       do i=1,10000000
+!$omp task
+         ! i is firstprivate, item is shared
+          call process(item(i))
+!$omp end task
+       end do
+!$omp end single
+!$omp end parallel
 
-       <span class="n">end</span>
+       end
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example is the same as the previous one, except that the tasks are  generated in an untied task. While generating the tasks, the implementation may  reach its limit on unassigned tasks. If it does, the implementation is allowed  to cause the thread executing the task generating loop to suspend its task at the  task scheduling point in the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  directive, and start executing unassigned  tasks.  If that thread begins execution of a task that takes a long time to complete,  the other threads may complete all the other tasks before it is finished.</p>
+<p>The following example is the same as the previous one, except that the tasks are  generated in an untied task. While generating the tasks, the implementation may  reach its limit on unassigned tasks. If it does, the implementation is allowed  to cause the thread executing the task generating loop to suspend its task at the  task scheduling point in the <code class="docutils literal notranslate"><span class="pre">task</span></code> directive, and start executing unassigned  tasks.  If that thread begins execution of a task that takes a long time to complete,  the other threads may complete all the other tasks before it is finished.</p>
 <p>In this case, since the loop is in an untied task, any other thread is eligible  to resume the task generating loop. In the previous examples, the other threads  would be forced to idle until the generating thread finishes its long task, since  the task generating loop was in a tied task.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.6c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define LARGE_NUMBER 10000000</span>
-<span class="kt">double</span> <span class="n">item</span><span class="p">[</span><span class="n">LARGE_NUMBER</span><span class="p">];</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">process</span><span class="p">(</span><span class="kt">double</span><span class="p">);</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-<span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-      <span class="cp">#pragma omp task untied</span>
-      <span class="c1">// i is firstprivate, item is shared</span>
-      <span class="p">{</span>
-         <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">LARGE_NUMBER</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-             <span class="cp">#pragma omp task</span>
-                  <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.6c
+* type: C
+* version: omp_3.0
+*/
+#define LARGE_NUMBER 10000000
+double item[LARGE_NUMBER];
+extern void process(double);
+int main() {
+#pragma omp parallel
+  {
+    #pragma omp single
+    {
+      int i;
+      #pragma omp task untied
+      // i is firstprivate, item is shared
+      {
+         for (i=0; i&lt;LARGE_NUMBER; i++)
+             #pragma omp task
+                  process(item[i]);
+      }
+    }
+  }
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1609,127 +1659,63 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.0</span>
-       <span class="n">real</span><span class="o">*</span><span class="mi">8</span> <span class="n">item</span><span class="p">(</span><span class="mi">10000000</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">untied</span>
-       <span class="o">!</span> <span class="n">loop</span> <span class="n">iteration</span> <span class="n">variable</span> <span class="n">i</span> <span class="n">is</span> <span class="n">private</span>
-       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000000</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="o">!</span> <span class="n">i</span> <span class="n">is</span> <span class="n">firstprivate</span><span class="p">,</span> <span class="n">item</span> <span class="n">is</span> <span class="n">shared</span>
-          <span class="n">call</span> <span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-       <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-       <span class="n">end</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.6f
+! type: F-fixed
+! version: omp_3.0
+       real*8 item(10000000)
+!$omp parallel
+!$omp single
+!$omp task untied
+       ! loop iteration variable i is private
+       do i=1,10000000
+!$omp task ! i is firstprivate, item is shared
+          call process(item(i))
+!$omp end task
+       end do
+!$omp end task
+!$omp end single
+!$omp end parallel
+       end
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following two examples demonstrate how the scheduling rules illustrated in  Section 2.11.3 of the OpenMP 4.0 specification affect the usage of   <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variables in tasks. A  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>   variable can be modified by another task that is executed by the same thread. Thus,  the value of a  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variable cannot be assumed to be unchanged  across a task scheduling point. In untied tasks, task scheduling points may be  added in any place by the implementation.</p>
-<p>A task switch may occur at a task scheduling point. A single thread may execute  both of the task regions that modify  <code class="docutils literal notranslate"><span class="pre">tp</span></code> . The parts of these task regions  in which  <code class="docutils literal notranslate"><span class="pre">tp</span></code>  is modified may be executed in any order so the resulting  value of  <code class="docutils literal notranslate"><span class="pre">var</span></code>  can be either 1 or 2.</p>
+<p>The following two examples demonstrate how the scheduling rules illustrated in  Section 2.11.3 of the OpenMP 4.0 specification affect the usage of  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variables in tasks. A <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variable can be modified by another task that is executed by the same thread. Thus,  the value of a <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variable cannot be assumed to be unchanged  across a task scheduling point. In untied tasks, task scheduling points may be  added in any place by the implementation.</p>
+<p>A task switch may occur at a task scheduling point. A single thread may execute  both of the task regions that modify <code class="docutils literal notranslate"><span class="pre">tp</span></code>. The parts of these task regions  in which <code class="docutils literal notranslate"><span class="pre">tp</span></code> is modified may be executed in any order so the resulting  value of <code class="docutils literal notranslate"><span class="pre">var</span></code> can be either 1 or 2.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.7c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="n">tp</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(tp)</span>
-<span class="kt">int</span> <span class="n">var</span><span class="p">;</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="cp">#pragma omp task</span>
-    <span class="p">{</span>
-        <span class="cm">/* do work here */</span>
-<span class="cp">#pragma omp task</span>
-        <span class="p">{</span>
-            <span class="n">tp</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-            <span class="cm">/* do work here */</span>
-<span class="cp">#pragma omp task</span>
-            <span class="p">{</span>
-                <span class="cm">/* no modification of tp */</span>
-            <span class="p">}</span>
-            <span class="n">var</span> <span class="o">=</span> <span class="n">tp</span><span class="p">;</span> <span class="c1">//value of tp can be 1 or 2</span>
-        <span class="p">}</span>
-        <span class="n">tp</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: tasking.7c
+* type: C
+* version: omp_3.0
+*/
 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.7f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.0</span>
-      <span class="n">module</span> <span class="n">example</span>
-      <span class="n">integer</span> <span class="n">tp</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">threadprivate</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
-      <span class="n">integer</span> <span class="n">var</span>
-      <span class="n">contains</span>
-      <span class="n">subroutine</span> <span class="n">work</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-         <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-         <span class="n">tp</span> <span class="o">=</span> <span class="mi">1</span>
-         <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-           <span class="o">!</span> <span class="n">no</span> <span class="n">modification</span> <span class="n">of</span> <span class="n">tp</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-         <span class="n">var</span> <span class="o">=</span> <span class="n">tp</span>    <span class="o">!</span> <span class="n">value</span> <span class="n">of</span> <span class="n">var</span> <span class="n">can</span> <span class="n">be</span> <span class="mi">1</span> <span class="n">or</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-        <span class="n">tp</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="n">end</span> <span class="n">subroutine</span>
-      <span class="n">end</span> <span class="n">module</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In this example, scheduling constraints prohibit a thread in the team from executing  a new task that modifies  <code class="docutils literal notranslate"><span class="pre">tp</span></code>   while another such task region tied to the  same thread is suspended. Therefore, the value written will persist across the  task scheduling point.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.8c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-
-<span class="kt">int</span> <span class="n">tp</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(tp)</span>
-<span class="kt">int</span> <span class="n">var</span><span class="p">;</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">()</span>
-<span class="p">{</span>
-<span class="cp">#pragma omp parallel</span>
-    <span class="p">{</span>
-        <span class="cm">/* do work here */</span>
-<span class="cp">#pragma omp task</span>
-        <span class="p">{</span>
-            <span class="n">tp</span><span class="o">++</span><span class="p">;</span>
-            <span class="cm">/* do work here */</span>
-<span class="cp">#pragma omp task</span>
-            <span class="p">{</span>
-                <span class="cm">/* do work here but don&#39;t modify tp */</span>
-            <span class="p">}</span>
-            <span class="n">var</span> <span class="o">=</span> <span class="n">tp</span><span class="p">;</span> <span class="c1">//Value does not change after write above</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+int tp;
+#pragma omp threadprivate(tp)
+int var;
+void work()
+{
+#pragma omp task
+    {
+        /* do work here */
+#pragma omp task
+        {
+            tp = 1;
+            /* do work here */
+#pragma omp task
+            {
+                /* no modification of tp */
+            }
+            var = tp; //value of tp can be 1 or 2
+        }
+        tp = 2;
+    }
+}
 
 </pre></div>
 </div>
@@ -1737,7 +1723,75 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.7f
+! type: F-fixed
+! version: omp_3.0
+      module example
+      integer tp
+!$omp threadprivate(tp)
+      integer var
+      contains
+      subroutine work
+!$omp task
+         ! do work here
+!$omp task
+         tp = 1
+         ! do work here
+!$omp task
+           ! no modification of tp
+!$omp end task
+         var = tp    ! value of var can be 1 or 2
+!$omp end task
+        tp = 2
+!$omp end task
+      end subroutine
+      end module
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, scheduling constraints prohibit a thread in the team from executing  a new task that modifies <code class="docutils literal notranslate"><span class="pre">tp</span></code>  while another such task region tied to the  same thread is suspended. Therefore, the value written will persist across the  task scheduling point.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.8c
+* type: C
+* version: omp_3.0
+*/
+
+int tp;
+#pragma omp threadprivate(tp)
+int var;
+void work()
+{
+#pragma omp parallel
+    {
+        /* do work here */
+#pragma omp task
+        {
+            tp++;
+            /* do work here */
+#pragma omp task
+            {
+                /* do work here but don&#39;t modify tp */
+            }
+            var = tp; //Value does not change after write above
+        }
+    }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: tasking.8f
 ! type: F-fixed
 ! version: omp_3.0
@@ -1765,33 +1819,35 @@
 </div>
 </div>
 </div>
-<p>The following two examples demonstrate how the scheduling rules illustrated in  Section 2.11.3 of the OpenMP 4.0 specification affect the usage of locks  and critical sections in tasks.  If a lock is held  across a task scheduling point, no attempt should be made to acquire the same lock  in any  that may be interleaved.  Otherwise, a deadlock is possible.</p>
+<p>The following two examples demonstrate how the scheduling rules illustrated in  Section 2.11.3 of the OpenMP 4.0 specification affect the usage of locks  and critical sections in tasks.  If a lock is held  across a task scheduling point, no attempt should be made to acquire the same lock  in any code that may be interleaved.  Otherwise, a deadlock is possible.</p>
 <p>In the example below, suppose the thread executing task 1 defers task 2.  When  it encounters the task scheduling point at task 3, it could suspend task 1 and  begin task 2 which will result in a deadlock when it tries to enter critical region  1.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.9c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="cp">#pragma omp task</span>
-   <span class="p">{</span> <span class="c1">//Task 1</span>
-       <span class="cp">#pragma omp task</span>
-       <span class="p">{</span> <span class="c1">//Task 2</span>
-            <span class="cp">#pragma omp critical </span><span class="c1">//Critical region 1</span>
-            <span class="p">{</span><span class="cm">/*do work here */</span> <span class="p">}</span>
-       <span class="p">}</span>
-       <span class="cp">#pragma omp critical </span><span class="c1">//Critical Region 2</span>
-       <span class="p">{</span>
-           <span class="c1">//Capture data for the following task</span>
-           <span class="cp">#pragma omp task</span>
-           <span class="p">{</span> <span class="cm">/* do work here */</span> <span class="p">}</span> <span class="c1">//Task 3</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.9c
+* type: C
+* version: omp_3.0
+*/
+void work()
+{
+   #pragma omp task
+   { //Task 1
+       #pragma omp task
+       { //Task 2
+            #pragma omp critical //Critical region 1
+            {/*do work here */ }
+       }
+       #pragma omp critical //Critical Region 2
+       {
+           //Capture data for the following task
+           #pragma omp task
+           { /* do work here */ } //Task 3
+       }
+   }
+}
 
 </pre></div>
 </div>
@@ -1799,70 +1855,72 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.9f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.0</span>
-       <span class="n">module</span> <span class="n">example</span>
-       <span class="n">contains</span>
-       <span class="n">subroutine</span> <span class="n">work</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-       <span class="o">!</span> <span class="n">Task</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-       <span class="o">!</span> <span class="n">Task</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-       <span class="o">!</span> <span class="n">Critical</span> <span class="n">region</span> <span class="mi">1</span>
-       <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-       <span class="o">!</span> <span class="n">Critical</span> <span class="n">region</span> <span class="mi">2</span>
-       <span class="o">!</span> <span class="n">Capture</span> <span class="n">data</span> <span class="k">for</span> <span class="n">the</span> <span class="n">following</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-       <span class="o">!</span><span class="n">Task</span> <span class="mi">3</span>
-       <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="n">end</span> <span class="n">subroutine</span>
-      <span class="n">end</span> <span class="n">module</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.9f
+! type: F-fixed
+! version: omp_3.0
+       module example
+       contains
+       subroutine work
+!$omp task
+       ! Task 1
+!$omp task
+       ! Task 2
+!$omp critical
+       ! Critical region 1
+       ! do work here
+!$omp end critical
+!$omp end task
+!$omp critical
+       ! Critical region 2
+       ! Capture data for the following task
+!$omp task
+       !Task 3
+       ! do work here
+!$omp end task
+!$omp end critical
+!$omp end task
+      end subroutine
+      end module
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example,  <code class="docutils literal notranslate"><span class="pre">lock</span></code>  is held across a task scheduling point.   However, according to the scheduling restrictions, the executing thread can’t  begin executing one of the non-descendant tasks that also acquires  <code class="docutils literal notranslate"><span class="pre">lock</span></code>  before  the task region is complete.  Therefore, no deadlock is possible.</p>
+<p>In the following example, <code class="docutils literal notranslate"><span class="pre">lock</span></code> is held across a task scheduling point.   However, according to the scheduling restrictions, the executing thread can’t  begin executing one of the non-descendant tasks that also acquires <code class="docutils literal notranslate"><span class="pre">lock</span></code> before  the task region is complete.  Therefore, no deadlock is possible.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.10c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">omp_lock_t</span> <span class="n">lock</span><span class="p">;</span>
-    <span class="n">omp_init_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
-<span class="cp">#pragma omp parallel</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-<span class="cp">#pragma omp for</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="cp">#pragma omp task</span>
-            <span class="p">{</span>
- <span class="c1">// lock is shared by default in the task</span>
- <span class="n">omp_set_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
-                <span class="c1">// Capture data for the following task</span>
-<span class="cp">#pragma omp task</span>
- <span class="c1">// Task Scheduling Point 1</span>
-                <span class="p">{</span> <span class="cm">/* do work here */</span> <span class="p">}</span>
-                <span class="n">omp_unset_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="n">omp_destroy_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.10c
+* type: C
+* version: omp_3.0
+*/
+#include &lt;omp.h&gt;
+void work() {
+    omp_lock_t lock;
+    omp_init_lock(&amp;lock);
+#pragma omp parallel
+    {
+        int i;
+#pragma omp for
+        for (i = 0; i &lt; 100; i++) {
+#pragma omp task
+            {
+ // lock is shared by default in the task
+ omp_set_lock(&amp;lock);
+                // Capture data for the following task
+#pragma omp task
+ // Task Scheduling Point 1
+                { /* do work here */ }
+                omp_unset_lock(&amp;lock);
+            }
+        }
+    }
+    omp_destroy_lock(&amp;lock);
+}
 
 </pre></div>
 </div>
@@ -1870,7 +1928,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: tasking.10f
 ! type: F-free
 ! version:    omp_3.0
@@ -1907,26 +1965,28 @@
 </div>
 </div>
 </div>
-<p>The following examples illustrate the use of the  <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>  clause in the   <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct. In this first example, the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct has  been annotated with the  <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>   clause. The addition of this clause  allows the implementation to reuse the data environment (including the ICVs) of  the parent task for the task inside  <code class="docutils literal notranslate"><span class="pre">foo</span></code>  if the task is included or undeferred.  Thus, the result of the execution may differ depending on whether the task is merged  or not. Therefore the mergeable clause needs to be used with caution. In this example,  the use of the mergeable clause is safe. As  <code class="docutils literal notranslate"><span class="pre">x</span></code>  is a shared variable the  outcome does not depend on whether or not the task is merged (that is, the task  will always increment the same variable and will always compute the same value  for  <code class="docutils literal notranslate"><span class="pre">x</span></code> ).</p>
+<p>The following examples illustrate the use of the <code class="docutils literal notranslate"><span class="pre">mergeable</span></code> clause in the  <code class="docutils literal notranslate"><span class="pre">task</span></code> construct. In this first example, the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct has  been annotated with the <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>  clause. The addition of this clause  allows the implementation to reuse the data environment (including the ICVs) of  the parent task for the task inside <code class="docutils literal notranslate"><span class="pre">foo</span></code> if the task is included or undeferred.  Thus, the result of the execution may differ depending on whether the task is merged  or not. Therefore the mergeable clause needs to be used with caution. In this example,  the use of the mergeable clause is safe. As <code class="docutils literal notranslate"><span class="pre">x</span></code> is a shared variable the  outcome does not depend on whether or not the task is merged (that is, the task  will always increment the same variable and will always compute the same value  for <code class="docutils literal notranslate"><span class="pre">x</span></code>).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.11c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">foo</span> <span class="p">(</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-   <span class="cp">#pragma omp task shared(x) mergeable</span>
-   <span class="p">{</span>
-      <span class="n">x</span><span class="o">++</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp taskwait</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>  <span class="c1">// prints 3</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.11c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;stdio.h&gt;
+void foo ( )
+{
+   int x = 2;
+   #pragma omp task shared(x) mergeable
+   {
+      x++;
+   }
+   #pragma omp taskwait
+   printf(&quot;%d\n&quot;,x);  // prints 3
+}
 
 </pre></div>
 </div>
@@ -1934,111 +1994,46 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.11f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">mergeable</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">x</span>     <span class="o">!</span> <span class="n">prints</span> <span class="mi">3</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.11f
+! type: F-free
+! version:    omp_3.1
+subroutine foo()
+  integer :: x
+  x = 2
+!$omp task shared(x) mergeable
+  x = x + 1
+!$omp end task
+!$omp taskwait
+  print *, x     ! prints 3
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>This second example shows an incorrect use of the  <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>  clause. In  this example, the created task will access different instances of the variable   <code class="docutils literal notranslate"><span class="pre">x</span></code>  if the task is not merged, as  <code class="docutils literal notranslate"><span class="pre">x</span></code>  is  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> , but  it will access the same variable  <code class="docutils literal notranslate"><span class="pre">x</span></code>  if the task is merged. As a result,  the behavior of the program is unspecified and it can print two different values  for  <code class="docutils literal notranslate"><span class="pre">x</span></code>  depending on the decisions taken by the implementation.</p>
+<p>This second example shows an incorrect use of the <code class="docutils literal notranslate"><span class="pre">mergeable</span></code> clause. In  this example, the created task will access different instances of the variable  <code class="docutils literal notranslate"><span class="pre">x</span></code> if the task is not merged, as <code class="docutils literal notranslate"><span class="pre">x</span></code> is <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, but  it will access the same variable <code class="docutils literal notranslate"><span class="pre">x</span></code> if the task is merged. As a result,  the behavior of the program is unspecified and it can print two different values  for <code class="docutils literal notranslate"><span class="pre">x</span></code> depending on the decisions taken by the implementation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.12c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">foo</span> <span class="p">(</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-   <span class="cp">#pragma omp task mergeable</span>
-   <span class="p">{</span>
-      <span class="n">x</span><span class="o">++</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp taskwait</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>  <span class="c1">// prints 2 or 3</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.12f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">mergeable</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">x</span>   <span class="o">!</span> <span class="n">prints</span> <span class="mi">2</span> <span class="n">or</span> <span class="mi">3</span>
-<span class="n">end</span> <span class="n">subroutine</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example shows the use of the  <code class="docutils literal notranslate"><span class="pre">final</span></code>  clause and the  <code class="docutils literal notranslate"><span class="pre">omp_in_final</span></code>   API call in a recursive binary search program. To reduce overhead, once a certain  depth of recursion is reached the program uses the  <code class="docutils literal notranslate"><span class="pre">final</span></code>  clause to create  only included tasks, which allow additional optimizations.</p>
-<p>The use of the  <code class="docutils literal notranslate"><span class="pre">omp_in_final</span></code>  API call allows programmers to optimize  their  by specifying which parts of the program are not necessary when a task  can create only included tasks (that is, the  is inside a  <code class="docutils literal notranslate"><span class="pre">final</span></code>  task).  In this example, the use of a different state variable is not necessary so once  the program reaches the part of the computation that is finalized and copying from  the parent state to the new state is eliminated. The allocation of  <code class="docutils literal notranslate"><span class="pre">new_state</span></code>   in the stack could also be avoided but it would make this example less clear. The   <code class="docutils literal notranslate"><span class="pre">final</span></code>  clause is most effective when used in conjunction with the  <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>   clause since all tasks created in a  <code class="docutils literal notranslate"><span class="pre">final</span></code>  task region are included tasks  that can be merged if the  <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>  clause is present.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.13c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#define LIMIT  3 </span><span class="cm">/* arbitrary limit on recursion depth */</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">check_solution</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">bin_search</span> <span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">state</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">if</span> <span class="p">(</span> <span class="n">pos</span> <span class="o">==</span> <span class="n">n</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">check_solution</span><span class="p">(</span><span class="n">state</span><span class="p">);</span>
-      <span class="k">return</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp task final( pos &gt; LIMIT ) mergeable</span>
-   <span class="p">{</span>
-      <span class="kt">char</span> <span class="n">new_state</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">omp_in_final</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">memcpy</span><span class="p">(</span><span class="n">new_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">pos</span> <span class="p">);</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="n">new_state</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="n">state</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-      <span class="n">bin_search</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">state</span> <span class="p">);</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp task final( pos &gt; LIMIT ) mergeable</span>
-   <span class="p">{</span>
-      <span class="kt">char</span> <span class="n">new_state</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="n">omp_in_final</span><span class="p">()</span> <span class="p">)</span> <span class="p">{</span>
-        <span class="n">memcpy</span><span class="p">(</span><span class="n">new_state</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">pos</span> <span class="p">);</span>
-        <span class="n">state</span> <span class="o">=</span> <span class="n">new_state</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="n">state</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="n">bin_search</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">state</span> <span class="p">);</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp taskwait</span>
-<span class="p">}</span>
+/*
+* name: tasking.12c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;stdio.h&gt;
+void foo ( )
+{
+   int x = 2;
+   #pragma omp task mergeable
+   {
+      x++;
+   }
+   #pragma omp taskwait
+   printf(&quot;%d\n&quot;,x);  // prints 2 or 3
+}
 
 </pre></div>
 </div>
@@ -2046,74 +2041,68 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.13f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">recursive</span> <span class="n">subroutine</span> <span class="n">bin_search</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-  <span class="n">use</span> <span class="n">omp_lib</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">pos</span><span class="p">,</span> <span class="n">n</span>
-  <span class="n">character</span><span class="p">,</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">state</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-  <span class="n">character</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">::</span> <span class="n">new_state1</span><span class="p">,</span> <span class="n">new_state2</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">LIMIT</span> <span class="o">=</span> <span class="mi">3</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">pos</span> <span class="p">.</span><span class="n">eq</span><span class="p">.</span> <span class="n">n</span><span class="p">)</span> <span class="n">then</span>
-    <span class="n">call</span> <span class="n">check_solution</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
-    <span class="k">return</span>
-  <span class="n">endif</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">final</span><span class="p">(</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="n">LIMIT</span><span class="p">)</span> <span class="n">mergeable</span>
-  <span class="k">if</span> <span class="p">(.</span><span class="n">not</span><span class="p">.</span> <span class="n">omp_in_final</span><span class="p">())</span> <span class="n">then</span>
-    <span class="n">new_state1</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">pos</span><span class="p">)</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">pos</span><span class="p">)</span>
-    <span class="n">state</span> <span class="o">=&gt;</span> <span class="n">new_state1</span>
-  <span class="n">endif</span>
-  <span class="n">state</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="sc">&#39;z&#39;</span>
-  <span class="n">call</span> <span class="n">bin_search</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">final</span><span class="p">(</span><span class="n">pos</span> <span class="o">&gt;</span> <span class="n">LIMIT</span><span class="p">)</span> <span class="n">mergeable</span>
-  <span class="k">if</span> <span class="p">(.</span><span class="n">not</span><span class="p">.</span> <span class="n">omp_in_final</span><span class="p">())</span> <span class="n">then</span>
-    <span class="n">new_state2</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">pos</span><span class="p">)</span> <span class="o">=</span> <span class="n">state</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">pos</span><span class="p">)</span>
-    <span class="n">state</span> <span class="o">=&gt;</span> <span class="n">new_state2</span>
-  <span class="n">endif</span>
-  <span class="n">state</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="sc">&#39;y&#39;</span>
-  <span class="n">call</span> <span class="n">bin_search</span><span class="p">(</span><span class="n">pos</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.12f
+! type: F-free
+! version:    omp_3.1
+subroutine foo()
+  integer :: x
+  x = 2
+!$omp task mergeable
+  x = x + 1
+!$omp end task
+!$omp taskwait
+  print *, x   ! prints 2 or 3
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates the difference between the  <code class="docutils literal notranslate"><span class="pre">if</span></code>   and the   <code class="docutils literal notranslate"><span class="pre">final</span></code>  clauses. The  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause has a local effect. In the first  nest of tasks, the one that has the  <code class="docutils literal notranslate"><span class="pre">if</span></code>   clause will be undeferred but  the task nested inside that task will not be affected by the  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause  and will be created as usual. Alternatively, the  <code class="docutils literal notranslate"><span class="pre">final</span></code>  clause affects  all  <code class="docutils literal notranslate"><span class="pre">task</span></code>  constructs in the  <code class="docutils literal notranslate"><span class="pre">final</span></code>  task region but not the  <code class="docutils literal notranslate"><span class="pre">final</span></code>   task itself. In the second nest of tasks, the nested tasks will be created as included  tasks. Note also that the conditions for the  <code class="docutils literal notranslate"><span class="pre">if</span></code>  and  <code class="docutils literal notranslate"><span class="pre">final</span></code>  clauses  are usually the opposite.</p>
+<p>The following example shows the use of the <code class="docutils literal notranslate"><span class="pre">final</span></code> clause and the <code class="docutils literal notranslate"><span class="pre">omp_in_final</span></code>  API call in a recursive binary search program. To reduce overhead, once a certain  depth of recursion is reached the program uses the <code class="docutils literal notranslate"><span class="pre">final</span></code> clause to create  only included tasks, which allow additional optimizations.</p>
+<p>The use of the <code class="docutils literal notranslate"><span class="pre">omp_in_final</span></code> API call allows programmers to optimize  their code by specifying which parts of the program are not necessary when a task  can create only included tasks (that is, the code is inside a <code class="docutils literal notranslate"><span class="pre">final</span></code> task).  In this example, the use of a different state variable is not necessary so once  the program reaches the part of the computation that is finalized and copying from  the parent state to the new state is eliminated. The allocation of <code class="docutils literal notranslate"><span class="pre">new_state</span></code>  in the stack could also be avoided but it would make this example less clear. The  <code class="docutils literal notranslate"><span class="pre">final</span></code> clause is most effective when used in conjunction with the <code class="docutils literal notranslate"><span class="pre">mergeable</span></code>  clause since all tasks created in a <code class="docutils literal notranslate"><span class="pre">final</span></code> task region are included tasks  that can be merged if the <code class="docutils literal notranslate"><span class="pre">mergeable</span></code> clause is present.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: tasking.14c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">bar</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">foo</span> <span class="p">(</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp task if(0)  </span><span class="c1">// This task is undeferred</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task     </span><span class="c1">// This task is a regular task</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-          <span class="cp">#pragma omp task     </span><span class="c1">// This task is a regular task</span>
-          <span class="n">bar</span><span class="p">();</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp task final(1) </span><span class="c1">// This task is a regular task</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task  </span><span class="c1">// This task is included</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-          <span class="cp">#pragma omp task     </span><span class="c1">// This task is also included</span>
-          <span class="n">bar</span><span class="p">();</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: tasking.13c
+* type: C
+* version: omp_3.1
+*/
+#include &lt;string.h&gt;
+#include &lt;omp.h&gt;
+#define LIMIT  3 /* arbitrary limit on recursion depth */
+void check_solution(char *);
+void bin_search (int pos, int n, char *state)
+{
+   if ( pos == n ) {
+      check_solution(state);
+      return;
+   }
+   #pragma omp task final( pos &gt; LIMIT ) mergeable
+   {
+      char new_state[n];
+      if (!omp_in_final() ) {
+        memcpy(new_state, state, pos );
+        state = new_state;
+      }
+      state[pos] = 0;
+      bin_search(pos+1, n, state );
+   }
+   #pragma omp task final( pos &gt; LIMIT ) mergeable
+   {
+      char new_state[n];
+      if (! omp_in_final() ) {
+        memcpy(new_state, state, pos );
+        state = new_state;
+      }
+      state[pos] = 1;
+      bin_search(pos+1, n, state );
+   }
+   #pragma omp taskwait
+}
 
 </pre></div>
 </div>
@@ -2121,31 +2110,108 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">tasking</span><span class="mf">.14f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-<span class="n">integer</span> <span class="n">i</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="k">if</span><span class="p">(.</span><span class="n">FALSE</span><span class="p">.)</span> <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">undeferred</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>             <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">a</span> <span class="n">regular</span> <span class="n">task</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>             <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">a</span> <span class="n">regular</span> <span class="n">task</span>
-      <span class="n">call</span> <span class="n">bar</span><span class="p">()</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-  <span class="n">enddo</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">final</span><span class="p">(.</span><span class="n">TRUE</span><span class="p">.)</span> <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">a</span> <span class="n">regular</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>               <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">included</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>               <span class="o">!</span> <span class="n">This</span> <span class="n">task</span> <span class="n">is</span> <span class="n">also</span> <span class="n">included</span>
-     <span class="n">call</span> <span class="n">bar</span><span class="p">()</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-  <span class="n">enddo</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.13f
+! type: F-free
+! version:    omp_3.1
+recursive subroutine bin_search(pos, n, state)
+  use omp_lib
+  integer :: pos, n
+  character, pointer :: state(:)
+  character, target, dimension(n) :: new_state1, new_state2
+  integer, parameter :: LIMIT = 3
+  if (pos .eq. n) then
+    call check_solution(state)
+    return
+  endif
+!$omp task final(pos &gt; LIMIT) mergeable
+  if (.not. omp_in_final()) then
+    new_state1(1:pos) = state(1:pos)
+    state =&gt; new_state1
+  endif
+  state(pos+1) = &#39;z&#39;
+  call bin_search(pos+1, n, state)
+!$omp end task
+!$omp task final(pos &gt; LIMIT) mergeable
+  if (.not. omp_in_final()) then
+    new_state2(1:pos) = state(1:pos)
+    state =&gt; new_state2
+  endif
+  state(pos+1) = &#39;y&#39;
+  call bin_search(pos+1, n, state)
+!$omp end task
+!$omp taskwait
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates the difference between the <code class="docutils literal notranslate"><span class="pre">if</span></code>  and the  <code class="docutils literal notranslate"><span class="pre">final</span></code> clauses. The <code class="docutils literal notranslate"><span class="pre">if</span></code> clause has a local effect. In the first  nest of tasks, the one that has the <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause will be undeferred but  the task nested inside that task will not be affected by the <code class="docutils literal notranslate"><span class="pre">if</span></code> clause  and will be created as usual. Alternatively, the <code class="docutils literal notranslate"><span class="pre">final</span></code> clause affects  all <code class="docutils literal notranslate"><span class="pre">task</span></code> constructs in the <code class="docutils literal notranslate"><span class="pre">final</span></code> task region but not the <code class="docutils literal notranslate"><span class="pre">final</span></code>  task itself. In the second nest of tasks, the nested tasks will be created as included  tasks. Note also that the conditions for the <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">final</span></code> clauses  are usually the opposite.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: tasking.14c
+* type: C
+* version: omp_3.1
+*/
+void bar(void);
+
+void foo ( )
+{
+   int i;
+   #pragma omp task if(0)  // This task is undeferred
+   {
+      #pragma omp task     // This task is a regular task
+      for (i = 0; i &lt; 3; i++) {
+          #pragma omp task     // This task is a regular task
+          bar();
+      }
+   }
+   #pragma omp task final(1) // This task is a regular task
+   {
+      #pragma omp task  // This task is included
+      for (i = 0; i &lt; 3; i++) {
+          #pragma omp task     // This task is also included
+          bar();
+      }
+   }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: tasking.14f
+! type: F-free
+! version:    omp_3.1
+subroutine foo()
+integer i
+!$omp task if(.FALSE.) ! This task is undeferred
+!$omp task             ! This task is a regular task
+  do i = 1, 3
+    !$omp task             ! This task is a regular task
+      call bar()
+    !$omp end task
+  enddo
+!$omp end task
+!$omp end task
+!$omp task final(.TRUE.) ! This task is a regular task
+!$omp task               ! This task is included
+  do i = 1, 3
+    !$omp task               ! This task is also included
+     call bar()
+    !$omp end task
+  enddo
+!$omp end task
+!$omp end task
+end subroutine
 
 </pre></div>
 </div>

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,25 +1290,25 @@
               <div>
                 
   <div class="section" id="fortran-restrictions-on-shared-and-private-clauses-with-common-blocks">
-<h1>Fortran Restrictions on  <code class="docutils literal notranslate"><span class="pre">shared</span></code>  and  <code class="docutils literal notranslate"><span class="pre">private</span></code>  Clauses with Common Blocks<a class="headerlink" href="#fortran-restrictions-on-shared-and-private-clauses-with-common-blocks" title="Permalink to this headline">¶</a></h1>
-<p>When a named common block is specified in a  <code class="docutils literal notranslate"><span class="pre">private</span></code> ,  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> ,  or  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  clause of a construct, none of its members may be declared  in another data-sharing attribute clause on that construct. The following examples  illustrate this point.</p>
+<h1>Fortran Restrictions on <code class="docutils literal notranslate"><span class="pre">shared</span></code> and <code class="docutils literal notranslate"><span class="pre">private</span></code> Clauses with Common Blocks<a class="headerlink" href="#fortran-restrictions-on-shared-and-private-clauses-with-common-blocks" title="Permalink to this headline">¶</a></h1>
+<p>When a named common block is specified in a <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>,  or <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause of a construct, none of its members may be declared  in another data-sharing attribute clause on that construct. The following examples  illustrate this point.</p>
 <p>The following example is conforming:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sp_common</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">C</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-        <span class="n">REAL</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.1f
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD()
+        COMMON /C/ X,Y
+        REAL X, Y
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span> <span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">SHARED</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD</span>
+!$OMP   PARALLEL PRIVATE (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+!$OMP   PARALLEL SHARED (X,Y)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD
 
 </pre></div>
 </div>
@@ -1279,26 +1317,26 @@
 <p>The following example is also conforming:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sp_common</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD2</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">C</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-        <span class="n">REAL</span> <span class="n">X</span><span class="p">,</span> <span class="n">Y</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span>
-            <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-          <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">DO</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">DO</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span>
-            <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-          <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">DO</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD2</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.2f
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD2()
+        COMMON /C/ X,Y
+        REAL X, Y
+        INTEGER I
+!$OMP   PARALLEL
+!$OMP     DO PRIVATE(/C/)
+          DO I=1,1000
+            ! do work here
+          ENDDO
+!$OMP     END DO
+!$OMP     DO PRIVATE(X)
+          DO I=1,1000
+            ! do work here
+          ENDDO
+!$OMP     END DO
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD2
 
 </pre></div>
 </div>
@@ -1307,36 +1345,36 @@
 <p>The following example is conforming:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sp_common</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD3</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">C</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span> <span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">SHARED</span> <span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">COMMON_GOOD3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.3f
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD3()
+        COMMON /C/ X,Y
+!$OMP   PARALLEL PRIVATE (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+!$OMP   PARALLEL SHARED (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD3
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example is non-conforming because  <code class="docutils literal notranslate"><span class="pre">x</span></code>  is a constituent element  of  <code class="docutils literal notranslate"><span class="pre">c</span></code> :</p>
+<p>The following example is non-conforming because <code class="docutils literal notranslate"><span class="pre">x</span></code> is a constituent element  of <code class="docutils literal notranslate"><span class="pre">c</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sp_common</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">COMMON_WRONG</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">C</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-<span class="o">!</span> <span class="n">Incorrect</span> <span class="n">because</span> <span class="n">X</span> <span class="n">is</span> <span class="n">a</span> <span class="n">constituent</span> <span class="n">element</span> <span class="n">of</span> <span class="n">C</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">),</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">COMMON_WRONG</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.4f
+! type: F-fixed
+      SUBROUTINE COMMON_WRONG()
+        COMMON /C/ X,Y
+! Incorrect because X is a constituent element of C
+!$OMP   PARALLEL PRIVATE(/C/), SHARED(X)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_WRONG
 
 </pre></div>
 </div>
@@ -1345,18 +1383,18 @@
 <p>The following example is non-conforming because a common block may not be declared  both shared and private:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sp_common</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">COMMON_WRONG2</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">C</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span><span class="n">Y</span>
-<span class="o">!</span> <span class="nl">Incorrect</span><span class="p">:</span> <span class="n">common</span> <span class="n">block</span> <span class="n">C</span> <span class="n">cannot</span> <span class="n">be</span> <span class="n">declared</span> <span class="n">both</span>
-<span class="o">!</span> <span class="n">shared</span> <span class="n">and</span> <span class="n">private</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span> <span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">),</span> <span class="n">SHARED</span><span class="p">(</span><span class="o">/</span><span class="n">C</span><span class="o">/</span><span class="p">)</span>
-          <span class="o">!</span> <span class="k">do</span> <span class="n">work</span> <span class="n">here</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.5f
+! type: F-fixed
+      SUBROUTINE COMMON_WRONG2()
+        COMMON /C/ X,Y
+! Incorrect: common block C cannot be declared both
+! shared and private
+!$OMP   PARALLEL PRIVATE (/C/), SHARED(/C/)
+          ! do work here
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">COMMON_WRONG2</span>
+      END SUBROUTINE COMMON_WRONG2
 
 </pre></div>
 </div>
@@ -1390,7 +1428,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_fort_loopvar.html" title="previous page">Fortran Private Loop Iteration Variables</a>
-    <a class='right-next' id="next-link" href="Examples_fort_sa_private.html" title="next page">Fortran Restrictions on Storage Association with the  <code class="docutils literal notranslate"><span class="pre">private</span></code>  Clause</a>
+    <a class='right-next' id="next-link" href="Examples_fort_sa_private.html" title="next page">Fortran Restrictions on Storage Association with the <code class="docutils literal notranslate"><span class="pre">private</span></code> Clause</a>
 
         </div>
         

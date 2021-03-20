@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,69 +1291,127 @@
                 
   <div class="section" id="structure-mapping">
 <h1>Structure mapping<a class="headerlink" href="#structure-mapping" title="Permalink to this headline">¶</a></h1>
-<p>Also, since the pointer member  <em>S.p</em>  is used in an array section of a   <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause, the array storage of the array section on the device,   <em>S.p[:N]</em> , is {attached} to the pointer member  <em>S.p</em>  on the device. Explicitly mapping the pointer member  <em>S.p</em>  is optional in this case.</p>
+<p>In the example below, only structure elements  <em>S.a</em> ,  <em>S.b</em>  and  <em>S.p</em>   of the  <em>S</em>  structure appear in <code class="docutils literal notranslate"><span class="pre">map</span></code> clauses of a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct. Only these components have corresponding variables and storage on the device.   Hence, the large arrays,  <em>S.buffera</em>  and  <em>S.bufferb</em> , and the  <em>S.x</em>  component have no storage  on the device and cannot be accessed.</p>
+<p>Also, since the pointer member  <em>S.p</em>  is used in an array section of a  <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, the array storage of the array section on the device,   <em>S.p[:N]</em> , is <strong>attached</strong> to the pointer member  <em>S.p</em>  on the device. Explicitly mapping the pointer member  <em>S.p</em>  is optional in this case.</p>
 <p>Note: The buffer arrays and the  <em>x</em>  variable have been grouped together, so that the components that will reside on the device are all together (without gaps). This allows the runtime to optimize the transfer and the storage footprint on the device.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_struct_map.1c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
-<span class="cp">#define BAZILLION 2000000</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">struct</span> <span class="nc">foo</span> <span class="p">{</span>
-  <span class="kt">char</span> <span class="n">buffera</span><span class="p">[</span><span class="n">BAZILLION</span><span class="p">];</span>
-  <span class="kt">char</span> <span class="n">bufferb</span><span class="p">[</span><span class="n">BAZILLION</span><span class="p">];</span>
-  <span class="kt">float</span> <span class="n">x</span><span class="p">;</span>
-  <span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">;</span>
-  <span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-<span class="p">};</span>
+/*
+* name:       target_struct_map.1c
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 100
+#define BAZILLION 2000000
 
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">void</span> <span class="nf">saxpyfun</span><span class="p">(</span><span class="k">struct</span> <span class="nc">foo</span> <span class="o">*</span><span class="n">S</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">S</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">S</span><span class="o">-&gt;</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">S</span><span class="o">-&gt;</span><span class="n">a</span> <span class="o">+</span> <span class="n">S</span><span class="o">-&gt;</span><span class="n">b</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="cp">#pragma omp end declare target</span>
+struct foo {
+  char buffera[BAZILLION];
+  char bufferb[BAZILLION];
+  float x;
+  float a, b;
+  float *p;
+};
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="k">struct</span> <span class="nc">foo</span> <span class="n">S</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+#pragma omp declare target
+void saxpyfun(struct foo *S)
+{
+  int i;
+  for(i=0; i&lt;N; i++)
+    S-&gt;p[i] = S-&gt;p[i]*S-&gt;a + S-&gt;b;
+}
+#pragma omp end declare target
 
-  <span class="n">S</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-  <span class="n">S</span><span class="p">.</span><span class="n">b</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">;</span>
-  <span class="n">S</span><span class="p">.</span><span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">);</span>
-  <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">S</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+int main()
+{
+  struct foo S;
+  int i;
 
-  <span class="cp">#pragma omp target map(alloc:S.p) map(S.p[:N]) map(to:S.a, S.b)</span>
-  <span class="n">saxpyfun</span><span class="p">(</span><span class="o">&amp;</span><span class="n">S</span><span class="p">);</span>
+  S.a = 2.0;
+  S.b = 4.0;
+  S.p = (float *)malloc(sizeof(float)*N);
+  for(i=0; i&lt;N; i++) S.p[i] = i;
 
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %4.0f %4.0f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">S</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">S</span><span class="p">.</span><span class="n">p</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
-        <span class="c1">//     4  202  &lt;- output</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  #pragma omp target map(alloc:S.p) map(S.p[:N]) map(to:S.a, S.b)
+  saxpyfun(&amp;S);
+
+  printf(&quot; %4.0f %4.0f\n&quot;, S.p[0], S.p[N-1]);
+        //     4  202  &lt;- output
+  return 0;
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In this example a pointer,  <em>p</em> , is mapped in a<br />
-<code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct ( <code class="docutils literal notranslate"><span class="pre">map(p)</span></code> ) and remains<br />
-persistent throughout the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  region. The address stored
-on the host is not assigned to the device pointer variable, and<br />
-the device value is not copied back to the host at the end of the
-region (for a pointer, it is as though  <code class="docutils literal notranslate"><span class="pre">map(alloc:p</span></code> ) is effectively
-used).  The array section,  <em>p[:N]</em> , is mapped on both  <code class="docutils literal notranslate"><span class="pre">target</span></code><br />
-constructs, and the pointer  <em>p</em>  on the device is attached at the ning and detached at the end of the regions to the newly created
-array section on the device.</p>
+<p>The following example is a slight modification of the above example for  a C++ class.  In the member function  <em>SAXPY::driver</em>   the array section  <em>p[:N]</em>  is <strong>attached</strong> to the pointer member  <em>p</em>  on the device.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       target_struct_map.2cpp
+* type:       C++
+* version: omp_5.0
+*/
+#include &lt;cstdio&gt;
+#include &lt;cstdlib&gt;
+#define N 100
+
+class SAXPY {
+  private:
+   float a, b, *p;
+  public:
+   float buffer[N];
+
+   SAXPY(float arg_a, float arg_b){ a=arg_a; b=arg_b; }
+   void driver();
+   void saxpyfun(float *p);
+};
+
+#pragma omp declare target
+void SAXPY::saxpyfun(float *q)
+{
+  for(int i=0; i&lt;N; i++)
+    buffer[i] = q[i]*a + b;
+}
+#pragma omp end declare target
+
+void SAXPY::driver()
+{
+  p = (float *) malloc(N*sizeof(float));
+  for(int i=0; i&lt;N; i++) p[i]=i;
+
+  #pragma omp target map(alloc:p) map(to:p[:N]) map(to:a,b) \
+              map(from:buffer[:N])   // attach(p) to device_malloc()
+  {
+    saxpyfun(p);
+  }
+
+  free(p);
+}
+
+int main()
+{
+  SAXPY my_saxpy(2.0,4.0);
+
+  my_saxpy.driver();
+
+  printf(&quot; %4.0f %4.0f\n&quot;, my_saxpy.buffer[0], my_saxpy.buffer[N-1]);
+         //   4   202     &lt;- output
+
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

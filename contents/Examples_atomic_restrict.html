@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,32 +1290,34 @@
               <div>
                 
   <div class="section" id="restrictions-on-the-atomic-construct">
-<h1>Restrictions on the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct<a class="headerlink" href="#restrictions-on-the-atomic-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following non-conforming examples illustrate the restrictions on the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>   construct.</p>
+<h1>Restrictions on the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct<a class="headerlink" href="#restrictions-on-the-atomic-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following non-conforming examples illustrate the restrictions on the <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: atomic_restrict.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">atomic_wrong</span> <span class="p">()</span>
-<span class="p">{</span>
- <span class="k">union</span> <span class="p">{</span><span class="kt">int</span> <span class="n">n</span><span class="p">;</span> <span class="kt">float</span> <span class="n">x</span><span class="p">;}</span> <span class="n">u</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-<span class="cp">#pragma omp atomic update</span>
-    <span class="n">u</span><span class="p">.</span><span class="n">n</span><span class="o">++</span><span class="p">;</span>
+/*
+* name: atomic_restrict.1c
+* type: C
+* version: omp_3.1
+*/
+void atomic_wrong ()
+{
+ union {int n; float x;} u;
 
-<span class="cp">#pragma omp atomic update</span>
-    <span class="n">u</span><span class="p">.</span><span class="n">x</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="p">;</span>
+#pragma omp parallel
+  {
+#pragma omp atomic update
+    u.n++;
 
-<span class="cm">/* Incorrect because the atomic constructs reference the same location</span>
-<span class="cm">   through incompatible types */</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+#pragma omp atomic update
+    u.x += 1.0;
+
+/* Incorrect because the atomic constructs reference the same location
+   through incompatible types */
+  }
+}
 
 </pre></div>
 </div>
@@ -1285,24 +1325,24 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic_restrict</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-      <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG</span><span class="p">()</span>
-        <span class="n">INTEGER</span><span class="o">::</span> <span class="n">I</span>
-        <span class="n">REAL</span><span class="o">::</span> <span class="n">R</span>
-        <span class="n">EQUIVALENCE</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">R</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic_restrict.1f
+! type: F-fixed
+! version: omp_3.1
+      SUBROUTINE ATOMIC_WRONG()
+        INTEGER:: I
+        REAL:: R
+        EQUIVALENCE(I,R)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-            <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="mf">1.0</span>
-<span class="o">!</span> <span class="n">incorrect</span> <span class="n">because</span> <span class="n">I</span> <span class="n">and</span> <span class="n">R</span> <span class="n">reference</span> <span class="n">the</span> <span class="n">same</span> <span class="n">location</span>
-<span class="o">!</span> <span class="n">but</span> <span class="n">have</span> <span class="n">different</span> <span class="n">types</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG</span>
+!$OMP   PARALLEL
+!$OMP     ATOMIC UPDATE
+            I = I + 1
+!$OMP     ATOMIC UPDATE
+            R = R + 1.0
+! incorrect because I and R reference the same location
+! but have different types
+!$OMP   END PARALLEL
+      END SUBROUTINE ATOMIC_WRONG
 
 </pre></div>
 </div>
@@ -1310,65 +1350,67 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: atomic_restrict.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">atomic_wrong2</span> <span class="p">()</span>
-<span class="p">{</span>
- <span class="kt">int</span>  <span class="n">x</span><span class="p">;</span>
- <span class="kt">int</span> <span class="o">*</span><span class="n">i</span><span class="p">;</span>
- <span class="kt">float</span>   <span class="o">*</span><span class="n">r</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
- <span class="n">i</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
- <span class="n">r</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
+/*
+* name: atomic_restrict.2c
+* type: C
+* version: omp_3.1
+*/
+void atomic_wrong2 ()
+{
+ int  x;
+ int *i;
+ float   *r;
 
-<span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-<span class="cp">#pragma omp atomic update</span>
-    <span class="o">*</span><span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+ i = &amp;x;
+ r = (float *)&amp;x;
 
-<span class="cp">#pragma omp atomic update</span>
-    <span class="o">*</span><span class="n">r</span> <span class="o">+=</span> <span class="mf">1.0</span><span class="p">;</span>
+#pragma omp parallel
+  {
+#pragma omp atomic update
+    *i += 1;
 
-<span class="cm">/* Incorrect because the atomic constructs reference the same location</span>
-<span class="cm">   through incompatible types */</span>
+#pragma omp atomic update
+    *r += 1.0;
 
-  <span class="p">}</span>
-<span class="p">}</span>
+/* Incorrect because the atomic constructs reference the same location
+   through incompatible types */
+
+  }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example is non-conforming because  <code class="docutils literal notranslate"><span class="pre">I</span></code>  and  <code class="docutils literal notranslate"><span class="pre">R</span></code>  reference  the same location but have different types.</p>
+<p>The following example is non-conforming because <code class="docutils literal notranslate"><span class="pre">I</span></code> and <code class="docutils literal notranslate"><span class="pre">R</span></code> reference  the same location but have different types.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic_restrict</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-      <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLK</span><span class="o">/</span> <span class="n">R</span>
-        <span class="n">REAL</span> <span class="n">R</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic_restrict.2f
+! type: F-fixed
+! version: omp_3.1
+      SUBROUTINE SUB()
+        COMMON /BLK/ R
+        REAL R
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-          <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="mf">1.0</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
+!$OMP   ATOMIC UPDATE
+          R = R + 1.0
+      END SUBROUTINE SUB
 
-      <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG2</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLK</span><span class="o">/</span> <span class="n">I</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
+      SUBROUTINE ATOMIC_WRONG2()
+        COMMON /BLK/ I
+        INTEGER I
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
+!$OMP   PARALLEL
 
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-            <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">1</span>
-          <span class="n">CALL</span> <span class="n">SUB</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG2</span>
+!$OMP     ATOMIC UPDATE
+            I = I + 1
+          CALL SUB()
+!$OMP   END PARALLEL
+      END SUBROUTINE ATOMIC_WRONG2
 
 </pre></div>
 </div>
@@ -1377,30 +1419,30 @@
 <p>Although the following example might work on some implementations, this is also  non-conforming:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">atomic_restrict</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_3</span><span class="mf">.1</span>
-      <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG3</span>
-        <span class="n">INTEGER</span><span class="o">::</span> <span class="n">I</span>
-        <span class="n">REAL</span><span class="o">::</span> <span class="n">R</span>
-        <span class="n">EQUIVALENCE</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">R</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: atomic_restrict.3f
+! type: F-fixed
+! version: omp_3.1
+      SUBROUTINE ATOMIC_WRONG3
+        INTEGER:: I
+        REAL:: R
+        EQUIVALENCE(I,R)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-            <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">1</span>
-<span class="o">!</span> <span class="n">incorrect</span> <span class="n">because</span> <span class="n">I</span> <span class="n">and</span> <span class="n">R</span> <span class="n">reference</span> <span class="n">the</span> <span class="n">same</span> <span class="n">location</span>
-<span class="o">!</span> <span class="n">but</span> <span class="n">have</span> <span class="n">different</span> <span class="n">types</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL
+!$OMP     ATOMIC UPDATE
+            I = I + 1
+! incorrect because I and R reference the same location
+! but have different types
+!$OMP   END PARALLEL
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="mf">1.0</span>
-<span class="o">!</span> <span class="n">incorrect</span> <span class="n">because</span> <span class="n">I</span> <span class="n">and</span> <span class="n">R</span> <span class="n">reference</span> <span class="n">the</span> <span class="n">same</span> <span class="n">location</span>
-<span class="o">!</span> <span class="n">but</span> <span class="n">have</span> <span class="n">different</span> <span class="n">types</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL
+!$OMP     ATOMIC UPDATE
+            R = R + 1.0
+! incorrect because I and R reference the same location
+! but have different types
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">ATOMIC_WRONG3</span>
+      END SUBROUTINE ATOMIC_WRONG3
 
 </pre></div>
 </div>
@@ -1433,8 +1475,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_atomic.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_flush_nolist.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  Construct without a List</a>
+    <a class='left-prev' id="prev-link" href="Examples_atomic.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_flush_nolist.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">flush</span></code> Construct without a List</a>
 
         </div>
         

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,38 +1290,40 @@
               <div>
                 
   <div class="section" id="the-single-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">single</span></code>  Construct<a class="headerlink" href="#the-single-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following example demonstrates the  <code class="docutils literal notranslate"><span class="pre">single</span></code>  construct. In the example,  only one thread prints each of the progress messages. All other threads will skip  the  <code class="docutils literal notranslate"><span class="pre">single</span></code>  region and stop at the barrier at the end of the  <code class="docutils literal notranslate"><span class="pre">single</span></code>   construct until all threads in the team have reached the barrier. If other threads  can proceed without waiting for the thread executing the  <code class="docutils literal notranslate"><span class="pre">single</span></code>  region,  a  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause can be specified, as is done in the third  <code class="docutils literal notranslate"><span class="pre">single</span></code>   construct in this example. The user must not make any assumptions as to which thread  will execute a  <code class="docutils literal notranslate"><span class="pre">single</span></code>  region.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">single</span></code> Construct<a class="headerlink" href="#the-single-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following example demonstrates the <code class="docutils literal notranslate"><span class="pre">single</span></code> construct. In the example,  only one thread prints each of the progress messages. All other threads will skip  the <code class="docutils literal notranslate"><span class="pre">single</span></code> region and stop at the barrier at the end of the <code class="docutils literal notranslate"><span class="pre">single</span></code>  construct until all threads in the team have reached the barrier. If other threads  can proceed without waiting for the thread executing the <code class="docutils literal notranslate"><span class="pre">single</span></code> region,  a <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause can be specified, as is done in the third <code class="docutils literal notranslate"><span class="pre">single</span></code>  construct in this example. The user must not make any assumptions as to which thread  will execute a <code class="docutils literal notranslate"><span class="pre">single</span></code> region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: single.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">work1</span><span class="p">()</span> <span class="p">{}</span>
-<span class="kt">void</span> <span class="nf">work2</span><span class="p">()</span> <span class="p">{}</span>
+/*
+* name: single.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
 
-<span class="kt">void</span> <span class="nf">single_example</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp single</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Beginning work1.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+void work1() {}
+void work2() {}
 
-    <span class="n">work1</span><span class="p">();</span>
+void single_example()
+{
+  #pragma omp parallel
+  {
+    #pragma omp single
+      printf(&quot;Beginning work1.\n&quot;);
 
-    <span class="cp">#pragma omp single</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Finishing work1.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    work1();
 
-    <span class="cp">#pragma omp single nowait</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Finished work1 and beginning work2.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+    #pragma omp single
+      printf(&quot;Finishing work1.\n&quot;);
 
-    <span class="n">work2</span><span class="p">();</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    #pragma omp single nowait
+      printf(&quot;Finished work1 and beginning work2.\n&quot;);
+
+    work2();
+  }
+}
 
 </pre></div>
 </div>
@@ -1291,37 +1331,37 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">single</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK1</span><span class="p">()</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK1</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: single.1f
+! type: F-fixed
+      SUBROUTINE WORK1()
+      END SUBROUTINE WORK1
 
-      <span class="n">SUBROUTINE</span> <span class="n">WORK2</span><span class="p">()</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK2</span>
+      SUBROUTINE WORK2()
+      END SUBROUTINE WORK2
 
-      <span class="n">PROGRAM</span> <span class="n">SINGLE_EXAMPLE</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span>
+      PROGRAM SINGLE_EXAMPLE
+!$OMP PARALLEL
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">SINGLE</span>
-        <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Beginning work1.&quot;</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">SINGLE</span>
+!$OMP SINGLE
+        print *, &quot;Beginning work1.&quot;
+!$OMP END SINGLE
 
-        <span class="n">CALL</span> <span class="n">WORK1</span><span class="p">()</span>
+        CALL WORK1()
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">SINGLE</span>
-        <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Finishing work1.&quot;</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">SINGLE</span>
+!$OMP SINGLE
+        print *, &quot;Finishing work1.&quot;
+!$OMP END SINGLE
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">SINGLE</span>
-        <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Finished work1 and beginning work2.&quot;</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">SINGLE</span> <span class="n">NOWAIT</span>
+!$OMP SINGLE
+        print *, &quot;Finished work1 and beginning work2.&quot;
+!$OMP END SINGLE NOWAIT
 
-        <span class="n">CALL</span> <span class="n">WORK2</span><span class="p">()</span>
+        CALL WORK2()
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP END PARALLEL
 
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">SINGLE_EXAMPLE</span>
+      END PROGRAM SINGLE_EXAMPLE
 
 </pre></div>
 </div>
@@ -1354,8 +1394,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_fpriv_sections.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  Clause and the  <code class="docutils literal notranslate"><span class="pre">sections</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_workshare.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_fpriv_sections.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> Clause and the <code class="docutils literal notranslate"><span class="pre">sections</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_workshare.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">workshare</span></code> Construct</a>
 
         </div>
         

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,48 +1290,50 @@
               <div>
                 
   <div class="section" id="asynchronous-target-with-nowait-and-depend-clauses">
-<h1>Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  with  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  and  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  Clauses<a class="headerlink" href="#asynchronous-target-with-nowait-and-depend-clauses" title="Permalink to this headline">¶</a></h1>
-<p>More details on dependences can be found in , Task  Dependences. In this example, there are three flow dependences.  In the first two dependences the target task does not execute until the preceding explicit tasks have finished.   These  dependences are produced by arrays  <em>v1</em>  and  <em>v2</em>   with the  <code class="docutils literal notranslate"><span class="pre">out</span></code>  dependence type in the first two tasks, and the  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type in the target task.</p>
-<p>The last dependence is produced by array  <em>p</em>   with the  <code class="docutils literal notranslate"><span class="pre">out</span></code>  dependence type in the target task, and the  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type in the last task.  The last task does not execute until the target task finishes.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct creates a deferrable  <em>target task</em> , allowing the encountering task to continue execution without waiting for the completion of the  <em>target task</em> .</p>
+<h1>Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> with <code class="docutils literal notranslate"><span class="pre">nowait</span></code> and <code class="docutils literal notranslate"><span class="pre">depend</span></code> Clauses<a class="headerlink" href="#asynchronous-target-with-nowait-and-depend-clauses" title="Permalink to this headline">¶</a></h1>
+<p>More details on dependences can be found in  task_depend , Task  Dependences. In this example, there are three flow dependences.  In the first two dependences the target task does not execute until the preceding explicit tasks have finished.   These  dependences are produced by arrays  <em>v1</em>  and  <em>v2</em>   with the <code class="docutils literal notranslate"><span class="pre">out</span></code> dependence type in the first two tasks, and the <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type in the target task.</p>
+<p>The last dependence is produced by array  <em>p</em>   with the <code class="docutils literal notranslate"><span class="pre">out</span></code> dependence type in the target task, and the <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type in the last task.  The last task does not execute until the target task finishes.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause on the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct creates a deferrable  <em>target task</em> , allowing the encountering task to continue execution without waiting for the completion of the  <em>target task</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span>  <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+/*
+* name: target.4c
+* type: C
+* version: omp_4.5
+*/
 
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="kt">float</span> <span class="n">p</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v2</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+extern void init(  float*, int);
+extern void output(float*, int);
 
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp single</span>
-      <span class="p">{</span>
-         <span class="cp">#pragma omp task depend(out:v1)</span>
-         <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+void vec_mult(int N)
+{
+   int i;
+   float p[N], v1[N], v2[N];
 
-         <span class="cp">#pragma omp task depend(out:v2)</span>
-         <span class="n">init</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+   #pragma omp parallel num_threads(2)
+   {
+      #pragma omp single
+      {
+         #pragma omp task depend(out:v1)
+         init(v1, N);
 
-         <span class="cp">#pragma omp target nowait depend(in:v1,v2) depend(out:p) \</span>
-<span class="cp">                                      map(to:v1,v2) map( from: p)</span>
-         <span class="cp">#pragma omp parallel for private(i)</span>
-         <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+         #pragma omp task depend(out:v2)
+         init(v2, N);
 
-         <span class="cp">#pragma omp task depend(in:p)</span>
-         <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+         #pragma omp target nowait depend(in:v1,v2) depend(out:p) \
+                                      map(to:v1,v2) map( from: p)
+         #pragma omp parallel for private(i)
+         for (i=0; i&lt;N; i++)
+            p[i] = v1[i] * v2[i];
+
+         #pragma omp task depend(in:p)
+         output(p, N);
+      }
+   }
+}
 
 </pre></div>
 </div>
@@ -1301,48 +1341,48 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target</span><span class="mf">.4f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target.4f90
+! type: F-free
+! version: omp_4.5
 
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span>           <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">N</span>
-   <span class="n">real</span><span class="p">,</span> <span class="n">allocatable</span> <span class="o">::</span> <span class="n">p</span><span class="p">(</span><span class="o">:</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="o">:</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-   <span class="n">allocate</span><span class="p">(</span> <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="p">)</span>
+subroutine vec_mult(N)
+   implicit none
+   integer           :: i, N
+   real, allocatable :: p(:), v1(:), v2(:)
+   allocate( p(N), v1(N), v2(N) )
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+   !$omp parallel num_threads(2)
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
+      !$omp single
 
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span><span class="n">v1</span><span class="p">)</span>
-         <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+         !$omp task depend(out:v1)
+         call init(v1, N)
+         !$omp end task
 
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span><span class="n">v2</span><span class="p">)</span>
-         <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+         !$omp task depend(out:v2)
+         call init(v2, N)
+         !$omp end task
 
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">nowait</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span><span class="n">p</span><span class="p">)</span> <span class="o">&amp;</span>
-         <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                 <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>  <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+         !$omp target nowait depend(in:v1,v2) depend(out:p) &amp;
+         !$omp&amp;                 map(to:v1,v2)  map(from: p)
+         !$omp parallel do
+         do i=1,N
+            p(i) = v1(i) * v2(i)
+         end do
+         !$omp end target
 
 
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span><span class="n">p</span><span class="p">)</span>
-         <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+         !$omp task depend(in:p)
+         call output(p, N)
+         !$omp end task
 
-     <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+     !$omp end single
+   !$omp end parallel
 
-   <span class="n">deallocate</span><span class="p">(</span> <span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="p">)</span>
+   deallocate( p, v1, v2 )
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
 </pre></div>
 </div>
@@ -1375,7 +1415,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_async_target_nowait.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">nowait</span></code>  Clause on  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_async_target_nowait.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">nowait</span></code> Clause on <code class="docutils literal notranslate"><span class="pre">target</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_device.html" title="next page">Device Routines</a>
 
         </div>

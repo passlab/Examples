@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,74 +1291,76 @@
                 
   <div class="section" id="affinity-display">
 <h1>Affinity Display<a class="headerlink" href="#affinity-display" title="Permalink to this headline">¶</a></h1>
-<p>The following examples illustrate ways to display thread affinity. Automatic display of affinity can be invoked by setting the  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code>  environment variable to  <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> .   The format of the output can be customized by setting the   <code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code>  environment variable to an appropriate string.   Also, there are API calls for the user to display thread affinity  at selected locations within .</p>
-<p>For the first example the environment variable  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code>  has been set to  <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> , and execution occurs on an 8-core system with  <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>  set to 8.</p>
-<p>The affinity for the master thread is reported through a call to the API  <code class="docutils literal notranslate"><span class="pre">omp_display_affinity()</span></code>  routine. For default affinity settings the report shows that the master thread can execute on any of the cores.  In the following parallel region the affinity for each of the team threads is reported automatically since the  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code>  environment variable has been set to  <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> .</p>
-<p>These two reports are often useful (as in hybrid s using both MPI and OpenMP)  to observe the affinity (for an MPI task) before the parallel region, and during an OpenMP parallel region. Note: the next parallel region uses the  same number of threads as in the previous parallel region and affinities are  not changed, so affinity is NOT reported.</p>
+<p>The following examples illustrate ways to display thread affinity. Automatic display of affinity can be invoked by setting the <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code> environment variable to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.   The format of the output can be customized by setting the  <code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code> environment variable to an appropriate string.   Also, there are API calls for the user to display thread affinity  at selected locations within code.</p>
+<p>For the first example the environment variable <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code> has been set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>, and execution occurs on an 8-core system with <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> set to 8.</p>
+<p>The affinity for the master thread is reported through a call to the API <code class="docutils literal notranslate"><span class="pre">omp_display_affinity()</span></code> routine. For default affinity settings the report shows that the master thread can execute on any of the cores.  In the following parallel region the affinity for each of the team threads is reported automatically since the <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code> environment variable has been set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.</p>
+<p>These two reports are often useful (as in hybrid codes using both MPI and OpenMP)  to observe the affinity (for an MPI task) before the parallel region, and during an OpenMP parallel region. Note: the next parallel region uses the  same number of threads as in the previous parallel region and affinities are  not changed, so affinity is NOT reported.</p>
 <p>In the last parallel region, the thread affinities are reported because the thread affinity has changed.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: affinity_display.1.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>                     <span class="c1">//MAX threads = 8, single socket system</span>
+/*
+* name: affinity_display.1.c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-   <span class="n">omp_display_affinity</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>  <span class="c1">//API call-- Displays Affinity of Master Thread</span>
+int main(void){                     //MAX threads = 8, single socket system
 
-<span class="c1">// API CALL OUTPUT (default format):</span>
-<span class="c1">//team_num= 0, nesting_level= 0, thread_num= 0, thread_affinity= 0,1,2,3,4,5,6,7</span>
+   omp_display_affinity(NULL);  //API call-- Displays Affinity of Master Thread
+
+// API CALL OUTPUT (default format):
+//team_num= 0, nesting_level= 0, thread_num= 0, thread_affinity= 0,1,2,3,4,5,6,7
 
 
-                   <span class="c1">// OMP_DISPLAY_AFFINITY=TRUE, OMP_NUM_THREADS=8</span>
-   <span class="cp">#pragma omp parallel num_threads(omp_get_num_procs())</span>
-   <span class="p">{</span>
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;1st Parallel Region -- Affinity Reported </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                   // OMP_DISPLAY_AFFINITY=TRUE, OMP_NUM_THREADS=8
+   #pragma omp parallel num_threads(omp_get_num_procs())
+   {
+     if(omp_get_thread_num()==0)
+        printf(&quot;1st Parallel Region -- Affinity Reported \n&quot;);
 
-         <span class="c1">// DISPLAY OUTPUT (default format) has been sorted:</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 1</span>
-         <span class="c1">// ...</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 7, thread_affinity= 7</span>
+         // DISPLAY OUTPUT (default format) has been sorted:
+         // team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0
+         // team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 1
+         // ...
+         // team_num= 0, nesting_level= 1, thread_num= 7, thread_affinity= 7
 
-     <span class="c1">// doing work here</span>
-   <span class="p">}</span>
+     // doing work here
+   }
 
-   <span class="cp">#pragma omp parallel num_threads( omp_get_num_procs() )</span>
-   <span class="p">{</span>
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%s%s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="s">&quot;Same Affinity as in Previous Parallel Region&quot;</span><span class="p">,</span>
-                        <span class="s">&quot; -- no Affinity Reported</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+   #pragma omp parallel num_threads( omp_get_num_procs() )
+   {
+     if(omp_get_thread_num()==0)
+        printf(&quot;%s%s\n&quot;,&quot;Same Affinity as in Previous Parallel Region&quot;,
+                        &quot; -- no Affinity Reported\n&quot;);
 
-         <span class="c1">// NO AFFINITY OUTPUT:</span>
-         <span class="c1">//(output in 1st parallel region only for OMP_DISPLAY_AFFINITY=TRUE)</span>
+         // NO AFFINITY OUTPUT:
+         //(output in 1st parallel region only for OMP_DISPLAY_AFFINITY=TRUE)
 
-     <span class="c1">// doing more work here</span>
-   <span class="p">}</span>
+     // doing more work here
+   }
 
-                       <span class="c1">// Report Affinity for 1/2 number of threads</span>
-   <span class="cp">#pragma omp parallel num_threads( omp_get_num_procs()/2 )</span>
-   <span class="p">{</span>
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Report Affinity for using 1/2 of max threads.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+                       // Report Affinity for 1/2 number of threads
+   #pragma omp parallel num_threads( omp_get_num_procs()/2 )
+   {
+     if(omp_get_thread_num()==0)
+        printf(&quot;Report Affinity for using 1/2 of max threads.\n&quot;);
 
-         <span class="c1">// DISPLAY OUTPUT (default format) has been sorted:</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0,1</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 2,3</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 2, thread_affinity= 4,5</span>
-         <span class="c1">// team_num= 0, nesting_level= 1, thread_num= 3, thread_affinity= 6,7</span>
+         // DISPLAY OUTPUT (default format) has been sorted:
+         // team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0,1
+         // team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 2,3
+         // team_num= 0, nesting_level= 1, thread_num= 2, thread_affinity= 4,5
+         // team_num= 0, nesting_level= 1, thread_num= 3, thread_affinity= 6,7
 
-     <span class="c1">// do work</span>
-   <span class="p">}</span>
+     // do work
+   }
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1328,72 +1368,72 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">affinity_display</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: affinity_display.1.f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">program</span> <span class="n">affinity_display</span>        <span class="o">!</span> <span class="n">MAX</span> <span class="n">threads</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">single</span> <span class="n">socket</span> <span class="n">system</span>
+program affinity_display        ! MAX threads = 8, single socket system
 
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">::</span> <span class="n">null</span>
+   use omp_lib
+   implicit none
+   character(len=0) :: null
 
-   <span class="n">call</span> <span class="n">omp_display_affinity</span><span class="p">(</span><span class="n">null</span><span class="p">)</span> <span class="o">!</span><span class="n">API</span> <span class="n">call</span><span class="o">-</span> <span class="n">Displays</span> <span class="n">Affinity</span> <span class="n">of</span> <span class="n">Master</span> <span class="n">Thread</span>
+   call omp_display_affinity(null) !API call- Displays Affinity of Master Thread
 
-<span class="o">!</span> <span class="n">API</span> <span class="n">CALL</span> <span class="n">OUTPUT</span> <span class="p">(</span><span class="k">default</span> <span class="n">format</span><span class="p">)</span><span class="o">:</span>
-<span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span>
+! API CALL OUTPUT (default format):
+! team_num= 0, nesting_level= 0, thread_num= 0, thread_affinity= 0,1,2,3,4,5,6,7
 
 
-                       <span class="o">!</span> <span class="n">OMP_DISPLAY_AFFINITY</span><span class="o">=</span><span class="n">TRUE</span><span class="p">,</span> <span class="n">OMP_NUM_THREADS</span><span class="o">=</span><span class="mi">8</span>
+                       ! OMP_DISPLAY_AFFINITY=TRUE, OMP_NUM_THREADS=8
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="n">omp_get_num_procs</span><span class="p">())</span>
+   !$omp parallel num_threads(omp_get_num_procs())
 
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-        <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;1st Parallel Region  -- Affinity Reported&quot;</span>
-     <span class="n">endif</span>
+     if(omp_get_thread_num()==0) then
+        print*, &quot;1st Parallel Region  -- Affinity Reported&quot;
+     endif
 
-          <span class="o">!</span> <span class="n">DISPLAY</span> <span class="n">OUTPUT</span> <span class="p">(</span><span class="k">default</span> <span class="n">format</span><span class="p">)</span> <span class="n">has</span> <span class="n">been</span> <span class="nl">sorted</span><span class="p">:</span>
-          <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">0</span>
-          <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">1</span>
-          <span class="o">!</span> <span class="p">...</span>
-          <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">7</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">7</span>
+          ! DISPLAY OUTPUT (default format) has been sorted:
+          ! team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0
+          ! team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 1
+          ! ...
+          ! team_num= 0, nesting_level= 1, thread_num= 7, thread_affinity= 7
 
-      <span class="o">!</span> <span class="n">doing</span> <span class="n">work</span> <span class="n">here</span>
+      ! doing work here
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+   !$omp end parallel
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span> <span class="n">omp_get_num_procs</span><span class="p">()</span> <span class="p">)</span>
+   !$omp parallel num_threads( omp_get_num_procs() )
 
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-        <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;Same Affinity in Parallel Region -- no Affinity Reported&quot;</span>
-     <span class="n">endif</span>
+     if(omp_get_thread_num()==0) then
+        print*, &quot;Same Affinity in Parallel Region -- no Affinity Reported&quot;
+     endif
 
-          <span class="o">!</span> <span class="n">NO</span> <span class="n">AFFINITY</span> <span class="nl">OUTPUT</span><span class="p">:</span>
-          <span class="o">!</span><span class="p">(</span><span class="n">output</span> <span class="n">in</span> <span class="mi">1</span><span class="n">st</span> <span class="n">parallel</span> <span class="n">region</span> <span class="n">only</span> <span class="k">for</span> <span class="n">OMP_DISPLAY_AFFINITY</span><span class="o">=</span><span class="n">TRUE</span><span class="p">)</span>
+          ! NO AFFINITY OUTPUT:
+          !(output in 1st parallel region only for OMP_DISPLAY_AFFINITY=TRUE)
 
-      <span class="o">!</span> <span class="n">doing</span> <span class="n">more</span> <span class="n">work</span> <span class="n">here</span>
+      ! doing more work here
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+   !$omp end parallel
 
-                       <span class="o">!</span> <span class="n">Report</span> <span class="n">Affinity</span> <span class="k">for</span> <span class="mi">1</span><span class="o">/</span><span class="mi">2</span> <span class="n">number</span> <span class="n">of</span> <span class="n">threads</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span> <span class="n">omp_get_num_procs</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span> <span class="p">)</span>
+                       ! Report Affinity for 1/2 number of threads
+   !$omp parallel num_threads( omp_get_num_procs()/2 )
 
-     <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-        <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;Different Affinity in Parallel Region -- Affinity Reported&quot;</span>
-     <span class="n">endif</span>
+     if(omp_get_thread_num()==0) then
+        print*, &quot;Different Affinity in Parallel Region -- Affinity Reported&quot;
+     endif
 
-         <span class="o">!</span> <span class="n">DISPLAY</span> <span class="n">OUTPUT</span> <span class="p">(</span><span class="k">default</span> <span class="n">format</span><span class="p">)</span> <span class="n">has</span> <span class="n">been</span> <span class="nl">sorted</span><span class="p">:</span>
-         <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="mi">1</span>
-         <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span><span class="mi">3</span>
-         <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">4</span><span class="p">,</span><span class="mi">5</span>
-         <span class="o">!</span> <span class="n">team_num</span><span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">nesting_level</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">thread_num</span><span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">thread_affinity</span><span class="o">=</span> <span class="mi">6</span><span class="p">,</span><span class="mi">7</span>
+         ! DISPLAY OUTPUT (default format) has been sorted:
+         ! team_num= 0, nesting_level= 1, thread_num= 0, thread_affinity= 0,1
+         ! team_num= 0, nesting_level= 1, thread_num= 1, thread_affinity= 2,3
+         ! team_num= 0, nesting_level= 1, thread_num= 2, thread_affinity= 4,5
+         ! team_num= 0, nesting_level= 1, thread_num= 3, thread_affinity= 6,7
 
-      <span class="o">!</span> <span class="k">do</span> <span class="n">work</span>
+      ! do work
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+   !$omp end parallel
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
@@ -1402,96 +1442,96 @@
 <p>In the following example 2 threads are forked, and each executes on a socket. Next, a nested parallel region runs half of the available threads on each socket.</p>
 <p>These OpenMP environment variables have been set:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> =’TRUE’</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> =’2,4’</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> =’{0,2,4,6},{1,3,5,7}’</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code> =’nest_level=
-L, parent_thrd_num=
-a, thrd_num=
-n, thrd_affinity=
-A’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>=”TRUE”</p></li>
 </ul>
-<p>where the numbers correspond to core ids for the system. Note,  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code>  is not set and is  <code class="docutils literal notranslate"><span class="pre">FALSE</span></code>  by default.  This example shows how to use API routines to perform affinity display operations.</p>
-<p>For each of the two first-level threads the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable specifies a place with all the core-ids of the socket ({0,2,4,6} for one thread and {1,3,5,7} for the other). (As is sometimes the case in 2-socket systems, one socket may consist of the even id numbers, while the other may have the odd id numbers.)  The affinities are printed according to the  <code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code>  format: providing the parallel nesting level (
-L), the ancestor thread number (
-a), the thread number (
-n) and the thread affinity (
-A). In the nested parallel region within the  <em>socket_work</em>  routine the affinities for the threads on each socket are printed according to this format.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>=”2,4”</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>=”{0,2,4,6},{1,3,5,7}”</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code>=”nest_level= L, parent_thrd_num= a, thrd_num= n, thrd_affinity= A”</p></li>
+</ul>
+<p>where the numbers correspond to core ids for the system. Note, <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code> is not set and is <code class="docutils literal notranslate"><span class="pre">FALSE</span></code> by default.  This example shows how to use API routines to perform affinity display operations.</p>
+<p>For each of the two first-level threads the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable specifies a place with all the core-ids of the socket ({0,2,4,6} for one thread and {1,3,5,7} for the other). (As is sometimes the case in 2-socket systems, one socket may consist of the even id numbers, while the other may have the odd id numbers.)  The affinities are printed according to the <code class="docutils literal notranslate"><span class="pre">OMP_AFFINITY_FORMAT</span></code> format: providing the parallel nesting level (L), the ancestor thread number (a), the thread number (n) and the thread affinity (A). In the nested parallel region within the  <em>socket_work</em>  routine the affinities for the threads on each socket are printed according to this format.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       affinity_display.2c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">socket_work</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n_thrds</span><span class="p">);</span>
+/*
+* name:       affinity_display.2c
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
- <span class="kt">int</span> <span class="n">n_sockets</span><span class="p">,</span> <span class="n">socket_num</span><span class="p">,</span> <span class="n">n_thrds_on_socket</span><span class="p">;</span>
+void socket_work(int socket_num, int n_thrds);
 
- <span class="n">omp_set_nested</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>            <span class="c1">// or env var= OMP_NESTED=true</span>
- <span class="n">omp_set_max_active_levels</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span> <span class="c1">// or env var= OMP_MAX_ACTIVE_LEVELS=2</span>
+int main(void)
+{
+ int n_sockets, socket_num, n_thrds_on_socket;
 
-  <span class="n">n_sockets</span>         <span class="o">=</span> <span class="n">omp_get_num_places</span><span class="p">();</span>
-  <span class="n">n_thrds_on_socket</span> <span class="o">=</span> <span class="n">omp_get_place_num_procs</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+ omp_set_nested(1);            // or env var= OMP_NESTED=true
+ omp_set_max_active_levels(2); // or env var= OMP_MAX_ACTIVE_LEVELS=2
 
-     <span class="c1">// OMP_NUM_THREADS=2,4</span>
-     <span class="c1">// OMP_PLACES=&quot;{0,2,4,6},{1,3,5,7}&quot;  #2 sockets; even/odd proc-ids</span>
-     <span class="c1">// OMP_AFFINITY_FORMAT=\</span>
-<span class="c1">     // &quot;nest_level= %L, parent_thrd_num= %a, thrd_num= %n, thrd_affinity= %A&quot;</span>
+  n_sockets         = omp_get_num_places();
+  n_thrds_on_socket = omp_get_place_num_procs(0);
 
-  <span class="cp">#pragma omp parallel num_threads(n_sockets) private(socket_num)</span>
-  <span class="p">{</span>
-    <span class="n">socket_num</span> <span class="o">=</span> <span class="n">omp_get_place_num</span><span class="p">();</span>
+     // OMP_NUM_THREADS=2,4
+     // OMP_PLACES=&quot;{0,2,4,6},{1,3,5,7}&quot;  #2 sockets; even/odd proc-ids
+     // OMP_AFFINITY_FORMAT=\
+     // &quot;nest_level= %L, parent_thrd_num= %a, thrd_num= %n, thrd_affinity= %A&quot;
 
-    <span class="k">if</span><span class="p">(</span><span class="n">socket_num</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-       <span class="n">printf</span><span class="p">(</span><span class="s">&quot; LEVEL 1 AFFINITIES 1 thread/socket, %d sockets:</span><span class="se">\n\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">n_sockets</span><span class="p">);</span>
+  #pragma omp parallel num_threads(n_sockets) private(socket_num)
+  {
+    socket_num = omp_get_place_num();
 
-    <span class="n">omp_display_affinity</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>   <span class="c1">// not needed if OMP_DISPLAY_AFFINITY=TRUE</span>
+    if(socket_num==0)
+       printf(&quot; LEVEL 1 AFFINITIES 1 thread/socket, %d sockets:\n\n&quot;, n_sockets);
 
-     <span class="c1">// OUTPUT:</span>
-     <span class="c1">// LEVEL 1 AFFINITIES 1 thread/socket, 2 sockets:</span>
-     <span class="c1">// nest_level= 1, parent_thrd_num= 0, thrd_num= 0, thrd_affinity= 0,2,4,6</span>
-     <span class="c1">// nest_level= 1, parent_thrd_num= 0, thrd_num= 1, thrd_affinity= 1,3,5,7</span>
+    omp_display_affinity(NULL);   // not needed if OMP_DISPLAY_AFFINITY=TRUE
 
-    <span class="n">socket_work</span><span class="p">(</span><span class="n">socket_num</span><span class="p">,</span> <span class="n">n_thrds_on_socket</span><span class="p">);</span>
-  <span class="p">}</span>
+     // OUTPUT:
+     // LEVEL 1 AFFINITIES 1 thread/socket, 2 sockets:
+     // nest_level= 1, parent_thrd_num= 0, thrd_num= 0, thrd_affinity= 0,2,4,6
+     // nest_level= 1, parent_thrd_num= 0, thrd_num= 1, thrd_affinity= 1,3,5,7
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    socket_work(socket_num, n_thrds_on_socket);
+  }
 
-<span class="kt">void</span> <span class="nf">socket_work</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket_num</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n_thrds</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="cp">#pragma omp parallel num_threads(n_thrds)</span>
-  <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; LEVEL 2 AFFINITIES, %d threads on socket %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">n_thrds</span><span class="p">,</span> <span class="n">socket_num</span><span class="p">);</span>
+  return 0;
+}
 
-    <span class="n">omp_display_affinity</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span>   <span class="c1">// not needed if OMP_DISPLAY_AFFINITY=TRUE</span>
+void socket_work(int socket_num, int n_thrds)
+{
+  #pragma omp parallel num_threads(n_thrds)
+  {
+    if(omp_get_thread_num()==0)
+  printf(&quot; LEVEL 2 AFFINITIES, %d threads on socket %d\n&quot;,n_thrds, socket_num);
 
-    <span class="c1">// OUTPUT:</span>
-    <span class="c1">// LEVEL 2 AFFINITIES, 4 threads on socket 0</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 0, thrd_num= 0, thrd_affinity= 0</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 0, thrd_num= 1, thrd_affinity= 2</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 0, thrd_num= 2, thrd_affinity= 4</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 0, thrd_num= 3, thrd_affinity= 6</span>
+    omp_display_affinity(NULL);   // not needed if OMP_DISPLAY_AFFINITY=TRUE
 
-    <span class="c1">// LEVEL 2 AFFINITIES, 4 threads on socket 1</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 1, thrd_num= 0, thrd_affinity= 1</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 1, thrd_num= 1, thrd_affinity= 3</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 1, thrd_num= 2, thrd_affinity= 5</span>
-    <span class="c1">// nest_level= 2, parent_thrd_num= 1, thrd_num= 3, thrd_affinity= 7</span>
+    // OUTPUT:
+    // LEVEL 2 AFFINITIES, 4 threads on socket 0
+    // nest_level= 2, parent_thrd_num= 0, thrd_num= 0, thrd_affinity= 0
+    // nest_level= 2, parent_thrd_num= 0, thrd_num= 1, thrd_affinity= 2
+    // nest_level= 2, parent_thrd_num= 0, thrd_num= 2, thrd_affinity= 4
+    // nest_level= 2, parent_thrd_num= 0, thrd_num= 3, thrd_affinity= 6
 
-    <span class="c1">// ... Do Some work on Socket</span>
+    // LEVEL 2 AFFINITIES, 4 threads on socket 1
+    // nest_level= 2, parent_thrd_num= 1, thrd_num= 0, thrd_affinity= 1
+    // nest_level= 2, parent_thrd_num= 1, thrd_num= 1, thrd_affinity= 3
+    // nest_level= 2, parent_thrd_num= 1, thrd_num= 2, thrd_affinity= 5
+    // nest_level= 2, parent_thrd_num= 1, thrd_num= 3, thrd_affinity= 7
 
-  <span class="p">}</span>
-<span class="p">}</span>
+    // ... Do Some work on Socket
+
+  }
+}
 
 </pre></div>
 </div>
@@ -1499,7 +1539,7 @@ A). In the nested parallel region within the  <em>socket_work</em>  routine the 
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: affinity_display.2.f90
 ! type: F-free
 ! version: omp_5.0
@@ -1581,112 +1621,101 @@ end subroutine
 </div>
 </div>
 </div>
-<p>The next example illustrates more details about affinity formatting. First, the  <code class="docutils literal notranslate"><span class="pre">omp_get_affininity_format()</span></code>  API routine is used to  obtain the default format. The  checks to make sure the storage  provides enough space to hold the format.   Next, the  <code class="docutils literal notranslate"><span class="pre">omp_set_affinity_format()</span></code>  API routine sets a user-defined  format:  <em>host=
-20H thrd_num=
-0.4n binds_to=
-A</em> .</p>
-<p>The host, thread number and affinity fields are specified by  _
-20H_ ,   _
-0.4n_  and  _
-A_ :  <em>H</em> ,  <em>n</em>  and  <em>A</em>  are single character ‘short names’  for the host, thread_num and thread_affinity data to be printed, with format sizes of  <em>20</em> ,  <em>4</em> , and ‘size as needed’.  The period (.) indicates that the field is displayed right-justified (default is left-justified)  and the ‘0’ indicates that any unused space is to be prefixed with zeros  (e.g. instead of ‘1’, ‘0001’ is displayed for the field size of 4).</p>
-<p>The period (.) indicates that the field is displayed left-justified and the ‘0’ indicates<br />
-that leading zeros are to be added so that the total length for the display of this “n” (thread_num) field is 4.</p>
-<p>The period ( <em>.</em> ) indicates right justified and  <em>0</em>  leading zeros.<br />
-All other text in the format is just user narrative.</p>
-<p>Within the parallel region the affinity for each thread is captured by   <code class="docutils literal notranslate"><span class="pre">omp_capture_affinity()</span></code>  into a buffer array with elements indexed  by the thread number ( <em>thrd_num</em> ). After the parallel region, the thread affinities are printed in thread-number order.</p>
-<p>If the storage area in buffer is inadequate for holding the affinity data, the stored affinity data is truncated.<br />
-The  <em>max</em>  reduction on the required storage, returned by<br />
-<code class="docutils literal notranslate"><span class="pre">omp_capture_affinity</span></code>  in  <em>nchars</em> , is used to report<br />
-possible truncation (if  <em>max_req_store</em>   &gt;   <em>buffer_store</em> ). The maximum value for the number of characters ( <em>nchars</em> ) returned by   <code class="docutils literal notranslate"><span class="pre">omp_capture_affinity</span></code>  is captured by the  <code class="docutils literal notranslate"><span class="pre">reduction(max:max_req_store)</span></code>  clause and the  <em>if(nchars &gt;= max_req_store) max_req_store=nchars</em>  statement.  It is used to report possible truncation (if  <em>max_req_store</em>  &gt;  <em>buffer_store</em> ).</p>
+<p>The next example illustrates more details about affinity formatting. First, the <code class="docutils literal notranslate"><span class="pre">omp_get_affininity_format()</span></code> API routine is used to  obtain the default format. The code checks to make sure the storage  provides enough space to hold the format.   Next, the <code class="docutils literal notranslate"><span class="pre">omp_set_affinity_format()</span></code> API routine sets a user-defined  format:  <em>host=20H thrd_num=0.4n binds_to=A</em> .</p>
+<p>The host, thread number and affinity fields are specified by  <em>20H</em> ,   <em>0.4n</em>  and  <em>A</em> :  <em>H</em> ,  <em>n</em>  and  <em>A</em>  are single character “short names”  for the host, thread_num and thread_affinity data to be printed, with format sizes of  <em>20</em> ,  <em>4</em> , and “size as needed”.  The period (.) indicates that the field is displayed right-justified (default is left-justified)  and the “0” indicates that any unused space is to be prefixed with zeros  (e.g. instead of “1”, “0001” is displayed for the field size of 4).</p>
+<p>Within the parallel region the affinity for each thread is captured by  <code class="docutils literal notranslate"><span class="pre">omp_capture_affinity()</span></code> into a buffer array with elements indexed  by the thread number ( <em>thrd_num</em> ). After the parallel region, the thread affinities are printed in thread-number order.</p>
+<p>If the storage area in buffer is inadequate for holding the affinity data, the stored affinity data is truncated.   The maximum value for the number of characters ( <em>nchars</em> ) returned by  <code class="docutils literal notranslate"><span class="pre">omp_capture_affinity</span></code> is captured by the <code class="docutils literal notranslate"><span class="pre">reduction(max:max_req_store)</span></code> clause and the  <em>if(nchars &gt;= max_req_store) max_req_store=nchars</em>  statement.  It is used to report possible truncation (if  <em>max_req_store</em>  &gt;  <em>buffer_store</em> ).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: affinity_display.3.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="c1">  // also null is in &lt;stddef.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stddef.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#define FORMAT_STORE   80</span>
-<span class="cp">#define BUFFER_STORE   80</span>
+/*
+* name: affinity_display.3.c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;  // also null is in &lt;stddef.h&gt;
+#include &lt;stddef.h&gt;
+#include &lt;string.h&gt;
+#include &lt;omp.h&gt;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+#define FORMAT_STORE   80
+#define BUFFER_STORE   80
 
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">thrd_num</span><span class="p">,</span> <span class="n">max_req_store</span><span class="p">;</span>
-   <span class="kt">size_t</span> <span class="n">nchars</span><span class="p">;</span>
+int main(void){
 
-   <span class="kt">char</span> <span class="n">default_format</span><span class="p">[</span><span class="n">FORMAT_STORE</span><span class="p">];</span>
-   <span class="kt">char</span> <span class="n">my_format</span><span class="p">[]</span>  <span class="o">=</span> <span class="s">&quot;host=%20H thrd_num=%0.4n binds_to=%A&quot;</span><span class="p">;</span>
-   <span class="kt">char</span> <span class="o">**</span><span class="n">buffer</span><span class="p">;</span>
+   int i, n, thrd_num, max_req_store;
+   size_t nchars;
 
-
-<span class="c1">// CODE SEGMENT 1         AFFINITY FORMAT</span>
-
-<span class="c1">//                        Get and Display Default Affinity Format</span>
-
-   <span class="n">nchars</span> <span class="o">=</span> <span class="n">omp_get_affinity_format</span><span class="p">(</span><span class="n">default_format</span><span class="p">,(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">FORMAT_STORE</span><span class="p">);</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Default Affinity Format is: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">default_format</span><span class="p">);</span>
-
-   <span class="k">if</span><span class="p">(</span><span class="n">nchars</span> <span class="o">&gt;=</span> <span class="n">FORMAT_STORE</span><span class="p">){</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Caution: Reported Format is truncated.  Increase</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;         FORMAT_STORE to %d.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">nchars</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-   <span class="p">}</span>
-
-<span class="c1">//                        Set Affinity Format</span>
-
-   <span class="n">omp_set_affinity_format</span><span class="p">(</span><span class="n">my_format</span><span class="p">);</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Affinity Format set to: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">my_format</span><span class="p">);</span>
+   char default_format[FORMAT_STORE];
+   char my_format[]  = &quot;host=%20H thrd_num=%0.4n binds_to=%A&quot;;
+   char **buffer;
 
 
-<span class="c1">// CODE SEGMENT 2         CAPTURE AFFINITY</span>
+// CODE SEGMENT 1         AFFINITY FORMAT
 
-<span class="c1">//                        Set up buffer for affinity of n threads</span>
+//                        Get and Display Default Affinity Format
 
-   <span class="n">n</span> <span class="o">=</span> <span class="n">omp_get_num_procs</span><span class="p">();</span>
-   <span class="n">buffer</span> <span class="o">=</span> <span class="p">(</span><span class="kt">char</span> <span class="o">**</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">n</span> <span class="p">);</span>
-   <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">)</span> <span class="o">*</span> <span class="n">BUFFER_STORE</span><span class="p">);</span> <span class="p">}</span>
+   nchars = omp_get_affinity_format(default_format,(size_t)FORMAT_STORE);
+   printf(&quot;Default Affinity Format is: %s\n&quot;,default_format);
 
-<span class="c1">//                        Capture Affinity using Affinity Format set above.</span>
-<span class="c1">//                        Use max reduction to check size of buffer areas</span>
-   <span class="n">max_req_store</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel private(thrd_num,nchars) reduction(max:max_req_store)</span>
-   <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="n">omp_get_num_threads</span><span class="p">()</span><span class="o">&gt;</span><span class="n">n</span><span class="p">)</span> <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//safety: don&#39;t exceed # of buffers</span>
+   if(nchars &gt;= FORMAT_STORE){
+      printf(&quot;Caution: Reported Format is truncated.  Increase\n&quot;);
+      printf(&quot;         FORMAT_STORE to %d.\n&quot;, nchars+1);
+   }
 
-      <span class="n">thrd_num</span><span class="o">=</span><span class="n">omp_get_thread_num</span><span class="p">();</span>
-      <span class="n">nchars</span><span class="o">=</span><span class="n">omp_capture_affinity</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">thrd_num</span><span class="p">],(</span><span class="kt">size_t</span><span class="p">)</span><span class="n">BUFFER_STORE</span><span class="p">,</span><span class="nb">NULL</span><span class="p">);</span>
-      <span class="k">if</span><span class="p">(</span><span class="n">nchars</span> <span class="o">&gt;</span> <span class="n">max_req_store</span><span class="p">)</span> <span class="n">max_req_store</span><span class="o">=</span><span class="n">nchars</span><span class="p">;</span>
+//                        Set Affinity Format
 
-      <span class="c1">// ...</span>
-   <span class="p">}</span>
-
-   <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;thrd_num= %d, affinity: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-         <span class="c1">// For 4 threads with OMP_PLACES=&#39;{0,1},{2,3},{4,5},{6,7}&#39;</span>
-         <span class="c1">// Format    host=%20H thrd_num=%0.4n binds_to=%A</span>
-
-         <span class="c1">// affinity: host=hpc.cn567            thrd_num=0000 binds_to=0,1</span>
-         <span class="c1">// affinity: host=hpc.cn567            thrd_num=0001 binds_to=2,3</span>
-         <span class="c1">// affinity: host=hpc.cn567            thrd_num=0002 binds_to=4,5</span>
-         <span class="c1">// affinity: host=hpc.cn567            thrd_num=0003 binds_to=6,7</span>
+   omp_set_affinity_format(my_format);
+   printf(&quot;Affinity Format set to: %s\n&quot;,my_format);
 
 
-   <span class="k">if</span><span class="p">(</span><span class="n">max_req_store</span><span class="o">&gt;=</span><span class="n">BUFFER_STORE</span><span class="p">){</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Caution: Affinity string truncated.  Increase</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;         BUFFER_STORE to %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">max_req_store</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-   <span class="p">}</span>
+// CODE SEGMENT 2         CAPTURE AFFINITY
 
-   <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="n">free</span> <span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+//                        Set up buffer for affinity of n threads
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   n = omp_get_num_procs();
+   buffer = (char **)malloc( sizeof(char *) * n );
+   for(i=0;i&lt;n;i++){ buffer[i]=(char *)malloc( sizeof(char) * BUFFER_STORE); }
+
+//                        Capture Affinity using Affinity Format set above.
+//                        Use max reduction to check size of buffer areas
+   max_req_store = 0;
+   #pragma omp parallel private(thrd_num,nchars) reduction(max:max_req_store)
+   {
+      if(omp_get_num_threads()&gt;n) exit(1); //safety: don&#39;t exceed # of buffers
+
+      thrd_num=omp_get_thread_num();
+      nchars=omp_capture_affinity(buffer[thrd_num],(size_t)BUFFER_STORE,NULL);
+      if(nchars &gt; max_req_store) max_req_store=nchars;
+
+      // ...
+   }
+
+   for(i=0;i&lt;n;i++){
+      printf(&quot;thrd_num= %d, affinity: %s\n&quot;, i,buffer[i]);
+   }
+         // For 4 threads with OMP_PLACES=&#39;{0,1},{2,3},{4,5},{6,7}&#39;
+         // Format    host=%20H thrd_num=%0.4n binds_to=%A
+
+         // affinity: host=hpc.cn567            thrd_num=0000 binds_to=0,1
+         // affinity: host=hpc.cn567            thrd_num=0001 binds_to=2,3
+         // affinity: host=hpc.cn567            thrd_num=0002 binds_to=4,5
+         // affinity: host=hpc.cn567            thrd_num=0003 binds_to=6,7
+
+
+   if(max_req_store&gt;=BUFFER_STORE){
+      printf(&quot;Caution: Affinity string truncated.  Increase\n&quot;);
+      printf(&quot;         BUFFER_STORE to %d\n&quot;,max_req_store+1);
+   }
+
+   for(i=0;i&lt;n;i++) free(buffer[i]);
+   free (buffer);
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1694,7 +1723,7 @@ possible truncation (if  <em>max_req_store</em>   &gt;   <em>buffer_store</em> )
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: affinity_display.3.f90
 ! type: F-free
 ! version: omp_5.0

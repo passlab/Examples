@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,36 +1291,38 @@
                 
   <div class="section" id="doacross-loop-nest">
 <h1>Doacross Loop Nest<a class="headerlink" href="#doacross-loop-nest" title="Permalink to this headline">¶</a></h1>
-<p>An  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  clause can be used on a loop construct with an integer parameter argument to define the number of associated loops within  a  <em>doacross loop nest</em>  where cross-iteration dependences exist. A  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on an  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  construct within an ordered  loop describes the dependences of the  <em>doacross</em>  loops.</p>
-<p>In the  below, the  <code class="docutils literal notranslate"><span class="pre">depend(sink:i-1)</span></code>  clause defines an  <em>i-1</em>   to  <em>i</em>  cross-iteration dependence that specifies a wait point for  the completion of computation from iteration  <em>i-1</em>  before proceeding  to the subsequent statements. The  <code class="docutils literal notranslate"><span class="pre">depend(source)</span></code>  clause indicates  the completion of computation from the current iteration ( <em>i</em> )  to satisfy the cross-iteration dependence that arises from the iteration. For this example the same sequential ordering could have been achieved  with an  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  clause without a parameter, on the loop directive,  and a single  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  directive without the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause specified for the statement executing the  <em>bar</em>  function.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">ordered</span></code> clause can be used on a loop construct with an integer parameter argument to define the number of associated loops within  a  <em>doacross loop nest</em>  where cross-iteration dependences exist. A <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause on an <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct within an ordered  loop describes the dependences of the  <em>doacross</em>  loops.</p>
+<p>In the code below, the <code class="docutils literal notranslate"><span class="pre">depend(sink:i-1)</span></code> clause defines an  <em>i-1</em>   to  <em>i</em>  cross-iteration dependence that specifies a wait point for  the completion of computation from iteration  <em>i-1</em>  before proceeding  to the subsequent statements. The <code class="docutils literal notranslate"><span class="pre">depend(source)</span></code> clause indicates  the completion of computation from the current iteration ( <em>i</em> )  to satisfy the cross-iteration dependence that arises from the iteration. For this example the same sequential ordering could have been achieved  with an <code class="docutils literal notranslate"><span class="pre">ordered</span></code> clause without a parameter, on the loop directive,  and a single <code class="docutils literal notranslate"><span class="pre">ordered</span></code> directive without the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause specified for the statement executing the  <em>bar</em>  function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: doacross.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="kt">float</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">);</span>
-<span class="kt">float</span> <span class="nf">bar</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="n">b</span><span class="p">);</span>
-<span class="kt">float</span> <span class="nf">baz</span><span class="p">(</span><span class="kt">float</span> <span class="n">b</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">B</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">C</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+/*
+* name: doacross.1c
+* type: C
+* version: omp_4.5
+*/
+float foo(int i);
+float bar(float a, float b);
+float baz(float b);
 
-  <span class="cp">#pragma omp for ordered(1)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+void work( int N, float *A, float *B, float *C )
+{
+  int i;
 
-  <span class="cp">#pragma omp ordered depend(sink: i-1)</span>
-    <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">bar</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">]);</span>
-  <span class="cp">#pragma omp ordered depend(source)</span>
+  #pragma omp for ordered(1)
+  for (i=1; i&lt;N; i++)
+  {
+    A[i] = foo(i);
 
-    <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">baz</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+  #pragma omp ordered depend(sink: i-1)
+    B[i] = bar(A[i], B[i-1]);
+  #pragma omp ordered depend(source)
+
+    C[i] = baz(B[i]);
+  }
+}
 
 </pre></div>
 </div>
@@ -1290,130 +1330,65 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">doacross</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span><span class="p">,</span> <span class="n">i</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">::</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: doacross.1f
+! type: F-free
+! version:    omp_4.5
+subroutine work( N, A, B, C )
+  integer :: N, i
+  real, dimension(N) :: A, B, C
+  real, external :: foo, bar, baz
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">ordered</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span>
-    <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+  !$omp do ordered(1)
+  do i=2, N
+    A(i) = foo(i)
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">i</span><span class="mi">-1</span><span class="p">)</span>
-    <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">bar</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">))</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+  !$omp ordered depend(sink: i-1)
+    B(i) = bar(A(i), B(i-1))
+  !$omp ordered depend(source)
 
-    <span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">baz</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-  <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following  is similar to the previous example but with   <em>doacross loop nest</em>  extended to two nested loops,  <em>i</em>  and  <em>j</em> ,  as specified by the  <code class="docutils literal notranslate"><span class="pre">ordered(2)</span></code>  clause on the loop directive.  In the C/C++ , the  <em>i</em>  and  <em>j</em>  loops are the first and second associated loops, respectively, whereas in the Fortran , the  <em>j</em>  and  <em>i</em>  loops are the first and second associated loops, respectively. The  <code class="docutils literal notranslate"><span class="pre">depend(sink:i-1,j)</span></code>  and  <code class="docutils literal notranslate"><span class="pre">depend(sink:i,j-1)</span></code>  clauses in  the C/C++  define cross-iteration dependences in two dimensions from  iterations ( <em>i-1, j</em> ) and ( <em>i, j-1</em> ) to iteration ( <em>i, j</em> ).   Likewise, the  <code class="docutils literal notranslate"><span class="pre">depend(sink:j-1,i)</span></code>  and  <code class="docutils literal notranslate"><span class="pre">depend(sink:j,i-1)</span></code>  clauses  in the Fortran  define cross-iteration dependences from iterations  ( <em>j-1, i</em> ) and ( <em>j, i-1</em> ) to iteration ( <em>j, i</em> ).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: doacross.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="kt">float</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">);</span>
-<span class="kt">float</span> <span class="nf">bar</span><span class="p">(</span><span class="kt">float</span> <span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="n">b</span><span class="p">,</span> <span class="kt">float</span> <span class="n">c</span><span class="p">);</span>
-<span class="kt">float</span> <span class="nf">baz</span><span class="p">(</span><span class="kt">float</span> <span class="n">b</span><span class="p">);</span>
-
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span> <span class="kt">float</span> <span class="o">**</span><span class="n">A</span><span class="p">,</span> <span class="kt">float</span> <span class="o">**</span><span class="n">B</span><span class="p">,</span> <span class="kt">float</span> <span class="o">**</span><span class="n">C</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-
-  <span class="cp">#pragma omp for ordered(2)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">M</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
-
-  <span class="cp">#pragma omp ordered depend(sink: i-1,j) depend(sink: i,j-1)</span>
-      <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">bar</span><span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="n">j</span><span class="p">],</span> <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">]);</span>
-  <span class="cp">#pragma omp ordered depend(source)</span>
-
-      <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">baz</span><span class="p">(</span><span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+    C(i) = baz(B(i))
+  end do
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>The following code is similar to the previous example but with   <em>doacross loop nest</em>  extended to two nested loops,  <em>i</em>  and  <em>j</em> ,  as specified by the <code class="docutils literal notranslate"><span class="pre">ordered(2)</span></code> clause on the loop directive.  In the C/C++ code, the  <em>i</em>  and  <em>j</em>  loops are the first and second associated loops, respectively, whereas in the Fortran code, the  <em>j</em>  and  <em>i</em>  loops are the first and second associated loops, respectively. The <code class="docutils literal notranslate"><span class="pre">depend(sink:i-1,j)</span></code> and <code class="docutils literal notranslate"><span class="pre">depend(sink:i,j-1)</span></code> clauses in  the C/C++ code define cross-iteration dependences in two dimensions from  iterations ( <em>i-1, j</em> ) and ( <em>i, j-1</em> ) to iteration ( <em>i, j</em> ).   Likewise, the <code class="docutils literal notranslate"><span class="pre">depend(sink:j-1,i)</span></code> and <code class="docutils literal notranslate"><span class="pre">depend(sink:j,i-1)</span></code> clauses  in the Fortran code define cross-iteration dependences from iterations  ( <em>j-1, i</em> ) and ( <em>j, i-1</em> ) to iteration ( <em>j, i</em> ).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">doacross</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="n">M</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">::</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">baz</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">ordered</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span>
-    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">M</span>
-      <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+/*
+* name: doacross.2c
+* type: C
+* version: omp_4.5
+*/
+float foo(int i, int j);
+float bar(float a, float b, float c);
+float baz(float b);
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">j</span><span class="mi">-1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span>
-      <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">bar</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">,</span><span class="n">j</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="mi">-1</span><span class="p">))</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+void work( int N, int M, float **A, float **B, float **C )
+{
+  int i, j;
 
-      <span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">baz</span><span class="p">(</span><span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span>
-    <span class="n">end</span> <span class="k">do</span>
-  <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+  #pragma omp for ordered(2)
+  for (i=1; i&lt;N; i++)
+  {
+    for (j=1; j&lt;M; j++)
+    {
+      A[i][j] = foo(i, j);
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following example shows the incorrect use of the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>   directive with a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause.  There are two issues with the .   The first issue is a missing  <code class="docutils literal notranslate"><span class="pre">ordered</span></code> ~ <code class="docutils literal notranslate"><span class="pre">depend(source)</span></code>  directive, which could cause a deadlock.   The second issue is the  <code class="docutils literal notranslate"><span class="pre">depend(sink:i+1,j)</span></code>  and  <code class="docutils literal notranslate"><span class="pre">depend(sink:i,j+1)</span></code>   clauses define dependences on lexicographically later  source iterations ( <em>i+1, j</em> ) and ( <em>i, j+1</em> ), which could cause  a deadlock as well since they may not start to execute until the current iteration completes.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: doacross.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 100</span>
+  #pragma omp ordered depend(sink: i-1,j) depend(sink: i,j-1)
+      B[i][j] = bar(A[i][j], B[i-1][j], B[i][j-1]);
+  #pragma omp ordered depend(source)
 
-<span class="kt">void</span> <span class="nf">work_wrong</span><span class="p">(</span><span class="kt">double</span> <span class="n">p</span><span class="p">[][</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">])</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-
-<span class="cp">#pragma omp parallel for ordered(2) private(i,j,k)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="mi">-1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="n">N</span><span class="mi">-1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-<span class="cp">#pragma omp ordered depend(sink: i-1,j) depend(sink: i+1,j) \</span>
-<span class="cp">                    depend(sink: i,j-1) depend(sink: i,j+1)</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">k</span><span class="o">&lt;</span><span class="n">N</span><span class="mi">-1</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">tmp1</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
-        <span class="kt">double</span> <span class="n">tmp2</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">k</span><span class="p">];</span>
-        <span class="kt">double</span> <span class="n">tmp3</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="mi">-1</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp1</span> <span class="o">+</span> <span class="n">tmp2</span> <span class="o">+</span> <span class="n">tmp3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">;</span>
-      <span class="p">}</span>
-<span class="cm">/* missing #pragma omp ordered depend(source) */</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+      C[i][j] = baz(B[i][j]);
+    }
+  }
+}
 
 </pre></div>
 </div>
@@ -1421,68 +1396,68 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">doacross</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">subroutine</span> <span class="n">work_wrong</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span>
-  <span class="n">real</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">dimension</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span>
-  <span class="n">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">::</span> <span class="n">tmp1</span><span class="p">,</span> <span class="n">tmp2</span><span class="p">,</span> <span class="n">tmp3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: doacross.2f
+! type: F-free
+! version:    omp_4.5
+subroutine work( N, M, A, B, C )
+  integer :: N, M, i, j
+  real, dimension(M,N) :: A, B, C
+  real, external :: foo, bar, baz
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">ordered</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">tmp1</span><span class="p">,</span><span class="n">tmp2</span><span class="p">,</span><span class="n">tmp3</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span>
-    <span class="k">do</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">i</span><span class="mi">-1</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>        <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="mi">-1</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-      <span class="k">do</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span>
-        <span class="n">tmp1</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="mi">-1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">tmp2</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="mi">-1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-        <span class="n">tmp3</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp1</span> <span class="o">+</span> <span class="n">tmp2</span> <span class="o">+</span> <span class="n">tmp3</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span>
-      <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span> <span class="n">missing</span> <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
-    <span class="n">end</span> <span class="k">do</span>
-  <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+  !$omp do ordered(2)
+  do j=2, N
+    do i=2, M
+      A(i,j) = foo(i, j)
+
+    !$omp ordered depend(sink: j-1,i) depend(sink: j,i-1)
+      B(i,j) = bar(A(i,j), B(i-1,j), B(i,j-1))
+    !$omp ordered depend(source)
+
+      C(i,j) = baz(B(i,j))
+    end do
+  end do
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates the use of the  <code class="docutils literal notranslate"><span class="pre">collapse</span></code>  clause for a  <em>doacross loop nest</em> .  The  <em>i</em>  and  <em>j</em>  loops are the associated loops for the collapsed loop as well as for the  <em>doacross loop nest</em> . The example also shows a compliant usage of the dependence source directive placed before the corresponding sink directive. Checking the completion of computation from previous iterations at the sink point can occur after the source statement.</p>
+<p>The following example shows the incorrect use of the <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  directive with a <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause.  There are two issues with the code.   The first issue is a missing <code class="docutils literal notranslate"><span class="pre">ordered</span></code> <code class="docutils literal notranslate"><span class="pre">depend(source)</span></code> directive, which could cause a deadlock.   The second issue is the <code class="docutils literal notranslate"><span class="pre">depend(sink:i+1,j)</span></code> and <code class="docutils literal notranslate"><span class="pre">depend(sink:i,j+1)</span></code>  clauses define dependences on lexicographically later  source iterations ( <em>i+1, j</em> ) and ( <em>i, j+1</em> ), which could cause  a deadlock as well since they may not start to execute until the current iteration completes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: doacross.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="kt">double</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span> <span class="n">M</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">A</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">B</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">C</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-  <span class="kt">double</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">;</span>
+/*
+* name: doacross.3c
+* type: C
+* version: omp_4.5
+*/
+#define N 100
 
-  <span class="cp">#pragma omp for collapse(2) ordered(2)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="mi">-1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">M</span><span class="mi">-1</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
-  <span class="cp">#pragma omp ordered depend(source)</span>
+void work_wrong(double p[][N][N])
+{
+  int i, j, k;
 
-      <span class="n">B</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
-
-  <span class="cp">#pragma omp ordered depend(sink: i-1,j) depend(sink: i,j-1)</span>
-      <span class="n">C</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span>
-                <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="mi">-1</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+#pragma omp parallel for ordered(2) private(i,j,k)
+  for (i=1; i&lt;N-1; i++)
+  {
+    for (j=1; j&lt;N-1; j++)
+    {
+#pragma omp ordered depend(sink: i-1,j) depend(sink: i+1,j) \
+                    depend(sink: i,j-1) depend(sink: i,j+1)
+      for (k=1; k&lt;N-1; k++)
+      {
+        double tmp1 = p[i-1][j][k] + p[i+1][j][k];
+        double tmp2 = p[i][j-1][k] + p[i][j+1][k];
+        double tmp3 = p[i][j][k-1] + p[i][j][k+1];
+        p[i][j][k] = (tmp1 + tmp2 + tmp3) / 6.0;
+      }
+/* missing #pragma omp ordered depend(source) */
+    }
+  }
+}
 
 </pre></div>
 </div>
@@ -1490,31 +1465,102 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">doacross</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span> <span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span><span class="p">,</span> <span class="n">M</span>
-  <span class="n">real</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">dimension</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">::</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
-  <span class="n">real</span><span class="p">(</span><span class="mi">8</span><span class="p">),</span> <span class="n">external</span> <span class="o">::</span> <span class="n">foo</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
-  <span class="n">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="o">::</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.2</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: doacross.3f
+! type: F-free
+! version:    omp_4.5
+subroutine work_wrong(N, p)
+  integer :: N
+  real(8), dimension(N,N,N) :: p
+  integer :: i, j, k
+  real(8) :: tmp1, tmp2, tmp3
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">collapse</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">ordered</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">j</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span>
-    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">M</span><span class="mi">-1</span>
-      <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+!$omp parallel do ordered(2) private(i,j,k,tmp1,tmp2,tmp3)
+  do i=2, N-1
+    do j=2, N-1
+    !$omp ordered depend(sink: i-1,j) depend(sink: i+1,j) &amp;
+    !$omp&amp;        depend(sink: i,j-1) depend(sink: i,j+1)
+      do k=2, N-1
+        tmp1 = p(k-1,j,i) + p(k+1,j,i)
+        tmp2 = p(k,j-1,i) + p(k,j+1,i)
+        tmp3 = p(k,j,i-1) + p(k,j,i+1)
+        p(k,j,i) = (tmp1 + tmp2 + tmp3) / 6.0
+      end do
+! missing !$omp ordered depend(source)
+    end do
+  end do
+end subroutine
 
-      <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">collapse</span></code> clause for a  <em>doacross loop nest</em> .  The  <em>i</em>  and  <em>j</em>  loops are the associated loops for the collapsed loop as well as for the  <em>doacross loop nest</em> . The example also shows a compliant usage of the dependence source directive placed before the corresponding sink directive. Checking the completion of computation from previous iterations at the sink point can occur after the source statement.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">ordered</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">sink</span><span class="p">:</span> <span class="n">j</span><span class="mi">-1</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.2</span> <span class="o">*</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span>  <span class="o">&amp;</span>
-               <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">))</span>
-    <span class="n">end</span> <span class="k">do</span>
-  <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+/*
+* name: doacross.4c
+* type: C
+* version: omp_4.5
+*/
+double foo(int i, int j);
+
+void work( int N, int M, double **A, double **B, double **C )
+{
+  int i, j;
+  double alpha = 1.2;
+
+  #pragma omp for collapse(2) ordered(2)
+  for (i = 1; i &lt; N-1; i++)
+  {
+    for (j = 1; j &lt; M-1; j++)
+    {
+      A[i][j] = foo(i, j);
+  #pragma omp ordered depend(source)
+
+      B[i][j] = alpha * A[i][j];
+
+  #pragma omp ordered depend(sink: i-1,j) depend(sink: i,j-1)
+      C[i][j] = 0.2 * (A[i-1][j] + A[i+1][j] +
+                A[i][j-1] + A[i][j+1] + A[i][j]);
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: doacross.4f
+! type: F-free
+! version:    omp_4.5
+subroutine work( N, M, A, B, C )
+  integer :: N, M
+  real(8), dimension(M, N) :: A, B, C
+  real(8), external :: foo
+  integer :: i, j
+  real(8) :: alpha = 1.2
+
+  !$omp do collapse(2) ordered(2)
+  do j=2, N-1
+    do i=2, M-1
+      A(i,j) = foo(i, j)
+    !$omp ordered depend(source)
+
+      B(i,j) = alpha * A(i,j)
+
+    !$omp ordered depend(sink: j,i-1) depend(sink: j-1,i)
+      C(i,j) = 0.2 * (A(i-1,j) + A(i+1,j) +  &amp;
+               A(i,j-1) + A(i,j+1) + A(i,j))
+    end do
+  end do
+end subroutine
 
 </pre></div>
 </div>
@@ -1547,7 +1593,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_depobj.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_depobj.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">depobj</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_locks.html" title="next page">Lock Routines</a>
 
         </div>

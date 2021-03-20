@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,187 +1290,191 @@
               <div>
                 
   <div class="section" id="asynchronous-target-with-tasks">
-<h1>Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  with Tasks<a class="headerlink" href="#asynchronous-target-with-tasks" title="Permalink to this headline">¶</a></h1>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  and  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs  are used to execute multiple  <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions asynchronously. The task that  encounters the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct generates an explicit task that contains  a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. The thread executing the explicit task encounters a task  scheduling point while waiting for the execution of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region  to complete, allowing the thread to switch back to the execution of the encountering  task or one of the previously generated explicit tasks.</p>
+<h1>Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> with Tasks<a class="headerlink" href="#asynchronous-target-with-tasks" title="Permalink to this headline">¶</a></h1>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">task</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs  are used to execute multiple <code class="docutils literal notranslate"><span class="pre">target</span></code> regions asynchronously. The task that  encounters the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct generates an explicit task that contains  a <code class="docutils literal notranslate"><span class="pre">target</span></code> region. The thread executing the explicit task encounters a task  scheduling point while waiting for the execution of the <code class="docutils literal notranslate"><span class="pre">target</span></code> region  to complete, allowing the thread to switch back to the execution of the encountering  task or one of the previously generated explicit tasks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: async_target.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">float</span> <span class="nf">F</span><span class="p">(</span><span class="kt">float</span><span class="p">);</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="cp">#define N 1000000000</span>
-<span class="cp">#define CHUNKSZ 1000000</span>
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">float</span> <span class="n">Z</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="kt">void</span> <span class="nf">pipedF</span><span class="p">(){</span>
-   <span class="kt">int</span> <span class="n">C</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">C</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">C</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">C</span><span class="o">+=</span><span class="n">CHUNKSZ</span><span class="p">){</span>
-      <span class="cp">#pragma omp task shared(Z)</span>
-      <span class="cp">#pragma omp target map(Z[C:CHUNKSZ])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">CHUNKSZ</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="n">Z</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp taskwait</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: async_target.1c
+* type: C
+* version: omp_4.0
+*/
+#pragma omp declare target
+float F(float);
+#pragma omp end declare target
+#define N 1000000000
+#define CHUNKSZ 1000000
+void init(float *, int);
+float Z[N];
+void pipedF(){
+   int C, i;
+   init(Z, N);
+   for (C=0; C&lt;N; C+=CHUNKSZ){
+      #pragma omp task shared(Z)
+      #pragma omp target map(Z[C:CHUNKSZ])
+      #pragma omp parallel for
+      for (i=0; i&lt;CHUNKSZ; i++) Z[i] = F(Z[i]);
+   }
+   #pragma omp taskwait
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran version has an interface block that contains the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code> .  An identical statement exists in the function declaration (not shown here).</p>
+<p>The Fortran version has an interface block that contains the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code>.  An identical statement exists in the function declaration (not shown here).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">async_target</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">parameters</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000000000</span><span class="p">,</span> <span class="n">CHUNKSZ</span><span class="o">=</span><span class="mi">1000000</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">subroutine</span> <span class="n">pipedF</span><span class="p">()</span>
-<span class="n">use</span> <span class="n">parameters</span><span class="p">,</span> <span class="nl">ONLY</span><span class="p">:</span> <span class="n">N</span><span class="p">,</span> <span class="n">CHUNKSZ</span>
-<span class="n">integer</span>            <span class="o">::</span> <span class="n">C</span><span class="p">,</span> <span class="n">i</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">z</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: async_target.1f
+! type: F-free
+! version: omp_4.0
+module parameters
+integer, parameter :: N=1000000000, CHUNKSZ=1000000
+end module
+subroutine pipedF()
+use parameters, ONLY: N, CHUNKSZ
+integer            :: C, i
+real               :: z(N)
 
-<span class="n">interface</span>
-   <span class="n">function</span> <span class="n">F</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-     <span class="n">real</span><span class="p">,</span> <span class="n">intent</span><span class="p">(</span><span class="n">IN</span><span class="p">)</span> <span class="o">::</span><span class="n">z</span>
-     <span class="n">real</span>             <span class="o">::</span><span class="n">F</span>
-   <span class="n">end</span> <span class="n">function</span> <span class="n">F</span>
-<span class="n">end</span> <span class="n">interface</span>
+interface
+   function F(z)
+   !$omp declare target
+     real, intent(IN) ::z
+     real             ::F
+   end function F
+end interface
 
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+   call init(z,N)
 
-   <span class="k">do</span> <span class="n">C</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="n">CHUNKSZ</span>
+   do C=1,N,CHUNKSZ
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="n">z</span><span class="p">(</span><span class="nl">C</span><span class="p">:</span><span class="n">C</span><span class="o">+</span><span class="n">CHUNKSZ</span><span class="mi">-1</span><span class="p">))</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="n">C</span><span class="p">,</span><span class="n">C</span><span class="o">+</span><span class="n">CHUNKSZ</span><span class="mi">-1</span>
-            <span class="n">z</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">F</span><span class="p">(</span><span class="n">z</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      !$omp task shared(z)
+      !$omp target map(z(C:C+CHUNKSZ-1))
+      !$omp parallel do
+         do i=C,C+CHUNKSZ-1
+            z(i) = F(z(i))
+         end do
+      !$omp end target
+      !$omp end task
 
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-   <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="n">z</span>
+   end do
+   !$omp taskwait
+   print*, z
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">pipedF</span>
+end subroutine pipedF
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  and  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs  are used to execute multiple  <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions asynchronously. The task dependence  ensures that the storage is allocated and initialized on the device before it is  accessed.</p>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">task</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs  are used to execute multiple <code class="docutils literal notranslate"><span class="pre">target</span></code> regions asynchronously. The task dependence  ensures that the storage is allocated and initialized on the device before it is  accessed.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: async_target.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#pragma omp declare target</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">foo</span><span class="p">();</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span> <span class="n">dev</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="o">*</span><span class="n">v2</span><span class="p">;</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp task shared(v1, v2) depend(out: v1, v2)</span>
-   <span class="cp">#pragma omp target device(dev) map(v1, v2)</span>
-   <span class="p">{</span>
-       <span class="c1">// check whether on device dev</span>
-       <span class="k">if</span> <span class="p">(</span><span class="n">omp_is_initial_device</span><span class="p">())</span>
-   <span class="n">abort</span><span class="p">();</span>
-       <span class="n">v1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
-       <span class="n">v2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">));</span>
-       <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="n">foo</span><span class="p">();</span> <span class="c1">// execute other work asychronously</span>
-   <span class="cp">#pragma omp task shared(v1, v2, p) depend(in: v1, v2)</span>
-   <span class="cp">#pragma omp target device(dev) map(to: v1, v2) map(from: p[0:N])</span>
-   <span class="p">{</span>
-       <span class="c1">// check whether on device dev</span>
-       <span class="k">if</span> <span class="p">(</span><span class="n">omp_is_initial_device</span><span class="p">())</span>
-   <span class="n">abort</span><span class="p">();</span>
-       <span class="cp">#pragma omp parallel for</span>
-       <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-  <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-       <span class="n">free</span><span class="p">(</span><span class="n">v1</span><span class="p">);</span>
-       <span class="n">free</span><span class="p">(</span><span class="n">v2</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp taskwait</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: async_target.2c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+#pragma omp declare target
+extern void init(float *, float *, int);
+#pragma omp end declare target
+extern void foo();
+extern void output(float *, int);
+void vec_mult(float *p, int N, int dev)
+{
+   float *v1, *v2;
+   int i;
+   #pragma omp task shared(v1, v2) depend(out: v1, v2)
+   #pragma omp target device(dev) map(v1, v2)
+   {
+       // check whether on device dev
+       if (omp_is_initial_device())
+   abort();
+       v1 = (float *)malloc(N*sizeof(float));
+       v2 = (float *)malloc(N*sizeof(float));
+       init(v1, v2, N);
+   }
+   foo(); // execute other work asychronously
+   #pragma omp task shared(v1, v2, p) depend(in: v1, v2)
+   #pragma omp target device(dev) map(to: v1, v2) map(from: p[0:N])
+   {
+       // check whether on device dev
+       if (omp_is_initial_device())
+   abort();
+       #pragma omp parallel for
+       for (i=0; i&lt;N; i++)
+  p[i] = v1[i] * v2[i];
+       free(v1);
+       free(v2);
+   }
+   #pragma omp taskwait
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran example below is similar to the C version above. Instead of pointers, though, it uses the convenience of Fortran allocatable arrays on the device. In order to preserve the arrays  allocated on the device across multiple  <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions, a  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  region  is used in this case.</p>
-<p>If there is no shape specified for an allocatable array in a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause, only the array descriptor (also called a dope vector) is mapped. That is, device space is created for the descriptor, and it is initially populated with host values. In this case, the  <em>v1</em>  and  <em>v2</em>  arrays will be in a non-associated state on the device. When space for  <em>v1</em>  and  <em>v2</em>  is allocated on the device in the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region the addresses to the space will be included in their descriptors.</p>
-<p>At the end of the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region, the arrays  <em>v1</em>  and  <em>v2</em>  are preserved on the device  for access in the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. At the end of the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region, the data  in array  <em>p</em>  is copied back, the arrays  <em>v1</em>  and  <em>v2</em>  are not.</p>
-<p>A  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause is used in the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  directive to provide a wait at the beginning of the second   <code class="docutils literal notranslate"><span class="pre">target</span></code>  region, to insure that there is no race condition with  <em>v1</em>  and  <em>v2</em>  in the two tasks. It would be noncompliant to use  <em>v1</em>  and/or  <em>v2</em>  in lieu of  <em>N</em>  in the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses,  because the use of non-allocated allocatable arrays as list items in a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause would  lead to unspecified behavior.</p>
-<p>noteheader{–} This example is not strictly compliant with the OpenMP 4.5 specification since the allocation status of allocatable arrays  <em>v1</em>  and  <em>v2</em>  is changed inside the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region, which is not allowed. (See the restrictions for the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause in the  <em>Data-mapping Attribute Rules and Clauses</em>   section of the specification.) However, the intention is to relax the restrictions on mapping of allocatable variables in the next release of the specification so that the example will be compliant.</p>
+<p>The Fortran example below is similar to the C version above. Instead of pointers, though, it uses the convenience of Fortran allocatable arrays on the device. In order to preserve the arrays  allocated on the device across multiple <code class="docutils literal notranslate"><span class="pre">target</span></code> regions, a <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region  is used in this case.</p>
+<p>If there is no shape specified for an allocatable array in a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, only the array descriptor (also called a dope vector) is mapped. That is, device space is created for the descriptor, and it is initially populated with host values. In this case, the  <em>v1</em>  and  <em>v2</em>  arrays will be in a non-associated state on the device. When space for  <em>v1</em>  and  <em>v2</em>  is allocated on the device in the first <code class="docutils literal notranslate"><span class="pre">target</span></code> region the addresses to the space will be included in their descriptors.</p>
+<p>At the end of the first <code class="docutils literal notranslate"><span class="pre">target</span></code> region, the arrays  <em>v1</em>  and  <em>v2</em>  are preserved on the device  for access in the second <code class="docutils literal notranslate"><span class="pre">target</span></code> region. At the end of the second <code class="docutils literal notranslate"><span class="pre">target</span></code> region, the data  in array  <em>p</em>  is copied back, the arrays  <em>v1</em>  and  <em>v2</em>  are not.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause is used in the <code class="docutils literal notranslate"><span class="pre">task</span></code> directive to provide a wait at the beginning of the second  <code class="docutils literal notranslate"><span class="pre">target</span></code> region, to insure that there is no race condition with  <em>v1</em>  and  <em>v2</em>  in the two tasks. It would be noncompliant to use  <em>v1</em>  and/or  <em>v2</em>  in lieu of  <em>N</em>  in the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses,  because the use of non-allocated allocatable arrays as list items in a <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause would  lead to unspecified behavior.</p>
+<p>This example is not strictly compliant with the OpenMP 4.5 specification since the allocation status of allocatable arrays  <em>v1</em>  and  <em>v2</em>  is changed inside the <code class="docutils literal notranslate"><span class="pre">target</span></code> region, which is not allowed. (See the restrictions for the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause in the  <em>Data-mapping Attribute Rules and Clauses</em>   section of the specification.) However, the intention is to relax the restrictions on mapping of allocatable variables in the next release of the specification so that the example will be compliant.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">async_target</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
- <span class="n">subroutine</span> <span class="n">mult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span>  <span class="n">N</span><span class="p">,</span> <span class="n">idev</span><span class="p">)</span>
-   <span class="n">use</span> <span class="n">omp_lib</span><span class="p">,</span> <span class="nl">ONLY</span><span class="p">:</span> <span class="n">omp_is_initial_device</span>
-   <span class="n">real</span>             <span class="o">::</span> <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">real</span><span class="p">,</span><span class="n">allocatable</span> <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="o">:</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">i</span><span class="p">,</span> <span class="n">idev</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="p">(</span><span class="n">init</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: async_target.2f
+! type: F-free
+! version: omp_4.0
+ subroutine mult(p,  N, idev)
+   use omp_lib, ONLY: omp_is_initial_device
+   real             :: p(N)
+   real,allocatable :: v1(:), v2(:)
+   integer ::  i, idev
+   !$omp declare target (init)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+   !$omp target data map(v1,v2)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">N</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">device</span><span class="p">(</span><span class="n">idev</span><span class="p">)</span>
-         <span class="k">if</span><span class="p">(</span> <span class="n">omp_is_initial_device</span><span class="p">()</span> <span class="p">)</span> <span class="o">&amp;</span>
-            <span class="n">stop</span> <span class="s">&quot;not executing on target device&quot;</span>
-         <span class="n">allocate</span><span class="p">(</span><span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-         <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+   !$omp task shared(v1,v2) depend(out: N)
+      !$omp target device(idev)
+         if( omp_is_initial_device() ) &amp;
+            stop &quot;not executing on target device&quot;
+         allocate(v1(N), v2(N))
+         call init(v1,v2,N)
+      !$omp end target
+   !$omp end task
 
-   <span class="n">call</span> <span class="n">foo</span><span class="p">()</span>  <span class="o">!</span> <span class="n">execute</span> <span class="n">other</span> <span class="n">work</span> <span class="n">asychronously</span>
+   call foo()  ! execute other work asychronously
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">p</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">N</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">device</span><span class="p">(</span><span class="n">idev</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-         <span class="k">if</span><span class="p">(</span> <span class="n">omp_is_initial_device</span><span class="p">()</span> <span class="p">)</span> <span class="o">&amp;</span>
-            <span class="n">stop</span> <span class="s">&quot;not executing on target device&quot;</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-            <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-               <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">end</span> <span class="k">do</span>
-         <span class="n">deallocate</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span>
+   !$omp task shared(v1,v2,p) depend(in: N)
+      !$omp target device(idev) map(from: p)
+         if( omp_is_initial_device() ) &amp;
+            stop &quot;not executing on target device&quot;
+         !$omp parallel do
+            do i = 1,N
+               p(i) = v1(i) * v2(i)
+            end do
+         deallocate(v1,v2)
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      !$omp end target
+   !$omp end task
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
+   !$omp taskwait
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
+   !$omp end target data
 
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+   call output(p, N)
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
 </pre></div>
 </div>
@@ -1465,8 +1507,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_async_target_depend.html" title="previous page">Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Execution and Dependences</a>
-    <a class='right-next' id="next-link" href="Examples_async_target_nowait.html" title="next page"><code class="docutils literal notranslate"><span class="pre">nowait</span></code>  Clause on  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_async_target_depend.html" title="previous page">Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> Execution and Dependences</a>
+    <a class='right-next' id="next-link" href="Examples_async_target_nowait.html" title="next page"><code class="docutils literal notranslate"><span class="pre">nowait</span></code> Clause on <code class="docutils literal notranslate"><span class="pre">target</span></code> Construct</a>
 
         </div>
         

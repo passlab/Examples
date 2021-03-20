@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,27 +1290,29 @@
               <div>
                 
   <div class="section" id="the-omp-get-num-threads-routine">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code>  Routine<a class="headerlink" href="#the-omp-get-num-threads-routine" title="Permalink to this headline">¶</a></h1>
-<p>In the following example, the  <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code>  call returns 1 in  the sequential part of the , so  <code class="docutils literal notranslate"><span class="pre">np</span></code>  will always be equal to 1. To determine  the number of threads that will be deployed for the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, the  call should be inside the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code> Routine<a class="headerlink" href="#the-omp-get-num-threads-routine" title="Permalink to this headline">¶</a></h1>
+<p>In the following example, the <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code> call returns 1 in  the sequential part of the code, so <code class="docutils literal notranslate"><span class="pre">np</span></code> will always be equal to 1. To determine  the number of threads that will be deployed for the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, the  call should be inside the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: get_nthrs.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">incorrect</span><span class="p">()</span> <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">np</span><span class="p">,</span> <span class="n">i</span><span class="p">;</span>
+/*
+* name: get_nthrs.1c
+* type: C
+*/
+#include &lt;omp.h&gt;
+void work(int i);
 
-  <span class="n">np</span> <span class="o">=</span> <span class="n">omp_get_num_threads</span><span class="p">();</span>  <span class="cm">/* misplaced */</span>
+void incorrect() {
+  int np, i;
 
-  <span class="cp">#pragma omp parallel for schedule(static)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">np</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-<span class="p">}</span>
+  np = omp_get_num_threads();  /* misplaced */
+
+  #pragma omp parallel for schedule(static)
+  for (i=0; i &lt; np; i++)
+    work(i);
+}
 
 </pre></div>
 </div>
@@ -1280,25 +1320,25 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">get_nthrs</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">I</span>
-        <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">1</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: get_nthrs.1f
+! type: F-fixed
+      SUBROUTINE WORK(I)
+      INTEGER I
+        I = I + 1
+      END SUBROUTINE WORK
 
-      <span class="n">SUBROUTINE</span> <span class="n">INCORRECT</span><span class="p">()</span>
-        <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>      <span class="o">!</span> <span class="n">or</span> <span class="n">USE</span> <span class="n">OMP_LIB</span>
-        <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">NP</span>
+      SUBROUTINE INCORRECT()
+        INCLUDE &quot;omp_lib.h&quot;      ! or USE OMP_LIB
+        INTEGER I, NP
 
-        <span class="n">NP</span> <span class="o">=</span> <span class="n">OMP_GET_NUM_THREADS</span><span class="p">()</span>   <span class="o">!</span><span class="nl">misplaced</span><span class="p">:</span> <span class="n">will</span> <span class="k">return</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">SCHEDULE</span><span class="p">(</span><span class="n">STATIC</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">NP</span><span class="mi">-1</span>
-            <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-          <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INCORRECT</span>
+        NP = OMP_GET_NUM_THREADS()   !misplaced: will return 1
+!$OMP   PARALLEL DO SCHEDULE(STATIC)
+          DO I = 0, NP-1
+            CALL WORK(I)
+          ENDDO
+!$OMP   END PARALLEL DO
+      END SUBROUTINE INCORRECT
 
 </pre></div>
 </div>
@@ -1307,24 +1347,26 @@
 <p>The following example shows how to rewrite this program without including a query  for the number of threads:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: get_nthrs.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">correct</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+/*
+* name: get_nthrs.2c
+* type: C
+*/
+#include &lt;omp.h&gt;
+void work(int i);
 
-  <span class="cp">#pragma omp parallel private(i)</span>
-  <span class="p">{</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
-    <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+void correct()
+{
+  int i;
+
+  #pragma omp parallel private(i)
+  {
+    i = omp_get_thread_num();
+    work(i);
+  }
+}
 
 </pre></div>
 </div>
@@ -1332,26 +1374,26 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">get_nthrs</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: get_nthrs.2f
+! type: F-fixed
+      SUBROUTINE WORK(I)
+        INTEGER I
 
-        <span class="n">I</span> <span class="o">=</span> <span class="n">I</span> <span class="o">+</span> <span class="mi">1</span>
+        I = I + 1
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK</span>
+      END SUBROUTINE WORK
 
-      <span class="n">SUBROUTINE</span> <span class="n">CORRECT</span><span class="p">()</span>
-        <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>     <span class="o">!</span> <span class="n">or</span> <span class="n">USE</span> <span class="n">OMP_LIB</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
+      SUBROUTINE CORRECT()
+        INCLUDE &quot;omp_lib.h&quot;     ! or USE OMP_LIB
+        INTEGER I
 
-<span class="o">!</span><span class="n">$OMP</span>    <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-          <span class="n">I</span> <span class="o">=</span> <span class="n">OMP_GET_THREAD_NUM</span><span class="p">()</span>
-          <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP    PARALLEL PRIVATE(I)
+          I = OMP_GET_THREAD_NUM()
+          CALL WORK(I)
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">CORRECT</span>
+      END SUBROUTINE CORRECT
 
 </pre></div>
 </div>
@@ -1384,7 +1426,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_set_dynamic_nthrs.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">omp_set_dynamic</span></code>  and   <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code>  Routines</a>
+    <a class='left-prev' id="prev-link" href="Examples_set_dynamic_nthrs.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">omp_set_dynamic</span></code> and  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code> Routines</a>
     <a class='right-next' id="next-link" href="Chap_affinity.html" title="next page">OpenMP Affinity</a>
 
         </div>

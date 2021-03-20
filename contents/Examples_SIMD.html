@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ref , val , uval Modifiers for linear Clause" href="Examples_linear_modifier.html" />
+    <link rel="next" title="ref, val, uval Modifiers for linear Clause" href="Examples_linear_modifier.html" />
     <link rel="prev" title="SIMD" href="Chap_SIMD.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1304,23 +1342,25 @@
               <div>
                 
   <div class="section" id="simd-and-declare-simd-constructs">
-<h1><code class="docutils literal notranslate"><span class="pre">simd</span></code>  and  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  Constructs<a class="headerlink" href="#simd-and-declare-simd-constructs" title="Permalink to this headline">¶</a></h1>
-<p>The following example illustrates the basic use of the  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct  to assure the compiler that the loop can be vectorized.</p>
+<h1><code class="docutils literal notranslate"><span class="pre">simd</span></code> and <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> Constructs<a class="headerlink" href="#simd-and-declare-simd-constructs" title="Permalink to this headline">¶</a></h1>
+<p>The following example illustrates the basic use of the <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct  to assure the compiler that the loop can be vectorized.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">star</span><span class="p">(</span> <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">ioff</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp simd</span>
-   <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="o">+</span> <span class="o">*</span><span class="n">ioff</span><span class="p">];</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: SIMD.1c
+* type: C
+* version: omp_4.0
+*/
+void star( double *a, double *b, double *c, int n, int *ioff )
+{
+   int i;
+   #pragma omp simd
+   for ( i = 0; i &lt; n; i++ )
+      a[i] *= b[i] * c[i+ *ioff];
+}
 
 </pre></div>
 </div>
@@ -1328,173 +1368,95 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">star</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">ioff_ptr</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="n">c</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-   <span class="n">integer</span>          <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">ioff_ptr</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.1f
+! type: F-free
+! version: omp_4.0
+subroutine star(a,b,c,n,ioff_ptr)
+   implicit none
+   double precision :: a(*),b(*),c(*)
+   integer          :: n, i
+   integer, pointer :: ioff_ptr
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="n">ioff_ptr</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
+   !$omp simd
+   do i = 1,n
+      a(i) = a(i) * b(i) * c(i+ioff_ptr)
+   end do
 
-<span class="n">end</span> <span class="n">subroutine</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>When a function can be inlined within a loop the compiler has an opportunity to  vectorize the loop. By guaranteeing SIMD behavior of a function’s operations,  characterizing the arguments of the function and privatizing temporary  variables of the loop, the compiler can often create faster, vector  for  the loop. In the examples below the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct is  used on the  <em>add1</em>  and  <em>add2</em>  functions to enable creation of their  corresponding SIMD function versions for execution within the associated SIMD  loop. The functions characterize two different approaches of accessing data  within the function: by a single variable and as an element in a data array,  respectively. The  <em>add3</em>  C function uses dereferencing.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  constructs also illustrate the use of   <code class="docutils literal notranslate"><span class="pre">uniform</span></code>  and  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clauses.  The  <code class="docutils literal notranslate"><span class="pre">uniform(fact)</span></code>  clause  indicates that the variable  <em>fact</em>  is invariant across the SIMD lanes. In  the  <em>add2</em>  function  <em>a</em>  and  <em>b</em>  are included in the  <code class="docutils literal notranslate"><span class="pre">uniform</span></code>   list because the C pointer and the Fortran array references are constant.  The   <em>i</em>  index used in the  <em>add2</em>  function is included in a  <code class="docutils literal notranslate"><span class="pre">linear</span></code>   clause with a constant-linear-step of 1, to guarantee a unity increment of the  associated loop. In the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct for the  <em>add3</em>   C function the   <code class="docutils literal notranslate"><span class="pre">linear(a,b:1)</span></code>  clause instructs the compiler to generate  unit-stride loads across the SIMD lanes; otherwise,  costly {gather}  instructions would be generated for the unknown sequence of access of the  pointer dereferences.</p>
-<p>In the  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  constructs for the loops the  <code class="docutils literal notranslate"><span class="pre">private(tmp)</span></code>  clause is  necessary to assure that the each vector operation has its own  <em>tmp</em>   variable.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#pragma omp declare simd uniform(fact)</span>
-<span class="kt">double</span> <span class="nf">add1</span><span class="p">(</span><span class="kt">double</span> <span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="n">fact</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">double</span> <span class="n">c</span><span class="p">;</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">fact</span><span class="p">;</span>
-   <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cp">#pragma omp declare simd uniform(a,b,fact) linear(i:1)</span>
-<span class="kt">double</span> <span class="nf">add2</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">double</span> <span class="n">fact</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">double</span> <span class="n">c</span><span class="p">;</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">fact</span><span class="p">;</span>
-   <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="cp">#pragma omp declare simd uniform(fact) linear(a,b:1)</span>
-<span class="kt">double</span> <span class="nf">add3</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="n">fact</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">double</span> <span class="n">c</span><span class="p">;</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="o">*</span><span class="n">a</span> <span class="o">+</span> <span class="o">*</span><span class="n">b</span> <span class="o">+</span> <span class="n">fact</span><span class="p">;</span>
-   <span class="k">return</span> <span class="n">c</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="kt">double</span> <span class="n">tmp</span><span class="p">;</span>
-   <span class="cp">#pragma omp simd private(tmp)</span>
-   <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">tmp</span>  <span class="o">=</span> <span class="n">add1</span><span class="p">(</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>  <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">);</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">add2</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span>     <span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">;</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">add3</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="k">const</span> <span class="kt">int</span> <span class="n">N</span><span class="o">=</span><span class="mi">32</span><span class="p">;</span>
-   <span class="kt">double</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-
-   <span class="k">for</span> <span class="p">(</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span><span class="o">-</span><span class="n">i</span><span class="p">;</span>
-   <span class="p">}</span>
-
-   <span class="n">work</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">N</span> <span class="p">);</span>
-
-   <span class="k">for</span> <span class="p">(</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d %f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>When a function can be inlined within a loop the compiler has an opportunity to  vectorize the loop. By guaranteeing SIMD behavior of a function’s operations,  characterizing the arguments of the function and privatizing temporary  variables of the loop, the compiler can often create faster, vector code for  the loop. In the examples below the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct is  used on the  <em>add1</em>  and  <em>add2</em>  functions to enable creation of their  corresponding SIMD function versions for execution within the associated SIMD  loop. The functions characterize two different approaches of accessing data  within the function: by a single variable and as an element in a data array,  respectively. The  <em>add3</em>  C function uses dereferencing.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> constructs also illustrate the use of  <code class="docutils literal notranslate"><span class="pre">uniform</span></code> and <code class="docutils literal notranslate"><span class="pre">linear</span></code> clauses.  The <code class="docutils literal notranslate"><span class="pre">uniform(fact)</span></code> clause  indicates that the variable  <em>fact</em>  is invariant across the SIMD lanes. In  the  <em>add2</em>  function  <em>a</em>  and  <em>b</em>  are included in the <code class="docutils literal notranslate"><span class="pre">uniform</span></code>  list because the C pointer and the Fortran array references are constant.  The   <em>i</em>  index used in the  <em>add2</em>  function is included in a <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause with a constant-linear-step of 1, to guarantee a unity increment of the  associated loop. In the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct for the  <em>add3</em>   C function the  <code class="docutils literal notranslate"><span class="pre">linear(a,b:1)</span></code> clause instructs the compiler to generate  unit-stride loads across the SIMD lanes; otherwise,  costly <strong>gather</strong>  instructions would be generated for the unknown sequence of access of the  pointer dereferences.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">simd</span></code> constructs for the loops the <code class="docutils literal notranslate"><span class="pre">private(tmp)</span></code> clause is  necessary to assure that the each vector operation has its own  <em>tmp</em>   variable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">main</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">32</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
-   <span class="kt">double</span> <span class="n">precision</span>   <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span><span class="mi">-1</span>
-      <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">N</span><span class="o">-</span><span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="n">call</span> <span class="n">work</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">N</span> <span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="n">function</span> <span class="n">add1</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">fact</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">add1</span><span class="p">)</span> <span class="n">uniform</span><span class="p">(</span><span class="n">fact</span><span class="p">)</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">fact</span><span class="p">,</span> <span class="n">c</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span> <span class="o">+</span> <span class="n">fact</span>
-<span class="n">end</span> <span class="n">function</span>
+/*
+* name: SIMD.2c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
 
-<span class="n">function</span> <span class="n">add2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">i</span><span class="p">,</span> <span class="n">fact</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">add2</span><span class="p">)</span> <span class="n">uniform</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">fact</span><span class="p">)</span> <span class="n">linear</span><span class="p">(</span><span class="nl">i</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span>
-   <span class="n">integer</span>          <span class="o">::</span> <span class="n">i</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="n">fact</span><span class="p">,</span> <span class="n">c</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">fact</span>
-<span class="n">end</span> <span class="n">function</span>
+#pragma omp declare simd uniform(fact)
+double add1(double a, double b, double fact)
+{
+   double c;
+   c = a + b + fact;
+   return c;
+}
 
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span> <span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="kt">double</span> <span class="n">precision</span>           <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">),</span><span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">tmp</span>
-   <span class="n">integer</span>                    <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span>
-   <span class="kt">double</span> <span class="n">precision</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">add1</span><span class="p">,</span> <span class="n">add2</span>
+#pragma omp declare simd uniform(a,b,fact) linear(i:1)
+double add2(double *a, double *b, int i, double fact)
+{
+   double c;
+   c = a[i] + b[i] + fact;
+   return c;
+}
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">private</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span>
-      <span class="n">tmp</span>  <span class="o">=</span> <span class="n">add1</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="mf">1.0</span><span class="n">d0</span><span class="p">)</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">add2</span><span class="p">(</span><span class="n">a</span><span class="p">,</span>    <span class="n">b</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">d0</span><span class="p">)</span> <span class="o">+</span> <span class="n">tmp</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="n">d0</span>
-   <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+#pragma omp declare simd uniform(fact) linear(a,b:1)
+double add3(double *a, double *b, double fact)
+{
+   double c;
+   c = *a + *b + fact;
+   return c;
+}
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>A thread that encounters a SIMD construct executes a vectorized  of the  iterations. Similar to the concerns of a worksharing loop a loop vectorized  with a SIMD construct must assure that temporary and reduction variables are  privatized and declared as reductions with clauses.  The example below  illustrates the use of  <code class="docutils literal notranslate"><span class="pre">private</span></code>  and  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clauses in a SIMD  construct.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="kt">double</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="kt">double</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">sum</span><span class="p">;</span>
-   <span class="n">sum</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-   <span class="cp">#pragma omp simd private(tmp) reduction(+:sum)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">sum</span> <span class="o">+=</span> <span class="n">tmp</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
-<span class="p">}</span>
+void work( double *a, double *b, int n )
+{
+   int i;
+   double tmp;
+   #pragma omp simd private(tmp)
+   for ( i = 0; i &lt; n; i++ ) {
+      tmp  = add1( a[i],  b[i], 1.0);
+      a[i] = add2( a,     b, i, 1.0) + tmp;
+      a[i] = add3(&amp;a[i], &amp;b[i], 1.0);
+   }
+}
+
+int main(){
+   int i;
+   const int N=32;
+   double a[N], b[N];
+
+   for ( i=0; i&lt;N; i++ ) {
+      a[i] = i; b[i] = N-i;
+   }
+
+   work(a, b, N );
+
+   for ( i=0; i&lt;N; i++ ) {
+      printf(&quot;%d %f\n&quot;, i, a[i]);
+   }
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1502,44 +1464,81 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">sum</span> <span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">sum</span><span class="p">,</span> <span class="n">tmp</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.2f
+! type: F-free
+! version: omp_4.0
+program main
+   implicit none
+   integer, parameter :: N=32
+   integer :: i
+   double precision   :: a(N), b(N)
+   do i = 1,N
+      a(i) = i-1
+      b(i) = N-(i-1)
+   end do
+   call work(a, b, N )
+   do i = 1,N
+      print*, i,a(i)
+   end do
+end program
 
-   <span class="n">sum</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">d0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">private</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">sum</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span>
-      <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">sum</span> <span class="o">=</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">tmp</span>
-   <span class="n">end</span> <span class="k">do</span>
+function add1(a,b,fact) result(c)
+   implicit none
+!$omp declare simd(add1) uniform(fact)
+   double precision :: a,b,fact, c
+   c = a + b + fact
+end function
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">work</span>
+function add2(a,b,i, fact) result(c)
+   implicit none
+!$omp declare simd(add2) uniform(a,b,fact) linear(i:1)
+   integer          :: i
+   double precision :: a(*),b(*),fact, c
+   c = a(i) + b(i) + fact
+end function
+
+subroutine work(a, b, n )
+   implicit none
+   double precision           :: a(n),b(n), tmp
+   integer                    :: n, i
+   double precision, external :: add1, add2
+
+   !$omp simd private(tmp)
+   do i = 1,n
+      tmp  = add1(a(i), b(i), 1.0d0)
+      a(i) = add2(a,    b, i, 1.0d0) + tmp
+      a(i) = a(i) + b(i) + 1.0d0
+   end do
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>A  <code class="docutils literal notranslate"><span class="pre">safelen(N)</span></code>  clause in a  <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct assures the compiler that  there are no loop-carried dependencies for vectors of size  <em>N</em>  or below. If  the  <code class="docutils literal notranslate"><span class="pre">safelen</span></code>  clause is not specified, then the default safelen value is  the number of loop iterations.   The  <code class="docutils literal notranslate"><span class="pre">safelen(16)</span></code>  clause in the example below guarantees that the vector   is safe for vectors up to and including size 16.  In the loop,  <em>m</em>  can  be 16 or greater, for correct  execution.  If the value of  <em>m</em>  is less  than 16, the behavior is undefined.</p>
+<p>A thread that encounters a SIMD construct executes a vectorized code of the  iterations. Similar to the concerns of a worksharing loop a loop vectorized  with a SIMD construct must assure that temporary and reduction variables are  privatized and declared as reductions with clauses.  The example below  illustrates the use of <code class="docutils literal notranslate"><span class="pre">private</span></code> and <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clauses in a SIMD  construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">float</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp simd safelen(16)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="n">m</span><span class="p">]</span> <span class="o">-</span> <span class="mf">1.0f</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: SIMD.3c
+* type: C
+* version: omp_4.0
+*/
+double work( double *a, double *b, int n )
+{
+   int i;
+   double tmp, sum;
+   sum = 0.0;
+   #pragma omp simd private(tmp) reduction(+:sum)
+   for (i = 0; i &lt; n; i++) {
+      tmp = a[i] + b[i];
+      sum += tmp;
+   }
+   return sum;
+}
 
 </pre></div>
 </div>
@@ -1547,20 +1546,68 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">real</span>       <span class="o">::</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-   <span class="n">integer</span>    <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.3f
+! type: F-free
+! version: omp_4.0
+subroutine work( a, b, n, sum )
+   implicit none
+   integer :: i, n
+   double precision :: a(n), b(n), sum, tmp
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">safelen</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-      <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">m</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
-   <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">work</span>
+   sum = 0.0d0
+   !$omp simd private(tmp) reduction(+:sum)
+   do i = 1,n
+      tmp = a(i) + b(i)
+      sum = sum + tmp
+   end do
+
+end subroutine work
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">safelen(N)</span></code> clause in a <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct assures the compiler that  there are no loop-carried dependencies for vectors of size  <em>N</em>  or below. If  the <code class="docutils literal notranslate"><span class="pre">safelen</span></code> clause is not specified, then the default safelen value is  the number of loop iterations.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">safelen(16)</span></code> clause in the example below guarantees that the vector  code is safe for vectors up to and including size 16.  In the loop,  <em>m</em>  can  be 16 or greater, for correct code execution.  If the value of  <em>m</em>  is less  than 16, the behavior is undefined.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: SIMD.4c
+* type: C
+* version: omp_4.0
+*/
+void work( float *b, int n, int m )
+{
+   int i;
+   #pragma omp simd safelen(16)
+   for (i = m; i &lt; n; i++)
+      b[i] = b[i-m] - 1.0f;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.4f
+! type: F-free
+! version: omp_4.0
+subroutine work( b, n, m )
+   implicit none
+   real       :: b(n)
+   integer    :: i,n,m
+
+   !$omp simd safelen(16)
+   do i = m+1, n
+      b(i) = b(i-m) - 1.0
+   end do
+end subroutine work
 
 </pre></div>
 </div>
@@ -1569,24 +1616,26 @@
 <p>The following SIMD construct instructs the compiler to collapse the  <em>i</em>  and   <em>j</em>  loops into a single SIMD loop in which SIMD chunks are executed by  threads of the team. Within the workshared loop chunks of a thread, the SIMD  chunks are executed in the lanes of the vector units.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.5c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span> <span class="kt">double</span> <span class="o">**</span><span class="n">a</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">b</span><span class="p">,</span> <span class="kt">double</span> <span class="o">**</span><span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-   <span class="kt">double</span> <span class="n">tmp</span><span class="p">;</span>
-   <span class="cp">#pragma omp for simd collapse(2) private(tmp)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
-         <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: SIMD.5c
+* type: C
+* version: omp_4.0
+*/
+void work( double **a, double **b, double **c, int n )
+{
+   int i, j;
+   double tmp;
+   #pragma omp for simd collapse(2) private(tmp)
+   for (i = 0; i &lt; n; i++) {
+      for (j = 0; j &lt; n; j++) {
+         tmp = a[i][j] + b[i][j];
+         c[i][j] = tmp;
+      }
+   }
+}
 
 </pre></div>
 </div>
@@ -1594,24 +1643,24 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">work</span><span class="p">(</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span>  <span class="n">n</span> <span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">n</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">c</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span> <span class="n">tmp</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.5f
+! type: F-free
+! version: omp_4.0
+subroutine work( a, b, c,  n )
+   implicit none
+   integer :: i,j,n
+   double precision :: a(n,n), b(n,n), c(n,n), tmp
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span> <span class="n">simd</span> <span class="n">collapse</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
-         <span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">tmp</span>
-      <span class="n">end</span> <span class="k">do</span>
-   <span class="n">end</span> <span class="k">do</span>
+   !$omp do simd collapse(2) private(tmp)
+   do j = 1,n
+      do i = 1,n
+         tmp = a(i,j) + b(i,j)
+         c(i,j) = tmp
+      end do
+   end do
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">work</span>
+end subroutine work
 
 </pre></div>
 </div>
@@ -1619,46 +1668,48 @@
 </div>
 </div>
 <div class="section" id="inbranch-and-notinbranch-clauses">
-<h1><code class="docutils literal notranslate"><span class="pre">inbranch</span></code>  and  <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code>  Clauses<a class="headerlink" href="#inbranch-and-notinbranch-clauses" title="Permalink to this headline">¶</a></h1>
-<p>The following examples illustrate the use of the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>   construct with the  <code class="docutils literal notranslate"><span class="pre">inbranch</span></code>  and  <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code>  clauses. The   <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code>  clause informs the compiler that the function  <em>foo</em>  is  never called conditionally in the SIMD loop of the function  <em>myaddint</em> . On  the other hand, the  <code class="docutils literal notranslate"><span class="pre">inbranch</span></code>  clause for the function goo indicates that  the function is always called conditionally in the SIMD loop inside  the function  <em>myaddfloat</em> .</p>
+<h1><code class="docutils literal notranslate"><span class="pre">inbranch</span></code> and <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code> Clauses<a class="headerlink" href="#inbranch-and-notinbranch-clauses" title="Permalink to this headline">¶</a></h1>
+<p>The following examples illustrate the use of the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct with the <code class="docutils literal notranslate"><span class="pre">inbranch</span></code> and <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code> clauses. The  <code class="docutils literal notranslate"><span class="pre">notinbranch</span></code> clause informs the compiler that the function  <em>foo</em>  is  never called conditionally in the SIMD loop of the function  <em>myaddint</em> . On  the other hand, the <code class="docutils literal notranslate"><span class="pre">inbranch</span></code> clause for the function goo indicates that  the function is always called conditionally in the SIMD loop inside  the function  <em>myaddfloat</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.6c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#pragma omp declare simd linear(p:1) notinbranch</span>
-<span class="kt">int</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">){</span>
-  <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span> <span class="o">+</span> <span class="mi">10</span><span class="p">;</span>
-  <span class="k">return</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">myaddint</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="cp">#pragma omp simd</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>  <span class="cm">/* foo is not called under a condition */</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">a</span><span class="p">[</span><span class="n">n</span><span class="mi">-1</span><span class="p">];</span>
-<span class="p">}</span>
+/*
+* name: SIMD.6c
+* type: C
+* version: omp_4.0
+*/
+#pragma omp declare simd linear(p:1) notinbranch
+int foo(int *p){
+  *p = *p + 10;
+  return *p;
+}
 
-<span class="cp">#pragma omp declare simd linear(p:1) inbranch</span>
-<span class="kt">float</span> <span class="nf">goo</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">){</span>
-  <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">*</span><span class="n">p</span> <span class="o">+</span> <span class="mf">18.5f</span><span class="p">;</span>
-  <span class="k">return</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-<span class="p">}</span>
+int myaddint(int *a, int *b, int n)
+{
+#pragma omp simd
+  for (int i=0; i&lt;n; i++){
+      a[i]  = foo(&amp;b[i]);  /* foo is not called under a condition */
+  }
+  return a[n-1];
+}
 
-<span class="kt">int</span> <span class="nf">myaddfloat</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">y</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-<span class="cp">#pragma omp simd</span>
-  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
-     <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">?</span> <span class="n">goo</span><span class="p">(</span><span class="o">&amp;</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">:</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-       <span class="cm">/* goo is called under the condition (or within a branch) */</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="mi">-1</span><span class="p">];</span>
-<span class="p">}</span>
+#pragma omp declare simd linear(p:1) inbranch
+float goo(float *p){
+  *p = *p + 18.5f;
+  return *p;
+}
+
+int myaddfloat(float *x, float *y, int n)
+{
+#pragma omp simd
+  for (int i=0; i&lt;n; i++){
+     x[i] = (x[i] &gt; y[i]) ? goo(&amp;y[i]) : y[i];
+       /* goo is called under the condition (or within a branch) */
+  }
+  return x[n-1];
+}
 
 </pre></div>
 </div>
@@ -1666,147 +1717,149 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">function</span> <span class="n">foo</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span> <span class="n">notinbranch</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">p</span><span class="p">,</span> <span class="n">r</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mi">10</span>
-  <span class="n">r</span> <span class="o">=</span> <span class="n">p</span>
-<span class="n">end</span> <span class="n">function</span> <span class="n">foo</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.6f
+! type: F-free
+! version: omp_4.0
+function foo(p) result(r)
+  implicit none
+!$omp declare simd(foo) notinbranch
+  integer :: p, r
+  p = p + 10
+  r = p
+end function foo
 
-<span class="n">function</span> <span class="n">myaddint</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span>  <span class="n">n</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">foo</span>
+function myaddint(a, b,  n) result(r)
+  implicit none
+  integer :: a(*), b(*), n, r
+  integer :: i
+  integer, external :: foo
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">foo</span><span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>  <span class="o">!</span> <span class="n">foo</span> <span class="n">is</span> <span class="n">not</span> <span class="n">called</span> <span class="n">under</span> <span class="n">a</span> <span class="n">condition</span>
-  <span class="n">end</span> <span class="k">do</span>
-  <span class="n">r</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  !$omp simd
+  do i=1, n
+      a(i) = foo(b(i))  ! foo is not called under a condition
+  end do
+  r = a(n)
 
-<span class="n">end</span> <span class="n">function</span> <span class="n">myaddint</span>
+end function myaddint
 
-<span class="n">function</span> <span class="n">goo</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">goo</span><span class="p">)</span> <span class="n">inbranch</span>
-  <span class="n">real</span> <span class="o">::</span> <span class="n">p</span><span class="p">,</span> <span class="n">r</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">+</span> <span class="mf">18.5</span>
-  <span class="n">r</span> <span class="o">=</span> <span class="n">p</span>
-<span class="n">end</span> <span class="n">function</span> <span class="n">goo</span>
+function goo(p) result(r)
+  implicit none
+!$omp declare simd(goo) inbranch
+  real :: p, r
+  p = p + 18.5
+  r = p
+end function goo
 
-<span class="n">function</span> <span class="n">myaddfloat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">real</span> <span class="o">::</span> <span class="n">x</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">r</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">goo</span>
+function myaddfloat(x, y, n) result(r)
+  implicit none
+  real :: x(*), y(*), r
+  integer :: n
+  integer :: i
+  real, external :: goo
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-     <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="n">then</span>
-        <span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">goo</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-        <span class="o">!</span> <span class="n">goo</span> <span class="n">is</span> <span class="n">called</span> <span class="n">under</span> <span class="n">the</span> <span class="n">condition</span> <span class="p">(</span><span class="n">or</span> <span class="n">within</span> <span class="n">a</span> <span class="n">branch</span><span class="p">)</span>
-     <span class="k">else</span>
-        <span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-     <span class="n">endif</span>
-  <span class="n">end</span> <span class="k">do</span>
+  !$omp simd
+  do i=1, n
+     if (x(i) &gt; y(i)) then
+        x(i) = goo(y(i))
+        ! goo is called under the condition (or within a branch)
+     else
+        x(i) = y(i)
+     endif
+  end do
 
-  <span class="n">r</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">function</span> <span class="n">myaddfloat</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the  below, the function  <em>fib()</em>  is called in the main program and  also recursively called in the function  <em>fib()</em>  within an  <code class="docutils literal notranslate"><span class="pre">if</span></code>   condition. The compiler creates a masked vector version and a non-masked vector  version for the function  <em>fib()</em>  while retaining the original scalar  version of the  <em>fib()</em>  function.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.7c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#define N 45</span>
-<span class="kt">int</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">c</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-
-<span class="cp">#pragma omp declare simd inbranch</span>
-<span class="kt">int</span> <span class="nf">fib</span><span class="p">(</span> <span class="kt">int</span> <span class="n">n</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">n</span><span class="p">;</span>
-   <span class="k">else</span> <span class="p">{</span>
-      <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-
-   <span class="cp">#pragma omp simd</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-
-   <span class="cp">#pragma omp simd</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Done a[%d] = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  r = x(n)
+end function myaddfloat
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In the code below, the function  <em>fib()</em>  is called in the main program and  also recursively called in the function  <em>fib()</em>  within an <code class="docutils literal notranslate"><span class="pre">if</span></code>  condition. The compiler creates a masked vector version and a non-masked vector  version for the function  <em>fib()</em>  while retaining the original scalar  version of the  <em>fib()</em>  function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.7f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">fibonacci</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span><span class="p">,</span><span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">45</span>
-   <span class="n">integer</span>           <span class="o">::</span> <span class="n">a</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="mi">-1</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="mi">0</span><span class="o">:</span><span class="n">N</span><span class="mi">-1</span><span class="p">)</span>
-   <span class="n">integer</span>           <span class="o">::</span> <span class="n">i</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">external</span> <span class="o">::</span> <span class="n">fib</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="mi">-1</span>
-      <span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">i</span>
-   <span class="n">end</span> <span class="k">do</span>
+/*
+* name: SIMD.7c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">N</span><span class="mi">-1</span>
-      <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="n">b</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-   <span class="n">end</span> <span class="k">do</span>
+#define N 45
+int a[N], b[N], c[N];
 
-   <span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s">&quot;Done a(&quot;</span><span class="p">,</span> <span class="n">N</span><span class="mi">-1</span><span class="p">,</span> <span class="s">&quot;) = &quot;</span><span class="p">,</span> <span class="n">a</span><span class="p">(</span><span class="n">N</span><span class="mi">-1</span><span class="p">)</span>
-                        <span class="o">!</span> <span class="mi">44</span>  <span class="mi">701408733</span>
-<span class="n">end</span> <span class="n">program</span>
+#pragma omp declare simd inbranch
+int fib( int n )
+{
+   if (n &lt;= 1)
+      return n;
+   else {
+      return fib(n-1) + fib(n-2);
+   }
+}
 
-<span class="n">recursive</span> <span class="n">function</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span><span class="p">(</span><span class="n">fib</span><span class="p">)</span> <span class="n">inbranch</span>
-   <span class="n">integer</span>  <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">r</span>
+int main(void)
+{
+   int i;
 
-   <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="n">then</span>
-      <span class="n">r</span> <span class="o">=</span> <span class="n">n</span>
-   <span class="k">else</span>
-      <span class="n">r</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">)</span>
-   <span class="n">endif</span>
+   #pragma omp simd
+   for (i=0; i &lt; N; i++) b[i] = i;
 
-<span class="n">end</span> <span class="n">function</span> <span class="n">fib</span>
+   #pragma omp simd
+   for (i=0; i &lt; N; i++) {
+      a[i] = fib(b[i]);
+   }
+   printf(&quot;Done a[%d] = %d\n&quot;, N-1, a[N-1]);
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.7f
+! type: F-free
+! version: omp_4.0
+program fibonacci
+   implicit none
+   integer,parameter :: N=45
+   integer           :: a(0:N-1), b(0:N-1)
+   integer           :: i
+   integer, external :: fib
+
+   !$omp simd
+   do i = 0,N-1
+      b(i) = i
+   end do
+
+   !$omp simd
+   do i=0,N-1
+      a(i) = fib(b(i))
+   end do
+
+   write(*,*) &quot;Done a(&quot;, N-1, &quot;) = &quot;, a(N-1)
+                        ! 44  701408733
+end program
+
+recursive function fib(n) result(r)
+   implicit none
+!$omp declare simd(fib) inbranch
+   integer  :: n, r
+
+   if (n &lt;= 1) then
+      r = n
+   else
+      r = fib(n-1) + fib(n-2)
+   endif
+
+end function fib
 
 </pre></div>
 </div>
@@ -1816,59 +1869,61 @@
 <div class="section" id="loop-carried-lexical-forward-dependence">
 <h1>Loop-Carried Lexical Forward Dependence<a class="headerlink" href="#loop-carried-lexical-forward-dependence" title="Permalink to this headline">¶</a></h1>
 <p>The following example tests the restriction on an SIMD loop with the loop-carried lexical forward-dependence. This dependence must be preserved for the correct execution of SIMD loops.</p>
-<p>A loop can be vectorized even though the iterations are not completely independent when it has loop-carried dependences that are forward lexical dependences, indicated in the  below by the read of  <em>A[j+1]</em>  and the write to  <em>A[j]</em>  in C/C++  (or  <em>A(j+1)</em>  and  <em>A(j)</em>  in Fortran). That is, the read of  <em>A[j+1]</em>  (or  <em>A(j+1)</em>  in Fortran) before the write to  <em>A[j]</em>  (or  <em>A(j)</em>  in Fortran) ordering must be preserved for each iteration in  <em>j</em>  for valid SIMD  generation.</p>
-<p>This test assures that the compiler preserves the loop carried lexical forward-dependence for generating a correct SIMD .</p>
+<p>A loop can be vectorized even though the iterations are not completely independent when it has loop-carried dependences that are forward lexical dependences, indicated in the code below by the read of  <em>A[j+1]</em>  and the write to  <em>A[j]</em>  in C/C++ code (or  <em>A(j+1)</em>  and  <em>A(j)</em>  in Fortran). That is, the read of  <em>A[j+1]</em>  (or  <em>A(j+1)</em>  in Fortran) before the write to  <em>A[j]</em>  (or  <em>A(j)</em>  in Fortran) ordering must be preserved for each iteration in  <em>j</em>  for valid SIMD code generation.</p>
+<p>This test assures that the compiler preserves the loop carried lexical forward-dependence for generating a correct SIMD code.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: SIMD.8c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span>   <span class="n">P</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
-<span class="kt">float</span> <span class="n">A</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
+/*
+* name: SIMD.8c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;math.h&gt;
 
-<span class="kt">float</span> <span class="nf">do_work</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">arr</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">float</span> <span class="n">pri</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-<span class="cp">#pragma omp simd lastprivate(pri)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">999</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+int   P[1000];
+float A[1000];
 
-    <span class="n">pri</span> <span class="o">=</span> <span class="mf">0.5f</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">j</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">pri</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
-    <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">pri</span> <span class="o">*</span> <span class="mf">1.5f</span><span class="p">;</span>
-    <span class="n">pri</span> <span class="o">=</span> <span class="n">pri</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">pri</span><span class="p">;</span>
-<span class="p">}</span>
+float do_work(float *arr)
+{
+  float pri;
+  int i;
+#pragma omp simd lastprivate(pri)
+  for (i = 0; i &lt; 999; ++i) {
+    int j = P[i];
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">float</span> <span class="n">pri</span><span class="p">,</span> <span class="n">arr</span><span class="p">[</span><span class="mi">1000</span><span class="p">];</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    pri = 0.5f;
+    if (j % 2 == 0) {
+      pri = A[j+1] + arr[i];
+    }
+    A[j] = pri * 1.5f;
+    pri = pri + A[j];
+  }
+  return pri;
+}
 
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-     <span class="n">P</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-     <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>   <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.5f</span><span class="p">;</span>
-     <span class="n">arr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.8f</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">pri</span> <span class="o">=</span> <span class="n">do_work</span><span class="p">(</span><span class="o">&amp;</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">pri</span> <span class="o">==</span> <span class="mf">8237.25</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;passed: result pri = %7.2f (8237.25) </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">pri</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">else</span> <span class="p">{</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;failed: result pri = %7.2f (8237.25) </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">pri</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main(void)
+{
+  float pri, arr[1000];
+  int i;
+
+  for (i = 0; i &lt; 1000; ++i) {
+     P[i]   = i;
+     A[i]   = i * 1.5f;
+     arr[i] = i * 1.8f;
+  }
+  pri = do_work(&amp;arr[0]);
+  if (pri == 8237.25) {
+    printf(&quot;passed: result pri = %7.2f (8237.25) \n&quot;, pri);
+  }
+  else {
+    printf(&quot;failed: result pri = %7.2f (8237.25) \n&quot;, pri);
+  }
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1876,59 +1931,59 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">SIMD</span><span class="mf">.8f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">work</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: SIMD.8f
+! type: F-free
+! version: omp_4.0
+module work
 
-<span class="n">integer</span> <span class="o">::</span> <span class="n">P</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-<span class="n">real</span>    <span class="o">::</span> <span class="n">A</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+integer :: P(1000)
+real    :: A(1000)
 
-<span class="n">contains</span>
-<span class="n">function</span> <span class="n">do_work</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">pri</span><span class="p">)</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">real</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="o">::</span> <span class="n">arr</span>
+contains
+function do_work(arr) result(pri)
+  implicit none
+  real, dimension(*) :: arr
 
-  <span class="n">real</span> <span class="o">::</span> <span class="n">pri</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span>
+  real :: pri
+  integer :: i, j
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">private</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="n">lastprivate</span><span class="p">(</span><span class="n">pri</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">999</span>
-    <span class="n">j</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+  !$omp simd private(j) lastprivate(pri)
+  do i = 1, 999
+    j = P(i)
 
-    <span class="n">pri</span> <span class="o">=</span> <span class="mf">0.5</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">j</span><span class="mi">-1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-      <span class="n">pri</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">arr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">endif</span>
-    <span class="n">A</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">pri</span> <span class="o">*</span> <span class="mf">1.5</span>
-    <span class="n">pri</span> <span class="o">=</span> <span class="n">pri</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
-  <span class="n">end</span> <span class="k">do</span>
+    pri = 0.5
+    if (mod(j-1, 2) == 0) then
+      pri = A(j+1) + arr(i)
+    endif
+    A(j) = pri * 1.5
+    pri = pri + A(j)
+  end do
 
-<span class="n">end</span> <span class="n">function</span> <span class="n">do_work</span>
+end function do_work
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">work</span>
+end module work
 
-<span class="n">program</span> <span class="n">simd_8f</span>
-  <span class="n">use</span> <span class="n">work</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">real</span> <span class="o">::</span> <span class="n">pri</span><span class="p">,</span> <span class="n">arr</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+program simd_8f
+  use work
+  implicit none
+  real :: pri, arr(1000)
+  integer :: i
 
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span>
-     <span class="n">P</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>   <span class="o">=</span> <span class="n">i</span>
-     <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>   <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.5</span>
-     <span class="n">arr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="mi">-1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.8</span>
-  <span class="n">end</span> <span class="k">do</span>
-  <span class="n">pri</span> <span class="o">=</span> <span class="n">do_work</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">pri</span> <span class="o">==</span> <span class="mf">8237.25</span><span class="p">)</span> <span class="n">then</span>
-    <span class="n">print</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;passed&quot;</span><span class="p">,</span> <span class="n">pri</span>
-  <span class="k">else</span>
-    <span class="n">print</span> <span class="mi">2</span><span class="p">,</span> <span class="s">&quot;failed&quot;</span><span class="p">,</span> <span class="n">pri</span>
-  <span class="n">endif</span>
-<span class="mi">2</span> <span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="s">&quot;: result pri = &quot;</span><span class="p">,</span> <span class="n">f7</span><span class="mf">.2</span><span class="p">,</span> <span class="s">&quot; (8237.25)&quot;</span><span class="p">)</span>
+  do i = 1, 1000
+     P(i)   = i
+     A(i)   = (i-1) * 1.5
+     arr(i) = (i-1) * 1.8
+  end do
+  pri = do_work(arr)
+  if (pri == 8237.25) then
+    print 2, &quot;passed&quot;, pri
+  else
+    print 2, &quot;failed&quot;, pri
+  endif
+2 format(a, &quot;: result pri = &quot;, f7.2, &quot; (8237.25)&quot;)
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
@@ -1962,7 +2017,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Chap_SIMD.html" title="previous page">SIMD</a>
-    <a class='right-next' id="next-link" href="Examples_linear_modifier.html" title="next page"><code class="docutils literal notranslate"><span class="pre">ref</span></code> ,  <code class="docutils literal notranslate"><span class="pre">val</span></code> ,  <code class="docutils literal notranslate"><span class="pre">uval</span></code>  Modifiers for  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  Clause</a>
+    <a class='right-next' id="next-link" href="Examples_linear_modifier.html" title="next page"><code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">uval</span></code> Modifiers for <code class="docutils literal notranslate"><span class="pre">linear</span></code> Clause</a>
 
         </div>
         

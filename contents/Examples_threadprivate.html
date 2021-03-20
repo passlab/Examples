@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,23 +1290,25 @@
               <div>
                 
   <div class="section" id="the-threadprivate-directive">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  Directive<a class="headerlink" href="#the-threadprivate-directive" title="Permalink to this headline">¶</a></h1>
-<p>The following examples demonstrate how to use the  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  directive   to give each thread a separate counter.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> Directive<a class="headerlink" href="#the-threadprivate-directive" title="Permalink to this headline">¶</a></h1>
+<p>The following examples demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive   to give each thread a separate counter.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: threadprivate.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(counter)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">increment_counter</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">counter</span><span class="o">++</span><span class="p">;</span>
-  <span class="k">return</span><span class="p">(</span><span class="n">counter</span><span class="p">);</span>
-<span class="p">}</span>
+/*
+* name: threadprivate.1c
+* type: C
+*/
+int counter = 0;
+#pragma omp threadprivate(counter)
+
+int increment_counter()
+{
+  counter++;
+  return(counter);
+}
 
 </pre></div>
 </div>
@@ -1276,108 +1316,112 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">threadprivate</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">INTEGER</span> <span class="n">FUNCTION</span> <span class="n">INCREMENT_COUNTER</span><span class="p">()</span>
-        <span class="n">COMMON</span><span class="o">/</span><span class="n">INC_COMMON</span><span class="o">/</span><span class="n">COUNTER</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">INC_COMMON</span><span class="o">/</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.1f
+! type: F-fixed
+      INTEGER FUNCTION INCREMENT_COUNTER()
+        COMMON/INC_COMMON/COUNTER
+!$OMP   THREADPRIVATE(/INC_COMMON/)
 
-        <span class="n">COUNTER</span> <span class="o">=</span> <span class="n">COUNTER</span> <span class="o">+</span><span class="mi">1</span>
-        <span class="n">INCREMENT_COUNTER</span> <span class="o">=</span> <span class="n">COUNTER</span>
-        <span class="n">RETURN</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">INCREMENT_COUNTER</span>
+        COUNTER = COUNTER +1
+        INCREMENT_COUNTER = COUNTER
+        RETURN
+      END FUNCTION INCREMENT_COUNTER
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example uses  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  on a static variable:</p>
+<p>The following example uses <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> on a static variable:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: threadprivate.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="nf">increment_counter_2</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="k">static</span> <span class="kt">int</span> <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="cp">#pragma omp threadprivate(counter)</span>
-  <span class="n">counter</span><span class="o">++</span><span class="p">;</span>
-  <span class="k">return</span><span class="p">(</span><span class="n">counter</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.2c
+* type: C
+*/
+int increment_counter_2()
+{
+  static int counter = 0;
+  #pragma omp threadprivate(counter)
+  counter++;
+  return(counter);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example demonstrates unspecified behavior for the initialization  of a  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variable. A  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>   variable is initialized  once at an unspecified point before its first reference. Because  <code class="docutils literal notranslate"><span class="pre">a</span></code>  is  constructed using the value of  <code class="docutils literal notranslate"><span class="pre">x</span></code>   (which is modified by the statement   <code class="docutils literal notranslate"><span class="pre">x++</span></code> ), the value of  <code class="docutils literal notranslate"><span class="pre">a.val</span></code>   at the start of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region could be either 1 or 2. This problem is avoided for  <code class="docutils literal notranslate"><span class="pre">b</span></code> , which uses  an auxiliary  <code class="docutils literal notranslate"><span class="pre">const</span></code>  variable and a copy-constructor.</p>
+<p>The following example demonstrates unspecified behavior for the initialization  of a <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variable. A <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variable is initialized  once at an unspecified point before its first reference. Because <code class="docutils literal notranslate"><span class="pre">a</span></code> is  constructed using the value of <code class="docutils literal notranslate"><span class="pre">x</span></code>  (which is modified by the statement  <code class="docutils literal notranslate"><span class="pre">x++</span></code>), the value of <code class="docutils literal notranslate"><span class="pre">a.val</span></code>  at the start of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region could be either 1 or 2. This problem is avoided for <code class="docutils literal notranslate"><span class="pre">b</span></code>, which uses  an auxiliary <code class="docutils literal notranslate"><span class="pre">const</span></code> variable and a copy-constructor.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: threadprivate.3c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">*/</span>
-<span class="n">class</span> <span class="n">T</span> <span class="p">{</span>
-  <span class="nl">public</span><span class="p">:</span>
-    <span class="kt">int</span> <span class="n">val</span><span class="p">;</span>
-    <span class="n">T</span> <span class="p">(</span><span class="kt">int</span><span class="p">);</span>
-    <span class="n">T</span> <span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">);</span>
-<span class="p">};</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="n">T</span> <span class="o">::</span> <span class="n">T</span> <span class="p">(</span><span class="kt">int</span> <span class="n">v</span><span class="p">){</span>
-   <span class="n">val</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
-<span class="p">}</span>
+/*
+* name: threadprivate.3c
+* type: C++
+*/
+class T {
+  public:
+    int val;
+    T (int);
+    T (const T&amp;);
+};
 
-<span class="n">T</span> <span class="o">::</span> <span class="n">T</span> <span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">t</span><span class="p">)</span> <span class="p">{</span>
-   <span class="n">val</span> <span class="o">=</span> <span class="n">t</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-<span class="p">}</span>
+T :: T (int v){
+   val = v;
+}
 
-<span class="kt">void</span> <span class="n">g</span><span class="p">(</span><span class="n">T</span> <span class="n">a</span><span class="p">,</span> <span class="n">T</span> <span class="n">b</span><span class="p">){</span>
-   <span class="n">a</span><span class="p">.</span><span class="n">val</span> <span class="o">+=</span> <span class="n">b</span><span class="p">.</span><span class="n">val</span><span class="p">;</span>
-<span class="p">}</span>
+T :: T (const T&amp; t) {
+   val = t.val;
+}
 
-<span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="n">T</span> <span class="nf">a</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-<span class="k">const</span> <span class="n">T</span> <span class="n">b_aux</span><span class="p">(</span><span class="n">x</span><span class="p">);</span> <span class="cm">/* Capture value of x = 1 */</span>
-<span class="n">T</span> <span class="nf">b</span><span class="p">(</span><span class="n">b_aux</span><span class="p">);</span>
-<span class="cp">#pragma omp threadprivate(a, b)</span>
+void g(T a, T b){
+   a.val += b.val;
+}
 
-<span class="kt">void</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-   <span class="n">x</span><span class="o">++</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="cm">/* In each thread:</span>
-<span class="cm">    * a is constructed from x (with value 1 or 2?)</span>
-<span class="cm">    * b is copy-constructed from b_aux</span>
-<span class="cm">    */</span>
+int x = 1;
+T a(x);
+const T b_aux(x); /* Capture value of x = 1 */
+T b(b_aux);
+#pragma omp threadprivate(a, b)
 
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-       <span class="n">g</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span> <span class="cm">/* Value of a is unspecified. */</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+void f(int n) {
+   x++;
+   #pragma omp parallel for
+   /* In each thread:
+    * a is constructed from x (with value 1 or 2?)
+    * b is copy-constructed from b_aux
+    */
+
+   for (int i=0; i&lt;n; i++) {
+       g(a, b); /* Value of a is unspecified. */
+   }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following examples show non-conforming uses and correct uses of the  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>   directive.</p>
+<p>The following examples show non-conforming uses and correct uses of the <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  directive.</p>
 <p>The following example is non-conforming because the common block is not declared  local to the subroutine that refers to it:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">threadprivate</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">MODULE</span> <span class="n">INC_MODULE</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">A</span>
-      <span class="n">END</span> <span class="n">MODULE</span> <span class="n">INC_MODULE</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.2f
+! type: F-fixed
+      MODULE INC_MODULE
+        COMMON /T/ A
+      END MODULE INC_MODULE
 
-      <span class="n">SUBROUTINE</span> <span class="n">INC_MODULE_WRONG</span><span class="p">()</span>
-        <span class="n">USE</span> <span class="n">INC_MODULE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">non</span><span class="o">-</span><span class="n">conforming</span> <span class="n">because</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="n">INC_MODULE_WRONG</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INC_MODULE_WRONG</span>
+      SUBROUTINE INC_MODULE_WRONG()
+        USE INC_MODULE
+!$OMP   THREADPRIVATE(/T/)
+      !non-conforming because /T/ not declared in INC_MODULE_WRONG
+      END SUBROUTINE INC_MODULE_WRONG
 
 </pre></div>
 </div>
@@ -1386,20 +1430,20 @@
 <p>The following example is also non-conforming because the common block is not declared  local to the subroutine that refers to it:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">threadprivate</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">INC_WRONG</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">A</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.3f
+! type: F-fixed
+      SUBROUTINE INC_WRONG()
+        COMMON /T/ A
+!$OMP   THREADPRIVATE(/T/)
 
-        <span class="n">CONTAINS</span>
-          <span class="n">SUBROUTINE</span> <span class="n">INC_WRONG_SUB</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">PARALLEL</span> <span class="n">COPYIN</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">non</span><span class="o">-</span><span class="n">conforming</span> <span class="n">because</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">not</span> <span class="n">declared</span> <span class="n">in</span> <span class="n">INC_WRONG_SUB</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">END</span> <span class="n">PARALLEL</span>
-          <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INC_WRONG_SUB</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INC_WRONG</span>
+        CONTAINS
+          SUBROUTINE INC_WRONG_SUB()
+!$OMP       PARALLEL COPYIN(/T/)
+      !non-conforming because /T/ not declared in INC_WRONG_SUB
+!$OMP       END PARALLEL
+          END SUBROUTINE INC_WRONG_SUB
+      END SUBROUTINE INC_WRONG
 
 </pre></div>
 </div>
@@ -1408,31 +1452,31 @@
 <p>The following example is a correct rewrite of the previous example:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">threadprivate</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-       <span class="n">SUBROUTINE</span> <span class="n">INC_GOOD</span><span class="p">()</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">A</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.4f
+! type: F-fixed
+       SUBROUTINE INC_GOOD()
+        COMMON /T/ A
+!$OMP   THREADPRIVATE(/T/)
 
-        <span class="n">CONTAINS</span>
-          <span class="n">SUBROUTINE</span> <span class="n">INC_GOOD_SUB</span><span class="p">()</span>
-            <span class="n">COMMON</span> <span class="o">/</span><span class="n">T</span><span class="o">/</span> <span class="n">A</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
+        CONTAINS
+          SUBROUTINE INC_GOOD_SUB()
+            COMMON /T/ A
+!$OMP       THREADPRIVATE(/T/)
 
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">PARALLEL</span> <span class="n">COPYIN</span><span class="p">(</span><span class="o">/</span><span class="n">T</span><span class="o">/</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">END</span> <span class="n">PARALLEL</span>
-         <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INC_GOOD_SUB</span>
-       <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INC_GOOD</span>
+!$OMP       PARALLEL COPYIN(/T/)
+!$OMP       END PARALLEL
+         END SUBROUTINE INC_GOOD_SUB
+       END SUBROUTINE INC_GOOD
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following is an example of the use of  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  for local variables:</p>
+<p>The following is an example of the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for local variables:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: threadprivate.5f
 ! type: F-fixed
       PROGRAM INC_GOOD2
@@ -1476,81 +1520,85 @@
 </div>
 </div>
 <p>The above program, if executed by two threads, will print one of the following  two sets of output:</p>
-<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">11</span> <span class="pre">12</span> <span class="pre">13</span></code>    <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>    <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>    <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>    <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">11</span> <span class="pre">12</span> <span class="pre">13</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
 <p>or</p>
-<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>    <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>    <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
-<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">3</span></code>    <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>    <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
-<p>The following is an example of the use of  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  for module variables:</p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">3</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
+<p>The following is an example of the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for module variables:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">threadprivate</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">MODULE</span> <span class="n">INC_MODULE_GOOD3</span>
-        <span class="n">REAL</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">WORK</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-        <span class="n">SAVE</span> <span class="n">WORK</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">THREADPRIVATE</span><span class="p">(</span><span class="n">WORK</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">MODULE</span> <span class="n">INC_MODULE_GOOD3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.6f
+! type: F-fixed
+      MODULE INC_MODULE_GOOD3
+        REAL, POINTER :: WORK(:)
+        SAVE WORK
+!$OMP   THREADPRIVATE(WORK)
+      END MODULE INC_MODULE_GOOD3
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB1</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">USE</span> <span class="n">INC_MODULE_GOOD3</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">THE_SUM</span><span class="p">)</span>
-        <span class="n">ALLOCATE</span><span class="p">(</span><span class="n">WORK</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-        <span class="n">CALL</span> <span class="n">SUB2</span><span class="p">(</span><span class="n">THE_SUM</span><span class="p">)</span>
-       <span class="n">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="n">THE_SUM</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB1</span>
+      SUBROUTINE SUB1(N)
+      USE INC_MODULE_GOOD3
+!$OMP   PARALLEL PRIVATE(THE_SUM)
+        ALLOCATE(WORK(N))
+        CALL SUB2(THE_SUM)
+       WRITE(*,*)THE_SUM
+!$OMP   END PARALLEL
+      END SUBROUTINE SUB1
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB2</span><span class="p">(</span><span class="n">THE_SUM</span><span class="p">)</span>
-        <span class="n">USE</span> <span class="n">INC_MODULE_GOOD3</span>
-        <span class="n">WORK</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">=</span> <span class="mi">10</span>
-        <span class="n">THE_SUM</span><span class="o">=</span><span class="n">SUM</span><span class="p">(</span><span class="n">WORK</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB2</span>
+      SUBROUTINE SUB2(THE_SUM)
+        USE INC_MODULE_GOOD3
+        WORK(:) = 10
+        THE_SUM=SUM(WORK)
+      END SUBROUTINE SUB2
 
-      <span class="n">PROGRAM</span> <span class="n">INC_GOOD3</span>
-        <span class="n">N</span> <span class="o">=</span> <span class="mi">10</span>
-        <span class="n">CALL</span> <span class="n">SUB1</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">INC_GOOD3</span>
+      PROGRAM INC_GOOD3
+        N = 10
+        CALL SUB1(N)
+      END PROGRAM INC_GOOD3
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates initialization of  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variables  for class-type  <code class="docutils literal notranslate"><span class="pre">T</span></code> .  <code class="docutils literal notranslate"><span class="pre">t1</span></code>  is default constructed,  <code class="docutils literal notranslate"><span class="pre">t2</span></code>  is constructed  taking a constructor accepting one argument of integer type,  <code class="docutils literal notranslate"><span class="pre">t3</span></code>  is copy  constructed with argument  <code class="docutils literal notranslate"><span class="pre">f()</span></code> :</p>
+<p>The following example illustrates initialization of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variables  for class-type <code class="docutils literal notranslate"><span class="pre">T</span></code>. <code class="docutils literal notranslate"><span class="pre">t1</span></code> is default constructed, <code class="docutils literal notranslate"><span class="pre">t2</span></code> is constructed  taking a constructor accepting one argument of integer type, <code class="docutils literal notranslate"><span class="pre">t3</span></code> is copy  constructed with argument <code class="docutils literal notranslate"><span class="pre">f()</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: threadprivate.4c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">*/</span>
-<span class="k">struct</span> <span class="nc">T</span> <span class="p">{</span> <span class="n">T</span> <span class="p">();</span> <span class="n">T</span> <span class="p">(</span><span class="kt">int</span><span class="p">);</span> <span class="o">~</span><span class="n">T</span> <span class="p">();</span> <span class="kt">int</span> <span class="n">t</span><span class="p">;</span> <span class="p">};</span>
-<span class="kt">int</span> <span class="nf">f</span><span class="p">();</span>
-<span class="k">static</span> <span class="n">T</span> <span class="n">t1</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(t1)</span>
-<span class="k">static</span> <span class="n">T</span> <span class="n">t2</span><span class="p">(</span> <span class="mi">23</span> <span class="p">);</span>
-<span class="cp">#pragma omp threadprivate(t2)</span>
-<span class="k">static</span> <span class="n">T</span> <span class="n">t3</span> <span class="o">=</span> <span class="n">f</span><span class="p">();</span>
-<span class="cp">#pragma omp threadprivate(t3)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.4c
+* type: C++
+*/
+struct T { T (); T (int); ~T (); int t; };
+int f();
+static T t1;
+#pragma omp threadprivate(t1)
+static T t2( 23 );
+#pragma omp threadprivate(t2)
+static T t3 = f();
+#pragma omp threadprivate(t3)
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates the use of  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  for static  class members. The  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  directive for a static class member must  be placed inside the class definition.</p>
+<p>The following example illustrates the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for static  class members. The <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive for a static class member must  be placed inside the class definition.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: threadprivate.5c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">*/</span>
-<span class="n">class</span> <span class="n">T</span> <span class="p">{</span>
- <span class="nl">public</span><span class="p">:</span>
-  <span class="k">static</span> <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-<span class="cp">#pragma omp threadprivate(i)</span>
-<span class="p">};</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.5c
+* type: C++
+*/
+class T {
+ public:
+  static int i;
+#pragma omp threadprivate(i)
+};
 
 </pre></div>
 </div>
@@ -1584,7 +1632,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Chap_data_environment.html" title="previous page">Data Environment</a>
-    <a class='right-next' id="next-link" href="Examples_default_none.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">default(none)</span></code>  Clause</a>
+    <a class='right-next' id="next-link" href="Examples_default_none.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">default(none)</span></code> Clause</a>
 
         </div>
         

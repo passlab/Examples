@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,22 +1291,24 @@
                 
   <div class="section" id="a-simple-parallel-loop">
 <h1>A Simple Parallel Loop<a class="headerlink" href="#a-simple-parallel-loop" title="Permalink to this headline">¶</a></h1>
-<p>The following example demonstrates how to parallelize a simple loop using the parallel  loop construct. The loop iteration variable is private by default, so it is not  necessary to specify it explicitly in a  <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause.</p>
+<p>The following example demonstrates how to parallelize a simple loop using the parallel  loop construct. The loop iteration variable is private by default, so it is not  necessary to specify it explicitly in a <code class="docutils literal notranslate"><span class="pre">private</span></code> clause.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: ploop.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">simple</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#pragma omp parallel for</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="cm">/* i is private by default */</span>
-        <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="mi">-1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">;</span>
-<span class="p">}</span>
+/*
+* name: ploop.1c
+* type: C
+*/
+void simple(int n, float *a, float *b)
+{
+    int i;
+
+#pragma omp parallel for
+    for (i=1; i&lt;n; i++) /* i is private by default */
+        b[i] = (a[i] + a[i-1]) / 2.0;
+}
 
 </pre></div>
 </div>
@@ -1276,21 +1316,21 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">ploop</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">SIMPLE</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: ploop.1f
+! type: F-fixed
+      SUBROUTINE SIMPLE(N, A, B)
 
-      <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">B</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">A</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+      INTEGER I, N
+      REAL B(N), A(N)
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span>  <span class="o">!</span><span class="n">I</span> <span class="n">is</span> <span class="n">private</span> <span class="n">by</span> <span class="k">default</span>
-      <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">N</span>
-          <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="mi">-1</span><span class="p">))</span> <span class="o">/</span> <span class="mf">2.0</span>
-      <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>
+!$OMP PARALLEL DO  !I is private by default
+      DO I=2,N
+          B(I) = (A(I) + A(I-1)) / 2.0
+      ENDDO
+!$OMP END PARALLEL DO
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SIMPLE</span>
+      END SUBROUTINE SIMPLE
 
 </pre></div>
 </div>
@@ -1324,7 +1364,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Chap_parallel_execution.html" title="previous page">Parallel Execution</a>
-    <a class='right-next' id="next-link" href="Examples_parallel.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_parallel.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">parallel</span></code> Construct</a>
 
         </div>
         

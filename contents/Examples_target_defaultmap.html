@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,110 +1290,109 @@
               <div>
                 
   <div class="section" id="defaultmap-clause">
-<h1><code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  Clause<a class="headerlink" href="#defaultmap-clause" title="Permalink to this headline">¶</a></h1>
-<p>The implicitly-determined, data-mapping and data-sharing attribute rules of variables referenced in a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct can be changed by the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause introduced in OpenMP 5.0. The implicit behavior is specified as  <code class="docutils literal notranslate"><span class="pre">alloc</span></code> ,  <code class="docutils literal notranslate"><span class="pre">to</span></code> ,  <code class="docutils literal notranslate"><span class="pre">from</span></code> ,  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> ,  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> ,  <code class="docutils literal notranslate"><span class="pre">none</span></code> ,  <code class="docutils literal notranslate"><span class="pre">default</span></code>  or  <code class="docutils literal notranslate"><span class="pre">present</span></code> , and is applied to a variable-category, where  <code class="docutils literal notranslate"><span class="pre">scalar</span></code> ,  <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> ,  <code class="docutils literal notranslate"><span class="pre">allocatable</span></code> , and  <code class="docutils literal notranslate"><span class="pre">pointer</span></code>  are the variable categories.</p>
-<p>In OpenMP, a “category’’ has a common data-mapping and data-sharing  behavior for variable types within the category. In C/C++,  <code class="docutils literal notranslate"><span class="pre">scalar</span></code>  refers to base-language scalar variables, except pointers. In Fortran it refers to a scalar variable, as defined by the base language,  with intrinsic type, and excludes character type.</p>
-<p>Also,  <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>  refers to arrays and structures (C/C++) and derived types (Fortran). Fortran has the additional category of  <code class="docutils literal notranslate"><span class="pre">allocatable</span></code> .</p>
-<p>In the example below, the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct uses   <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code><br />
-clauses to  explicitly set data-mapping attributes that reproduce<br />
-the default implicit mapping (data-mapping and data-sharing attributes).  That is,<br />
-if the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clauses were removed, the results would be identical. In the example below, the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct uses   <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clauses to set data-mapping and possibly data-sharing attributes that reproduce  the default implicit mapping (data-mapping and data-sharing attributes).  That is,  if the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clauses were removed, the results would be identical.</p>
-<p>In the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct all implicit behavior is removed by specifying the  <code class="docutils literal notranslate"><span class="pre">none</span></code>  implicit behavior in the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause. Hence, all variables must be explicitly mapped.   In the C/C++  a scalar ( s ), an array ( A ) and a structure  ( S ) are explicitly mapped  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> .   The Fortran  uses a derived type ( D ) in lieu of structure.</p>
-<p>The third  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct shows another usual case for using the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause. The default mapping for (non-pointer) scalar variables is specified as  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> . Here, the default implicit mapping for {s3} is  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  as specified  in the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause, and {s1} and {s2} are explicitly  mapped with the  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  data-sharing attribute.</p>
-<p>In the fourth  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct all arrays, structures (C/C++) and derived  types (Fortran) are mapped with  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  data-sharing behavior by a   <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause with an  <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>  variable category. For the  H  allocated array in the Fortran , the  <code class="docutils literal notranslate"><span class="pre">allocable</span></code>   category must be used in a separate  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause to acquire   <code class="docutils literal notranslate"><span class="pre">firsprivate</span></code>  data-sharing behavior ( H  has the Fortran allocatable attribute).</p>
+<h1><code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> Clause<a class="headerlink" href="#defaultmap-clause" title="Permalink to this headline">¶</a></h1>
+<p>The implicitly-determined, data-mapping and data-sharing attribute rules of variables referenced in a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct can be changed by the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause introduced in OpenMP 5.0. The implicit behavior is specified as <code class="docutils literal notranslate"><span class="pre">alloc</span></code>, <code class="docutils literal notranslate"><span class="pre">to</span></code>, <code class="docutils literal notranslate"><span class="pre">from</span></code>, <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">none</span></code>, <code class="docutils literal notranslate"><span class="pre">default</span></code> or <code class="docutils literal notranslate"><span class="pre">present</span></code>, and is applied to a variable-category, where <code class="docutils literal notranslate"><span class="pre">scalar</span></code>, <code class="docutils literal notranslate"><span class="pre">aggregate</span></code>, <code class="docutils literal notranslate"><span class="pre">allocatable</span></code>, and <code class="docutils literal notranslate"><span class="pre">pointer</span></code> are the variable categories.</p>
+<p>In OpenMP, a “category’’ has a common data-mapping and data-sharing  behavior for variable types within the category. In C/C++, <code class="docutils literal notranslate"><span class="pre">scalar</span></code> refers to base-language scalar variables, except pointers. In Fortran it refers to a scalar variable, as defined by the base language,  with intrinsic type, and excludes character type.</p>
+<p>Also, <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> refers to arrays and structures (C/C++) and derived types (Fortran). Fortran has the additional category of <code class="docutils literal notranslate"><span class="pre">allocatable</span></code>.</p>
+<p>In the example below, the first <code class="docutils literal notranslate"><span class="pre">target</span></code> construct uses  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clauses to set data-mapping and possibly data-sharing attributes that reproduce  the default implicit mapping (data-mapping and data-sharing attributes).  That is,  if the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clauses were removed, the results would be identical.</p>
+<p>In the second <code class="docutils literal notranslate"><span class="pre">target</span></code> construct all implicit behavior is removed by specifying the <code class="docutils literal notranslate"><span class="pre">none</span></code> implicit behavior in the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause. Hence, all variables must be explicitly mapped.   In the C/C++ code a scalar ( <strong>s</strong> ), an array ( <strong>A</strong> ) and a structure  ( <strong>S</strong> ) are explicitly mapped <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>.   The Fortran code uses a derived type ( <strong>D</strong> ) in lieu of structure.</p>
+<p>The third <code class="docutils literal notranslate"><span class="pre">target</span></code> construct shows another usual case for using the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause. The default mapping for (non-pointer) scalar variables is specified as <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>. Here, the default implicit mapping for  <strong>s3</strong>  is <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> as specified  in the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause, and  <strong>s1</strong>  and  <strong>s2</strong>  are explicitly  mapped with the <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> data-sharing attribute.</p>
+<p>In the fourth <code class="docutils literal notranslate"><span class="pre">target</span></code> construct all arrays, structures (C/C++) and derived  types (Fortran) are mapped with <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> data-sharing behavior by a  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause with an <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> variable category. For the  <strong>H</strong>  allocated array in the Fortran code, the <code class="docutils literal notranslate"><span class="pre">allocable</span></code>  category must be used in a separate <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause to acquire  <code class="docutils literal notranslate"><span class="pre">firsprivate</span></code> data-sharing behavior ( <strong>H</strong>  has the Fortran allocatable attribute).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_defaultmap.1.c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 2</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-  <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">S_struct</span> <span class="p">{</span> <span class="kt">int</span> <span class="n">s</span><span class="p">;</span> <span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="n">N</span><span class="p">];</span> <span class="p">}</span> <span class="n">S_struct_t</span><span class="p">;</span>
+/*
+* name:       target_defaultmap.1.c
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define N 2
 
-
-  <span class="kt">int</span>         <span class="n">s</span><span class="p">;</span>       <span class="c1">//scalar int variable (scalar)</span>
-  <span class="kt">int</span>         <span class="n">A</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>    <span class="c1">//aggregate variable  (array)</span>
-  <span class="n">S_struct_t</span>  <span class="n">S</span><span class="p">;</span>       <span class="c1">//aggregate variable  (structure)</span>
-  <span class="kt">int</span>         <span class="o">*</span><span class="n">ptr</span><span class="p">;</span>    <span class="c1">//scalar, pointer variable (pointer)</span>
-
-  <span class="kt">int</span>         <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">;</span>
-
-<span class="c1">// Initialize everything to zero;</span>
-   <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span> <span class="n">s1</span><span class="o">=</span><span class="n">s2</span><span class="o">=</span><span class="n">s3</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-   <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-   <span class="n">S</span><span class="p">.</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-
-<span class="c1">// Target Region 1</span>
-                   <span class="c1">// Uses defaultmap to set scalars, aggregates &amp; pointers</span>
-                   <span class="c1">// to normal defaults.</span>
-    <span class="cp">#pragma omp target \</span>
-<span class="cp">            defaultmap(firstprivate: scalar)     </span><span class="c1">//could also be default \</span>
-            <span class="n">defaultmap</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span>       <span class="n">aggregate</span><span class="p">)</span>  <span class="c1">//could also be default \</span>
-<span class="c1">            defaultmap(default:      pointer)    //must be default       \</span>
-<span class="c1">            map(ptr2m[:N])</span>
-    <span class="p">{</span>
-        <span class="n">s</span>       <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>               <span class="c1">// SCALAR firstprivate, value not returned</span>
-
-        <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>    <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>  <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>    <span class="c1">// AGGREGATE array, default map tofrom</span>
-
-                                    <span class="c1">// AGGREGATE structure, default tofrom</span>
-        <span class="n">S</span><span class="p">.</span><span class="n">s</span>     <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-        <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-        <span class="n">ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>                <span class="c1">// POINTER is private</span>
-        <span class="n">ptr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>   <span class="n">ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-    <span class="p">}</span>
-   <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">S</span><span class="p">.</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">2</span><span class="p">)</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot; PASSED 1 of 4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+int main(){
+  typedef struct S_struct { int s; int A[N]; } S_struct_t;
 
 
-<span class="c1">// Target Region 2</span>
-                   <span class="c1">// no implicit mapping allowed.</span>
-    <span class="cp">#pragma omp target defaultmap(none) map(tofrom: s, A, S)</span>
-    <span class="p">{</span>
-        <span class="n">s</span>     <span class="o">+=</span><span class="mi">5</span><span class="p">;</span>           <span class="c1">// All variables must be explicitly mapped</span>
-        <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">+=</span><span class="mi">5</span><span class="p">;</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+=</span><span class="mi">5</span><span class="p">;</span>
-        <span class="n">S</span><span class="p">.</span><span class="n">s</span>   <span class="o">+=</span><span class="mi">5</span><span class="p">;</span>
-        <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+=</span><span class="mi">5</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+=</span><span class="mi">5</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">7</span> <span class="o">&amp;&amp;</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span> <span class="o">&amp;&amp;</span> <span class="n">S</span><span class="p">.</span><span class="n">s</span><span class="o">==</span><span class="mi">7</span> <span class="o">&amp;&amp;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">7</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot; PASSED 2 of 4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+  int         s;       //scalar int variable (scalar)
+  int         A[N];    //aggregate variable  (array)
+  S_struct_t  S;       //aggregate variable  (structure)
+  int         *ptr;    //scalar, pointer variable (pointer)
+
+  int         s1, s2, s3;
+
+// Initialize everything to zero;
+   s=2; s1=s2=s3=0;
+   A[0]=0; A[1]=0;
+   S.s=0; S.A[0]=0; S.A[1]=0;
+
+// Target Region 1
+                   // Uses defaultmap to set scalars, aggregates &amp; pointers
+                   // to normal defaults.
+    #pragma omp target \
+            defaultmap(firstprivate: scalar)     //could also be default \
+            defaultmap(tofrom:       aggregate)  //could also be default \
+            defaultmap(default:      pointer)    //must be default       \
+            map(ptr2m[:N])
+    {
+        s       = 3;               // SCALAR firstprivate, value not returned
+
+        A[0]    = 3;  A[1] = 3;    // AGGREGATE array, default map tofrom
+
+                                    // AGGREGATE structure, default tofrom
+        S.s     = 2;
+        S.A[0]  = 2;  S.A[1] = 2;
+
+        ptr = &amp;A[0];                // POINTER is private
+        ptr[0] = 2;   ptr[1] = 2;
+
+    }
+   if(s==2 &amp;&amp; A[0]==2 &amp;&amp; S.s==2 &amp;&amp; S.A[0]==2)
+      printf(&quot; PASSED 1 of 4\n&quot;);
 
 
-<span class="c1">// Target Region 3</span>
-                  <span class="c1">// defaultmap &amp; explicit map with variables in same category</span>
-    <span class="n">s1</span><span class="o">=</span><span class="n">s2</span><span class="o">=</span><span class="n">s3</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
-    <span class="cp">#pragma  omp defaultmap(tofrom: scalar) map(firstprivate: s1,s2)</span>
-    <span class="p">{</span>
-        <span class="n">s1</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>           <span class="c1">// firstprivate (s1 value not returned to host)</span>
-        <span class="n">s2</span> <span class="o">+=</span> <span class="mi">5</span><span class="p">;</span>           <span class="c1">// firstprivate (s2 value not returned to host)</span>
-        <span class="n">s3</span> <span class="o">+=</span> <span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span><span class="p">;</span>     <span class="c1">// mapped as tofrom</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">s1</span><span class="o">==</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">s2</span><span class="o">==</span><span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="n">s3</span><span class="o">==</span><span class="mi">13</span> <span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot; PASSED 3 of 4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+// Target Region 2
+                   // no implicit mapping allowed.
+    #pragma omp target defaultmap(none) map(tofrom: s, A, S)
+    {
+        s     +=5;           // All variables must be explicitly mapped
+        A[0]  +=5; A[1]+=5;
+        S.s   +=5;
+        S.A[0]+=5; S.A[1]+=5;
+    }
+    if(s==7 &amp;&amp; A[0]==7 &amp;&amp; S.s==7 &amp;&amp; S.A[0]==7) printf(&quot; PASSED 2 of 4\n&quot;);
 
 
-<span class="c1">// Target Region 4</span>
-    <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-    <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+// Target Region 3
+                  // defaultmap &amp; explicit map with variables in same category
+    s1=s2=s3=1;
+    #pragma  omp defaultmap(tofrom: scalar) map(firstprivate: s1,s2)
+    {
+        s1 += 5;           // firstprivate (s1 value not returned to host)
+        s2 += 5;           // firstprivate (s2 value not returned to host)
+        s3 += s1 + s2;     // mapped as tofrom
+    }
+    if(s1==1 &amp;&amp; s2==1 &amp;&amp; s3==13 ) printf(&quot; PASSED 3 of 4\n&quot;);
 
-    <span class="c1">// arrays and structure are firstprivate, and scalars are from</span>
-    <span class="cp">#pragma omp target defaultmap(firstprivate: aggregate) map(from: s1, s2)</span>
-    <span class="p">{</span>
 
-        <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//Aggregate changes not returned to host</span>
-        <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span><span class="p">;</span> <span class="c1">//Aggregate changes not returned to host</span>
-        <span class="n">s1</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> <span class="c1">//s1 value returned to host</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> <span class="c1">//s1 value returned to host</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">S</span><span class="p">.</span><span class="n">A</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">s1</span><span class="o">==</span><span class="mi">2</span> <span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot; PASSED 4 of 4</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+// Target Region 4
+    A[0]=0; A[1]=0;
+    S.A[0]=0; S.A[1]=0;
 
-<span class="p">}</span>
+    // arrays and structure are firstprivate, and scalars are from
+    #pragma omp target defaultmap(firstprivate: aggregate) map(from: s1, s2)
+    {
+
+        A[0]+=1; S.A[0]+=1; //Aggregate changes not returned to host
+        A[1]+=1; S.A[1]+=1; //Aggregate changes not returned to host
+        s1 = A[0]+S.A[0]; //s1 value returned to host
+        s2 = A[1]+S.A[1]; //s1 value returned to host
+    }
+    if( A[0]==0 &amp;&amp; S.A[0]==0 &amp;&amp; s1==2 ) printf(&quot; PASSED 4 of 4\n&quot;);
+
+}
 
 </pre></div>
 </div>
@@ -1363,109 +1400,109 @@ if the  <code class="docutils literal notranslate"><span class="pre">defaultmap<
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">defaultmap</span><span class="mf">.1f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">defaultmap</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">2</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       defaultmap.1f90
+! type:       F-free
+! version:    omp_5.0
+program defaultmap
+  integer, parameter :: N=2
 
-  <span class="n">type</span> <span class="n">DDT_sA</span>
-    <span class="n">integer</span>  <span class="o">::</span> <span class="n">s</span>
-    <span class="n">integer</span>  <span class="o">::</span> <span class="n">A</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-  <span class="n">end</span> <span class="n">type</span>
+  type DDT_sA
+    integer  :: s
+    integer  :: A(N)
+  end type
 
-  <span class="n">integer</span>             <span class="o">::</span> <span class="n">s</span><span class="p">,</span><span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">,</span><span class="n">s3</span> <span class="o">!!</span> <span class="nl">SCALAR</span><span class="p">:</span> <span class="n">variable</span> <span class="p">(</span><span class="n">integer</span><span class="p">)</span>
+  integer             :: s,s1,s2,s3 !! SCALAR: variable (integer)
 
-  <span class="n">integer</span><span class="p">,</span><span class="n">target</span>      <span class="o">::</span> <span class="n">A</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>       <span class="o">!!</span> <span class="nl">AGGREGATE</span><span class="p">:</span> <span class="n">Array</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">DDT_sA</span><span class="p">)</span>        <span class="o">::</span> <span class="n">D</span>          <span class="o">!!</span> <span class="nl">AGGREGATE</span><span class="p">:</span> <span class="n">Derived</span> <span class="n">Data</span> <span class="n">Type</span> <span class="p">(</span><span class="n">D</span><span class="p">)</span>
+  integer,target      :: A(N)       !! AGGREGATE: Array
+  type(DDT_sA)        :: D          !! AGGREGATE: Derived Data Type (D)
 
-  <span class="n">integer</span><span class="p">,</span><span class="n">allocatable</span> <span class="o">::</span> <span class="n">H</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>       <span class="o">!!</span> <span class="nl">ALLOCATABLE</span><span class="p">:</span> <span class="n">Heap</span> <span class="n">allocated</span> <span class="n">array</span>
+  integer,allocatable :: H(:)       !! ALLOCATABLE: Heap allocated array
 
-  <span class="n">integer</span><span class="p">,</span><span class="n">pointer</span>     <span class="o">::</span> <span class="n">ptrA</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>    <span class="o">!!</span> <span class="nl">POINTER</span><span class="p">:</span> <span class="n">points</span> <span class="n">to</span> <span class="n">Array</span>
+  integer,pointer     :: ptrA(:)    !! POINTER: points to Array
 
-  <span class="o">!</span> <span class="n">Assign</span> <span class="n">vaues</span> <span class="n">to</span> <span class="n">scalar</span><span class="p">,</span> <span class="n">Array</span><span class="p">,</span> <span class="n">Allocatable</span><span class="p">,</span> <span class="n">and</span> <span class="n">Pointers</span>
+  ! Assign vaues to scalar, Array, Allocatable, and Pointers
 
-    <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
-    <span class="n">s1</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="n">s2</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>     <span class="n">s3</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">D</span><span class="o">%</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>  <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
+    s=2;
+    s1=0;   s2=0;     s3=0
+    D%s=0;  D%A(1)=0; D%A(2)=0
+    A(1)=0; A(2)=0
 
-    <span class="n">allocate</span><span class="p">(</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="p">)</span>
-    <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
+    allocate( H(2) )
+    H(1)=0; H(2)=0
 
-<span class="o">!!</span> <span class="n">Target</span> <span class="n">Region</span> <span class="mi">1</span>
-                   <span class="o">!!</span> <span class="n">Using</span> <span class="n">defaultmap</span> <span class="n">to</span> <span class="n">set</span> <span class="n">scalars</span><span class="p">,</span> <span class="n">aggregates</span> <span class="o">&amp;</span> <span class="n">pointers</span>
-                   <span class="o">!!</span> <span class="n">and</span> <span class="n">allocatables</span> <span class="n">to</span> <span class="n">normal</span> <span class="n">defaults</span><span class="p">.</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>                                        <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">defaultmap</span><span class="p">(</span> <span class="nl">firstprivate</span><span class="p">:</span> <span class="n">scalar</span><span class="p">)</span>      <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">defaultmap</span><span class="p">(</span> <span class="nl">tofrom</span><span class="p">:</span>       <span class="n">aggregate</span><span class="p">)</span>   <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">defaultmap</span><span class="p">(</span> <span class="nl">tofrom</span><span class="p">:</span>       <span class="n">allocatable</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">defaultmap</span><span class="p">(</span> <span class="k">default</span><span class="o">:</span>      <span class="n">pointer</span><span class="p">)</span>
+!! Target Region 1
+                   !! Using defaultmap to set scalars, aggregates &amp; pointers
+                   !! and allocatables to normal defaults.
+    !$omp target                                        &amp;
+    !$omp&amp;       defaultmap( firstprivate: scalar)      &amp;
+    !$omp&amp;       defaultmap( tofrom:       aggregate)   &amp;
+    !$omp&amp;       defaultmap( tofrom:       allocatable) &amp;
+    !$omp&amp;       defaultmap( default:      pointer)
 
-        <span class="n">s</span> <span class="o">=</span> <span class="mi">3</span>                     <span class="o">!!</span> <span class="n">SCALAR</span> <span class="n">firstprivate</span><span class="p">,</span> <span class="n">value</span> <span class="n">not</span> <span class="n">returned</span>
+        s = 3                     !! SCALAR firstprivate, value not returned
 
-        <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">3</span>                  <span class="o">!!</span> <span class="n">AGGREGATE</span> <span class="n">array</span><span class="p">,</span> <span class="k">default</span> <span class="n">map</span> <span class="n">tofrom</span>
-        <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">3</span>
+        A(1) = 3                  !! AGGREGATE array, default map tofrom
+        A(2) = 3
 
-        <span class="n">D</span><span class="o">%</span><span class="n">s</span> <span class="o">=</span> <span class="mi">2</span>                   <span class="o">!!</span> <span class="n">AGGR</span><span class="p">.</span> <span class="n">Derived</span> <span class="n">Types</span><span class="p">,</span> <span class="k">default</span> <span class="n">map</span> <span class="n">tofrom</span>
-        <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>  <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+        D%s = 2                   !! AGGR. Derived Types, default map tofrom
+        D%A(1) = 2;  D%A(2) = 2
 
-        <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>    <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>     <span class="o">!!</span> <span class="n">ALLOCATABLE</span><span class="p">,</span> <span class="k">default</span> <span class="n">map</span> <span class="n">tofrom</span>
+        H(1) = 2;    H(2) = 2     !! ALLOCATABLE, default map tofrom
 
-        <span class="n">ptrA</span><span class="o">=&gt;</span><span class="n">A</span>                   <span class="o">!!</span> <span class="n">POINTER</span> <span class="n">is</span> <span class="n">private</span>
-        <span class="n">ptrA</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">ptrA</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">2</span>
+        ptrA=&gt;A                   !! POINTER is private
+        ptrA(1) = 2; ptrA(2) = 2
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+    !$omp end target
 
-    <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">D</span><span class="o">%</span><span class="n">s</span><span class="o">==</span><span class="mi">2</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&amp;</span>
-       <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot; PASSED 1 of 4&quot;</span>
+    if(s==2 .and. A(1)==2 .and. D%s==2 .and. D%A(1)==2 .and. H(1) == 2) &amp;
+       print*,&quot; PASSED 1 of 4&quot;
 
-<span class="o">!!</span> <span class="n">Target</span> <span class="n">Region</span> <span class="mi">2</span>
-                   <span class="o">!!</span> <span class="n">no</span> <span class="n">implicit</span> <span class="n">mapping</span> <span class="n">allowed</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">defaultmap</span><span class="p">(</span><span class="n">none</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+!! Target Region 2
+                   !! no implicit mapping allowed
+    !$omp target defaultmap(none) map(tofrom: s, A, D)
 
-        <span class="n">s</span><span class="o">=</span><span class="n">s</span><span class="o">+</span><span class="mi">5</span>                     <span class="o">!!</span> <span class="n">All</span> <span class="n">variables</span> <span class="n">must</span> <span class="n">be</span> <span class="n">explicitly</span> <span class="n">mapped</span>
-        <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">5</span><span class="p">;</span>       <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">5</span>
-        <span class="n">D</span><span class="o">%</span><span class="n">s</span><span class="o">=</span><span class="n">D</span><span class="o">%</span><span class="n">s</span><span class="o">+</span><span class="mi">5</span>
-        <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">5</span><span class="p">;</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">5</span>
+        s=s+5                     !! All variables must be explicitly mapped
+        A(1)=A(1)+5;       A(2)=A(2)+5
+        D%s=D%s+5
+        D%A(1)=D%A(1)+5; D%A(2)=D%A(2)+5
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">s</span><span class="o">==</span><span class="mi">7</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">7</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">D</span><span class="o">%</span><span class="n">s</span><span class="o">==</span><span class="mi">7</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">7</span><span class="p">)</span> <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot; PASSED 2 of 4&quot;</span>
+    !$omp end target
+    if(s==7 .and. A(1)==7 .and. D%s==7 .and. D%A(1)==7) print*,&quot; PASSED 2 of 4&quot;
 
-<span class="o">!!</span> <span class="n">Target</span> <span class="n">Region</span> <span class="mi">3</span>
-                   <span class="o">!!</span><span class="n">defaultmap</span> <span class="o">&amp;</span> <span class="n">explicit</span> <span class="n">map</span> <span class="n">with</span> <span class="n">variables</span> <span class="n">in</span> <span class="n">same</span> <span class="n">category</span>
-    <span class="n">s1</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">s2</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">s3</span><span class="o">=</span><span class="mi">1</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">defaultmap</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span> <span class="n">scalar</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">firstprivate</span><span class="p">:</span> <span class="n">s1</span><span class="p">,</span><span class="n">s2</span><span class="p">)</span>
+!! Target Region 3
+                   !!defaultmap &amp; explicit map with variables in same category
+    s1=1; s2=1; s3=1
+    !$omp defaultmap(tofrom: scalar) map(firstprivate: s1,s2)
 
-        <span class="n">s1</span> <span class="o">=</span> <span class="n">s1</span><span class="o">+</span><span class="mi">5</span><span class="p">;</span>           <span class="o">!!</span> <span class="n">firstprivate</span> <span class="p">(</span><span class="n">s1</span> <span class="n">value</span> <span class="n">not</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span><span class="p">)</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="n">s2</span><span class="o">+</span><span class="mi">5</span><span class="p">;</span>           <span class="o">!!</span> <span class="n">firstprivate</span> <span class="p">(</span><span class="n">s2</span> <span class="n">value</span> <span class="n">not</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span><span class="p">)</span>
-        <span class="n">s3</span> <span class="o">=</span> <span class="n">s3</span> <span class="o">+</span><span class="n">s1</span> <span class="o">+</span> <span class="n">s2</span><span class="p">;</span>    <span class="o">!!</span> <span class="n">mapped</span> <span class="n">as</span> <span class="n">tofrom</span>
+        s1 = s1+5;           !! firstprivate (s1 value not returned to host)
+        s2 = s2+5;           !! firstprivate (s2 value not returned to host)
+        s3 = s3 +s1 + s2;    !! mapped as tofrom
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">s1</span><span class="o">==</span><span class="mi">1</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">s2</span><span class="o">==</span><span class="mi">1</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">s3</span><span class="o">==</span><span class="mi">13</span><span class="p">)</span> <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot; PASSED 3 of 4&quot;</span>
+    !$omp end target
+    if(s1==1 .and. s2==1 .and. s3==13) print*,&quot; PASSED 3 of 4&quot;
 
-<span class="o">!!</span> <span class="n">Target</span> <span class="n">Region</span> <span class="mi">4</span>
-    <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
-    <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>   <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span>
-                 <span class="o">!!</span> <span class="n">non</span><span class="o">-</span><span class="n">allocated</span> <span class="n">arrays</span> <span class="o">&amp;</span> <span class="n">derived</span> <span class="n">types</span> <span class="n">are</span> <span class="n">in</span> <span class="n">AGGREGATE</span> <span class="n">cat</span><span class="p">.</span>
-                 <span class="o">!!</span> <span class="n">Allocatable</span> <span class="n">Arrays</span> <span class="n">are</span> <span class="n">in</span> <span class="n">ALLOCATABLE</span> <span class="n">category</span>
-                 <span class="o">!!</span> <span class="n">Scalars</span> <span class="n">are</span> <span class="n">explicitly</span> <span class="n">mapped</span> <span class="n">from</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">defaultmap</span><span class="p">(</span><span class="nl">firstprivate</span><span class="p">:</span> <span class="n">aggregate</span> <span class="p">)</span>  <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">defaultmap</span><span class="p">(</span><span class="nl">firstprivate</span><span class="p">:</span> <span class="n">allocatable</span><span class="p">)</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">)</span>
+!! Target Region 4
+    A(1)=0;   A(2)=0
+    D%A(1)=0; D%A(2)=0
+    H(1)=0;   H(2)=0
+                 !! non-allocated arrays &amp; derived types are in AGGREGATE cat.
+                 !! Allocatable Arrays are in ALLOCATABLE category
+                 !! Scalars are explicitly mapped from
+    !$omp target defaultmap(firstprivate: aggregate )  &amp;
+    !$omp&amp;       defaultmap(firstprivate: allocatable) &amp;
+    !$omp&amp;       map(from: s1, s2)
 
-        <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">!!</span><span class="n">changes</span> <span class="n">not</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span>
-        <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">=</span><span class="n">H</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span> <span class="o">!!</span><span class="n">changes</span> <span class="n">not</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span>
-        <span class="n">s1</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">!!</span><span class="n">s1</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span>
-        <span class="n">s2</span> <span class="o">=</span> <span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>                   <span class="o">!!</span><span class="n">s2</span> <span class="n">returned</span> <span class="n">to</span> <span class="n">host</span>
+        A(1)=A(1)+1; D%A(1)=D%A(1)+1; H(1)=H(1)+1 !!changes not returned to host
+        A(2)=A(2)+1; D%A(2)=D%A(2)+1; H(2)=H(2)+1 !!changes not returned to host
+        s1 = A(1)+D%A(1)+H(1)                   !!s1 returned to host
+        s2 = A(2)+D%A(2)+H(1)                   !!s2 returned to host
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-    <span class="k">if</span><span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">D</span><span class="o">%</span><span class="n">A</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">H</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span> <span class="p">.</span><span class="n">and</span><span class="p">.</span> <span class="n">s1</span><span class="o">==</span><span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span>
-       <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot; PASSED 4 of 4&quot;</span>
+    !$omp end target
+    if(A(1)==0 .and. D%A(1)==0 .and. H(1)==0 .and. s1==3) &amp;
+       print*,&quot; PASSED 4 of 4&quot;
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
@@ -1498,7 +1535,7 @@ if the  <code class="docutils literal notranslate"><span class="pre">defaultmap<
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_target.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_target.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">target</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_target_pointer_mapping.html" title="next page">Pointer mapping</a>
 
         </div>

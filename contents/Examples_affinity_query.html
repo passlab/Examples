@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1254,50 +1292,52 @@
   <div class="section" id="affinity-query-functions">
 <h1>Affinity Query Functions<a class="headerlink" href="#affinity-query-functions" title="Permalink to this headline">¶</a></h1>
 <p>In the example below a team of threads is generated on each socket of the system, using nested parallelism. Several query functions are used to gather information to support the creation of the teams and to obtain  socket and thread numbers.</p>
-<p>For proper execution of the , the user must create a place partition, such that each place is a listing of the core numbers for a socket. For example, in a 2 socket system with 8 cores in each socket, and sequential numbering in the socket for the core numbers, the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable would be set to ‘{0:8},{8:8}’, using the place syntax { <em>lower_bound</em> : <em>length</em> : <em>stride</em> }, and the default stride of 1.</p>
-<p>The  determines the number of sockets ( <em>n_sockets</em> ) using the  <code class="docutils literal notranslate"><span class="pre">omp_get_num_places()</span></code>  query function. In this example each place is constructed with a list of  each socket’s core numbers, hence the number of places is equal to the number of sockets.</p>
-<p>The outer parallel region forms a team of threads, and each thread  executes on a socket (place) because the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause uses   <code class="docutils literal notranslate"><span class="pre">spread</span></code>  in the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct. Next, in the  <em>socket_init</em>  function, an inner parallel region creates a team  of threads equal to the number of elements (core numbers) from the place of the parent thread. Because the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct uses  a  <code class="docutils literal notranslate"><span class="pre">spread</span></code>  affinity policy, each of its threads inherits a subpartition of  the original partition.  Hence, the  <code class="docutils literal notranslate"><span class="pre">omp_get_place_num_procs</span></code>  query function returns the number of elements (here procs = cores) in the subpartition of the thread.   After each parent thread creates its nested parallel region on the section, the socket number and thread number are reported.</p>
+<p>For proper execution of the code, the user must create a place partition, such that each place is a listing of the core numbers for a socket. For example, in a 2 socket system with 8 cores in each socket, and sequential numbering in the socket for the core numbers, the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable would be set to “{0:8},{8:8}”, using the place syntax { <em>lower_bound</em> : <em>length</em> : <em>stride</em> }, and the default stride of 1.</p>
+<p>The code determines the number of sockets ( <em>n_sockets</em> ) using the <code class="docutils literal notranslate"><span class="pre">omp_get_num_places()</span></code> query function. In this example each place is constructed with a list of  each socket’s core numbers, hence the number of places is equal to the number of sockets.</p>
+<p>The outer parallel region forms a team of threads, and each thread  executes on a socket (place) because the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause uses  <code class="docutils literal notranslate"><span class="pre">spread</span></code> in the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct. Next, in the  <em>socket_init</em>  function, an inner parallel region creates a team  of threads equal to the number of elements (core numbers) from the place of the parent thread. Because the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct uses  a <code class="docutils literal notranslate"><span class="pre">spread</span></code> affinity policy, each of its threads inherits a subpartition of  the original partition.  Hence, the <code class="docutils literal notranslate"><span class="pre">omp_get_place_num_procs</span></code> query function returns the number of elements (here procs = cores) in the subpartition of the thread.   After each parent thread creates its nested parallel region on the section, the socket number and thread number are reported.</p>
 <p>Note: Portable tools like hwloc (Portable HardWare LOCality package), which support many common operating systems, can be used to determine the configuration of a system.   On some systems there are utilities, files or user guides that provide configuration information.  For instance, the socket number and proc_id’s for a socket  can be found in the /proc/cpuinfo text file on Linux systems.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: affinity_query.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">socket_init</span><span class="p">(</span><span class="kt">int</span> <span class="n">socket_num</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">n_procs</span><span class="p">;</span>
+/*
+* name: affinity_query.1c
+* type: C
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-   <span class="n">n_procs</span> <span class="o">=</span> <span class="n">omp_get_place_num_procs</span><span class="p">(</span><span class="n">socket_num</span><span class="p">);</span>
-   <span class="cp">#pragma omp parallel num_threads(n_procs) proc_bind(close)</span>
-   <span class="p">{</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Reporting in from socket num, thread num:  %d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
-                                <span class="n">socket_num</span><span class="p">,</span><span class="n">omp_get_thread_num</span><span class="p">()</span> <span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+void socket_init(int socket_num)
+{
+   int n_procs;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">n_sockets</span><span class="p">,</span> <span class="n">socket_num</span><span class="p">;</span>
+   n_procs = omp_get_place_num_procs(socket_num);
+   #pragma omp parallel num_threads(n_procs) proc_bind(close)
+   {
+      printf(&quot;Reporting in from socket num, thread num:  %d %d\n&quot;,
+                                socket_num,omp_get_thread_num() );
+   }
+}
 
-   <span class="n">omp_set_nested</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>              <span class="c1">// or export OMP_NESTED=true</span>
-   <span class="n">omp_set_max_active_levels</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>   <span class="c1">// or export OMP_MAX_ACTIVE_LEVELS=2</span>
+int main()
+{
+   int n_sockets, socket_num;
 
-   <span class="n">n_sockets</span> <span class="o">=</span> <span class="n">omp_get_num_places</span><span class="p">();</span>
-   <span class="cp">#pragma omp parallel num_threads(n_sockets) private(socket_num) \</span>
-<span class="cp">                        proc_bind(spread)</span>
-   <span class="p">{</span>
-      <span class="n">socket_num</span> <span class="o">=</span> <span class="n">omp_get_place_num</span><span class="p">();</span>
-      <span class="n">socket_init</span><span class="p">(</span><span class="n">socket_num</span><span class="p">);</span>
-   <span class="p">}</span>
+   omp_set_nested(1);              // or export OMP_NESTED=true
+   omp_set_max_active_levels(2);   // or export OMP_MAX_ACTIVE_LEVELS=2
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   n_sockets = omp_get_num_places();
+   #pragma omp parallel num_threads(n_sockets) private(socket_num) \
+                        proc_bind(spread)
+   {
+      socket_num = omp_get_place_num();
+      socket_init(socket_num);
+   }
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1305,39 +1345,39 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">affinity_query</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: affinity_query.1f
+! type: F-free
+! version: omp_4.5
 
-<span class="n">subroutine</span> <span class="n">socket_init</span><span class="p">(</span><span class="n">socket_num</span><span class="p">)</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span>  <span class="o">::</span> <span class="n">socket_num</span><span class="p">,</span> <span class="n">n_procs</span>
+subroutine socket_init(socket_num)
+   use omp_lib
+   integer  :: socket_num, n_procs
 
-   <span class="n">n_procs</span> <span class="o">=</span> <span class="n">omp_get_place_num_procs</span><span class="p">(</span><span class="n">socket_num</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="n">n_procs</span><span class="p">)</span> <span class="n">proc_bind</span><span class="p">(</span><span class="n">close</span><span class="p">)</span>
+   n_procs = omp_get_place_num_procs(socket_num)
+   !$omp parallel num_threads(n_procs) proc_bind(close)
 
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot;Reporting in from socket num, thread num: &quot;</span><span class="p">,</span>  <span class="o">&amp;</span>
-                                <span class="n">socket_num</span><span class="p">,</span><span class="n">omp_get_thread_num</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+      print*,&quot;Reporting in from socket num, thread num: &quot;,  &amp;
+                                socket_num,omp_get_thread_num()
+   !$omp end parallel
+end subroutine
 
-<span class="n">program</span> <span class="n">numa_teams</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">n_sockets</span><span class="p">,</span> <span class="n">socket_num</span>
+program numa_teams
+   use omp_lib
+   integer :: n_sockets, socket_num
 
-   <span class="n">call</span> <span class="n">omp_set_nested</span><span class="p">(.</span><span class="nb">true</span><span class="p">.)</span>            <span class="o">!</span> <span class="n">or</span> <span class="n">export</span> <span class="n">OMP_NESTED</span><span class="o">=</span><span class="nb">true</span>
-   <span class="n">call</span> <span class="n">omp_set_max_active_levels</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">!</span> <span class="n">or</span> <span class="n">export</span> <span class="n">OMP_MAX_ACTIVE_LEVELS</span><span class="o">=</span><span class="mi">2</span>
+   call omp_set_nested(.true.)            ! or export OMP_NESTED=true
+   call omp_set_max_active_levels(2) ! or export OMP_MAX_ACTIVE_LEVELS=2
 
-   <span class="n">n_sockets</span> <span class="o">=</span> <span class="n">omp_get_num_places</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="n">n_sockets</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">socket_num</span><span class="p">)</span> <span class="o">&amp;</span>
-   <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>         <span class="n">proc_bind</span><span class="p">(</span><span class="n">spread</span><span class="p">)</span>
+   n_sockets = omp_get_num_places()
+   !$omp parallel num_threads(n_sockets) private(socket_num) &amp;
+   !$omp&amp;         proc_bind(spread)
 
-      <span class="n">socket_num</span> <span class="o">=</span> <span class="n">omp_get_place_num</span><span class="p">()</span>
-      <span class="n">call</span> <span class="n">socket_init</span><span class="p">(</span><span class="n">socket_num</span><span class="p">)</span>
+      socket_num = omp_get_place_num()
+      call socket_init(socket_num)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>

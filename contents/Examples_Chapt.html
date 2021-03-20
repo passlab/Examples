@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,16 +1291,21 @@
                 
   <div class="section" id="examples">
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>The following are examples of the OpenMP API directives, constructs, and routines.</p>
-<p>A statement following a directive is compound only when necessary, and a  non-compound statement is indented with respect to a directive preceding it.</p>
-<p>Each example is labeled as  <em>ename.seqno.ext</em> , where  <em>ename</em>  is  the example name,  <em>seqno</em>  is the sequence number in a section, and   <em>ext</em>  is the source file extension to indicate the  type and  source form.   <em>ext</em>  is one of the following:</p>
+<p>The following are examples of the OpenMP API directives, constructs, and routines.  A statement following a directive is compound only when necessary, and a  non-compound statement is indented with respect to a directive preceding it.</p>
+<p>Each example is labeled as  <em>ename.seqno.ext</em> , where  <em>ename</em>  is  the example name,  <em>seqno</em>  is the sequence number in a section, and   <em>ext</em>  is the source file extension to indicate the code type and  source form.   <em>ext</em>  is one of the following:</p>
 <ul class="simple">
-<li><p><em>c</em>  – C ,</p></li>
-<li><p><em>cpp</em>  – C++ ,</p></li>
-<li><p><em>f</em>  – Fortran  in fixed form, and</p></li>
-<li><p><em>f90</em>  – Fortran  in free form.</p></li>
+<li><p><em>c</em>  – C code,</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">f</span> <span class="pre">the</span> <span class="pre">example</span> <span class="pre">labels</span> <span class="pre">may</span> <span class="pre">include</span> <span class="pre">version</span> <span class="pre">information</span>&#160; <span class="pre">({omp_</span> <span class="pre">_verno_</span> <span class="pre">})</span> <span class="pre">to</span> <span class="pre">indicate</span> <span class="pre">features</span> <span class="pre">that</span> <span class="pre">are</span> <span class="pre">illustrated</span> <span class="pre">by</span> <span class="pre">an</span> <span class="pre">example</span> <span class="pre">for</span> <span class="pre">a</span> <span class="pre">specific</span> <span class="pre">OpenMP</span> <span class="pre">version,</span> <span class="pre">such</span> <span class="pre">as</span> <span class="pre">&quot;</span> <span class="pre">_scan.1.c_</span>&#160;&#160; <span class="pre">;({omp_5.0}).&quot;'</span></code></p>
+<ul class="simple">
+<li><p><em>cpp</em>  – C++ code,</p></li>
+</ul>
+<ul class="simple">
+<li><p><em>f</em>  – Fortran code in fixed form, and</p></li>
+</ul>
+<ul class="simple">
+<li><p><em>f90</em>  – Fortran code in free form.</p></li>
+</ul>
+<p>Some of the example labels may include version information  (<code class="docutils literal notranslate"><span class="pre">omp_</span> <span class="pre">_verno_</span> </code>) to indicate features that are illustrated by an example for a specific OpenMP version, such as ” <em>scan.1.c</em>   (<code class="docutils literal notranslate"><span class="pre">omp_5.0</span></code>).’’</p>
 </div>
 
     <script type="text/x-thebe-config">

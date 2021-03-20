@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,66 +1290,68 @@
               <div>
                 
   <div class="section" id="the-flush-construct-without-a-list">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  Construct without a List<a class="headerlink" href="#the-flush-construct-without-a-list" title="Permalink to this headline">¶</a></h1>
-<p>The following example distinguishes the shared variables affected by a  <code class="docutils literal notranslate"><span class="pre">flush</span></code>   construct with no list from the shared objects that are not affected:</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">flush</span></code> Construct without a List<a class="headerlink" href="#the-flush-construct-without-a-list" title="Permalink to this headline">¶</a></h1>
+<p>The following example distinguishes the shared variables affected by a <code class="docutils literal notranslate"><span class="pre">flush</span></code>  construct with no list from the shared objects that are not affected:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: flush_nolist.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">f1</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">q</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="o">*</span><span class="n">q</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="cp">#pragma omp flush</span>
-  <span class="cm">/* x, p, and *q are flushed */</span>
-  <span class="cm">/* because they are shared and accessible */</span>
-  <span class="cm">/* q is not flushed because it is not shared. */</span>
-<span class="p">}</span>
+/*
+* name: flush_nolist.1c
+* type: C
+*/
+int x, *p = &amp;x;
 
-<span class="kt">void</span> <span class="nf">f2</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">q</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="cp">#pragma omp barrier</span>
-  <span class="o">*</span><span class="n">q</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="cp">#pragma omp barrier</span>
+void f1(int *q)
+{
+  *q = 1;
+  #pragma omp flush
+  /* x, p, and *q are flushed */
+  /* because they are shared and accessible */
+  /* q is not flushed because it is not shared. */
+}
 
-  <span class="cm">/* a barrier implies a flush */</span>
-  <span class="cm">/* x, p, and *q are flushed */</span>
-  <span class="cm">/* because they are shared and accessible */</span>
-  <span class="cm">/* q is not flushed because it is not shared. */</span>
-<span class="p">}</span>
+void f2(int *q)
+{
+  #pragma omp barrier
+  *q = 2;
+  #pragma omp barrier
 
-<span class="kt">int</span> <span class="nf">g</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel reduction(+: sum) num_threads(10)</span>
-  <span class="p">{</span>
-    <span class="n">f1</span><span class="p">(</span><span class="o">&amp;</span><span class="n">j</span><span class="p">);</span>
+  /* a barrier implies a flush */
+  /* x, p, and *q are flushed */
+  /* because they are shared and accessible */
+  /* q is not flushed because it is not shared. */
+}
 
-    <span class="cm">/* i, n and sum were not flushed */</span>
-    <span class="cm">/* because they were not accessible in f1 */</span>
-    <span class="cm">/* j was flushed because it was accessible */</span>
-    <span class="n">sum</span> <span class="o">+=</span> <span class="n">j</span><span class="p">;</span>
+int g(int n)
+{
+  int i = 1, j, sum = 0;
+  *p = 1;
+  #pragma omp parallel reduction(+: sum) num_threads(10)
+  {
+    f1(&amp;j);
 
-    <span class="n">f2</span><span class="p">(</span><span class="o">&amp;</span><span class="n">j</span><span class="p">);</span>
+    /* i, n and sum were not flushed */
+    /* because they were not accessible in f1 */
+    /* j was flushed because it was accessible */
+    sum += j;
 
-    <span class="cm">/* i, n, and sum were not flushed */</span>
-    <span class="cm">/* because they were not accessible in f2 */</span>
-    <span class="cm">/* j was flushed because it was accessible */</span>
-    <span class="n">sum</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">j</span> <span class="o">+</span> <span class="o">*</span><span class="n">p</span> <span class="o">+</span> <span class="n">n</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">sum</span><span class="p">;</span>
-<span class="p">}</span>
+    f2(&amp;j);
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">result</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span>
-  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
-<span class="p">}</span>
+    /* i, n, and sum were not flushed */
+    /* because they were not accessible in f2 */
+    /* j was flushed because it was accessible */
+    sum += i + j + *p + n;
+  }
+  return sum;
+}
+
+int main()
+{
+  int result = g(7);
+  return result;
+}
 
 </pre></div>
 </div>
@@ -1319,72 +1359,72 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">flush_nolist</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">F1</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">DATA</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">TARGET</span>  <span class="o">::</span> <span class="n">X</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">Q</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: flush_nolist.1f
+! type: F-fixed
+      SUBROUTINE F1(Q)
+        COMMON /DATA/ X, P
+        INTEGER, TARGET  :: X
+        INTEGER, POINTER :: P
+        INTEGER Q
 
-        <span class="n">Q</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">FLUSH</span>
-        <span class="o">!</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span> <span class="n">and</span> <span class="n">Q</span> <span class="n">are</span> <span class="n">flushed</span>
-        <span class="o">!</span> <span class="n">because</span> <span class="n">they</span> <span class="n">are</span> <span class="n">shared</span> <span class="n">and</span> <span class="n">accessible</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">F1</span>
+        Q = 1
+!$OMP   FLUSH
+        ! X, P and Q are flushed
+        ! because they are shared and accessible
+      END SUBROUTINE F1
 
-      <span class="n">SUBROUTINE</span> <span class="n">F2</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">DATA</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">TARGET</span>  <span class="o">::</span> <span class="n">X</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">Q</span>
+      SUBROUTINE F2(Q)
+        COMMON /DATA/ X, P
+        INTEGER, TARGET  :: X
+        INTEGER, POINTER :: P
+        INTEGER Q
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
-          <span class="n">Q</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
-          <span class="o">!</span> <span class="n">a</span> <span class="n">barrier</span> <span class="n">implies</span> <span class="n">a</span> <span class="n">flush</span>
-          <span class="o">!</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span> <span class="n">and</span> <span class="n">Q</span> <span class="n">are</span> <span class="n">flushed</span>
-          <span class="o">!</span> <span class="n">because</span> <span class="n">they</span> <span class="n">are</span> <span class="n">shared</span> <span class="n">and</span> <span class="n">accessible</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">F2</span>
+!$OMP   BARRIER
+          Q = 2
+!$OMP   BARRIER
+          ! a barrier implies a flush
+          ! X, P and Q are flushed
+          ! because they are shared and accessible
+      END SUBROUTINE F2
 
-      <span class="n">INTEGER</span> <span class="n">FUNCTION</span> <span class="n">G</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">DATA</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">TARGET</span>  <span class="o">::</span> <span class="n">X</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">N</span>
-        <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">SUM</span>
+      INTEGER FUNCTION G(N)
+        COMMON /DATA/ X, P
+        INTEGER, TARGET  :: X
+        INTEGER, POINTER :: P
+        INTEGER N
+        INTEGER I, J, SUM
 
-        <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="n">SUM</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">P</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">REDUCTION</span><span class="p">(</span><span class="o">+:</span> <span class="n">SUM</span><span class="p">)</span> <span class="n">NUM_THREADS</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-          <span class="n">CALL</span> <span class="n">F1</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-            <span class="o">!</span> <span class="n">I</span><span class="p">,</span> <span class="n">N</span> <span class="n">and</span> <span class="n">SUM</span> <span class="n">were</span> <span class="n">not</span> <span class="n">flushed</span>
-            <span class="o">!</span>   <span class="n">because</span> <span class="n">they</span> <span class="n">were</span> <span class="n">not</span> <span class="n">accessible</span> <span class="n">in</span> <span class="n">F1</span>
-            <span class="o">!</span> <span class="n">J</span> <span class="n">was</span> <span class="n">flushed</span> <span class="n">because</span> <span class="n">it</span> <span class="n">was</span> <span class="n">accessible</span>
-          <span class="n">SUM</span> <span class="o">=</span> <span class="n">SUM</span> <span class="o">+</span> <span class="n">J</span>
+        I = 1
+        SUM = 0
+        P = 1
+!$OMP   PARALLEL REDUCTION(+: SUM) NUM_THREADS(10)
+          CALL F1(J)
+            ! I, N and SUM were not flushed
+            !   because they were not accessible in F1
+            ! J was flushed because it was accessible
+          SUM = SUM + J
 
-          <span class="n">CALL</span> <span class="n">F2</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
-            <span class="o">!</span> <span class="n">I</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">and</span> <span class="n">SUM</span> <span class="n">were</span> <span class="n">not</span> <span class="n">flushed</span>
-            <span class="o">!</span>   <span class="n">because</span> <span class="n">they</span> <span class="n">were</span> <span class="n">not</span> <span class="n">accessible</span> <span class="n">in</span> <span class="n">f2</span>
-            <span class="o">!</span> <span class="n">J</span> <span class="n">was</span> <span class="n">flushed</span> <span class="n">because</span> <span class="n">it</span> <span class="n">was</span> <span class="n">accessible</span>
-          <span class="n">SUM</span> <span class="o">=</span> <span class="n">SUM</span> <span class="o">+</span> <span class="n">I</span> <span class="o">+</span> <span class="n">J</span> <span class="o">+</span> <span class="n">P</span> <span class="o">+</span> <span class="n">N</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+          CALL F2(J)
+            ! I, N, and SUM were not flushed
+            !   because they were not accessible in f2
+            ! J was flushed because it was accessible
+          SUM = SUM + I + J + P + N
+!$OMP   END PARALLEL
 
-        <span class="n">G</span> <span class="o">=</span> <span class="n">SUM</span>
-      <span class="n">END</span> <span class="n">FUNCTION</span> <span class="n">G</span>
+        G = SUM
+      END FUNCTION G
 
-      <span class="n">PROGRAM</span> <span class="n">FLUSH_NOLIST</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">DATA</span><span class="o">/</span> <span class="n">X</span><span class="p">,</span> <span class="n">P</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">TARGET</span>  <span class="o">::</span> <span class="n">X</span>
-        <span class="n">INTEGER</span><span class="p">,</span> <span class="n">POINTER</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">RESULT</span><span class="p">,</span> <span class="n">G</span>
+      PROGRAM FLUSH_NOLIST
+        COMMON /DATA/ X, P
+        INTEGER, TARGET  :: X
+        INTEGER, POINTER :: P
+        INTEGER RESULT, G
 
-        <span class="n">P</span> <span class="o">=&gt;</span> <span class="n">X</span>
-        <span class="n">RESULT</span> <span class="o">=</span> <span class="n">G</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-        <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">RESULT</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">FLUSH_NOLIST</span>
+        P =&gt; X
+        RESULT = G(7)
+        PRINT *, RESULT
+      END PROGRAM FLUSH_NOLIST
 
 </pre></div>
 </div>
@@ -1417,7 +1457,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_atomic_restrict.html" title="previous page">Restrictions on the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_atomic_restrict.html" title="previous page">Restrictions on the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_acquire_release.html" title="next page">Synchronization Based on Acquire/Release Semantics</a>
 
         </div>

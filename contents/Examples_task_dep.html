@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1315,28 +1353,30 @@
 <h1>Task Dependences<a class="headerlink" href="#task-dependences" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="flow-dependence">
 <h2>Flow Dependence<a class="headerlink" href="#flow-dependence" title="Permalink to this headline">¶</a></h2>
-<p>This example shows a simple flow dependence using a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.</p>
+<p>This example shows a simple flow dependence using a <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-      <span class="cp">#pragma omp task shared(x) depend(in: x)</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.1c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+int main() {
+   int x = 1;
+   #pragma omp parallel
+   #pragma omp single
+   {
+      #pragma omp task shared(x) depend(out: x)
+         x = 2;
+      #pragma omp task shared(x) depend(in: x)
+         printf(&quot;x = %d\n&quot;, x);
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1344,56 +1384,58 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.1f
+! type: F-free
+! version:    omp_4.0
+program example
+   integer :: x
+   x = 1
+   !$omp parallel
+   !$omp single
+      !$omp task shared(x) depend(out: x)
+         x = 2
+      !$omp end task
+      !$omp task shared(x) depend(in: x)
+         print*, &quot;x = &quot;, x
+      !$omp end task
+   !$omp end single
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The program will always print  ‘ x = 2 ‘ , because the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clauses enforce the ordering of the tasks. If the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses had been  omitted, then the tasks could execute in any order and the program and the program  would have a race condition.</p>
+<p>The program will always print  <strong>“</strong> x = 2 <strong>“</strong> , because the <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses enforce the ordering of the tasks. If the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses had been  omitted, then the tasks could execute in any order and the program and the program  would have a race condition.</p>
 </div>
 <div class="section" id="anti-dependence">
 <h2>Anti-dependence<a class="headerlink" href="#anti-dependence" title="Permalink to this headline">¶</a></h2>
-<p>This example shows an anti-dependence using the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.</p>
+<p>This example shows an anti-dependence using the <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task shared(x) depend(in: x)</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
-      <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.2c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+int main()
+{
+   int x = 1;
+   #pragma omp parallel
+   #pragma omp single
+   {
+      #pragma omp task shared(x) depend(in: x)
+         printf(&quot;x = %d\n&quot;, x);
+      #pragma omp task shared(x) depend(out: x)
+         x = 2;
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1401,57 +1443,59 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.2f
+! type: F-free
+! version:    omp_4.0
+program example
+   integer :: x
+   x = 1
+   !$omp parallel
+   !$omp single
+      !$omp task shared(x) depend(in: x)
+         print*, &quot;x = &quot;, x
+      !$omp end task
+      !$omp task shared(x) depend(out: x)
+         x = 2
+      !$omp end task
+   !$omp end single
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The program will always print  ‘ x = 1 ‘ , because the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clauses enforce the ordering of the tasks. If the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
+<p>The program will always print  <strong>“</strong> x = 1 <strong>“</strong> , because the <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses enforce the ordering of the tasks. If the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
 </div>
 <div class="section" id="output-dependence">
 <h2>Output Dependence<a class="headerlink" href="#output-dependence" title="Permalink to this headline">¶</a></h2>
-<p>This example shows an output dependence using the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.</p>
+<p>This example shows an output dependence using the <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-      <span class="cp">#pragma omp taskwait</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.3c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+int main() {
+   int x;
+   #pragma omp parallel
+   #pragma omp single
+   {
+      #pragma omp task shared(x) depend(out: x)
+         x = 1;
+      #pragma omp task shared(x) depend(out: x)
+         x = 2;
+      #pragma omp taskwait
+      printf(&quot;x = %d\n&quot;, x);
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1459,58 +1503,60 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.3f
+! type: F-free
+! version:    omp_4.0
+program example
+   integer :: x
+   !$omp parallel
+   !$omp single
+      !$omp task shared(x) depend(out: x)
+         x = 1
+      !$omp end task
+      !$omp task shared(x) depend(out: x)
+         x = 2
+      !$omp end task
+      !$omp taskwait
+      print*, &quot;x = &quot;, x
+   !$omp end single
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The program will always print  ‘ x = 2 ‘ , because the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>   clauses enforce the ordering of the tasks. If the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
+<p>The program will always print  <strong>“</strong> x = 2 <strong>“</strong> , because the <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses enforce the ordering of the tasks. If the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
 </div>
 <div class="section" id="concurrent-execution-with-dependences">
 <h2>Concurrent Execution with Dependences<a class="headerlink" href="#concurrent-execution-with-dependences" title="Permalink to this headline">¶</a></h2>
-<p>In this example we show potentially concurrent execution of tasks using multiple  flow dependences expressed using the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>   construct.</p>
+<p>In this example we show potentially concurrent execution of tasks using multiple  flow dependences expressed using the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-      <span class="cp">#pragma omp task shared(x) depend(in: x)</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x + 1 = %d. &quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-      <span class="cp">#pragma omp task shared(x) depend(in: x)</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x + 2 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.4c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+int main() {
+   int x = 1;
+   #pragma omp parallel
+   #pragma omp single
+   {
+      #pragma omp task shared(x) depend(out: x)
+         x = 2;
+      #pragma omp task shared(x) depend(in: x)
+         printf(&quot;x + 1 = %d. &quot;, x+1);
+      #pragma omp task shared(x) depend(in: x)
+         printf(&quot;x + 2 = %d\n&quot;, x+2);
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1518,73 +1564,75 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.4f
+! type: F-free
+! version:    omp_4.0
 
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
+program example
+   integer :: x
 
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
+   x = 1
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
+   !$omp parallel
+   !$omp single
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      !$omp task shared(x) depend(out: x)
+         x = 2
+      !$omp end task
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x + 1 = &quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;.&quot;</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      !$omp task shared(x) depend(in: x)
+         print*, &quot;x + 1 = &quot;, x+1, &quot;.&quot;
+      !$omp end task
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x + 2 = &quot;</span><span class="p">,</span> <span class="n">x</span><span class="o">+</span><span class="mi">2</span><span class="p">,</span> <span class="s">&quot;.&quot;</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+      !$omp task shared(x) depend(in: x)
+         print*, &quot;x + 2 = &quot;, x+2, &quot;.&quot;
+      !$omp end task
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+   !$omp end single
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The last two tasks are dependent on the first task. However there is no dependence  between the last two tasks, which may execute in any order (or concurrently if  more than one thread is available). Thus, the possible outputs are  ‘ x  + 1 = 3. x + 2 = 4.  ‘  and  ‘ x + 2 = 4. x + 1 = 3.  ‘ .  If the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses had been omitted, then all of the tasks could execute  in any order and the program would have a race condition.</p>
+<p>The last two tasks are dependent on the first task. However there is no dependence  between the last two tasks, which may execute in any order (or concurrently if  more than one thread is available). Thus, the possible outputs are  <strong>“</strong> x  + 1 = 3. x + 2 = 4.  <strong>“</strong>  and  <strong>“</strong> x + 2 = 4. x + 1 = 3.  <strong>“</strong> .  If the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses had been omitted, then all of the tasks could execute  in any order and the program would have a race condition.</p>
 </div>
 <div class="section" id="matrix-multiplication">
 <h2>Matrix multiplication<a class="headerlink" href="#matrix-multiplication" title="Permalink to this headline">¶</a></h2>
 <p>This example shows a task-based blocked matrix multiplication. Matrices are of  NxN elements, and the multiplication is implemented using blocks of BSxBS elements.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.5c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="c1">// Assume BS divides N perfectly</span>
-<span class="kt">void</span> <span class="nf">matmul_depend</span><span class="p">(</span><span class="kt">int</span> <span class="n">N</span><span class="p">,</span> <span class="kt">int</span> <span class="n">BS</span><span class="p">,</span> <span class="kt">float</span> <span class="n">A</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span> <span class="kt">float</span> <span class="n">B</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">],</span> <span class="kt">float</span>
-<span class="n">C</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">]</span> <span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span> <span class="n">kk</span><span class="p">;</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">+=</span><span class="n">BS</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">j</span><span class="o">+=</span><span class="n">BS</span><span class="p">)</span> <span class="p">{</span>
-         <span class="k">for</span> <span class="p">(</span><span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">k</span><span class="o">+=</span><span class="n">BS</span><span class="p">)</span> <span class="p">{</span>
-<span class="c1">// Note 1: i, j, k, A, B, C are firstprivate by default</span>
-<span class="c1">// Note 2: A, B and C are just pointers</span>
-<span class="cp">#pragma omp task private(ii, jj, kk) \</span>
-<span class="cp">            depend ( in: A[i:BS][k:BS], B[k:BS][j:BS] ) \</span>
-<span class="cp">            depend ( inout: C[i:BS][j:BS] )</span>
-            <span class="k">for</span> <span class="p">(</span><span class="n">ii</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="n">i</span><span class="o">+</span><span class="n">BS</span><span class="p">;</span> <span class="n">ii</span><span class="o">++</span> <span class="p">)</span>
-               <span class="k">for</span> <span class="p">(</span><span class="n">jj</span> <span class="o">=</span> <span class="n">j</span><span class="p">;</span> <span class="n">jj</span> <span class="o">&lt;</span> <span class="n">j</span><span class="o">+</span><span class="n">BS</span><span class="p">;</span> <span class="n">jj</span><span class="o">++</span> <span class="p">)</span>
-                  <span class="k">for</span> <span class="p">(</span><span class="n">kk</span> <span class="o">=</span> <span class="n">k</span><span class="p">;</span> <span class="n">kk</span> <span class="o">&lt;</span> <span class="n">k</span><span class="o">+</span><span class="n">BS</span><span class="p">;</span> <span class="n">kk</span><span class="o">++</span> <span class="p">)</span>
-                     <span class="n">C</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="n">jj</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="n">jj</span><span class="p">]</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="n">kk</span><span class="p">]</span> <span class="o">*</span> <span class="n">B</span><span class="p">[</span><span class="n">kk</span><span class="p">][</span><span class="n">jj</span><span class="p">];</span>
-         <span class="p">}</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.5c
+* type: C
+* version: omp_4.0
+*/
+// Assume BS divides N perfectly
+void matmul_depend(int N, int BS, float A[N][N], float B[N][N], float
+C[N][N] )
+{
+   int i, j, k, ii, jj, kk;
+   for (i = 0; i &lt; N; i+=BS) {
+      for (j = 0; j &lt; N; j+=BS) {
+         for (k = 0; k &lt; N; k+=BS) {
+// Note 1: i, j, k, A, B, C are firstprivate by default
+// Note 2: A, B and C are just pointers
+#pragma omp task private(ii, jj, kk) \
+            depend ( in: A[i:BS][k:BS], B[k:BS][j:BS] ) \
+            depend ( inout: C[i:BS][j:BS] )
+            for (ii = i; ii &lt; i+BS; ii++ )
+               for (jj = j; jj &lt; j+BS; jj++ )
+                  for (kk = k; kk &lt; k+BS; kk++ )
+                     C[ii][jj] = C[ii][jj] + A[ii][kk] * B[kk][jj];
+         }
+      }
+   }
+}
 
 </pre></div>
 </div>
@@ -1592,35 +1640,35 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="o">!</span> <span class="n">Assume</span> <span class="n">BS</span> <span class="n">divides</span> <span class="n">N</span> <span class="n">perfectly</span>
-<span class="n">subroutine</span> <span class="n">matmul_depend</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">BS</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span><span class="p">,</span> <span class="n">BS</span><span class="p">,</span> <span class="n">BM</span>
-   <span class="n">real</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> <span class="o">::</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">ii</span><span class="p">,</span> <span class="n">jj</span><span class="p">,</span> <span class="n">kk</span>
-   <span class="n">BM</span> <span class="o">=</span> <span class="n">BS</span> <span class="o">-</span> <span class="mi">1</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">BS</span>
-      <span class="k">do</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">BS</span>
-         <span class="k">do</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">BS</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">C</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">jj</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">!</span> <span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">,</span><span class="n">K</span> <span class="n">are</span> <span class="n">firstprivate</span> <span class="n">by</span> <span class="k">default</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">depend</span> <span class="p">(</span> <span class="nl">in</span><span class="p">:</span> <span class="n">A</span><span class="p">(</span><span class="nl">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">BM</span><span class="p">,</span> <span class="nl">k</span><span class="p">:</span><span class="n">k</span><span class="o">+</span><span class="n">BM</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="nl">k</span><span class="p">:</span><span class="n">k</span><span class="o">+</span><span class="n">BM</span><span class="p">,</span> <span class="nl">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">BM</span><span class="p">)</span> <span class="p">)</span> <span class="o">&amp;</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">depend</span> <span class="p">(</span> <span class="nl">inout</span><span class="p">:</span> <span class="n">C</span><span class="p">(</span><span class="nl">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">BM</span><span class="p">,</span> <span class="nl">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">BM</span><span class="p">)</span> <span class="p">)</span>
-            <span class="k">do</span> <span class="n">ii</span> <span class="o">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="n">BM</span>
-               <span class="k">do</span> <span class="n">jj</span> <span class="o">=</span> <span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="o">+</span><span class="n">BM</span>
-                  <span class="k">do</span> <span class="n">kk</span> <span class="o">=</span> <span class="n">k</span><span class="p">,</span> <span class="n">k</span><span class="o">+</span><span class="n">BM</span>
-                     <span class="n">C</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">C</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">ii</span><span class="p">)</span> <span class="o">+</span> <span class="n">A</span><span class="p">(</span><span class="n">kk</span><span class="p">,</span><span class="n">ii</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span><span class="p">(</span><span class="n">jj</span><span class="p">,</span><span class="n">kk</span><span class="p">)</span>
-                  <span class="n">end</span> <span class="k">do</span>
-               <span class="n">end</span> <span class="k">do</span>
-            <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="n">end</span> <span class="k">do</span>
-   <span class="n">end</span> <span class="k">do</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.5f
+! type: F-free
+! version:    omp_4.0
+! Assume BS divides N perfectly
+subroutine matmul_depend (N, BS, A, B, C)
+   implicit none
+   integer :: N, BS, BM
+   real, dimension(N, N) :: A, B, C
+   integer :: i, j, k, ii, jj, kk
+   BM = BS - 1
+   do i = 1, N, BS
+      do j = 1, N, BS
+         do k = 1, N, BS
+!$omp task shared(A,B,C) private(ii,jj,kk) &amp; ! I,J,K are firstprivate by default
+!$omp depend ( in: A(i:i+BM, k:k+BM), B(k:k+BM, j:j+BM) ) &amp;
+!$omp depend ( inout: C(i:i+BM, j:j+BM) )
+            do ii = i, i+BM
+               do jj = j, j+BM
+                  do kk = k, k+BM
+                     C(jj,ii) = C(jj,ii) + A(kk,ii) * B(jj,kk)
+                  end do
+               end do
+            end do
+!$omp end task
+         end do
+      end do
+   end do
+end subroutine
 
 </pre></div>
 </div>
@@ -1628,51 +1676,53 @@
 </div>
 </div>
 <div class="section" id="taskwait-with-dependences">
-<h2><code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  with Dependences<a class="headerlink" href="#taskwait-with-dependences" title="Permalink to this headline">¶</a></h2>
-<p>In this #### three examples illustrate how the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause can be applied to a  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct to make the generating task wait for specific child tasks to complete. This is an OpenMP 5.0 feature.  In the same manner that dependences can order executions among child tasks with  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses on  <code class="docutils literal notranslate"><span class="pre">task</span></code>  constructs, the generating task can be scheduled to wait on child tasks at a  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  before it can proceed.</p>
-<p>Note: Since the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on a  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct relaxes the default synchronization behavior (waiting for all children to finish), it is important to realize that child tasks that are not predecessor tasks, as determined by the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct, may be running concurrently while the generating task is executing after the taskwait.</p>
-<p>In the first example the generating task waits at the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct for the completion of the first child task because a dependence on the first task is produced by  <em>x</em>  with an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type within the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct. Immediately after the first  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct it is safe to access the  <em>x</em>  variable by the generating task, as shown in the print statement. There is no completion restraint on the second child task. Hence, immediately after the first  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  it is unsafe to access the  <em>y</em>  variable since the second child task may still be executing. The second  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  ensures that the second child task has completed; hence it is safe to access the  <em>y</em>  variable in the following print statement.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">taskwait</span></code> with Dependences<a class="headerlink" href="#taskwait-with-dependences" title="Permalink to this headline">¶</a></h2>
+<p>In this subsection three examples illustrate how the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause can be applied to a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct to make the generating task wait for specific child tasks to complete. This is an OpenMP 5.0 feature.  In the same manner that dependences can order executions among child tasks with <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses on <code class="docutils literal notranslate"><span class="pre">task</span></code> constructs, the generating task can be scheduled to wait on child tasks at a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> before it can proceed.</p>
+<p>Note: Since the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause on a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct relaxes the default synchronization behavior (waiting for all children to finish), it is important to realize that child tasks that are not predecessor tasks, as determined by the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct, may be running concurrently while the generating task is executing after the taskwait.</p>
+<p>In the first example the generating task waits at the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct for the completion of the first child task because a dependence on the first task is produced by  <em>x</em>  with an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type within the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct. Immediately after the first <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct it is safe to access the  <em>x</em>  variable by the generating task, as shown in the print statement. There is no completion restraint on the second child task. Hence, immediately after the first <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> it is unsafe to access the  <em>y</em>  variable since the second child task may still be executing. The second <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> ensures that the second child task has completed; hence it is safe to access the  <em>y</em>  variable in the following print statement.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_depend.6.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+/*
+* name: task_depend.6.c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+#include&lt;stdio.h&gt;
 
-    <span class="cp">#pragma omp task depend(inout: x) shared(x)</span>
-    <span class="n">x</span><span class="o">++</span><span class="p">;</span>                                        <span class="c1">// 1st child task</span>
+void foo()
+{
+    int x = 0, y = 2;
 
-    <span class="cp">#pragma omp task shared(y)</span>
-    <span class="n">y</span><span class="o">--</span><span class="p">;</span>                                        <span class="c1">// 2nd child task</span>
+    #pragma omp task depend(inout: x) shared(x)
+    x++;                                        // 1st child task
 
-    <span class="cp">#pragma omp taskwait depend(in: x)          </span><span class="c1">// 1st taskwait</span>
+    #pragma omp task shared(y)
+    y--;                                        // 2nd child task
 
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
+    #pragma omp taskwait depend(in: x)          // 1st taskwait
 
-    <span class="c1">// Second task may not be finished.</span>
-    <span class="c1">// Accessing y here will create a race condition.</span>
+    printf(&quot;x=%d\n&quot;,x);
 
-    <span class="cp">#pragma omp taskwait                        </span><span class="c1">// 2nd taskwait</span>
+    // Second task may not be finished.
+    // Accessing y here will create a race condition.
 
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;y=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
+    #pragma omp taskwait                        // 2nd taskwait
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cp">#pragma omp parallel</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="n">foo</span><span class="p">();</span>
+    printf(&quot;y=%d\n&quot;,y);
+}
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+    #pragma omp parallel
+    #pragma omp single
+    foo();
+
+    return 0;
+}
 
 </pre></div>
 </div>
@@ -1680,190 +1730,193 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_depend</span><span class="mf">.6</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_depend.6.f90
+! type: F-free
+! version: omp_5.0
 
 
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+subroutine foo()
+    implicit none
+    integer :: x, y
 
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
+    x = 0
+    y = 2
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>                         <span class="o">!!</span> <span class="mi">1</span><span class="n">st</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task depend(inout: x) shared(x)
+        x = x + 1                         !! 1st child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span>                         <span class="o">!!</span> <span class="mi">2</span><span class="n">nd</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task shared(y)
+        y = y - 1                         !! 2nd child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>          <span class="o">!!</span> <span class="mi">1</span><span class="n">st</span> <span class="n">taskwait</span>
+    !$omp taskwait depend(in: x)          !! 1st taskwait
 
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x=&quot;</span><span class="p">,</span> <span class="n">x</span>
+    print*, &quot;x=&quot;, x
 
-    <span class="o">!!</span> <span class="n">Second</span> <span class="n">task</span> <span class="n">may</span> <span class="n">not</span> <span class="n">be</span> <span class="n">finished</span><span class="p">.</span>
-    <span class="o">!!</span> <span class="n">Accessing</span> <span class="n">y</span> <span class="n">here</span> <span class="n">will</span> <span class="n">create</span> <span class="n">a</span> <span class="n">race</span> <span class="n">condition</span><span class="p">.</span>
+    !! Second task may not be finished.
+    !! Accessing y here will create a race condition.
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>                        <span class="o">!!</span> <span class="mi">2</span><span class="n">nd</span> <span class="n">taskwait</span>
+    !$omp taskwait                        !! 2nd taskwait
 
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;y=&quot;</span><span class="p">,</span> <span class="n">y</span>
+    print*, &quot;y=&quot;, y
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">foo</span>
+end subroutine foo
 
-<span class="n">program</span> <span class="n">p</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-       <span class="n">call</span> <span class="n">foo</span><span class="p">()</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span> <span class="n">p</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In this example the first two tasks are serialized, because a dependence on the first child is produced by  <em>x</em>  with the  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type in the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the second task. However, the generating task at the first  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  waits only on the first child task to complete, because a dependence on only the first child task is produced by  <em>x</em>  with an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type within the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct. The second  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  (without a  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause) is included to guarantee completion of the second task before  <em>y</em>  is accessed. (While unnecessary, the  <code class="docutils literal notranslate"><span class="pre">depend(inout:</span></code>   <code class="docutils literal notranslate"><span class="pre">y)</span></code>  clause on the  2nd child task is included to illustrate how the child task dependences can be completely annotated in a data-flow model.)</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_depend.7.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-
-<span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-    <span class="cp">#pragma omp task depend(inout: x) shared(x)</span>
-    <span class="n">x</span><span class="o">++</span><span class="p">;</span>                                          <span class="c1">// 1st child task</span>
-
-    <span class="cp">#pragma omp task depend(in: x) depend(inout: y) shared(x, y)</span>
-    <span class="n">y</span> <span class="o">-=</span> <span class="n">x</span><span class="p">;</span>                                       <span class="c1">// 2nd child task</span>
-
-    <span class="cp">#pragma omp taskwait depend(in: x)            </span><span class="c1">// 1st taskwait</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
-
-    <span class="c1">// Second task may not be finished.</span>
-    <span class="c1">// Accessing y here would create a race condition.</span>
-
-    <span class="cp">#pragma omp taskwait                          </span><span class="c1">// 2nd taskwait</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;y=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
-
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cp">#pragma omp parallel</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="n">foo</span><span class="p">();</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+program p
+    implicit none
+    !$omp parallel
+    !$omp single
+       call foo()
+    !$omp end single
+    !$omp end parallel
+end program p
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In this example the first two tasks are serialized, because a dependence on the first child is produced by  <em>x</em>  with the <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type in the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the second task. However, the generating task at the first <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> waits only on the first child task to complete, because a dependence on only the first child task is produced by  <em>x</em>  with an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type within the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct. The second <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> (without a <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause) is included to guarantee completion of the second task before  <em>y</em>  is accessed. (While unnecessary, the <code class="docutils literal notranslate"><span class="pre">depend(inout:</span></code> <code class="docutils literal notranslate"><span class="pre">y)</span></code> clause on the  2nd child task is included to illustrate how the child task dependences can be completely annotated in a data-flow model.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_depend</span><span class="mf">.7</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_depend.7.c
+* type: C
+* version: omp_5.0
+*/
+
+#include&lt;stdio.h&gt;
+
+void foo()
+{
+    int x = 0, y = 2;
+
+    #pragma omp task depend(inout: x) shared(x)
+    x++;                                          // 1st child task
+
+    #pragma omp task depend(in: x) depend(inout: y) shared(x, y)
+    y -= x;                                       // 2nd child task
+
+    #pragma omp taskwait depend(in: x)            // 1st taskwait
+
+    printf(&quot;x=%d\n&quot;,x);
+
+    // Second task may not be finished.
+    // Accessing y here would create a race condition.
+
+    #pragma omp taskwait                          // 2nd taskwait
+
+    printf(&quot;y=%d\n&quot;,y);
+
+}
+
+int main()
+{
+    #pragma omp parallel
+    #pragma omp single
+    foo();
+
+    return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_depend.7.f90
+! type: F-free
+! version: omp_5.0
 
 
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-<span class="n">implicit</span> <span class="n">none</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+subroutine foo()
+implicit none
+integer :: x, y
 
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
+    x = 0
+    y = 2
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>                         <span class="o">!!</span> <span class="mi">1</span><span class="n">st</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task depend(inout: x) shared(x)
+        x = x + 1                         !! 1st child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">y</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>                         <span class="o">!!</span> <span class="mi">2</span><span class="n">nd</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task depend(in: x) depend(inout: y) shared(x, y)
+        y = y - x                         !! 2nd child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>          <span class="o">!!</span> <span class="mi">1</span><span class="n">st</span> <span class="n">taskwait</span>
+    !$omp taskwait depend(in: x)          !! 1st taskwait
 
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x=&quot;</span><span class="p">,</span> <span class="n">x</span>
+    print*, &quot;x=&quot;, x
 
-    <span class="o">!!</span> <span class="n">Second</span> <span class="n">task</span> <span class="n">may</span> <span class="n">not</span> <span class="n">be</span> <span class="n">finished</span><span class="p">.</span>
-    <span class="o">!!</span> <span class="n">Accessing</span> <span class="n">y</span> <span class="n">here</span> <span class="n">would</span> <span class="n">create</span> <span class="n">a</span> <span class="n">race</span> <span class="n">condition</span><span class="p">.</span>
+    !! Second task may not be finished.
+    !! Accessing y here would create a race condition.
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>                        <span class="o">!!</span> <span class="mi">2</span><span class="n">nd</span> <span class="n">taskwait</span>
+    !$omp taskwait                        !! 2nd taskwait
 
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;y=&quot;</span><span class="p">,</span> <span class="n">y</span>
+    print*, &quot;y=&quot;, y
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">foo</span>
+end subroutine foo
 
-<span class="n">program</span> <span class="n">p</span>
-<span class="n">implicit</span> <span class="n">none</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-       <span class="n">call</span> <span class="n">foo</span><span class="p">()</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span> <span class="n">p</span>
+program p
+implicit none
+    !$omp parallel
+    !$omp single
+       call foo()
+    !$omp end single
+    !$omp end parallel
+end program p
 
 </pre></div>
 </div>
 </div>
 </div>
 <p>This example is similar to the previous one, except the generating task is directed to also wait for completion of the second task.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct now includes an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence type for  <em>y</em> .  Hence the generating task must now wait on completion of any child task having  <em>y</em>  with an  <code class="docutils literal notranslate"><span class="pre">out</span></code>  (here  <code class="docutils literal notranslate"><span class="pre">inout</span></code> ) dependence type in its  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause. So, the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct now constrains the second task to complete at the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> , too.
-–both tasks must now complete execution at the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> .  (This change makes the second  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  of the previous example unnecessary– it has been removed in this example.)</p>
-<p>Note: While a taskwait construct ensures that all child tasks have completed; a depend clause on a taskwait construct only waits for specific child tasks (prescribed by the dependence type and list items in the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> ‘s  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause). This and the previous example illustrate the need to carefully determine the dependence type of variables in the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>   <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause when selecting child tasks that the generating task must wait on, so that its execution after the taskwait does not produce race conditions on variables accessed by non-completed child tasks.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct now includes an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence type for  <em>y</em> .  Hence the generating task must now wait on completion of any child task having  <em>y</em>  with an <code class="docutils literal notranslate"><span class="pre">out</span></code> (here <code class="docutils literal notranslate"><span class="pre">inout</span></code>) dependence type in its <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause. So, the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct now constrains the second task to complete at the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>, too. (This change makes the second <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> of the previous example unnecessary– it has been removed in this example.)</p>
+<p>Note: While a taskwait construct ensures that all child tasks have completed; a depend clause on a taskwait construct only waits for specific child tasks (prescribed by the dependence type and list items in the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>’s <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause). This and the previous example illustrate the need to carefully determine the dependence type of variables in the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause when selecting child tasks that the generating task must wait on, so that its execution after the taskwait does not produce race conditions on variables accessed by non-completed child tasks.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_depend.8.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+/*
+* name: task_depend.8.c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+#include&lt;stdio.h&gt;
 
-    <span class="cp">#pragma omp task depend(inout: x) shared(x)</span>
-    <span class="n">x</span><span class="o">++</span><span class="p">;</span>                                          <span class="c1">// 1st child task</span>
+void foo()
+{
+    int x = 0, y = 2;
 
-    <span class="cp">#pragma omp task depend(in: x) depend(inout: y) shared(x, y)</span>
-    <span class="n">y</span> <span class="o">-=</span> <span class="n">x</span><span class="p">;</span>                                       <span class="c1">// 2st child task</span>
+    #pragma omp task depend(inout: x) shared(x)
+    x++;                                          // 1st child task
 
-    <span class="cp">#pragma omp taskwait depend(in: x,y)</span>
+    #pragma omp task depend(in: x) depend(inout: y) shared(x, y)
+    y -= x;                                       // 2st child task
 
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;y=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">);</span>
+    #pragma omp taskwait depend(in: x,y)
 
-<span class="p">}</span>
+    printf(&quot;x=%d\n&quot;,x);
+    printf(&quot;y=%d\n&quot;,y);
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cp">#pragma omp parallel</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="n">foo</span><span class="p">();</span>
+}
 
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+    #pragma omp parallel
+    #pragma omp single
+    foo();
+
+    return 0;
+}
 
 </pre></div>
 </div>
@@ -1871,42 +1924,42 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_depend</span><span class="mf">.8</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_depend.8.f90
+! type: F-free
+! version: omp_5.0
 
 
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">()</span>
-<span class="n">implicit</span> <span class="n">nonE</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+subroutine foo()
+implicit nonE
+integer :: x, y
 
-    <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span>
+    x = 0
+    y = 2
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>                         <span class="o">!!</span> <span class="mi">1</span><span class="n">st</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task depend(inout: x) shared(x)
+        x = x + 1                         !! 1st child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">y</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>                         <span class="o">!!</span> <span class="mi">2</span><span class="n">nd</span> <span class="n">child</span> <span class="n">task</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+    !$omp task depend(in: x) depend(inout: y) shared(x, y)
+        y = y - x                         !! 2nd child task
+    !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+    !$omp taskwait depend(in: x,y)
 
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x=&quot;</span><span class="p">,</span> <span class="n">x</span>
-    <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;y=&quot;</span><span class="p">,</span> <span class="n">y</span>
+    print*, &quot;x=&quot;, x
+    print*, &quot;y=&quot;, y
 
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">foo</span>
+end subroutine foo
 
-<span class="n">program</span> <span class="n">p</span>
-<span class="n">implicit</span> <span class="n">none</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-       <span class="n">call</span> <span class="n">foo</span><span class="p">()</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span> <span class="n">p</span>
+program p
+implicit none
+    !$omp parallel
+    !$omp single
+       call foo()
+    !$omp end single
+    !$omp end parallel
+end program p
 
 </pre></div>
 </div>
@@ -1915,39 +1968,41 @@
 </div>
 <div class="section" id="mutually-exclusive-execution-with-dependences">
 <h2>Mutually Exclusive Execution with Dependences<a class="headerlink" href="#mutually-exclusive-execution-with-dependences" title="Permalink to this headline">¶</a></h2>
-<p>In this example we show a series of tasks, including mutually exclusive tasks, expressing dependences using the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause on the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.</p>
-<p>The program will always print~6. Tasks T1, T2 and T3 will be scheduled first, in any order. Task T4 will be scheduled after tasks T1 and T2 are completed. T5 will be scheduled after tasks T1 and T3 are completed. Due to the  <code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code>  dependence type on  <code class="docutils literal notranslate"><span class="pre">c</span></code> , T4 and T5 may be scheduled in any order with respect to each other, but not at the same time. Tasks T6 will be scheduled after both T4 and T5 are completed.</p>
+<p>In this example we show a series of tasks, including mutually exclusive tasks, expressing dependences using the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.</p>
+<p>The program will always print 6. Tasks T1, T2 and T3 will be scheduled first, in any order. Task T4 will be scheduled after tasks T1 and T2 are completed. T5 will be scheduled after tasks T1 and T3 are completed. Due to the <code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code> dependence type on <code class="docutils literal notranslate"><span class="pre">c</span></code>, T4 and T5 may be scheduled in any order with respect to each other, but not at the same time. Tasks T6 will be scheduled after both T4 and T5 are completed.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.6c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel</span>
-   <span class="cp">#pragma omp single</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp task depend(out: c)</span>
-         <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>   <span class="cm">/* Task T1 */</span>
-      <span class="cp">#pragma omp task depend(out: a)</span>
-         <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>   <span class="cm">/* Task T2 */</span>
-      <span class="cp">#pragma omp task depend(out: b)</span>
-         <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>   <span class="cm">/* Task T3 */</span>
-      <span class="cp">#pragma omp task depend(in: a) depend(mutexinoutset: c)</span>
-         <span class="n">c</span> <span class="o">+=</span> <span class="n">a</span><span class="p">;</span>  <span class="cm">/* Task T4 */</span>
-      <span class="cp">#pragma omp task depend(in: b) depend(mutexinoutset: c)</span>
-         <span class="n">c</span> <span class="o">+=</span> <span class="n">b</span><span class="p">;</span>  <span class="cm">/* Task T5 */</span>
-      <span class="cp">#pragma omp task depend(in: c)</span>
-         <span class="n">d</span> <span class="o">=</span> <span class="n">c</span><span class="p">;</span>   <span class="cm">/* Task T6 */</span>
-   <span class="p">}</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">d</span><span class="p">);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.6c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+int main()
+{
+   int a, b, c, d;
+   #pragma omp parallel
+   #pragma omp single
+   {
+      #pragma omp task depend(out: c)
+         c = 1;   /* Task T1 */
+      #pragma omp task depend(out: a)
+         a = 2;   /* Task T2 */
+      #pragma omp task depend(out: b)
+         b = 3;   /* Task T3 */
+      #pragma omp task depend(in: a) depend(mutexinoutset: c)
+         c += a;  /* Task T4 */
+      #pragma omp task depend(in: b) depend(mutexinoutset: c)
+         c += b;  /* Task T5 */
+      #pragma omp task depend(in: c)
+         d = c;   /* Task T6 */
+   }
+   printf(&quot;%d\n&quot;, d);
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1955,69 +2010,71 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-      <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>      <span class="o">!</span> <span class="n">Task</span> <span class="n">T1</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">a</span><span class="p">)</span>
-      <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>      <span class="o">!</span> <span class="n">Task</span> <span class="n">T2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">b</span><span class="p">)</span>
-      <span class="n">b</span> <span class="o">=</span> <span class="mi">3</span>      <span class="o">!</span> <span class="n">Task</span> <span class="n">T3</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">a</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">mutexinoutset</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-      <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">a</span>  <span class="o">!</span> <span class="n">Task</span> <span class="n">T4</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">b</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">mutexinoutset</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-      <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="n">b</span>  <span class="o">!</span> <span class="n">Task</span> <span class="n">T5</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-      <span class="n">d</span> <span class="o">=</span> <span class="n">c</span>      <span class="o">!</span> <span class="n">Task</span> <span class="n">T6</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">d</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.6f
+! type: F-free
+! version:    omp_5.0
+program example
+   integer :: a, b, c, d
+   !$omp parallel
+   !$omp single
+      !$omp task depend(out: c)
+      c = 1      ! Task T1
+      !$omp end task
+      !$omp task depend(out: a)
+      a = 2      ! Task T2
+      !$omp end task
+      !$omp task depend(out: b)
+      b = 3      ! Task T3
+      !$omp end task
+      !$omp task depend(in: a) depend(mutexinoutset: c)
+      c = c + a  ! Task T4
+      !$omp end task
+      !$omp task depend(in: b) depend(mutexinoutset: c)
+      c = c + b  ! Task T5
+      !$omp end task
+      !$omp task depend(in: c)
+      d = c      ! Task T6
+      !$omp end task
+   !$omp end single
+   !$omp end parallel
+   print *, d
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example demonstrates a situation where the  <code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code>  dependence type is advantageous. If  <code class="docutils literal notranslate"><span class="pre">shortTaskB</span></code>  completes before  <code class="docutils literal notranslate"><span class="pre">longTaskA</span></code> , the runtime can take advantage of this by scheduling  <code class="docutils literal notranslate"><span class="pre">longTaskBC</span></code>  before  <code class="docutils literal notranslate"><span class="pre">shortTaskAC</span></code> .</p>
+<p>The following example demonstrates a situation where the <code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code> dependence type is advantageous. If <code class="docutils literal notranslate"><span class="pre">shortTaskB</span></code> completes before <code class="docutils literal notranslate"><span class="pre">longTaskA</span></code>, the runtime can take advantage of this by scheduling <code class="docutils literal notranslate"><span class="pre">longTaskBC</span></code> before <code class="docutils literal notranslate"><span class="pre">shortTaskAC</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.7c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="k">extern</span> <span class="kt">int</span> <span class="n">longTaskA</span><span class="p">(),</span> <span class="n">shortTaskB</span><span class="p">();</span>
-<span class="k">extern</span> <span class="kt">int</span> <span class="n">shortTaskAC</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">),</span> <span class="n">longTaskBC</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">foo</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">;</span>
-  <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel</span>
-  <span class="cp">#pragma omp single</span>
-  <span class="p">{</span>
-     <span class="cp">#pragma omp task depend(out: a)</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">longTaskA</span><span class="p">();</span>
-     <span class="cp">#pragma omp task depend(out: b)</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">shortTaskB</span><span class="p">();</span>
-     <span class="cp">#pragma omp task depend(in: a) depend(mutexinoutset: c)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">shortTaskAC</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
-     <span class="cp">#pragma omp task depend(in: b) depend(mutexinoutset: c)</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="n">longTaskBC</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: task_dep.7c
+* type: C
+* version: omp_5.0
+*/
+extern int longTaskA(), shortTaskB();
+extern int shortTaskAC(int,int), longTaskBC(int,int);
+void foo (void)
+{
+  int a, b, c;
+  c = 0;
+  #pragma omp parallel
+  #pragma omp single
+  {
+     #pragma omp task depend(out: a)
+        a = longTaskA();
+     #pragma omp task depend(out: b)
+        b = shortTaskB();
+     #pragma omp task depend(in: a) depend(mutexinoutset: c)
+        c = shortTaskAC(a,c);
+     #pragma omp task depend(in: b) depend(mutexinoutset: c)
+        c = longTaskBC(b,c);
+  }
+}
 
 </pre></div>
 </div>
@@ -2025,30 +2082,30 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.7f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">foo</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
-   <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">a</span><span class="p">)</span>
-         <span class="n">a</span> <span class="o">=</span> <span class="n">longTaskA</span><span class="p">()</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">b</span><span class="p">)</span>
-         <span class="n">b</span> <span class="o">=</span> <span class="n">shortTaskB</span><span class="p">()</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">a</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">mutexinoutset</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-         <span class="n">c</span> <span class="o">=</span> <span class="n">shortTaskAC</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">b</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">mutexinoutset</span><span class="p">:</span> <span class="n">c</span><span class="p">)</span>
-         <span class="n">c</span> <span class="o">=</span> <span class="n">longTaskBC</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">subroutine</span> <span class="n">foo</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.7f
+! type: F-free
+! version:    omp_5.0
+subroutine foo
+   integer :: a,b,c
+   c = 0
+   !$omp parallel
+   !$omp single
+      !$omp task depend(out: a)
+         a = longTaskA()
+      !$omp end task
+      !$omp task depend(out: b)
+         b = shortTaskB()
+      !$omp end task
+      !$omp task depend(in: a) depend(mutexinoutset: c)
+         c = shortTaskAC(a,c)
+      !$omp end task
+      !$omp task depend(in: b) depend(mutexinoutset: c)
+         c = longTaskBC(b,c)
+      !$omp end task
+   !$omp end single
+   !$omp end parallel
+end subroutine foo
 
 </pre></div>
 </div>
@@ -2058,49 +2115,51 @@
 <div class="section" id="multidependences-using-iterators">
 <h2>Multidependences Using Iterators<a class="headerlink" href="#multidependences-using-iterators" title="Permalink to this headline">¶</a></h2>
 <p>The following example uses an iterator to define a dynamic number of dependences.</p>
-<p>In the  <code class="docutils literal notranslate"><span class="pre">single</span></code>  construct of a parallel region a loop generates n tasks and each task has an  <code class="docutils literal notranslate"><span class="pre">out</span></code>  dependence specified through an element of the  <em>v</em>  array.  This is followed by a single task that defines an  <code class="docutils literal notranslate"><span class="pre">in</span></code>  dependence on each element of the array.  This is accomplished by using the  <code class="docutils literal notranslate"><span class="pre">iterator</span></code>  modifier in the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause, supporting a dynamic number of dependences ( <em>n</em>  here).</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">single</span></code> construct of a parallel region a loop generates n tasks and each task has an <code class="docutils literal notranslate"><span class="pre">out</span></code> dependence specified through an element of the  <em>v</em>  array.  This is followed by a single task that defines an <code class="docutils literal notranslate"><span class="pre">in</span></code> dependence on each element of the array.  This is accomplished by using the <code class="docutils literal notranslate"><span class="pre">iterator</span></code> modifier in the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause, supporting a dynamic number of dependences ( <em>n</em>  here).</p>
 <p>The task for the  <em>print_all_elements</em>  function is not executed until all dependences prescribed (or registered) by the iterator are fulfilled; that is, after all the tasks generated by the loop have completed.</p>
-<p>Note, one cannot simply use an array section in the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause of the second task construct because this would violate the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause restriction:</p>
-<p>‘List items used in  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses of the same task or sibling tasks must indicate identical storage locations or disjoint storage locations’.</p>
-<p>In this case each of the loop tasks use a single disjoint (different storage) element in their  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause; however, the array-section storage area prescribed in the commented directive is neither identical nor disjoint to the storage prescibed by the elements of the loop tasks.  The iterator overcomes this restriction by effectively creating n disjoint storage areas.</p>
+<p>Note, one cannot simply use an array section in the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause of the second task construct because this would violate the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause restriction:</p>
+<p>“List items used in <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses of the same task or sibling tasks must indicate identical storage locations or disjoint storage locations”.</p>
+<p>In this case each of the loop tasks use a single disjoint (different storage) element in their <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause; however, the array-section storage area prescribed in the commented directive is neither identical nor disjoint to the storage prescibed by the elements of the loop tasks.  The iterator overcomes this restriction by effectively creating n disjoint storage areas.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       task_dep.11c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">set_an_element</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="o">*</span><span class="n">p</span> <span class="o">=</span> <span class="n">val</span><span class="p">;</span>
-<span class="p">}</span>
+/*
+* name:       task_dep.11c
+* type:       C
+* version: omp_5.0
+*/
+#include&lt;stdio.h&gt;
 
-<span class="kt">void</span> <span class="nf">print_all_elements</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">v</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d, &quot;</span><span class="p">,</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-    <span class="p">}</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="p">}</span>
+void set_an_element(int *p, int val) {
+    *p = val;
+}
 
-<span class="kt">void</span> <span class="nf">parallel_computation</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">v</span><span class="p">[</span><span class="n">n</span><span class="p">];</span>
-    <span class="cp">#pragma omp parallel</span>
-    <span class="cp">#pragma omp single</span>
-    <span class="p">{</span>
-        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
-            <span class="cp">#pragma omp task depend(out: v[i])</span>
-            <span class="n">set_an_element</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">i</span><span class="p">);</span>
+void print_all_elements(int *v, int n) {
+    int i;
+    for (i = 0; i &lt; n; ++i) {
+        printf(&quot;%d, &quot;, v[i]);
+    }
+    printf(&quot;\n&quot;);
+}
 
-        <span class="cp">#pragma omp task depend(iterator(it = 0:n), in: v[it])</span>
-     <span class="c1">// #pragma omp task depend(in: v[0:n]) Violates Array section restriction.</span>
-        <span class="n">print_all_elements</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+void parallel_computation(int n) {
+    int v[n];
+    #pragma omp parallel
+    #pragma omp single
+    {
+        int i;
+        for (i = 0; i &lt; n; ++i)
+            #pragma omp task depend(out: v[i])
+            set_an_element(&amp;v[i], i);
 
-    <span class="p">}</span>
-<span class="p">}</span>
+        #pragma omp task depend(iterator(it = 0:n), in: v[it])
+     // #pragma omp task depend(in: v[0:n]) Violates Array section restriction.
+        print_all_elements(v, n);
+
+    }
+}
 
 
 </pre></div>
@@ -2109,47 +2168,47 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.11f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">set_an_element</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">e</span><span class="p">,</span> <span class="n">val</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.11f90
+! type: F-free
+! version:    omp_5.0
+subroutine set_an_element(e, val)
+    implicit none
+    integer :: e, val
 
-    <span class="n">e</span> <span class="o">=</span> <span class="n">val</span>
+    e = val
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
-<span class="n">subroutine</span> <span class="n">print_all_elements</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+subroutine print_all_elements(v, n)
+    implicit none
+    integer :: n, v(n)
 
-    <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v</span>
+    print *, v
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
-<span class="n">subroutine</span> <span class="n">parallel_computation</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+subroutine parallel_computation(n)
+    implicit none
+    integer :: n
+    integer :: i, v(n)
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-        <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-                 <span class="n">call</span> <span class="n">set_an_element</span><span class="p">(</span><span class="n">v</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">i</span><span class="p">)</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-        <span class="n">enddo</span>
+    !$omp parallel
+    !$omp single
+        do i=1, n
+            !$omp task depend(out: v(i))
+                 call set_an_element(v(i), i)
+            !$omp end task
+        enddo
 
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="n">iterator</span><span class="p">(</span><span class="n">it</span> <span class="o">=</span> <span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="p">),</span> <span class="nl">in</span><span class="p">:</span> <span class="n">v</span><span class="p">(</span><span class="n">it</span><span class="p">))</span>
-       <span class="o">!!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span> <span class="n">v</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">n</span><span class="p">))</span> <span class="n">Violates</span> <span class="n">Array</span> <span class="n">section</span> <span class="n">restriction</span><span class="p">.</span>
-            <span class="n">call</span> <span class="n">print_all_elements</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+        !$omp task depend(iterator(it = 1:n), in: v(it))
+       !!$omp task depend(in: v(1:n)) Violates Array section restriction.
+            call print_all_elements(v, n)
+        !$omp end task
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+    !$omp end single
+    !$omp end parallel
+end subroutine
 
 </pre></div>
 </div>
@@ -2158,38 +2217,40 @@
 </div>
 <div class="section" id="dependence-for-undeferred-tasks">
 <h2>Dependence for Undeferred Tasks<a class="headerlink" href="#dependence-for-undeferred-tasks" title="Permalink to this headline">¶</a></h2>
-<p>In the following example, we show that even if a task is undeferred as specified by an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause that evaluates to  <em>false</em> , task dependences are still honored.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses of the first and second explicit tasks specify that the first task is completed before the second task.</p>
-<p>The second explicit task has an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause that evaluates to  <em>false</em> . This means that the execution of the generating task (the implicit task of the  <code class="docutils literal notranslate"><span class="pre">single</span></code>  region) must be suspended until the second explict task is completed. But, because of the dependence, the first explicit task must complete first, then the second explicit task can execute and complete, and only then  the generating task can resume to the print statement. Thus, the program will always print ‘{x = 2}’.</p>
+<p>In the following example, we show that even if a task is undeferred as specified by an <code class="docutils literal notranslate"><span class="pre">if</span></code> clause that evaluates to  <em>false</em> , task dependences are still honored.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses of the first and second explicit tasks specify that the first task is completed before the second task.</p>
+<p>The second explicit task has an <code class="docutils literal notranslate"><span class="pre">if</span></code> clause that evaluates to  <em>false</em> . This means that the execution of the generating task (the implicit task of the <code class="docutils literal notranslate"><span class="pre">single</span></code> region) must be suspended until the second explict task is completed. But, because of the dependence, the first explicit task must complete first, then the second explicit task can execute and complete, and only then  the generating task can resume to the print statement. Thus, the program will always print ” <strong>x = 2</strong> “.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: task_dep.12c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel</span>
-  <span class="cp">#pragma omp single</span>
-  <span class="p">{</span>
-    <span class="cm">/* first explicit task */</span>
-    <span class="cp">#pragma omp task shared(x) depend(out: x)</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-    <span class="cm">/* second explicit task */</span>
-    <span class="cp">#pragma omp task shared(x) depend(inout: x) if(0)</span>
-      <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+/*
+* name: task_dep.12c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+int main (int argc, char *argv[])
+{
+  int x = 0;
+  #pragma omp parallel
+  #pragma omp single
+  {
+    /* first explicit task */
+    #pragma omp task shared(x) depend(out: x)
+      x = 1;
 
-    <span class="cm">/* statement executed by parent implicit task</span>
-<span class="cm">       prints: x = 2 */</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    /* second explicit task */
+    #pragma omp task shared(x) depend(inout: x) if(0)
+      x = 2;
+
+    /* statement executed by parent implicit task
+       prints: x = 2 */
+    printf(&quot;x = %d\n&quot;, x);
+  }
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -2197,31 +2258,31 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">task_dep</span><span class="mf">.12f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-     <span class="o">!</span><span class="p">...</span> <span class="n">first</span> <span class="n">explicit</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: task_dep.12f
+! type: F-free
+! version: omp_4.0
+program example
+   integer :: x
+   x = 0
+   !$omp parallel
+   !$omp single
+     !... first explicit task
+      !$omp task shared(x) depend(out: x)
+         x = 1
+      !$omp end task
 
-     <span class="o">!</span><span class="p">...</span> <span class="n">second</span> <span class="n">explicit</span> <span class="n">task</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">shared</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="n">depend</span><span class="p">(</span><span class="nl">inout</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span> <span class="k">if</span><span class="p">(.</span><span class="nb">false</span><span class="p">.)</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+     !... second explicit task
+      !$omp task shared(x) depend(inout: x) if(.false.)
+         x = 2
+      !$omp end task
 
-     <span class="o">!</span><span class="p">...</span> <span class="n">statement</span> <span class="n">executed</span> <span class="n">by</span> <span class="n">parent</span> <span class="n">implicit</span> <span class="n">task</span>
-     <span class="o">!</span> <span class="nl">prints</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+     !... statement executed by parent implicit task
+     ! prints: x = 2
+      print*, &quot;x = &quot;, x
+   !$omp end single
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
@@ -2256,7 +2317,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_task_priority.html" title="previous page">Task Priority</a>
-    <a class='right-next' id="next-link" href="Examples_taskgroup.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_taskgroup.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> Construct</a>
 
         </div>
         

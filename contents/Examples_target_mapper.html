@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,48 +1290,47 @@
               <div>
                 
   <div class="section" id="declare-mapper-construct">
-<h1><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  Construct<a class="headerlink" href="#declare-mapper-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following examples show how to use the  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  directive to prescribe a map for later use. It is also quite useful for pre-defining partitioned and nested  structure elements.</p>
-<p>In the first example the  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  directive specifies  that any structure of type  <em>myvec_t</em>  for which implicit data-mapping rules apply will be mapped according to its  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause. The variable  <em>v</em>  is used for referencing the structure and its  elements within the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause.  Within the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause the  <em>v</em>  variable specifies that all elements of the structure are to be mapped.  Additionally, the array section  <em>v.data[0:v.len]</em>  specifies that the dynamic  storage for data is to be mapped.</p>
-<p>Within the main program the  <em>s</em>  variable is typed as  <em>myvec_t</em> . Since the variable is found within the target region and the type has a mapping prescribed by a  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  directive, it will be automatically mapped according to its prescription:  full structure, plus the dynamic storage of the  <em>data</em>  element.</p>
-<p>Note: By default the mapping is  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> .<br />
-The associated Fortran allocatable  <em>data</em>  array is automatically mapped with the derived
-type, it does not require an array section as in the C/C++ example.</p>
+<h1><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> Construct<a class="headerlink" href="#declare-mapper-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following examples show how to use the <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> directive to prescribe a map for later use. It is also quite useful for pre-defining partitioned and nested  structure elements.</p>
+<p>In the first example the <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> directive specifies  that any structure of type  <em>myvec_t</em>  for which implicit data-mapping rules apply will be mapped according to its <code class="docutils literal notranslate"><span class="pre">map</span></code> clause. The variable  <em>v</em>  is used for referencing the structure and its  elements within the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause.  Within the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause the  <em>v</em>  variable specifies that all elements of the structure are to be mapped.  Additionally, the array section  <em>v.data[0:v.len]</em>  specifies that the dynamic  storage for data is to be mapped.</p>
+<p>Within the main program the  <em>s</em>  variable is typed as  <em>myvec_t</em> . Since the variable is found within the target region and the type has a mapping prescribed by a <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> directive, it will be automatically mapped according to its prescription:  full structure, plus the dynamic storage of the  <em>data</em>  element.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_mapper_map.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span>  <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>   <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">myvec</span><span class="p">{</span>
-    <span class="kt">size_t</span> <span class="n">len</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">myvec_t</span><span class="p">;</span>
+/*
+* name: target_mapper_map.1c
+* type: C
+* version: omp_5.0
+*/
+#include  &lt;stdlib.h&gt;
+#include   &lt;stdio.h&gt;
+#define N 100
 
-<span class="cp">#pragma omp declare mapper(myvec_t v) \</span>
-<span class="cp">                    map(v, v.data[0:v.len])</span>
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">myvec_t</span> <span class="o">*</span><span class="n">s</span><span class="p">);</span>
+typedef struct myvec{
+    size_t len;
+    double *data;
+} myvec_t;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-   <span class="n">myvec_t</span> <span class="n">s</span><span class="p">;</span>
+#pragma omp declare mapper(myvec_t v) \
+                    map(v, v.data[0:v.len])
+void init(myvec_t *s);
 
-   <span class="n">s</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="p">)</span><span class="n">calloc</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
-   <span class="n">s</span><span class="p">.</span><span class="n">len</span>  <span class="o">=</span> <span class="n">N</span><span class="p">;</span>
+int main(){
+   myvec_t s;
 
-   <span class="cp">#pragma omp target</span>
-   <span class="n">init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">s</span><span class="p">);</span>
+   s.data = (double *)calloc(N,sizeof(double));
+   s.len  = N;
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;s.data[%d]=%lf</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">N</span><span class="mi">-1</span><span class="p">,</span><span class="n">s</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>  <span class="c1">//s.data[99]=99.000000</span>
-<span class="p">}</span>
+   #pragma omp target
+   init(&amp;s);
 
-<span class="kt">void</span> <span class="nf">init</span><span class="p">(</span><span class="n">myvec_t</span> <span class="o">*</span><span class="n">s</span><span class="p">)</span>
-<span class="p">{</span> <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">s</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">s</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="p">}</span>
+   printf(&quot;s.data[%d]=%lf\n&quot;,N-1,s.data[N-1]);  //s.data[99]=99.000000
+}
+
+void init(myvec_t *s)
+{ for(int i=0; i&lt;s-&gt;len; i++) s-&gt;data[i]=i; }
 
 </pre></div>
 </div>
@@ -1301,215 +1338,110 @@ type, it does not require an array section as in the C/C++ example.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">target_mapper</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       target_mapper.1.f90
+! type:       F-free
+! version:    omp_5.0
 
-<span class="n">module</span> <span class="n">my_structures</span>
-  <span class="n">type</span> <span class="n">myvec_t</span>
-    <span class="n">integer</span>                     <span class="o">::</span> <span class="n">len</span>
-    <span class="kt">double</span> <span class="n">precision</span><span class="p">,</span> <span class="n">pointer</span>   <span class="o">::</span> <span class="n">data</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-  <span class="n">end</span> <span class="n">type</span>
-<span class="n">end</span> <span class="n">module</span>
+module my_structures
+  type myvec_t
+    integer                     :: len
+    double precision, pointer   :: data(:)
+  end type
+end module
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">use</span> <span class="n">my_structures</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span>
+program main
+  use my_structures
+  integer, parameter :: N=100
 
-  <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">mapper</span><span class="p">(</span><span class="n">myvec_t</span> <span class="o">::</span> <span class="n">v</span><span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>         <span class="n">map</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">v</span><span class="o">%</span><span class="n">data</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">v</span><span class="o">%</span><span class="n">len</span><span class="p">))</span>
+  !$omp  declare mapper(myvec_t :: v) &amp;
+  !$omp&amp;         map(v, v%data(1:v%len))
 
-  <span class="n">type</span><span class="p">(</span><span class="n">myvec_t</span><span class="p">)</span> <span class="o">::</span> <span class="n">s</span>
+  type(myvec_t) :: s
 
-  <span class="n">allocate</span><span class="p">(</span><span class="n">s</span><span class="o">%</span><span class="n">data</span><span class="p">(</span><span class="n">N</span><span class="p">))</span>
-  <span class="n">s</span><span class="o">%</span><span class="n">data</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">)</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">d0</span>
-  <span class="n">s</span><span class="o">%</span><span class="n">len</span> <span class="o">=</span> <span class="n">N</span>
+  allocate(s%data(N))
+  s%data(1:N) = 0.0d0
+  s%len = N
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>
-  <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+  !$omp target
+  call init(s)
+  !$omp end target
 
-  <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot;s%data(&quot;</span><span class="p">,</span><span class="n">N</span><span class="p">,</span><span class="s">&quot;)=&quot;</span><span class="p">,</span><span class="n">s</span><span class="o">%</span><span class="n">data</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>  <span class="o">!!</span> <span class="n">s</span><span class="o">%</span><span class="n">data</span><span class="p">(</span> <span class="mi">100</span> <span class="p">)</span><span class="o">=</span><span class="mf">100.000000000000</span>
-<span class="n">end</span> <span class="n">program</span>
+  print*,&quot;s%data(&quot;,N,&quot;)=&quot;,s%data(N)  !! s%data( 100 )=100.000000000000
+end program
 
-<span class="n">subroutine</span> <span class="n">init</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-  <span class="n">use</span> <span class="n">my_structures</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">myvec_t</span><span class="p">)</span> <span class="o">::</span> <span class="n">s</span>
+subroutine init(s)
+  use my_structures
+  type(myvec_t) :: s
 
-  <span class="n">s</span><span class="o">%</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">s</span><span class="o">%</span><span class="n">len</span><span class="p">)</span> <span class="p">]</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+  s%data = [ (i, i=1,s%len) ]
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
 <p>The next example illustrates the use of the  <em>mapper-identifier</em>  and deep copy within a structure.  The structure,  <em>dzmat_t</em> ,  represents a complex matrix,  with separate real ( <em>r_m</em> ) and imaginary ( <em>i_m</em> ) elements. Two map identifiers are created for partitioning the  <em>dzmat_t</em>  structure.</p>
-<p>For the C/C++  the first identifier is named  <em>top_id</em>  and maps the top half of two matrices of type  <em>dzmat_t</em> ; while the second identifier,  <em>bottom_id</em> , maps the lower half of two matrices.  Each identifier is applied to a different  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, as   <code class="docutils literal notranslate"><span class="pre">map(mapper(top_id),</span> <span class="pre">tofrom:</span> <span class="pre">a,b)</span></code>   and  <code class="docutils literal notranslate"><span class="pre">map(mapper(bottom_id),</span> <span class="pre">tofrom:</span> <span class="pre">a,b)</span></code> . Each target offload is allowed to execute concurrently on two different devices  ( <em>0</em>  and  <em>1</em> ) through the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause. The OpenMP 5.0  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span></code>  construct creates a region of two threads for these  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs, with a single thread ( <em>master</em> ) generator.</p>
-<p>The Fortran  uses the  <em>left_id</em>  and  <em>right_id</em>  map identifiers in the  <code class="docutils literal notranslate"><span class="pre">map(mapper(left_id),tofrom:</span> <span class="pre">a,b)</span></code>  and  <code class="docutils literal notranslate"><span class="pre">map(mapper(right_id),tofrom:</span> <span class="pre">a,b)</span></code>  map clauses.   The array sections for these left and right contiguous portions of the matrices  were defined previously in the  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  directive.</p>
+<p>For the C/C++ code the first identifier is named  <em>top_id</em>  and maps the top half of two matrices of type  <em>dzmat_t</em> ; while the second identifier,  <em>bottom_id</em> , maps the lower half of two matrices.  Each identifier is applied to a different <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, as  <code class="docutils literal notranslate"><span class="pre">map(mapper(top_id),</span> <span class="pre">tofrom:</span> <span class="pre">a,b)</span></code>  and <code class="docutils literal notranslate"><span class="pre">map(mapper(bottom_id),</span> <span class="pre">tofrom:</span> <span class="pre">a,b)</span></code>. Each target offload is allowed to execute concurrently on two different devices  ( <em>0</em>  and  <em>1</em> ) through the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause. The OpenMP 5.0 <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span></code> construct creates a region of two threads for these <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs, with a single thread ( <em>master</em> ) generator.</p>
+<p>The Fortran code uses the  <em>left_id</em>  and  <em>right_id</em>  map identifiers in the <code class="docutils literal notranslate"><span class="pre">map(mapper(left_id),tofrom:</span> <span class="pre">a,b)</span></code> and <code class="docutils literal notranslate"><span class="pre">map(mapper(right_id),tofrom:</span> <span class="pre">a,b)</span></code> map clauses.   The array sections for these left and right contiguous portions of the matrices  were defined previously in the <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> directive.</p>
 <p>Note, the  <em>is</em>  and  <em>ie</em>  scalars are firstprivate  by default for a target region, but are declared firstprivate anyway to remind the user of important firstprivate data-sharing properties required here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_mapper_map.2.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="c1">//                   N MUST BE EVEN</span>
-<span class="cp">#define N  100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="k">typedef</span> <span class="k">struct</span> <span class="nc">dzmat</span>
-  <span class="p">{</span>
-     <span class="kt">double</span> <span class="n">r_m</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
-     <span class="kt">double</span> <span class="n">i_m</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
-  <span class="p">}</span> <span class="n">dzmat_t</span><span class="p">;</span>
+/*
+* name: target_mapper_map.2.c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+//                   N MUST BE EVEN
+#define N  100
 
-  <span class="cp">#pragma omp declare mapper( top_id: dzmat_t v) \</span>
-<span class="cp">                      map(v.r_m[0:N/2][0:N],     \</span>
-<span class="cp">                          v.i_m[0:N/2][0:N]      )</span>
+  typedef struct dzmat
+  {
+     double r_m[N][N];
+     double i_m[N][N];
+  } dzmat_t;
 
-  <span class="cp">#pragma omp declare mapper(bottom_id: dzmat_t v) \</span>
-<span class="cp">                      map(v.r_m[N/2:N/2][0:N],     \</span>
-<span class="cp">                          v.i_m[N/2:N/2][0:N]      )</span>
+  #pragma omp declare mapper( top_id: dzmat_t v) \
+                      map(v.r_m[0:N/2][0:N],     \
+                          v.i_m[0:N/2][0:N]      )
 
-<span class="kt">void</span> <span class="nf">dzmat_init</span><span class="p">(</span><span class="n">dzmat_t</span> <span class="o">*</span><span class="n">z</span><span class="p">,</span> <span class="kt">int</span> <span class="n">is</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ie</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>         <span class="c1">//initialization</span>
-<span class="kt">void</span> <span class="nf">host_add</span><span class="p">(</span>  <span class="n">dzmat_t</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">dzmat_t</span> <span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">dzmat_t</span> <span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span> <span class="c1">//matrix add: c=a+b</span>
+  #pragma omp declare mapper(bottom_id: dzmat_t v) \
+                      map(v.r_m[N/2:N/2][0:N],     \
+                          v.i_m[N/2:N/2][0:N]      )
 
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">dzmat_t</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">;</span>
-  <span class="kt">int</span>     <span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">;</span>
-
-  <span class="n">is</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">ie</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mi">2-1</span><span class="p">;</span>       <span class="c1">//top N/2 rows on device 0</span>
-  <span class="cp">#pragma omp target map(mapper(top_id), tofrom: a,b) device(0) \</span>
-<span class="cp">                     firstprivate(is,ie) nowait</span>
-  <span class="p">{</span>
-    <span class="n">dzmat_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-    <span class="n">dzmat_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="n">is</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span> <span class="n">ie</span><span class="o">=</span><span class="n">N</span><span class="mi">-1</span><span class="p">;</span>       <span class="c1">//bottom N/2 rows on device 1</span>
-  <span class="cp">#pragma omp target map(mapper(bottom_id), tofrom: a,b) device(1) \</span>
-<span class="cp">                     firstprivate(is,ie) nowait</span>
-  <span class="p">{</span>
-    <span class="n">dzmat_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-    <span class="n">dzmat_init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="cp">#pragma omp taskwait</span>
-
-  <span class="n">host_add</span><span class="p">(</span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="o">&amp;</span><span class="n">c</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">target_mapper</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">complex_mats</span>
-
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span>    <span class="o">!</span><span class="n">N</span> <span class="n">must</span> <span class="n">be</span> <span class="n">even</span>
-   <span class="n">type</span> <span class="n">dzmat_t</span>
-     <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span>  <span class="n">r_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">i_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">end</span> <span class="n">type</span>
-
-   <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">mapper</span><span class="p">(</span> <span class="nl">left_id</span><span class="p">:</span> <span class="n">dzmat_t</span> <span class="o">::</span> <span class="n">v</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span> <span class="n">v</span><span class="o">%</span><span class="n">r_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span>  <span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="o">&amp;</span>
-   <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                                             <span class="n">v</span><span class="o">%</span><span class="n">i_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span>  <span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">))</span>
-
-   <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">mapper</span><span class="p">(</span><span class="nl">right_id</span><span class="p">:</span> <span class="n">dzmat_t</span> <span class="o">::</span> <span class="n">v</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span> <span class="n">v</span><span class="o">%</span><span class="n">r_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">),</span> <span class="o">&amp;</span>
-   <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                                             <span class="n">v</span><span class="o">%</span><span class="n">i_m</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="o">:</span><span class="n">N</span><span class="p">))</span>
-
-<span class="n">end</span> <span class="n">module</span>
+void dzmat_init(dzmat_t *z, int is, int ie, int n);         //initialization
+void host_add(  dzmat_t *a, dzmat_t *b, dzmat_t *c, int n); //matrix add: c=a+b
 
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">use</span>  <span class="n">complex_mats</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">dzmat_t</span><span class="p">)</span> <span class="o">::</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span>
-  <span class="n">external</span> <span class="n">dzmat_init</span><span class="p">,</span> <span class="n">host_add</span>  <span class="o">!</span><span class="n">initialization</span> <span class="n">and</span> <span class="n">matrix</span> <span class="nl">add</span><span class="p">:</span> <span class="n">a</span><span class="o">=</span><span class="n">b</span><span class="o">+</span><span class="n">c</span>
+int main()
+{
+  dzmat_t a,b,c;
+  int     is,ie;
 
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">is</span><span class="p">,</span><span class="n">ie</span>
+  is=0; ie=N/2-1;       //top N/2 rows on device 0
+  #pragma omp target map(mapper(top_id), tofrom: a,b) device(0) \
+                     firstprivate(is,ie) nowait
+  {
+    dzmat_init(&amp;a,is,ie,N);
+    dzmat_init(&amp;b,is,ie,N);
+  }
 
+  is=N/2; ie=N-1;       //bottom N/2 rows on device 1
+  #pragma omp target map(mapper(bottom_id), tofrom: a,b) device(1) \
+                     firstprivate(is,ie) nowait
+  {
+    dzmat_init(&amp;a,is,ie,N);
+    dzmat_init(&amp;b,is,ie,N);
+  }
 
-  <span class="n">is</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">ie</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span>            <span class="o">!</span><span class="n">left</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span> <span class="n">columns</span> <span class="n">on</span> <span class="n">device</span> <span class="mi">0</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="n">mapper</span><span class="p">(</span> <span class="n">left_id</span><span class="p">),</span> <span class="nl">tofrom</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="n">device</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">firstprivate</span><span class="p">(</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span> <span class="n">nowait</span>
-    <span class="n">call</span> <span class="n">dzmat_init</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span>
-    <span class="n">call</span> <span class="n">dzmat_init</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+  #pragma omp taskwait
 
-  <span class="n">is</span><span class="o">=</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">ie</span><span class="o">=</span><span class="n">N</span>         <span class="o">!</span><span class="n">right</span> <span class="n">N</span><span class="o">/</span><span class="mi">2</span> <span class="n">columns</span> <span class="n">on</span> <span class="n">device</span> <span class="mi">1</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="n">mapper</span><span class="p">(</span><span class="n">right_id</span><span class="p">),</span> <span class="nl">tofrom</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span> <span class="n">device</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>       <span class="n">firstprivate</span><span class="p">(</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span> <span class="n">nowait</span>
-    <span class="n">call</span> <span class="n">dzmat_init</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span>
-    <span class="n">call</span> <span class="n">dzmat_init</span><span class="p">(</span><span class="n">b</span><span class="p">,</span><span class="n">is</span><span class="p">,</span><span class="n">ie</span><span class="p">)</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-
-  <span class="o">!</span><span class="n">omp</span> <span class="n">taskwait</span>
-
-  <span class="n">call</span> <span class="n">host_add</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">)</span>
-
-<span class="n">end</span> <span class="n">program</span> <span class="n">main</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the third example  <em>myvec</em>  structures are nested within a  <em>mypoints</em>  structure. The  <em>myvec_t</em>  type is mapped as in the first example.  Following the  <em>mypoints</em>  structure declaration,  the  <em>mypoints_t</em>  type is mapped by a  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  directive.  For this structure the  <em>hostonly_data</em>  element will not be mapped; also the array section of  <em>x</em>  ( <em>v.x[:1]</em> ) and  <em>x</em>  will be mapped; and  <em>scratch</em>  will be allocated and used as scratch storage on the device. The default map-type mapping,  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> , applies to the  <em>x</em>  array section, but not to  <em>scratch</em>  which is explicitly mapped with the  <code class="docutils literal notranslate"><span class="pre">alloc</span></code>  map-type.  Note: the variable  <em>v</em>  is not included in the map list (otherwise the  <em>hostonly_data</em>  would be mapped)– just the elements  to be mapped are listed.</p>
-<p>The two mappers are combined when a  <em>mypoints_t</em>  structure type is mapped, because the mapper  <em>myvec_t</em>  structure type is used within a  <em>mypoints_t</em>  type structure.
-Note, in the main program  <em>P</em>  is an array of  <em>mypoints_t</em>  type structures,<br />
-and hence every element of the array is mapped with the mapper prescription.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_mapper_map.3.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>  <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#define N 100</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">myvec</span> <span class="p">{</span>
-    <span class="kt">size_t</span> <span class="n">len</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="o">*</span><span class="n">data</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">myvec_t</span><span class="p">;</span>
-
-<span class="cp">#pragma omp declare mapper(myvec_t v) \</span>
-<span class="cp">                    map(v, v.data[0:v.len])</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">mypoints</span> <span class="p">{</span>
-    <span class="k">struct</span> <span class="nc">myvec</span> <span class="n">scratch</span><span class="p">;</span>
-    <span class="k">struct</span> <span class="nc">myvec</span> <span class="o">*</span><span class="n">x</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">hostonly_data</span><span class="p">[</span><span class="mi">500000</span><span class="p">];</span>
-<span class="p">}</span> <span class="n">mypoints_t</span><span class="p">;</span>
-
-<span class="cp">#pragma omp declare mapper(mypoints_t v)  \</span>
-<span class="cp">                    map(v.x, v.x[0] ) map(alloc:v.scratch)</span>
-
-<span class="kt">void</span> <span class="nf">init_mypts_array</span><span class="p">(</span><span class="n">mypoints_t</span> <span class="o">*</span><span class="n">P</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">eval_mypts_array</span><span class="p">(</span><span class="n">mypoints_t</span> <span class="o">*</span><span class="n">P</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-
-   <span class="n">mypoints_t</span> <span class="n">P</span><span class="p">;</span>
-
-   <span class="n">init_mypts_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-
-   <span class="cp">#pragma omp target map(P)</span>
-   <span class="n">eval_mypts_array</span><span class="p">(</span><span class="o">&amp;</span><span class="n">P</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-
-<span class="p">}</span>
+  host_add(&amp;a,&amp;b,&amp;c,N);
+}
 
 </pre></div>
 </div>
@@ -1517,42 +1449,149 @@ and hence every element of the array is mapped with the mapper prescription.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">target_mapper</span><span class="mf">.3</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       target_mapper.2.f90
+! type:       F-free
+! version:    omp_5.0
+module complex_mats
 
-<span class="n">module</span> <span class="n">my_structures</span>
-  <span class="n">type</span> <span class="n">myvec_t</span>
-    <span class="n">integer</span>                   <span class="o">::</span> <span class="n">len</span>
-    <span class="kt">double</span> <span class="n">precision</span><span class="p">,</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">data</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-  <span class="n">end</span> <span class="n">type</span>
-  <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">mapper</span><span class="p">(</span><span class="n">myvec_t</span> <span class="o">::</span> <span class="n">v</span><span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>         <span class="n">map</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+   integer, parameter :: N=100    !N must be even
+   type dzmat_t
+     double precision ::  r_m(N,N), i_m(N,N)
+   end type
 
-  <span class="n">type</span> <span class="n">mypoints_t</span>
-     <span class="n">type</span><span class="p">(</span><span class="n">myvec_t</span><span class="p">)</span>            <span class="o">::</span> <span class="n">scratch</span>
-     <span class="n">type</span><span class="p">(</span><span class="n">myvec_t</span><span class="p">),</span> <span class="n">pointer</span>   <span class="o">::</span> <span class="n">x</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-     <span class="kt">double</span> <span class="n">precision</span>         <span class="o">::</span> <span class="n">hostonly_data</span><span class="p">(</span><span class="mi">500000</span><span class="p">)</span>
-  <span class="n">end</span>  <span class="n">type</span>
- <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">mapper</span><span class="p">(</span><span class="n">mypoints_t</span> <span class="o">::</span> <span class="n">v</span><span class="p">)</span>  <span class="o">&amp;</span>
- <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>         <span class="n">map</span><span class="p">(</span><span class="n">v</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">v</span><span class="o">%</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="n">map</span><span class="p">(</span><span class="nl">alloc</span><span class="p">:</span><span class="n">v</span><span class="o">%</span><span class="n">scratch</span><span class="p">)</span>
+   !$omp  declare mapper( left_id: dzmat_t :: v) map( v%r_m(N,  1:N/2), &amp;
+   !$omp&amp;                                             v%i_m(N,  1:N/2))
 
-<span class="n">end</span> <span class="n">module</span>
+   !$omp  declare mapper(right_id: dzmat_t :: v) map( v%r_m(N,N/2+1:N), &amp;
+   !$omp&amp;                                             v%i_m(N,N/2+1:N))
+
+end module
 
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">use</span> <span class="n">my_structures</span>
-  <span class="n">external</span>  <span class="n">init_mypts_array</span><span class="p">,</span> <span class="n">eval_mypts_array</span>
+program main
+  use  complex_mats
+  type(dzmat_t) :: a,b,c
+  external dzmat_init, host_add  !initialization and matrix add: a=b+c
 
-  <span class="n">type</span><span class="p">(</span><span class="n">mypoints_t</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
+  integer :: is,ie
 
-   <span class="n">call</span> <span class="n">init_mypts_array</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-   <span class="n">call</span> <span class="n">eval_mypts_array</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
+  is=1; ie=N/2            !left N/2 columns on device 0
+  !$omp target map(mapper( left_id), tofrom: a,b) device(0) &amp;
+  !$omp&amp;       firstprivate(is,ie) nowait
+    call dzmat_init(a,is,ie)
+    call dzmat_init(b,is,ie)
+  !$omp end target
 
-<span class="n">end</span> <span class="n">program</span>
+  is=N/2+1; ie=N         !right N/2 columns on device 1
+  !$omp target map(mapper(right_id), tofrom: a,b) device(1) &amp;
+  !$omp&amp;       firstprivate(is,ie) nowait
+    call dzmat_init(a,is,ie)
+    call dzmat_init(b,is,ie)
+  !$omp end target
+
+  !omp taskwait
+
+  call host_add(a,b,c)
+
+end program main
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the third example  <em>myvec</em>  structures are nested within a  <em>mypoints</em>  structure. The  <em>myvec_t</em>  type is mapped as in the first example.  Following the  <em>mypoints</em>  structure declaration,  the  <em>mypoints_t</em>  type is mapped by a <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> directive.  For this structure the  <em>hostonly_data</em>  element will not be mapped; also the array section of  <em>x</em>  ( <em>v.x[:1]</em> ) and  <em>x</em>  will be mapped; and  <em>scratch</em>  will be allocated and used as scratch storage on the device. The default map-type mapping, <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>, applies to the  <em>x</em>  array section, but not to  <em>scratch</em>  which is explicitly mapped with the <code class="docutils literal notranslate"><span class="pre">alloc</span></code> map-type.  Note: the variable  <em>v</em>  is not included in the map list (otherwise the  <em>hostonly_data</em>  would be mapped)– just the elements  to be mapped are listed.</p>
+<p>The two mappers are combined when a  <em>mypoints_t</em>  structure type is mapped, because the mapper  <em>myvec_t</em>  structure type is used within a  <em>mypoints_t</em>  type structure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_mapper_map.3.c
+* type: C
+* version: omp_5.0
+*/
+
+#include &lt;stdlib.h&gt;
+#include  &lt;stdio.h&gt;
+
+#define N 100
+
+typedef struct myvec {
+    size_t len;
+    double *data;
+} myvec_t;
+
+#pragma omp declare mapper(myvec_t v) \
+                    map(v, v.data[0:v.len])
+
+typedef struct mypoints {
+    struct myvec scratch;
+    struct myvec *x;
+    double hostonly_data[500000];
+} mypoints_t;
+
+#pragma omp declare mapper(mypoints_t v)  \
+                    map(v.x, v.x[0] ) map(alloc:v.scratch)
+
+void init_mypts_array(mypoints_t *P, int n);
+void eval_mypts_array(mypoints_t *P, int n);
+
+int main(){
+
+   mypoints_t P;
+
+   init_mypts_array(&amp;P, N);
+
+   #pragma omp target map(P)
+   eval_mypts_array(&amp;P, N);
+
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       target_mapper.3.f90
+! type:       F-free
+! version:    omp_5.0
+
+module my_structures
+  type myvec_t
+    integer                   :: len
+    double precision, pointer :: data(:)
+  end type
+  !$omp  declare mapper(myvec_t :: v) &amp;
+  !$omp&amp;         map(v)
+
+  type mypoints_t
+     type(myvec_t)            :: scratch
+     type(myvec_t), pointer   :: x(:)
+     double precision         :: hostonly_data(500000)
+  end  type
+ !$omp  declare mapper(mypoints_t :: v)  &amp;
+ !$omp&amp;         map(v%x, v%x(1)) map(alloc:v%scratch)
+
+end module
+
+
+program main
+  use my_structures
+  external  init_mypts_array, eval_mypts_array
+
+  type(mypoints_t) :: P
+
+   call init_mypts_array(P)
+
+   !$omp target map(P)
+   call eval_mypts_array(P)
+
+end program
 
 
 </pre></div>
@@ -1587,7 +1626,7 @@ and hence every element of the array is mapped with the mapper prescription.</p>
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_array_shaping.html" title="previous page">Array Shaping</a>
-    <a class='right-next' id="next-link" href="Examples_target_data.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_target_data.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Construct</a>
 
         </div>
         

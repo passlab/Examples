@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,25 +1291,12 @@
                 
   <div class="section" id="openmp-affinity">
 <h1>OpenMP Affinity<a class="headerlink" href="#openmp-affinity" title="Permalink to this headline">¶</a></h1>
-<p>OpenMP Affinity consists of a  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  policy (thread affinity policy) and a specification of places ( ‘ location units ‘  or  <em>processors</em>  that may be cores, hardware threads, sockets, etc.).   OpenMP Affinity enables users to bind computations on specific places. The placement will hold for the duration of the parallel region.  However, the runtime is free to migrate the OpenMP threads  to different cores (hardware threads, sockets, etc.) prescribed within a given place,  if two or more cores (hardware threads, sockets, etc.) have been assigned to a given place.</p>
-<p>Often the binding can be managed without resorting to explicitly setting places. Without the specification of places in the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable,  the OpenMP runtime will distribute and bind threads using the entire range of processors for  the OpenMP program, according to the  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>  environment variable or the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause.  When places are specified, the OMP runtime binds threads to the places according to a default distribution policy, or those specified in the  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>  environment variable or the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause.</p>
-<p>In the OpenMP Specifications document a processor refers to an execution unit that is enabled for an OpenMP thread to use.  A processor is a core when there is no SMT (Simultaneous Multi-Threading) support or SMT is disabled.  When  SMT is enabled, a processor is a hardware thread (HW-thread). (This is the usual case; but actually, the execution unit is implementation defined.) Processor numbers are numbered sequentially from 0 to the number of cores less one (without SMT), or 0 to the number HW-threads less one (with SMT). OpenMP places use the processor number to designate binding locations (unless an  ‘ abstract name ‘  is used.)</p>
-<p>The processors available to a process may be a subset of the system’s processors.  This restriction may be the result of a  wrapper process controlling the execution (such as  <code class="docutils literal notranslate"><span class="pre">numactl</span></code>  on Linux systems),  compiler options, library-specific environment variables, or default kernel settings.  For instance, the execution of multiple MPI processes, launched on a single compute node, will each have a subset of processors as determined by the MPI launcher or set by MPI affinity environment  variables for the MPI library.<br />
-Forked threads within an MPI process
-(for a hybrid execution of MPI and OpenMP ) inherit the valid<br />
-processor set for execution from the parent process (the initial task region)<br />
-when a parallel region forks threads.  The binding policy set in<br />
-<code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>  or the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause will be applied to<br />
-the subset of processors available to  <em>the particular</em>  MPI process.</p>
-<p>Also, setting an explicit list of processor numbers in the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code><br />
-variable before an MPI launch (which involves more than one MPI process) will
-result in unspecified behavior (and doesn’t make sense) because the set of<br />
-processors in the places list must not contain processors outside the subset<br />
-of processors for an MPI process. A separate  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable must
-be set for each MPI process, and is usually accomplished by launching a script<br />
-which sets  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  specifically for the MPI process.</p>
-<p>Threads of a team are positioned onto places in a compact manner, a  scattered distribution, or onto the master’s place, by setting the   <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>  environment variable or the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause  to   <em>close</em> ,  <em>spread</em> , or  <em>master</em> , respectively.  When   <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code>  is set to FALSE no binding is enforced; and  when the value is TRUE, the binding is implementation defined to  a set of places in the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable or to places  defined by the implementation if the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable  is not set.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  variable can also be set to an abstract name  ( <em>threads</em> ,  <em>cores</em> ,  <em>sockets</em> ) to specify that a place is either a single hardware thread, a core, or a socket, respectively.  This description of the  <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code>  is most useful when the  number of threads is equal to the number of hardware thread, cores or sockets.  It can also be used with a  <em>close</em>  or  <em>spread</em>   distribution policy when the equality doesn’t hold.</p>
+<p>OpenMP Affinity consists of a <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> policy (thread affinity policy) and a specification of places ( <strong>“</strong> location units <strong>“</strong>  or  <em>processors</em>  that may be cores, hardware threads, sockets, etc.).   OpenMP Affinity enables users to bind computations on specific places. The placement will hold for the duration of the parallel region.  However, the runtime is free to migrate the OpenMP threads  to different cores (hardware threads, sockets, etc.) prescribed within a given place,  if two or more cores (hardware threads, sockets, etc.) have been assigned to a given place.</p>
+<p>Often the binding can be managed without resorting to explicitly setting places. Without the specification of places in the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable,  the OpenMP runtime will distribute and bind threads using the entire range of processors for  the OpenMP program, according to the <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause.  When places are specified, the OMP runtime binds threads to the places according to a default distribution policy, or those specified in the <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause.</p>
+<p>In the OpenMP Specifications document a processor refers to an execution unit that is enabled for an OpenMP thread to use.  A processor is a core when there is no SMT (Simultaneous Multi-Threading) support or SMT is disabled.  When  SMT is enabled, a processor is a hardware thread (HW-thread). (This is the usual case; but actually, the execution unit is implementation defined.) Processor numbers are numbered sequentially from 0 to the number of cores less one (without SMT), or 0 to the number HW-threads less one (with SMT). OpenMP places use the processor number to designate binding locations (unless an  <strong>“</strong> abstract name <strong>“</strong>  is used.)</p>
+<p>The processors available to a process may be a subset of the system’s processors.  This restriction may be the result of a  wrapper process controlling the execution (such as <code class="docutils literal notranslate"><span class="pre">numactl</span></code> on Linux systems),  compiler options, library-specific environment variables, or default kernel settings.  For instance, the execution of multiple MPI processes, launched on a single compute node, will each have a subset of processors as determined by the MPI launcher or set by MPI affinity environment  variables for the MPI library.</p>
+<p>Threads of a team are positioned onto places in a compact manner, a  scattered distribution, or onto the master’s place, by setting the  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause  to   <em>close</em> ,  <em>spread</em> , or  <em>master</em> , respectively.  When  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> is set to FALSE no binding is enforced; and  when the value is TRUE, the binding is implementation defined to  a set of places in the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable or to places  defined by the implementation if the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable  is not set.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable can also be set to an abstract name  ( <em>threads</em> ,  <em>cores</em> ,  <em>sockets</em> ) to specify that a place is either a single hardware thread, a core, or a socket, respectively.  This description of the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> is most useful when the  number of threads is equal to the number of hardware thread, cores or sockets.  It can also be used with a  <em>close</em>  or  <em>spread</em>   distribution policy when the equality doesn’t hold.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1301,8 +1326,8 @@ which sets  <code class="docutils literal notranslate"><span class="pre">OMP_PLA
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_get_nthrs.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code>  Routine</a>
-    <a class='right-next' id="next-link" href="Examples_affinity.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_get_nthrs.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">omp_get_num_threads</span></code> Routine</a>
+    <a class='right-next' id="next-link" href="Examples_affinity.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> Clause</a>
 
         </div>
         

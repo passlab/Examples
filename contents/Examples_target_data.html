@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1335,59 +1373,61 @@
               <div>
                 
   <div class="section" id="target-data-construct">
-<h1><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Construct<a class="headerlink" href="#target-data-construct" title="Permalink to this headline">¶</a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Construct<a class="headerlink" href="#target-data-construct" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="simple-target-data-construct">
-<h2>Simple  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Construct<a class="headerlink" href="#simple-target-data-construct" title="Permalink to this headline">¶</a></h2>
-<p>This example shows how the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct maps variables  to a device data environment. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct creates  a new device data environment and maps the variables  <em>v1</em> ,  <em>v2</em> , and  <em>p</em>  to the new device  data environment. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct enclosed in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>    <code class="docutils literal notranslate"><span class="pre">data</span></code>  region creates a new device data environment, which inherits the  variables  <em>v1</em> ,  <em>v2</em> , and  <em>p</em>  from the enclosing device data environment. The variable   <em>N</em>  is mapped into the new device data environment from the encountering task’s data  environment.</p>
+<h2>Simple <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Construct<a class="headerlink" href="#simple-target-data-construct" title="Permalink to this headline">¶</a></h2>
+<p>This example shows how the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct maps variables  to a device data environment. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct creates  a new device data environment and maps the variables  <em>v1</em> ,  <em>v2</em> , and  <em>p</em>  to the new device  data environment. The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct enclosed in the <code class="docutils literal notranslate"><span class="pre">target</span></code>  <code class="docutils literal notranslate"><span class="pre">data</span></code> region creates a new device data environment, which inherits the  variables  <em>v1</em> ,  <em>v2</em> , and  <em>p</em>  from the enclosing device data environment. The variable   <em>N</em>  is mapped into the new device data environment from the encountering task’s data  environment.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p[0:N])</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp target</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
- <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-   <span class="p">}</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.1c
+* type: C
+* version: omp_4.0
+*/
+extern void init(float*, float*, int);
+extern void output(float*, int);
+void vec_mult(float *p, float *v1, float *v2, int N)
+{
+   int i;
+   init(v1, v2, N);
+   #pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p[0:N])
+   {
+      #pragma omp target
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+ p[i] = v1[i] * v2[i];
+   }
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran  passes a reference and specifies the extent of the arrays in the  declaration. No length information is necessary in the map clause, as is required  with C/C++ pointers.</p>
+<p>The Fortran code passes a reference and specifies the extent of the arrays in the  declaration. No length information is necessary in the map clause, as is required  with C/C++ pointers.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="n">real</span>    <span class="o">::</span>  <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-      <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-  <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.1f
+! type: F-free
+! version:    omp_4.0
+subroutine vec_mult(p, v1, v2, N)
+   real    ::  p(N), v1(N), v2(N)
+   integer ::  i
+   call init(v1, v2, N)
+   !$omp target data map(to: v1, v2) map(from: p)
+   !$omp target
+   !$omp parallel do
+      do i=1,N
+  p(i) = v1(i) * v2(i)
+      end do
+   !$omp end target
+   !$omp end target data
+   call output(p, N)
+end subroutine
 
 </pre></div>
 </div>
@@ -1395,114 +1435,118 @@
 </div>
 </div>
 <div class="section" id="target-data-region-enclosing-multiple-target-regions">
-<h2><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Region Enclosing Multiple  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Regions<a class="headerlink" href="#target-data-region-enclosing-multiple-target-regions" title="Permalink to this headline">¶</a></h2>
-<p>The following examples show how the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct maps  variables to a device data environment of a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>    <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct creates a device data environment and encloses  <code class="docutils literal notranslate"><span class="pre">target</span></code>   regions, which have their own device data environments. The device data environment  of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  region is inherited by the device data environment  of an enclosed  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct  is used to create variables that will persist throughout the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>   region.</p>
-<p>In the following example the variables  <em>v1</em>  and  <em>v2</em>  are mapped at each  <code class="docutils literal notranslate"><span class="pre">target</span></code>   construct. Instead of mapping the variable  <em>p</em>  twice, once at each  <code class="docutils literal notranslate"><span class="pre">target</span></code>   construct,  <em>p</em>  is mapped once by the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Region Enclosing Multiple <code class="docutils literal notranslate"><span class="pre">target</span></code> Regions<a class="headerlink" href="#target-data-region-enclosing-multiple-target-regions" title="Permalink to this headline">¶</a></h2>
+<p>The following examples show how the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct maps  variables to a device data environment of a <code class="docutils literal notranslate"><span class="pre">target</span></code> region. The <code class="docutils literal notranslate"><span class="pre">target</span></code>  <code class="docutils literal notranslate"><span class="pre">data</span></code> construct creates a device data environment and encloses <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions, which have their own device data environments. The device data environment  of the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region is inherited by the device data environment  of an enclosed <code class="docutils literal notranslate"><span class="pre">target</span></code> region. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct  is used to create variables that will persist throughout the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code>  region.</p>
+<p>In the following example the variables  <em>v1</em>  and  <em>v2</em>  are mapped at each <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct. Instead of mapping the variable  <em>p</em>  twice, once at each <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct,  <em>p</em>  is mapped once by the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init_again</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target data map(from: p[0:N])</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp target map(to: v1[:N], v2[:N])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
- <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">init_again</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-      <span class="cp">#pragma omp target map(to: v1[:N], v2[:N])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
- <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.2c
+* type: C
+* version: omp_4.0
+*/
+extern void init(float*, float*, int);
+extern void init_again(float*, float*, int);
+extern void output(float*, int);
+void vec_mult(float *p, float *v1, float *v2, int N)
+{
+   int i;
+   init(v1, v2, N);
+   #pragma omp target data map(from: p[0:N])
+   {
+      #pragma omp target map(to: v1[:N], v2[:N])
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+ p[i] = v1[i] * v2[i];
+      init_again(v1, v2, N);
+      #pragma omp target map(to: v1[:N], v2[:N])
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+ p[i] = p[i] + (v1[i] * v2[i]);
+   }
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran  uses reference and specifies the extent of the  <em>p</em> ,  <em>v1</em>  and  <em>v2</em>  arrays.  No length information is necessary in the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause, as is required with  C/C++ pointers. The arrays  <em>v1</em>  and  <em>v2</em>  are mapped at each  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.  Instead of mapping the array  <em>p</em>  twice, once at each target construct,  <em>p</em>  is mapped  once by the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct.</p>
+<p>The Fortran code uses reference and specifies the extent of the  <em>p</em> ,  <em>v1</em>  and  <em>v2</em>  arrays.  No length information is necessary in the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, as is required with  C/C++ pointers. The arrays  <em>v1</em>  and  <em>v2</em>  are mapped at each <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  Instead of mapping the array  <em>p</em>  twice, once at each target construct,  <em>p</em>  is mapped  once by the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="n">real</span>    <span class="o">::</span>  <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-      <span class="n">call</span> <span class="n">init_again</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span> <span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.2f
+! type: F-free
+! version:    omp_4.0
+subroutine vec_mult(p, v1, v2, N)
+   real    ::  p(N), v1(N), v2(N)
+   integer ::  i
+   call init(v1, v2, N)
+   !$omp target data map(from: p)
+      !$omp target map(to: v1, v2 )
+         !$omp parallel do
+         do i=1,N
+            p(i) = v1(i) * v2(i)
+         end do
+      !$omp end target
+      call init_again(v1, v2, N)
+      !$omp target map(to: v1, v2 )
+         !$omp parallel do
+         do i=1,N
+            p(i) = p(i) + v1(i) * v2(i)
+         end do
+      !$omp end target
+   !$omp end target data
+   call output(p, N)
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, the array  <em>Q</em>  is mapped once at the enclosing   <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  region instead of at each  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.  In OpenMP 4.0, a scalar variable is implicitly mapped with the  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  map-type. But since OpenMP 4.5, a scalar variable, such as the  <em>tmp</em>  variable, has to be explicitly mapped with  the  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  map-type at the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct in order to return  its reduced value from the parallel loop construct to the host. The variable defaults to firstprivate at the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.</p>
+<p>In the following example, the array  <em>Q</em>  is mapped once at the enclosing  <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region instead of at each <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  In OpenMP 4.0, a scalar variable is implicitly mapped with the <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> map-type. But since OpenMP 4.5, a scalar variable, such as the  <em>tmp</em>  variable, has to be explicitly mapped with  the <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> map-type at the first <code class="docutils literal notranslate"><span class="pre">target</span></code> construct in order to return  its reduced value from the parallel loop construct to the host. The variable defaults to firstprivate at the second <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-<span class="cp">#define COLS 100</span>
+/*
+* name: target_data.3c
+* type: C
+* version: omp_4.0
+*/
 
-<span class="kt">void</span> <span class="nf">gramSchmidt</span><span class="p">(</span><span class="kt">float</span> <span class="n">Q</span><span class="p">[][</span><span class="n">COLS</span><span class="p">],</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">rows</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">int</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">COLS</span><span class="p">;</span>
-    <span class="cp">#pragma omp target data map(Q[0:rows][0:cols])</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">cols</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="kt">double</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+#include &lt;math.h&gt;
+#define COLS 100
 
-        <span class="cp">#pragma omp target map(tofrom: tmp)</span>
-        <span class="cp">#pragma omp parallel for reduction(+:tmp)</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rows</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">tmp</span> <span class="o">+=</span> <span class="p">(</span><span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]);</span>
+void gramSchmidt(float Q[][COLS], const int rows)
+{
+    int cols = COLS;
+    #pragma omp target data map(Q[0:rows][0:cols])
+    for(int k=0; k &lt; cols; k++)
+    {
+        double tmp = 0.0;
 
-        <span class="n">tmp</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+        #pragma omp target map(tofrom: tmp)
+        #pragma omp parallel for reduction(+:tmp)
+        for(int i=0; i &lt; rows; i++)
+            tmp += (Q[i][k] * Q[i][k]);
 
-        <span class="cp">#pragma omp target</span>
-        <span class="cp">#pragma omp parallel for</span>
-        <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">rows</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-            <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*=</span> <span class="n">tmp</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        tmp = 1/sqrt(tmp);
 
-<span class="cm">/* Note:  The variable tmp is now mapped with tofrom, for correct</span>
-<span class="cm">   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.</span>
-<span class="cm"> */</span>
+        #pragma omp target
+        #pragma omp parallel for
+        for(int i=0; i &lt; rows; i++)
+            Q[i][k] *= tmp;
+    }
+}
+
+/* Note:  The variable tmp is now mapped with tofrom, for correct
+   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
+ */
 
 </pre></div>
 </div>
@@ -1510,37 +1554,37 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">subroutine</span> <span class="n">gramSchmidt</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">)</span>
-<span class="n">integer</span>             <span class="o">::</span>   <span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">,</span>  <span class="n">i</span><span class="p">,</span><span class="n">k</span>
-<span class="kt">double</span> <span class="n">precision</span>    <span class="o">::</span> <span class="n">Q</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span><span class="n">cols</span><span class="p">),</span> <span class="n">tmp</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
-      <span class="k">do</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cols</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0</span><span class="n">d0</span>
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span> <span class="n">tmp</span><span class="p">)</span>
-           <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">tmp</span><span class="p">)</span>
-           <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">rows</span>
-              <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">+</span> <span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
-           <span class="n">end</span> <span class="k">do</span>
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.3f
+! type: F-free
+! version:    omp_4.0
+subroutine gramSchmidt(Q,rows,cols)
+integer             ::   rows,cols,  i,k
+double precision    :: Q(rows,cols), tmp
+      !$omp target data map(Q)
+      do k=1,cols
+         tmp = 0.0d0
+        !$omp target map(tofrom: tmp)
+           !$omp parallel do reduction(+:tmp)
+           do i=1,rows
+              tmp = tmp + (Q(i,k) * Q(i,k))
+           end do
+        !$omp end target
 
-          <span class="n">tmp</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">d0</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+          tmp = 1.0d0/sqrt(tmp)
 
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>
-           <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-           <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">rows</span>
-               <span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">=</span> <span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="o">*</span><span class="n">tmp</span>
-           <span class="n">enddo</span>
-        <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-      <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+        !$omp target
+           !$omp parallel do
+           do i=1,rows
+               Q(i,k) = Q(i,k)*tmp
+           enddo
+        !$omp end target
+      end do
+      !$omp end target data
+end subroutine
 
-<span class="o">!</span> <span class="nl">Note</span><span class="p">:</span>  <span class="n">The</span> <span class="n">variable</span> <span class="n">tmp</span> <span class="n">is</span> <span class="n">now</span> <span class="n">mapped</span> <span class="n">with</span> <span class="n">tofrom</span><span class="p">,</span> <span class="k">for</span> <span class="n">correct</span>
-<span class="o">!</span> <span class="n">execution</span> <span class="n">with</span> <span class="mf">4.5</span> <span class="p">(</span><span class="n">and</span> <span class="n">pre</span><span class="mf">-4.5</span><span class="p">)</span> <span class="n">compliant</span> <span class="n">compilers</span><span class="p">.</span> <span class="n">See</span> <span class="n">Devices</span> <span class="n">Intro</span><span class="p">.</span>
+! Note:  The variable tmp is now mapped with tofrom, for correct
+! execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
 
 </pre></div>
 </div>
@@ -1548,171 +1592,175 @@
 </div>
 </div>
 <div class="section" id="target-data-construct-with-orphaned-call">
-<h2><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Construct with Orphaned Call<a class="headerlink" href="#target-data-construct-with-orphaned-call" title="Permalink to this headline">¶</a></h2>
-<p>The following two examples show how the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct  maps variables to a device data environment. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>   construct’s device data environment encloses the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s device  data environment in the function  <code class="docutils literal notranslate"><span class="pre">vec_mult()</span></code> .</p>
-<p>When the type of the variable appearing in an array section is pointer, the pointer  variable and the storage location of the corresponding array section are mapped  to the device data environment. The pointer variable is treated as if it had appeared  in a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause with a map-type of  <code class="docutils literal notranslate"><span class="pre">alloc</span></code> . The array section’s  storage location is mapped according to the map-type in the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause  (the default map-type is  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> ).</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s device data environment inherits the storage locations  of the array sections  <em>v1[0:N]</em> ,  <em>v2[:n]</em> , and  <em>p0[0:N]</em>  from the enclosing target data  construct’s device data environment. Neither initialization nor assignment is performed  for the array sections in the new device data environment.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Construct with Orphaned Call<a class="headerlink" href="#target-data-construct-with-orphaned-call" title="Permalink to this headline">¶</a></h2>
+<p>The following two examples show how the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct  maps variables to a device data environment. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct’s device data environment encloses the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s device  data environment in the function <code class="docutils literal notranslate"><span class="pre">vec_mult()</span></code>.</p>
+<p>When the type of the variable appearing in an array section is pointer, the pointer  variable and the storage location of the corresponding array section are mapped  to the device data environment. The pointer variable is treated as if it had appeared  in a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause with a map-type of <code class="docutils literal notranslate"><span class="pre">alloc</span></code>. The array section’s  storage location is mapped according to the map-type in the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause  (the default map-type is <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s device data environment inherits the storage locations  of the array sections  <em>v1[0:N]</em> ,  <em>v2[:n]</em> , and  <em>p0[0:N]</em>  from the enclosing target data  construct’s device data environment. Neither initialization nor assignment is performed  for the array sections in the new device data environment.</p>
 <p>The pointer variables  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are mapped into the target construct’s device  data environment with an implicit map-type of alloc and they are assigned the address  of the storage location associated with their corresponding array sections. Note  that the following pairs of array section storage locations are equivalent ( <em>p0[:N]</em> ,   <em>p1[:N]</em> ), ( <em>v1[:N]</em> , <em>v3[:N]</em> ), and ( <em>v2[:N]</em> , <em>v4[:N]</em> ).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.4c
+* type: C
+* version: omp_4.0
+*/
 
 
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+void vec_mult(float*, float*, float*, int);
 
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-
-
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p0</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-
-   <span class="cp">#pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p0[0:N])</span>
-   <span class="p">{</span>
-      <span class="n">vec_mult</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="p">}</span>
-
-   <span class="n">output</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+extern void init(float*, float*, int);
+extern void output(float*, int);
 
 
+void foo(float *p0, float *v1, float *v2, int N)
+{
+   init(v1, v2, N);
 
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v3</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v4</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp target map(to: v3[0:N], v4[:N]) map(from: p1[0:N])</span>
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-   <span class="p">{</span>
-     <span class="n">p1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v4</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+   #pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p0[0:N])
+   {
+      vec_mult(p0, v1, v2, N);
+   }
+
+   output(p0, N);
+}
+
+
+
+void vec_mult(float *p1, float *v3, float *v4, int N)
+{
+   int i;
+   #pragma omp target map(to: v3[0:N], v4[:N]) map(from: p1[0:N])
+   #pragma omp parallel for
+   for (i=0; i&lt;N; i++)
+   {
+     p1[i] = v3[i] * v4[i];
+   }
+}
 
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran  maps the pointers and storage in an identical manner (same extent,  but uses indices from 1 to  <em>N</em> ).</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s device data environment inherits the storage locations  of the arrays  <em>v1</em> ,  <em>v2</em>  and  <em>p0</em>  from the enclosing  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  constructs’s  device data environment. However, in Fortran the associated data of the pointer  is known, and the shape is not required.</p>
-<p>The pointer variables  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are mapped into the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s  device data environment with an implicit map-type of  <code class="docutils literal notranslate"><span class="pre">alloc</span></code>  and they are  assigned the address of the storage location associated with their corresponding  array sections. Note that the following pair of array storage locations are equivalent  ( <em>p0</em> , <em>p1</em> ), ( <em>v1</em> , <em>v3</em> ), and ( <em>v2</em> , <em>v4</em> ).</p>
+<p>The Fortran code maps the pointers and storage in an identical manner (same extent,  but uses indices from 1 to  <em>N</em> ).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s device data environment inherits the storage locations  of the arrays  <em>v1</em> ,  <em>v2</em>  and  <em>p0</em>  from the enclosing <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> constructs’s  device data environment. However, in Fortran the associated data of the pointer  is known, and the shape is not required.</p>
+<p>The pointer variables  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are mapped into the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s  device data environment with an implicit map-type of <code class="docutils literal notranslate"><span class="pre">alloc</span></code> and they are  assigned the address of the storage location associated with their corresponding  array sections. Note that the following pair of array storage locations are equivalent  ( <em>p0</em> , <em>p1</em> ), ( <em>v1</em> , <em>v3</em> ), and ( <em>v2</em> , <em>v4</em> ).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.4f
+! type: F-free
+! version:    omp_4.0
 
-<span class="n">module</span> <span class="n">mults</span>
-<span class="n">contains</span>
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">real</span><span class="p">,</span><span class="n">pointer</span><span class="p">,</span><span class="n">dimension</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">::</span> <span class="n">p0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span>
-<span class="n">integer</span>                   <span class="o">::</span> <span class="n">N</span><span class="p">,</span><span class="n">i</span>
+module mults
+contains
+subroutine foo(p0,v1,v2,N)
+real,pointer,dimension(:) :: p0, v1, v2
+integer                   :: N,i
 
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+   call init(v1, v2, N)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p0</span><span class="p">)</span>
-    <span class="n">call</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
+   !$omp target data map(to: v1, v2) map(from: p0)
+    call vec_mult(p0,v1,v2,N)
+   !$omp end target data
 
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+   call output(p0, N)
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">v3</span><span class="p">,</span><span class="n">v4</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">real</span><span class="p">,</span><span class="n">pointer</span><span class="p">,</span><span class="n">dimension</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">::</span> <span class="n">p1</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span>
-<span class="n">integer</span>                   <span class="o">::</span> <span class="n">N</span><span class="p">,</span><span class="n">i</span>
+subroutine vec_mult(p1,v3,v4,N)
+real,pointer,dimension(:) :: p1, v3, v4
+integer                   :: N,i
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p1</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">p1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v4</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+   !$omp target map(to: v3, v4) map(from: p1)
+   !$omp parallel do
+   do i=1,N
+      p1(i) = v3(i) * v4(i)
+   end do
+   !$omp end target
 
-<span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
+end subroutine
+end module
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, the variables  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are references to the pointer  variables  <em>p0</em> ,  <em>v1</em>  and  <em>v2</em>  respectively. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s device data  environment inherits the pointer variables  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  from the enclosing  <code class="docutils literal notranslate"><span class="pre">target</span></code>    <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct’s device data environment. Thus,  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are already  present in the device data environment.</p>
+<p>In the following example, the variables  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are references to the pointer  variables  <em>p0</em> ,  <em>v1</em>  and  <em>v2</em>  respectively. The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s device data  environment inherits the pointer variables  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  from the enclosing <code class="docutils literal notranslate"><span class="pre">target</span></code>  <code class="docutils literal notranslate"><span class="pre">data</span></code> construct’s device data environment. Thus,  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are already  present in the device data environment.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.5c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p0</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p0[0:N])</span>
-   <span class="p">{</span>
-      <span class="n">vec_mult</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">p1</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">v3</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span> <span class="o">&amp;</span><span class="n">v4</span><span class="p">,</span> <span class="kt">int</span> <span class="o">&amp;</span><span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="cp">#pragma omp target map(to: v3[0:N], v4[:N]) map(from: p1[0:N])</span>
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="n">p1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v4</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.5c
+* type: C++
+* version: omp_4.0
+*/
+void vec_mult(float* &amp;, float* &amp;, float* &amp;, int &amp;);
+extern void init(float*, float*, int);
+extern void output(float*, int);
+void foo(float *p0, float *v1, float *v2, int N)
+{
+   init(v1, v2, N);
+   #pragma omp target data map(to: v1[0:N], v2[:N]) map(from: p0[0:N])
+   {
+      vec_mult(p0, v1, v2, N);
+   }
+   output(p0, N);
+}
+void vec_mult(float* &amp;p1, float* &amp;v3, float* &amp;v4, int &amp;N)
+{
+   int i;
+   #pragma omp target map(to: v3[0:N], v4[:N]) map(from: p1[0:N])
+   #pragma omp parallel for
+   for (i=0; i&lt;N; i++)
+     p1[i] = v3[i] * v4[i];
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, the usual Fortran approach is used for dynamic memory.  The  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  arrays are allocated in the main program and passed as references  from one routine to another. In  <code class="docutils literal notranslate"><span class="pre">vec_mult</span></code> ,  <em>p1</em> ,  <em>v3</em>  and  <em>v4</em>  are references to the   <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  arrays, respectively. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct’s device data  environment inherits the arrays  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  from the enclosing target data construct’s  device data environment. Thus,  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are already present in the device  data environment.</p>
+<p>In the following example, the usual Fortran approach is used for dynamic memory.  The  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  arrays are allocated in the main program and passed as references  from one routine to another. In <code class="docutils literal notranslate"><span class="pre">vec_mult</span></code>,  <em>p1</em> ,  <em>v3</em>  and  <em>v4</em>  are references to the   <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  arrays, respectively. The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct’s device data  environment inherits the arrays  <em>p0</em> ,  <em>v1</em> , and  <em>v2</em>  from the enclosing target data construct’s  device data environment. Thus,  <em>p1</em> ,  <em>v3</em> , and  <em>v4</em>  are already present in the device  data environment.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">my_mult</span>
-<span class="n">contains</span>
-<span class="n">subroutine</span> <span class="n">foo</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">real</span><span class="p">,</span><span class="n">dimension</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">::</span> <span class="n">p0</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span>
-<span class="n">integer</span>           <span class="o">::</span> <span class="n">N</span><span class="p">,</span><span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p0</span><span class="p">)</span>
-    <span class="n">call</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span><span class="n">v3</span><span class="p">,</span><span class="n">v4</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">real</span><span class="p">,</span><span class="n">dimension</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">::</span> <span class="n">p1</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span>
-<span class="n">integer</span>           <span class="o">::</span> <span class="n">N</span><span class="p">,</span><span class="n">i</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p1</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">p1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v4</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-<span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">program</span> <span class="n">main</span>
-<span class="n">use</span> <span class="n">my_mult</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">1024</span>
-<span class="n">real</span><span class="p">,</span><span class="n">allocatable</span><span class="p">,</span> <span class="n">dimension</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="o">::</span> <span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span>
-   <span class="n">allocate</span><span class="p">(</span> <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="p">)</span>
-   <span class="n">call</span> <span class="n">foo</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.5f
+! type: F-free
+! version:    omp_4.0
+module my_mult
+contains
+subroutine foo(p0,v1,v2,N)
+real,dimension(:) :: p0, v1, v2
+integer           :: N,i
+   call init(v1, v2, N)
+   !$omp target data map(to: v1, v2) map(from: p0)
+    call vec_mult(p0,v1,v2,N)
+   !$omp end target data
+   call output(p0, N)
+end subroutine
+subroutine vec_mult(p1,v3,v4,N)
+real,dimension(:) :: p1, v3, v4
+integer           :: N,i
+   !$omp target map(to: v3, v4) map(from: p1)
+   !$omp parallel do
+   do i=1,N
+      p1(i) = v3(i) * v4(i)
+   end do
+   !$omp end target
+end subroutine
+end module
+program main
+use my_mult
+integer, parameter :: N=1024
+real,allocatable, dimension(:) :: p, v1, v2
+   allocate( p(N), v1(N), v2(N) )
+   call foo(p,v1,v2,N)
+end program
 
 </pre></div>
 </div>
@@ -1720,137 +1768,141 @@
 </div>
 </div>
 <div class="section" id="target-data-construct-with-if-clause">
-<h2><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Construct with  <code class="docutils literal notranslate"><span class="pre">if</span></code>  Clause<a class="headerlink" href="#target-data-construct-with-if-clause" title="Permalink to this headline">¶</a></h2>
-<p>The following two examples show how the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct  maps variables to a device data environment.</p>
-<p>In the following example, the if clause on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct  indicates that if the variable  <em>N</em>  is smaller than a given threshold, then the  <code class="docutils literal notranslate"><span class="pre">target</span></code>    <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct will not create a device data environment.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs enclosed in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  region  must also use an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause on the same condition, otherwise the pointer  variable  <em>p</em>  is implicitly mapped with a map-type of  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> , but the storage  location for the array section  <em>p[0:N]</em>  will not be mapped in the device data environments  of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Construct with <code class="docutils literal notranslate"><span class="pre">if</span></code> Clause<a class="headerlink" href="#target-data-construct-with-if-clause" title="Permalink to this headline">¶</a></h2>
+<p>The following two examples show how the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct  maps variables to a device data environment.</p>
+<p>In the following example, the if clause on the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct  indicates that if the variable  <em>N</em>  is smaller than a given threshold, then the <code class="docutils literal notranslate"><span class="pre">target</span></code>  <code class="docutils literal notranslate"><span class="pre">data</span></code> construct will not create a device data environment.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs enclosed in the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region  must also use an <code class="docutils literal notranslate"><span class="pre">if</span></code> clause on the same condition, otherwise the pointer  variable  <em>p</em>  is implicitly mapped with a map-type of <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>, but the storage  location for the array section  <em>p[0:N]</em>  will not be mapped in the device data environments  of the <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.6c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define THRESHOLD 1000000</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init_again</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target data if(N&gt;THRESHOLD) map(from: p[0:N])</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-      <span class="n">init_again</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-      <span class="cp">#pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-   <span class="p">}</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.6c
+* type: C
+* version: omp_4.0
+*/
+#define THRESHOLD 1000000
+extern void init(float*, float*, int);
+extern void init_again(float*, float*, int);
+extern void output(float*, int);
+void vec_mult(float *p, float *v1, float *v2, int N)
+{
+   int i;
+   init(v1, v2, N);
+   #pragma omp target data if(N&gt;THRESHOLD) map(from: p[0:N])
+   {
+      #pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+        p[i] = v1[i] * v2[i];
+      init_again(v1, v2, N);
+      #pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+        p[i] = p[i] + (v1[i] * v2[i]);
+   }
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clauses work the same way for the following Fortran . The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   constructs enclosed in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  region should also use  an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause with the same condition, so that the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>   region and the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region are either both created for the device, or  are both ignored.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">if</span></code> clauses work the same way for the following Fortran code. The <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs enclosed in the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region should also use  an <code class="docutils literal notranslate"><span class="pre">if</span></code> clause with the same condition, so that the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code>  region and the <code class="docutils literal notranslate"><span class="pre">target</span></code> region are either both created for the device, or  are both ignored.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">params</span>
-<span class="n">integer</span><span class="p">,</span><span class="n">parameter</span> <span class="o">::</span> <span class="n">THRESHOLD</span><span class="o">=</span><span class="mi">1000000</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="n">use</span> <span class="n">params</span>
-   <span class="n">real</span>    <span class="o">::</span>  <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="k">if</span><span class="p">(</span><span class="n">N</span><span class="o">&gt;</span><span class="n">THRESHOLD</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="k">if</span><span class="p">(</span><span class="n">N</span><span class="o">&gt;</span><span class="n">THRESHOLD</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-      <span class="n">call</span> <span class="n">init_again</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="k">if</span><span class="p">(</span><span class="n">N</span><span class="o">&gt;</span><span class="n">THRESHOLD</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.6f
+! type: F-free
+! version:    omp_4.0
+module params
+integer,parameter :: THRESHOLD=1000000
+end module
+subroutine vec_mult(p, v1, v2, N)
+   use params
+   real    ::  p(N), v1(N), v2(N)
+   integer ::  i
+   call init(v1, v2, N)
+   !$omp target data if(N&gt;THRESHOLD) map(from: p)
+      !$omp target if(N&gt;THRESHOLD) map(to: v1, v2)
+         !$omp parallel do
+         do i=1,N
+            p(i) = v1(i) * v2(i)
+         end do
+      !$omp end target
+      call init_again(v1, v2, N)
+      !$omp target if(N&gt;THRESHOLD) map(to: v1, v2)
+         !$omp parallel do
+         do i=1,N
+            p(i) = p(i) + v1(i) * v2(i)
+         end do
+      !$omp end target
+   !$omp end target data
+   call output(p, N)
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, when the  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause conditional expression on  the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct evaluates to  <em>false</em> , the target region will  execute on the host device. However, the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct  created an enclosing device data environment that mapped  <em>p[0:N]</em>  to a device data  environment on the default device. At the end of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>   region the array section  <em>p[0:N]</em>  will be assigned from the device data environment  to the corresponding variable in the data environment of the task that encountered  the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct, resulting in undefined values in  <em>p[0:N]</em> .</p>
+<p>In the following example, when the <code class="docutils literal notranslate"><span class="pre">if</span></code> clause conditional expression on  the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct evaluates to  <em>false</em> , the target region will  execute on the host device. However, the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct  created an enclosing device data environment that mapped  <em>p[0:N]</em>  to a device data  environment on the default device. At the end of the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code>  region the array section  <em>p[0:N]</em>  will be assigned from the device data environment  to the corresponding variable in the data environment of the task that encountered  the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct, resulting in undefined values in  <em>p[0:N]</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: target_data.7c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define THRESHOLD 1000000</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span><span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v1</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">v2</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target data map(from: p[0:N])</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])</span>
-      <span class="cp">#pragma omp parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-   <span class="p">}</span> <span class="cm">/* UNDEFINED behavior if N&lt;=THRESHOLD */</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_data.7c
+* type: C
+* version: omp_4.0
+*/
+#define THRESHOLD 1000000
+extern void init(float*, float*, int);
+extern void output(float*, int);
+void vec_mult(float *p, float *v1, float *v2, int N)
+{
+   int i;
+   init(v1, v2, N);
+   #pragma omp target data map(from: p[0:N])
+   {
+      #pragma omp target if (N&gt;THRESHOLD) map(to: v1[:N], v2[:N])
+      #pragma omp parallel for
+      for (i=0; i&lt;N; i++)
+        p[i] = v1[i] * v2[i];
+   } /* UNDEFINED behavior if N&lt;=THRESHOLD */
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clauses work the same way for the following Fortran . When  the  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause conditional expression on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct  evaluates to  <em>false</em> , the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region will execute on the host  device. However, the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct created an enclosing  device data environment that mapped the  <em>p</em>  array (and  <em>v1</em>  and  <em>v2</em> ) to a device data  environment on the default target device. At the end of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>   region the  <em>p</em>  array will be assigned from the device data environment to the corresponding  variable in the data environment of the task that encountered the  <code class="docutils literal notranslate"><span class="pre">target</span></code>    <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct, resulting in undefined values in  <em>p</em> .</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">if</span></code> clauses work the same way for the following Fortran code. When  the <code class="docutils literal notranslate"><span class="pre">if</span></code> clause conditional expression on the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct  evaluates to  <em>false</em> , the <code class="docutils literal notranslate"><span class="pre">target</span></code> region will execute on the host  device. However, the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct created an enclosing  device data environment that mapped the  <em>p</em>  array (and  <em>v1</em>  and  <em>v2</em> ) to a device data  environment on the default target device. At the end of the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code>  region the  <em>p</em>  array will be assigned from the device data environment to the corresponding  variable in the data environment of the task that encountered the <code class="docutils literal notranslate"><span class="pre">target</span></code>  <code class="docutils literal notranslate"><span class="pre">data</span></code> construct, resulting in undefined values in  <em>p</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">target_data</span><span class="mf">.7f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">params</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">THRESHOLD</span><span class="o">=</span><span class="mi">1000000</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="n">use</span> <span class="n">params</span>
-   <span class="n">real</span>    <span class="o">::</span>  <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">data</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">p</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="k">if</span><span class="p">(</span><span class="n">N</span><span class="o">&gt;</span><span class="n">THRESHOLD</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-         <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-            <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-         <span class="n">end</span> <span class="k">do</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">data</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>  <span class="o">!***</span> <span class="n">UNDEFINED</span> <span class="n">behavior</span> <span class="k">if</span> <span class="n">N</span><span class="o">&lt;=</span><span class="n">THRESHOLD</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_data.7f
+! type: F-free
+! version:    omp_4.0
+module params
+integer, parameter :: THRESHOLD=1000000
+end module
+subroutine vec_mult(p, v1, v2, N)
+   use params
+   real    ::  p(N), v1(N), v2(N)
+   integer ::  i
+   call init(v1, v2, N)
+   !$omp target data map(from: p)
+      !$omp target if(N&gt;THRESHOLD) map(to: v1, v2)
+         !$omp parallel do
+         do i=1,N
+            p(i) = v1(i) * v2(i)
+         end do
+      !$omp end target
+   !$omp end target data
+   call output(p, N)  !*** UNDEFINED behavior if N&lt;=THRESHOLD
+end subroutine
 
 </pre></div>
 </div>
@@ -1884,8 +1936,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_target_mapper.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_target_unstructured_data.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">enter</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  and  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">exit</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  Constructs</a>
+    <a class='left-prev' id="prev-link" href="Examples_target_mapper.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_target_unstructured_data.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">enter</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> and <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">exit</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> Constructs</a>
 
         </div>
         

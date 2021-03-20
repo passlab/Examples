@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Nested Loop Constructs" href="Examples_nested_loop.html" />
-    <link rel="prev" title="declare ~ variant Directive" href="Examples_variant.html" />
+    <link rel="prev" title="declare variant Directive" href="Examples_variant.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,36 +1291,38 @@
                 
   <div class="section" id="metadirective-directive">
 <h1>Metadirective Directive<a class="headerlink" href="#metadirective-directive" title="Permalink to this headline">¶</a></h1>
-<p>A  <code class="docutils literal notranslate"><span class="pre">metadirective</span></code>  directive provides a mechanism to select a directive in a  <code class="docutils literal notranslate"><span class="pre">when</span></code>  clause to be used, depending upon one or more contexts:   implementation, available devices and the present enclosing construct.  The directive in a  <code class="docutils literal notranslate"><span class="pre">default</span></code>  clause is used when a directive of the   <code class="docutils literal notranslate"><span class="pre">when</span></code>  clause is not selected.</p>
-<p>In the  <code class="docutils literal notranslate"><span class="pre">when</span></code>  clause the  <em>context selector</em>  (or just  <em>selector</em> ) defines traits that are evaluated for selection of the directive that follows the selector.  This ‘selectable’ directive is called a  <em>directive variant</em> . Traits are grouped by  <em>construct</em> ,  <em>implementation</em>  and   <em>device</em>   <em>sets</em>  to be used by a selector of the same name.</p>
-<p>In the first example the architecture trait  <em>arch</em>  of the   <em>device</em>  selector set specifies that if an  <em>nvptx</em>  (NVIDIA) architecture is active in the OpenMP context, then the  <code class="docutils literal notranslate"><span class="pre">teams</span></code> ~ <code class="docutils literal notranslate"><span class="pre">loop</span></code>    <em>directive variant</em>  is selected as the directive; otherwise, the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">loop</span></code>   <em>directive variant</em>  of the  <code class="docutils literal notranslate"><span class="pre">default</span></code>  clause is selected as the directive. That is, if a  <em>device</em>  of  <em>nvptx</em>  architecture is supported by the implementation within the enclosing  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, its  <em>directive variant</em>  is selected. The architecture names, such as  <em>nvptx</em> , are implementation defined. Also, note that  <em>device</em>  as used in a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct specifies a device number, while  <em>device</em> , as used in the  <code class="docutils literal notranslate"><span class="pre">metadirective</span></code>  directive as selector set, has traits of  <em>kind</em> ,  <em>isa</em>  and  <em>arch</em> .</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive provides a mechanism to select a directive in a <code class="docutils literal notranslate"><span class="pre">when</span></code> clause to be used, depending upon one or more contexts:   implementation, available devices and the present enclosing construct.  The directive in a <code class="docutils literal notranslate"><span class="pre">default</span></code> clause is used when a directive of the  <code class="docutils literal notranslate"><span class="pre">when</span></code> clause is not selected.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">when</span></code> clause the  <em>context selector</em>  (or just  <em>selector</em> ) defines traits that are evaluated for selection of the directive that follows the selector.  This “selectable” directive is called a  <em>directive variant</em> . Traits are grouped by  <em>construct</em> ,  <em>implementation</em>  and   <em>device</em>   <em>sets</em>  to be used by a selector of the same name.</p>
+<p>In the first example the architecture trait  <em>arch</em>  of the   <em>device</em>  selector set specifies that if an  <em>nvptx</em>  (NVIDIA) architecture is active in the OpenMP context, then the <code class="docutils literal notranslate"><span class="pre">teams</span></code> <code class="docutils literal notranslate"><span class="pre">loop</span></code>   <em>directive variant</em>  is selected as the directive; otherwise, the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">loop</span></code>  <em>directive variant</em>  of the <code class="docutils literal notranslate"><span class="pre">default</span></code> clause is selected as the directive. That is, if a  <em>device</em>  of  <em>nvptx</em>  architecture is supported by the implementation within the enclosing <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, its  <em>directive variant</em>  is selected. The architecture names, such as  <em>nvptx</em> , are implementation defined. Also, note that  <em>device</em>  as used in a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct specifies a device number, while  <em>device</em> , as used in the <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive as selector set, has traits of  <em>kind</em> ,  <em>isa</em>  and  <em>arch</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: metadirective.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#define N 100</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+/*
+* name: metadirective.1c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">v1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v2</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v3</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
+#define N 100
+#include &lt;stdio.h&gt;
 
-   <span class="cp">#pragma omp target map(to:v1,v2) map(from:v3) device(0)</span>
-   <span class="cp">#pragma omp metadirective \</span>
-<span class="cp">                   when(   device={arch(&quot;nvptx&quot;)}: teams loop) \</span>
-<span class="cp">                   default(                     parallel loop)</span>
-     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>  <span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+int main()
+{
+   int v1[N], v2[N], v3[N];
+   for(int i=0; i&lt;N; i++){ v1[i]=(i+1); v2[i]=-(i+1); }
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d  %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">v3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v3</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span> <span class="c1">//output: -1  -10000</span>
+   #pragma omp target map(to:v1,v2) map(from:v3) device(0)
+   #pragma omp metadirective \
+                   when(   device={arch(&quot;nvptx&quot;)}: teams loop) \
+                   default(                     parallel loop)
+     for (int i= 0; i&lt; N; i++)  v3[i] = v1[i] * v2[i];
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   printf(&quot; %d  %d\n&quot;,v3[0],v3[N-1]); //output: -1  -10000
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1290,152 +1330,70 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">metadirective</span><span class="mf">.2f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: metadirective.2f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">program</span> <span class="n">main</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span> <span class="mi">100</span>
-   <span class="n">integer</span> <span class="o">::</span>  <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
+program main
+   integer, parameter :: N= 100
+   integer ::  v1(N), v2(N), v3(N);
 
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span>  <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=-</span><span class="n">i</span><span class="p">;</span>  <span class="n">enddo</span>   <span class="o">!</span> <span class="n">initialize</span>
+   do i=1,N;  v1(i)=i; v2(i)=-i;  enddo   ! initialize
 
-   <span class="o">!</span><span class="n">$omp</span>  <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span><span class="n">v3</span><span class="p">)</span> <span class="n">device</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span>  <span class="n">metadirective</span> <span class="o">&amp;</span>
-   <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>     <span class="n">when</span><span class="p">(</span>   <span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;nvptx&quot;</span><span class="p">)}</span><span class="o">:</span> <span class="n">teams</span> <span class="n">loop</span><span class="p">)</span> <span class="o">&amp;</span>
-   <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>     <span class="k">default</span><span class="p">(</span>                     <span class="n">parallel</span> <span class="n">loop</span><span class="p">)</span>
-     <span class="k">do</span> <span class="n">i</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="n">enddo</span>
-   <span class="o">!</span><span class="n">$omp</span>  <span class="n">end</span> <span class="n">target</span>
+   !$omp  target map(to:v1,v2) map(from:v3) device(0)
+   !$omp  metadirective &amp;
+   !$omp&amp;     when(   device={arch(&quot;nvptx&quot;)}: teams loop) &amp;
+   !$omp&amp;     default(                     parallel loop)
+     do i= 1,N; v3(i) = v1(i) * v2(i); enddo
+   !$omp  end target
 
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v3</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">!!</span><span class="nl">output</span><span class="p">:</span> <span class="mi">-1</span>  <span class="mi">-10000</span>
-<span class="n">end</span> <span class="n">program</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the second example, the  <em>implementation</em>  selector set is specified in the  <code class="docutils literal notranslate"><span class="pre">when</span></code>  clause to distinguish between AMD and NVIDIA platforms.  Additionally, specific architectures are specified with the  <em>device</em>   selector set.</p>
-<p>In the , different  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  constructs are employed as determined by the  <code class="docutils literal notranslate"><span class="pre">metadirective</span></code>  directive. The number of teams is restricted by a  <code class="docutils literal notranslate"><span class="pre">num_teams</span></code>  clause and a thread limit is also set by a  <code class="docutils literal notranslate"><span class="pre">thread_limit</span></code>  clause for   <em>vendor</em>  AMD and NVIDIA platforms and specific architecture traits.  Otherwise, just the  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct is used without any clauses, as prescribed by the  <code class="docutils literal notranslate"><span class="pre">default</span></code>  clause.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: metadirective.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-
-<span class="cp">#define N 100</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-
-<span class="kt">void</span> <span class="nf">work_on_chunk</span><span class="p">(</span><span class="kt">int</span> <span class="n">idev</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">);</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>                    <span class="c1">//Driver</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span><span class="n">idev</span><span class="p">;</span>
-
-   <span class="k">for</span> <span class="p">(</span><span class="n">idev</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">idev</span><span class="o">&lt;</span><span class="n">omp_get_num_devices</span><span class="p">();</span> <span class="n">idev</span><span class="o">++</span><span class="p">)</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp target device(idev)</span>
-      <span class="cp">#pragma omp metadirective \</span>
-<span class="cp">                  when( implementation={vendor(nvidia)}, device={arch(&quot;kepler&quot;)}: \</span>
-<span class="cp">                        teams num_teams(512) thread_limit(32) )                   \</span>
-<span class="cp">                  when( implementation={vendor(amd)},    device={arch(&quot;fiji&quot;  )}: \</span>
-<span class="cp">                        teams num_teams(512) thread_limit(64) )                   \</span>
-<span class="cp">                  default(                                                        \</span>
-<span class="cp">                        teams)</span>
-      <span class="cp">#pragma omp distribute parallel for</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">work_on_chunk</span><span class="p">(</span><span class="n">idev</span><span class="p">,</span><span class="n">i</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-
+   print *, v3(1),v3(N) !!output: -1  -10000
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In the second example, the  <em>implementation</em>  selector set is specified in the <code class="docutils literal notranslate"><span class="pre">when</span></code> clause to distinguish between AMD and NVIDIA platforms.  Additionally, specific architectures are specified with the  <em>device</em>   selector set.</p>
+<p>In the code, different <code class="docutils literal notranslate"><span class="pre">teams</span></code> constructs are employed as determined by the <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive. The number of teams is restricted by a <code class="docutils literal notranslate"><span class="pre">num_teams</span></code> clause and a thread limit is also set by a <code class="docutils literal notranslate"><span class="pre">thread_limit</span></code> clause for   <em>vendor</em>  AMD and NVIDIA platforms and specific architecture traits.  Otherwise, just the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct is used without any clauses, as prescribed by the <code class="docutils literal notranslate"><span class="pre">default</span></code> clause.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">metadirective</span><span class="mf">.2f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="n">program</span> <span class="n">main</span>                    <span class="o">!!</span><span class="n">Driver</span>
-  <span class="n">use</span> <span class="n">omp_lib</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span>
-  <span class="n">external</span>           <span class="o">::</span> <span class="n">work_on_chunk</span>
-  <span class="n">integer</span>            <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">idev</span>
+/*
+* name: metadirective.2c
+* type: C
+* version: omp_5.0
+*/
 
-  <span class="k">do</span> <span class="n">idev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">omp_get_num_devices</span><span class="p">()</span><span class="mi">-1</span>
+#define N 100
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">device</span><span class="p">(</span><span class="n">idev</span><span class="p">)</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">begin</span> <span class="n">metadirective</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>  <span class="n">when</span><span class="p">(</span> <span class="n">implementation</span><span class="o">=</span><span class="p">{</span><span class="n">vendor</span><span class="p">(</span><span class="n">nvidia</span><span class="p">)},</span> <span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;kepler&quot;</span><span class="p">)}</span><span class="o">:</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>        <span class="n">teams</span> <span class="n">num_teams</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span> <span class="n">thread_limit</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="p">)</span>                   <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>  <span class="n">when</span><span class="p">(</span> <span class="n">implementation</span><span class="o">=</span><span class="p">{</span><span class="n">vendor</span><span class="p">(</span><span class="n">amd</span><span class="p">)},</span>    <span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;fiji&quot;</span>  <span class="p">)}</span><span class="o">:</span> <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>        <span class="n">teams</span> <span class="n">num_teams</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span> <span class="n">thread_limit</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span> <span class="p">)</span>                   <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>  <span class="k">default</span><span class="p">(</span>                                                        <span class="o">&amp;</span>
-    <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>        <span class="n">teams</span><span class="p">)</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">distribute</span> <span class="n">parallel</span> <span class="k">for</span>
-    <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-       <span class="n">call</span> <span class="n">work_on_chunk</span><span class="p">(</span><span class="n">idev</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">end</span> <span class="k">do</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">metadirective</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
+void work_on_chunk(int idev, int i);
 
-  <span class="n">end</span> <span class="k">do</span>
+int main()                    //Driver
+{
+   int i,idev;
 
-<span class="n">end</span> <span class="n">program</span>
+   for (idev=0; idev&lt;omp_get_num_devices(); idev++)
+   {
+      #pragma omp target device(idev)
+      #pragma omp metadirective \
+                  when( implementation={vendor(nvidia)}, device={arch(&quot;kepler&quot;)}: \
+                        teams num_teams(512) thread_limit(32) )                   \
+                  when( implementation={vendor(amd)},    device={arch(&quot;fiji&quot;  )}: \
+                        teams num_teams(512) thread_limit(64) )                   \
+                  default(                                                        \
+                        teams)
+      #pragma omp distribute parallel for
+      for (i=0; i&lt;N; i++) work_on_chunk(idev,i);
+   }
+   return 0;
+}
 
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the third example, a  <em>construct</em>  selector set is specified in the  <code class="docutils literal notranslate"><span class="pre">when</span></code>  clause.   Here, a  <code class="docutils literal notranslate"><span class="pre">metadirective</span></code>  directive is used within a function that is also compiled as a function for a target device as directed by the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive. The  <em>target</em>  directive name of the  <code class="docutils literal notranslate"><span class="pre">construct</span></code>  selector ensures that the  <code class="docutils literal notranslate"><span class="pre">distribute</span></code> ~ <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for/do</span></code>  construct is employed for the target compilation. Otherwise, for the host-compiled version the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for/do</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct is used.</p>
-<p>In the first call to the  <em>exp_pi_diff()</em>  routine the context is a  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct and the  <code class="docutils literal notranslate"><span class="pre">distribute</span></code> ~ <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for/do</span></code>  construct version of the function is invoked, while in the second call the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for/do</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct version is used.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: metadirective.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>  <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-<span class="cp">#define      N 1000</span>
-
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">void</span> <span class="nf">exp_pi_diff</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="kt">double</span> <span class="n">my_pi</span><span class="p">){</span>
-   <span class="cp">#pragma omp metadirective \</span>
-<span class="cp">               when( construct={target}: distribute parallel for  ) \</span>
-<span class="cp">               default(                             parallel for simd)</span>
-   <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span> <span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span><span class="o">*</span><span class="n">i</span> <span class="p">);</span>
-<span class="p">}</span>
-<span class="cp">#pragma omp end declare target</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="c1">//Calculates sequence of exponentials: (M_PI-my_pi) * index</span>
-  <span class="c1">//M_PI is from math.h, and my_pi is user provided.</span>
-
-  <span class="kt">double</span> <span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-  <span class="kt">double</span> <span class="n">my_pi</span><span class="o">=</span><span class="mf">3.14159265358979e0</span><span class="p">;</span>
-
-      <span class="cp">#pragma omp target teams map(tofrom: d[0:N])</span>
-      <span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">);</span>
-                                           <span class="c1">// value should be near 1</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;d[N-1] = %20.14f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span> <span class="c1">// ...= 1.00000000000311</span>
-
-      <span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">);</span>                <span class="c1">// value should be near 1</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&quot;d[N-1] = %20.14f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span> <span class="c1">// ...= 1.00000000000311</span>
-<span class="p">}</span>
 
 </pre></div>
 </div>
@@ -1443,54 +1401,141 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">metadirective</span><span class="mf">.3f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: metadirective.2f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">module</span> <span class="n">params</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span>
-   <span class="n">DOUBLE</span> <span class="n">PRECISION</span><span class="p">,</span> <span class="n">PARAMETER</span><span class="o">::</span><span class="n">M_PI</span><span class="o">=</span><span class="mf">4.0</span><span class="n">d0</span><span class="o">*</span><span class="n">DATAN</span><span class="p">(</span><span class="mf">1.0</span><span class="n">d0</span><span class="p">)</span> <span class="o">!</span><span class="mf">3.1415926535897932</span><span class="n">_8</span>
-<span class="n">end</span> <span class="n">module</span>
+program main                    !!Driver
+  use omp_lib
+  implicit none
+  integer, parameter :: N=1000
+  external           :: work_on_chunk
+  integer            :: i,idev
+
+  do idev=0,omp_get_num_devices()-1
+
+    !$omp target device(idev)
+    !$omp begin metadirective &amp;
+    !$omp&amp;  when( implementation={vendor(nvidia)}, device={arch(&quot;kepler&quot;)}: &amp;
+    !$omp&amp;        teams num_teams(512) thread_limit(32) )                   &amp;
+    !$omp&amp;  when( implementation={vendor(amd)},    device={arch(&quot;fiji&quot;  )}: &amp;
+    !$omp&amp;        teams num_teams(512) thread_limit(64) )                   &amp;
+    !$omp&amp;  default(                                                        &amp;
+    !$omp&amp;        teams)
+    !$omp distribute parallel for
+    do i=1,N
+       call work_on_chunk(idev,i)
+    end do
+    !$omp end metadirective
+    !$omp end target
+
+  end do
+
+end program
 
 
-<span class="n">subroutine</span> <span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span>    <span class="n">my_pi</span><span class="p">)</span>
-  <span class="n">use</span> <span class="n">params</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">integer</span>          <span class="o">::</span>  <span class="n">i</span>
-  <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span>  <span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">my_pi</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the third example, a  <em>construct</em>  selector set is specified in the <code class="docutils literal notranslate"><span class="pre">when</span></code> clause.   Here, a <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive is used within a function that is also compiled as a function for a target device as directed by the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive. The  <em>target</em>  directive name of the <code class="docutils literal notranslate"><span class="pre">construct</span></code> selector ensures that the <code class="docutils literal notranslate"><span class="pre">distribute</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> construct is employed for the target compilation. Otherwise, for the host-compiled version the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct is used.</p>
+<p>In the first call to the  <em>exp_pi_diff()</em>  routine the context is a <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct and the <code class="docutils literal notranslate"><span class="pre">distribute</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> construct version of the function is invoked, while in the second call the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct version is used.</p>
+<p>This case illustrates an important point for users that may want to hoist the  <code class="docutils literal notranslate"><span class="pre">target</span></code> directive out of a function that contains the usual  <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">teams</span></code> <code class="docutils literal notranslate"><span class="pre">distribute</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> construct (for providing alternate constructs through the <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive as here). While this combined construct can be decomposed into a <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">teams</span> <span class="pre">distribute</span> <span class="pre">parallel</span> <span class="pre">for/do</span></code> constructs, the OpenMP 5.0 specification has the restriction: “If a <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct is nested within a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, that <code class="docutils literal notranslate"><span class="pre">target</span></code> construct must contain no statements, declarations or directives outside of the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct’’. So, the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct must immediately follow the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct without any intervening code statements (which includes function calls).   Since the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct alone cannot be hoisted out of a function,  the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct has been hoisted out of the function, and the  <code class="docutils literal notranslate"><span class="pre">distribute</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for/do</span></code> construct is used as the  <em>variant</em>  directive of the <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive within the function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="o">!</span><span class="n">$omp</span>   <span class="n">metadirective</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>      <span class="n">when</span><span class="p">(</span> <span class="n">construct</span><span class="o">=</span><span class="p">{</span><span class="n">target</span><span class="p">}</span><span class="o">:</span> <span class="n">distribute</span> <span class="n">parallel</span> <span class="k">do</span>  <span class="p">)</span>  <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>      <span class="k">default</span><span class="p">(</span>                             <span class="n">parallel</span> <span class="k">do</span> <span class="n">simd</span><span class="p">)</span>
+/*
+* name: metadirective.3c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include  &lt;math.h&gt;
+#define      N 1000
 
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-     <span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span> <span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span><span class="o">*</span><span class="n">i</span> <span class="p">)</span>
-  <span class="n">end</span> <span class="k">do</span>
+#pragma omp declare target
+void exp_pi_diff(double *d, double my_pi){
+   #pragma omp metadirective \
+               when( construct={target}: distribute parallel for  ) \
+               default(                             parallel for simd)
+   for(int i = 0; i&lt;N; i++) d[i] = exp( (M_PI-my_pi)*i );
+}
+#pragma omp end declare target
 
-<span class="n">end</span> <span class="n">subroutine</span>
+int main()
+{
+  //Calculates sequence of exponentials: (M_PI-my_pi) * index
+  //M_PI is from math.h, and my_pi is user provided.
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="o">!</span> <span class="n">Calculates</span> <span class="n">sequence</span> <span class="n">of</span> <span class="nl">exponentials</span><span class="p">:</span> <span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">index</span>
-  <span class="o">!</span> <span class="n">M_PI</span> <span class="n">is</span> <span class="n">from</span> <span class="n">usual</span> <span class="n">way</span><span class="p">,</span> <span class="n">and</span> <span class="n">my_pi</span> <span class="n">is</span> <span class="n">user</span> <span class="n">provided</span><span class="p">.</span>
-  <span class="o">!</span> <span class="n">Fortran</span> <span class="n">Standard</span> <span class="n">does</span> <span class="n">not</span> <span class="n">provide</span> <span class="n">PI</span>
+  double d[N];
+  double my_pi=3.14159265358979e0;
 
-  <span class="n">use</span> <span class="n">params</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="kt">double</span> <span class="n">precision</span>   <span class="o">::</span> <span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-  <span class="kt">double</span> <span class="n">precision</span>   <span class="o">::</span> <span class="n">my_pi</span><span class="o">=</span><span class="mf">3.14159265358979</span><span class="n">d0</span>
+      #pragma omp target teams map(tofrom: d[0:N])
+      exp_pi_diff(d,my_pi);
+                                           // value should be near 1
+      printf(&quot;d[N-1] = %20.14f\n&quot;,d[N-1]); // ...= 1.00000000000311
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">d</span><span class="p">)</span>
-      <span class="n">call</span> <span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">teams</span>
-                                  <span class="o">!</span> <span class="n">value</span> <span class="n">should</span> <span class="n">be</span> <span class="n">near</span> <span class="mi">1</span>
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;d(N) = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>      <span class="o">!</span> <span class="mf">1.00000000000311</span>
+      exp_pi_diff(d,my_pi);                // value should be near 1
+      printf(&quot;d[N-1] = %20.14f\n&quot;,d[N-1]); // ...= 1.00000000000311
+}
 
-      <span class="n">call</span> <span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">)</span> <span class="o">!</span> <span class="n">value</span> <span class="n">should</span> <span class="n">be</span> <span class="n">near</span> <span class="mi">1</span>
-      <span class="n">print</span><span class="o">*</span><span class="p">,</span> <span class="s">&quot;d(N) = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>      <span class="o">!</span> <span class="mf">1.00000000000311</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: metadirective.3f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">end</span> <span class="n">program</span>
+module params
+   integer, parameter :: N=1000
+   DOUBLE PRECISION, PARAMETER::M_PI=4.0d0*DATAN(1.0d0) !3.1415926535897932_8
+end module
+
+
+subroutine exp_pi_diff(d,    my_pi)
+  use params
+  implicit none
+  integer          ::  i
+  double precision ::  d(N), my_pi
+  !$omp declare target
+
+  !$omp   metadirective &amp;
+  !$omp&amp;      when( construct={target}: distribute parallel do  )  &amp;
+  !$omp&amp;      default(                             parallel do simd)
+
+  do i = 1,size(d)
+     d(i) = exp( (M_PI-my_pi)*i )
+  end do
+
+end subroutine
+
+program main
+  ! Calculates sequence of exponentials: (M_PI-my_pi) * index
+  ! M_PI is from usual way, and my_pi is user provided.
+  ! Fortran Standard does not provide PI
+
+  use params
+  implicit none
+  double precision   :: d(N)
+  double precision   :: my_pi=3.14159265358979d0
+
+      !$omp target teams map(from: d)
+      call exp_pi_diff(d,my_pi)
+      !$omp end target teams
+                                  ! value should be near 1
+      print*, &quot;d(N) = &quot;,d(N)      ! 1.00000000000311
+
+      call exp_pi_diff(d,my_pi) ! value should be near 1
+      print*, &quot;d(N) = &quot;,d(N)      ! 1.00000000000311
+
+end program
 
 </pre></div>
 </div>
@@ -1523,7 +1568,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_variant.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  Directive</a>
+    <a class='left-prev' id="prev-link" href="Examples_variant.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> Directive</a>
     <a class='right-next' id="next-link" href="Examples_nested_loop.html" title="next page">Nested Loop Constructs</a>
 
         </div>

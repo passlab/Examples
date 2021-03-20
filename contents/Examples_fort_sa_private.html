@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,26 +1290,26 @@
               <div>
                 
   <div class="section" id="fortran-restrictions-on-storage-association-with-the-private-clause">
-<h1>Fortran Restrictions on Storage Association with the  <code class="docutils literal notranslate"><span class="pre">private</span></code>  Clause<a class="headerlink" href="#fortran-restrictions-on-storage-association-with-the-private-clause" title="Permalink to this headline">¶</a></h1>
-<p>The following non-conforming examples illustrate the implications of the  <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause rules with regard to storage association.</p>
+<h1>Fortran Restrictions on Storage Association with the <code class="docutils literal notranslate"><span class="pre">private</span></code> Clause<a class="headerlink" href="#fortran-restrictions-on-storage-association-with-the-private-clause" title="Permalink to this headline">¶</a></h1>
+<p>The following non-conforming examples illustrate the implications of the <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause rules with regard to storage association.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sa_private</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-       <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">()</span>
-       <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLOCK</span><span class="o">/</span> <span class="n">X</span>
-       <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="n">X</span>             <span class="o">!</span> <span class="n">X</span> <span class="n">is</span> <span class="n">undefined</span>
-       <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.1f
+! type: F-fixed
+       SUBROUTINE SUB()
+       COMMON /BLOCK/ X
+       PRINT *,X             ! X is undefined
+       END SUBROUTINE SUB
 
-       <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT</span>
-         <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLOCK</span><span class="o">/</span> <span class="n">X</span>
-         <span class="n">X</span> <span class="o">=</span> <span class="mf">1.0</span>
-<span class="o">!</span><span class="n">$OMP</span>    <span class="n">PARALLEL</span> <span class="n">PRIVATE</span> <span class="p">(</span><span class="n">X</span><span class="p">)</span>
-         <span class="n">X</span> <span class="o">=</span> <span class="mf">2.0</span>
-         <span class="n">CALL</span> <span class="n">SUB</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$OMP</span>    <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT</span>
+       PROGRAM PRIV_RESTRICT
+         COMMON /BLOCK/ X
+         X = 1.0
+!$OMP    PARALLEL PRIVATE (X)
+         X = 2.0
+         CALL SUB()
+!$OMP    END PARALLEL
+      END PROGRAM PRIV_RESTRICT
 
 </pre></div>
 </div>
@@ -1279,48 +1317,28 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sa_private</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT2</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLOCK2</span><span class="o">/</span> <span class="n">X</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="mf">1.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.2f
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT2
+        COMMON /BLOCK2/ X
+        X = 1.0
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span> <span class="p">(</span><span class="n">X</span><span class="p">)</span>
-          <span class="n">X</span> <span class="o">=</span> <span class="mf">2.0</span>
-          <span class="n">CALL</span> <span class="n">SUB</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL PRIVATE (X)
+          X = 2.0
+          CALL SUB()
+!$OMP   END PARALLEL
 
-       <span class="n">CONTAINS</span>
+       CONTAINS
 
-          <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">()</span>
-          <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLOCK2</span><span class="o">/</span> <span class="n">Y</span>
+          SUBROUTINE SUB()
+          COMMON /BLOCK2/ Y
 
-          <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="n">X</span>               <span class="o">!</span> <span class="n">X</span> <span class="n">is</span> <span class="n">undefined</span>
-          <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="n">Y</span>               <span class="o">!</span> <span class="n">Y</span> <span class="n">is</span> <span class="n">undefined</span>
-          <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
+          PRINT *,X               ! X is undefined
+          PRINT *,Y               ! Y is undefined
+          END SUBROUTINE SUB
 
-       <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT2</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sa_private</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT3</span>
-        <span class="n">EQUIVALENCE</span> <span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">)</span>
-        <span class="n">X</span> <span class="o">=</span> <span class="mf">1.0</span>
-
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-          <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="n">Y</span>                  <span class="o">!</span> <span class="n">Y</span> <span class="n">is</span> <span class="n">undefined</span>
-          <span class="n">Y</span> <span class="o">=</span> <span class="mi">10</span>
-          <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span><span class="n">X</span>                  <span class="o">!</span> <span class="n">X</span> <span class="n">is</span> <span class="n">undefined</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT3</span>
+       END PROGRAM PRIV_RESTRICT2
 
 </pre></div>
 </div>
@@ -1328,35 +1346,19 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sa_private</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT4</span>
-        <span class="n">INTEGER</span> <span class="n">I</span><span class="p">,</span> <span class="n">J</span>
-        <span class="n">INTEGER</span> <span class="n">A</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-        <span class="n">EQUIVALENCE</span> <span class="p">(</span><span class="n">A</span><span class="p">(</span><span class="mi">51</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.3f
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT3
+        EQUIVALENCE (X,Y)
+        X = 1.0
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">DEFAULT</span><span class="p">(</span><span class="n">PRIVATE</span><span class="p">)</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">,</span><span class="n">J</span><span class="p">)</span> <span class="n">LASTPRIVATE</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-          <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span>
-             <span class="n">DO</span> <span class="n">J</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span>
-               <span class="n">B</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">=</span> <span class="n">J</span> <span class="o">-</span> <span class="mi">1</span>
-             <span class="n">ENDDO</span>
-
-             <span class="n">DO</span> <span class="n">J</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span>
-               <span class="n">A</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">=</span> <span class="n">J</span>   <span class="o">!</span> <span class="n">B</span> <span class="n">becomes</span> <span class="n">undefined</span> <span class="n">at</span> <span class="n">this</span> <span class="n">point</span>
-             <span class="n">ENDDO</span>
-
-             <span class="n">DO</span> <span class="n">J</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span>
-               <span class="n">B</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="n">J</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>  <span class="o">!</span> <span class="n">B</span> <span class="n">is</span> <span class="n">undefined</span>
-                         <span class="o">!</span> <span class="n">A</span> <span class="n">becomes</span> <span class="n">undefined</span> <span class="n">at</span> <span class="n">this</span> <span class="n">point</span>
-             <span class="n">ENDDO</span>
-          <span class="n">ENDDO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>       <span class="o">!</span> <span class="n">The</span> <span class="n">LASTPRIVATE</span> <span class="n">write</span> <span class="k">for</span> <span class="n">A</span> <span class="n">has</span>
-                            <span class="o">!</span> <span class="n">undefined</span> <span class="n">results</span>
-
-         <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">B</span>    <span class="o">!</span> <span class="n">B</span> <span class="n">is</span> <span class="n">undefined</span> <span class="n">since</span> <span class="n">the</span> <span class="n">LASTPRIVATE</span>
-                       <span class="o">!</span> <span class="n">write</span> <span class="n">of</span> <span class="n">A</span> <span class="n">was</span> <span class="n">not</span> <span class="n">defined</span>
-       <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT4</span>
+!$OMP   PARALLEL PRIVATE(X)
+          PRINT *,Y                  ! Y is undefined
+          Y = 10
+          PRINT *,X                  ! X is undefined
+!$OMP   END PARALLEL
+      END PROGRAM PRIV_RESTRICT3
 
 </pre></div>
 </div>
@@ -1364,45 +1366,81 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">fort_sa_private</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">SUB1</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-        <span class="n">DIMENSION</span> <span class="n">X</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.4f
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT4
+        INTEGER I, J
+        INTEGER A(100), B(100)
+        EQUIVALENCE (A(51), B(1))
 
-        <span class="o">!</span> <span class="n">This</span> <span class="n">use</span> <span class="n">of</span> <span class="n">X</span> <span class="n">does</span> <span class="n">not</span> <span class="n">conform</span> <span class="n">to</span> <span class="n">the</span>
-        <span class="o">!</span> <span class="n">specification</span><span class="p">.</span> <span class="n">It</span> <span class="n">would</span> <span class="n">be</span> <span class="n">legal</span> <span class="n">Fortran</span> <span class="mi">90</span><span class="p">,</span>
-        <span class="o">!</span> <span class="n">but</span> <span class="n">the</span> <span class="n">OpenMP</span> <span class="n">private</span> <span class="n">directive</span> <span class="n">allows</span> <span class="n">the</span>
-        <span class="o">!</span> <span class="n">compiler</span> <span class="n">to</span> <span class="k">break</span> <span class="n">the</span> <span class="n">sequence</span> <span class="n">association</span> <span class="n">that</span>
-        <span class="o">!</span> <span class="n">A</span> <span class="n">had</span> <span class="n">with</span> <span class="n">the</span> <span class="n">rest</span> <span class="n">of</span> <span class="n">the</span> <span class="n">common</span> <span class="n">block</span><span class="p">.</span>
+!$OMP PARALLEL DO DEFAULT(PRIVATE) PRIVATE(I,J) LASTPRIVATE(A)
+          DO I=1,100
+             DO J=1,100
+               B(J) = J - 1
+             ENDDO
 
-        <span class="n">FORALL</span> <span class="p">(</span><span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="o">:</span><span class="mi">10</span><span class="p">)</span> <span class="n">X</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">I</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB1</span>
+             DO J=1,100
+               A(J) = J   ! B becomes undefined at this point
+             ENDDO
 
-      <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT5</span>
-        <span class="n">COMMON</span> <span class="o">/</span><span class="n">BLOCK5</span><span class="o">/</span> <span class="n">A</span>
+             DO J=1,50
+               B(J) = B(J) + 1  ! B is undefined
+                         ! A becomes undefined at this point
+             ENDDO
+          ENDDO
+!$OMP END PARALLEL DO       ! The LASTPRIVATE write for A has
+                            ! undefined results
 
-        <span class="n">DIMENSION</span> <span class="n">B</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-        <span class="n">EQUIVALENCE</span> <span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">B</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+         PRINT *, B    ! B is undefined since the LASTPRIVATE
+                       ! write of A was not defined
+       END PROGRAM PRIV_RESTRICT4
 
-        <span class="o">!</span> <span class="n">the</span> <span class="n">common</span> <span class="n">block</span> <span class="n">has</span> <span class="n">to</span> <span class="n">be</span> <span class="n">at</span> <span class="n">least</span> <span class="mi">10</span> <span class="n">words</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.5f
+! type: F-fixed
+      SUBROUTINE SUB1(X)
+        DIMENSION X(10)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="o">/</span><span class="n">BLOCK5</span><span class="o">/</span><span class="p">)</span>
+        ! This use of X does not conform to the
+        ! specification. It would be legal Fortran 90,
+        ! but the OpenMP private directive allows the
+        ! compiler to break the sequence association that
+        ! A had with the rest of the common block.
 
-          <span class="o">!</span> <span class="n">Without</span> <span class="n">the</span> <span class="n">private</span> <span class="n">clause</span><span class="p">,</span>
-          <span class="o">!</span> <span class="n">we</span> <span class="n">would</span> <span class="n">be</span> <span class="n">passing</span> <span class="n">a</span> <span class="n">member</span> <span class="n">of</span> <span class="n">a</span> <span class="n">sequence</span>
-          <span class="o">!</span> <span class="n">that</span> <span class="n">is</span> <span class="n">at</span> <span class="n">least</span> <span class="n">ten</span> <span class="n">elements</span> <span class="kt">long</span><span class="p">.</span>
-          <span class="o">!</span> <span class="n">With</span> <span class="n">the</span> <span class="n">private</span> <span class="n">clause</span><span class="p">,</span> <span class="n">A</span> <span class="n">may</span> <span class="n">no</span> <span class="n">longer</span> <span class="n">be</span>
-          <span class="o">!</span> <span class="n">sequence</span><span class="o">-</span><span class="n">associated</span><span class="p">.</span>
+        FORALL (I = 1:10) X(I) = I
+      END SUBROUTINE SUB1
 
-          <span class="n">CALL</span> <span class="n">SUB1</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">MASTER</span>
-            <span class="n">PRINT</span> <span class="o">*</span><span class="p">,</span> <span class="n">A</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">MASTER</span>
+      PROGRAM PRIV_RESTRICT5
+        COMMON /BLOCK5/ A
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">PRIV_RESTRICT5</span>
+        DIMENSION B(10)
+        EQUIVALENCE (A,B(1))
+
+        ! the common block has to be at least 10 words
+        A = 0
+
+!$OMP   PARALLEL PRIVATE(/BLOCK5/)
+
+          ! Without the private clause,
+          ! we would be passing a member of a sequence
+          ! that is at least ten elements long.
+          ! With the private clause, A may no longer be
+          ! sequence-associated.
+
+          CALL SUB1(A)
+!$OMP     MASTER
+            PRINT *, A
+!$OMP     END MASTER
+
+!$OMP   END PARALLEL
+      END PROGRAM PRIV_RESTRICT5
 
 </pre></div>
 </div>
@@ -1435,8 +1473,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_fort_sp_common.html" title="previous page">Fortran Restrictions on  <code class="docutils literal notranslate"><span class="pre">shared</span></code>  and  <code class="docutils literal notranslate"><span class="pre">private</span></code>  Clauses with Common Blocks</a>
-    <a class='right-next' id="next-link" href="Examples_carrays_fpriv.html" title="next page">C/C++ Arrays in a  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_fort_sp_common.html" title="previous page">Fortran Restrictions on <code class="docutils literal notranslate"><span class="pre">shared</span></code> and <code class="docutils literal notranslate"><span class="pre">private</span></code> Clauses with Common Blocks</a>
+    <a class='right-next' id="next-link" href="Examples_carrays_fpriv.html" title="next page">C/C++ Arrays in a <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> Clause</a>
 
         </div>
         

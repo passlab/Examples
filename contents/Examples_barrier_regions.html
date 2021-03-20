@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,50 +1290,52 @@
               <div>
                 
   <div class="section" id="binding-of-barrier-regions">
-<h1>Binding of  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  Regions<a class="headerlink" href="#binding-of-barrier-regions" title="Permalink to this headline">¶</a></h1>
-<p>The binding rules call for a  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  region to bind to the closest enclosing   <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
-<p>In the following example, the call from the main program to  <em>sub2</em>  is conforming  because the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  region (in  <em>sub3</em> ) binds to the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region in  <em>sub2</em> . The call from the main program to  <em>sub1</em>  is conforming  because the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  region binds to the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region in subroutine   <em>sub2</em> .</p>
-<p>The call from the main program to  <em>sub3</em>  is conforming because the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>   region binds to the implicit inactive  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region enclosing the sequential  part. Also note that the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  region in  <em>sub3</em>  when called from   <em>sub2</em>  only synchronizes the team of threads in the enclosing  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region and not all the threads created in  <em>sub1</em> .</p>
+<h1>Binding of <code class="docutils literal notranslate"><span class="pre">barrier</span></code> Regions<a class="headerlink" href="#binding-of-barrier-regions" title="Permalink to this headline">¶</a></h1>
+<p>The binding rules call for a <code class="docutils literal notranslate"><span class="pre">barrier</span></code> region to bind to the closest enclosing  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<p>In the following example, the call from the main program to  <em>sub2</em>  is conforming  because the <code class="docutils literal notranslate"><span class="pre">barrier</span></code> region (in  <em>sub3</em> ) binds to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region in  <em>sub2</em> . The call from the main program to  <em>sub1</em>  is conforming  because the <code class="docutils literal notranslate"><span class="pre">barrier</span></code> region binds to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region in subroutine   <em>sub2</em> .</p>
+<p>The call from the main program to  <em>sub3</em>  is conforming because the <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  region binds to the implicit inactive <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region enclosing the sequential  part. Also note that the <code class="docutils literal notranslate"><span class="pre">barrier</span></code> region in  <em>sub3</em>  when called from   <em>sub2</em>  only synchronizes the team of threads in the enclosing <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region and not all the threads created in  <em>sub1</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: barrier_regions.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span> <span class="p">{}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">sub3</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">work</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-  <span class="cp">#pragma omp barrier</span>
-  <span class="n">work</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
+/*
+* name: barrier_regions.1c
+* type: C
+*/
+void work(int n) {}
 
-<span class="kt">void</span> <span class="nf">sub2</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="cp">#pragma omp parallel shared(k)</span>
-    <span class="n">sub3</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
-<span class="p">}</span>
+void sub3(int n)
+{
+  work(n);
+  #pragma omp barrier
+  work(n);
+}
 
-<span class="kt">void</span> <span class="nf">sub1</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="cp">#pragma omp parallel private(i) shared(n)</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp for</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">sub2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+void sub2(int k)
+{
+  #pragma omp parallel shared(k)
+    sub3(k);
+}
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">sub1</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="n">sub2</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="n">sub3</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+void sub1(int n)
+{
+  int i;
+  #pragma omp parallel private(i) shared(n)
+  {
+    #pragma omp for
+    for (i=0; i&lt;n; i++)
+      sub2(i);
+  }
+}
+
+int main()
+{
+  sub1(2);
+  sub2(2);
+  sub3(2);
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1303,44 +1343,44 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">barrier_regions</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: barrier_regions.1f
+! type: F-fixed
+      SUBROUTINE WORK(N)
+        INTEGER N
+      END SUBROUTINE WORK
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-        <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">BARRIER</span>
-        <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB3</span>
+      SUBROUTINE SUB3(N)
+      INTEGER N
+        CALL WORK(N)
+!$OMP   BARRIER
+        CALL WORK(N)
+      END SUBROUTINE SUB3
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB2</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">K</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-          <span class="n">CALL</span> <span class="n">SUB3</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB2</span>
+      SUBROUTINE SUB2(K)
+      INTEGER K
+!$OMP   PARALLEL SHARED(K)
+          CALL SUB3(K)
+!$OMP   END PARALLEL
+      END SUBROUTINE SUB2
 
 
-      <span class="n">SUBROUTINE</span> <span class="n">SUB1</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">DO</span>
-          <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span>
-            <span class="n">CALL</span> <span class="n">SUB2</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-          <span class="n">END</span> <span class="n">DO</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB1</span>
+      SUBROUTINE SUB1(N)
+      INTEGER N
+        INTEGER I
+!$OMP   PARALLEL PRIVATE(I) SHARED(N)
+!$OMP     DO
+          DO I = 1, N
+            CALL SUB2(I)
+          END DO
+!$OMP   END PARALLEL
+      END SUBROUTINE SUB1
 
-      <span class="n">PROGRAM</span> <span class="n">EXAMPLE</span>
-        <span class="n">CALL</span> <span class="n">SUB1</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">CALL</span> <span class="n">SUB2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">CALL</span> <span class="n">SUB3</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">EXAMPLE</span>
+      PROGRAM EXAMPLE
+        CALL SUB1(2)
+        CALL SUB2(2)
+        CALL SUB3(2)
+      END PROGRAM EXAMPLE
 
 </pre></div>
 </div>
@@ -1373,8 +1413,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_worksharing_critical.html" title="previous page">Worksharing Constructs Inside a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_atomic.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_worksharing_critical.html" title="previous page">Worksharing Constructs Inside a <code class="docutils literal notranslate"><span class="pre">critical</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_atomic.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">atomic</span></code> Construct</a>
 
         </div>
         

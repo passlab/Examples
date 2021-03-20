@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,55 +1291,44 @@
                 
   <div class="section" id="synchronization-based-on-acquire-release-semantics">
 <h1>Synchronization Based on Acquire/Release Semantics<a class="headerlink" href="#synchronization-based-on-acquire-release-semantics" title="Permalink to this headline">¶</a></h1>
-<p>OpenMP 5.0 introduced “release/acquire’’ memory ordering semantics to the
-specification. The memory ordering behavior of OpenMP constructs and routines
-that permit two threads to synchronize with each other are defined in terms of
-textit{release flushes} and textit{acquire flushes}, where a release flush
-must occur at the source of the synchronization and an acquire flush must occur
-at the sink of the synchronization. Flushes resulting from a  <code class="docutils literal notranslate"><span class="pre">flush</span></code><br />
-directive without a list may function as a release flush, an acquire flush, or
-both a release and acquire flush. Flushes implied on entry to or exit from an
-atomic operation (specified by an  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct) may also function as
-a release flush or an acquire flush, depending on if a memory ordering clause
-appears on a construct. Flushes implied by other OpenMP constructs or routines
-also function as either a release flush or an acquire flush, according to the
-synchronization semantics of the construct.</p>
-<p>As explained in the Memory Model chapter of this document, a flush operation may be an {acquire flush} and/or a {release flush}, and OpenMP 5.0 defines acquire/release semantics in terms of these fundamental flush operations.  For any synchronization between two threads that is specified by OpenMP, a release flush logically occurs at the source of the synchronization and an acquire flush logically occurs at the sink of the synchronization. OpenMP 5.0 added memory ordering clauses –  <code class="docutils literal notranslate"><span class="pre">acquire</span></code> ,  <code class="docutils literal notranslate"><span class="pre">release</span></code> , and  <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code>  – to the  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  and  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs for explicitly requesting acquire/release semantics.  Furthermore, implicit flushes for all OpenMP constructs and runtime routines that synchronize OpenMP threads in some manner were redefined in terms of synchronizing release and acquire flushes to avoid the requirement of strong memory fences (see the  <em>Flush Synchronization and Happens Before</em>  and  <em>Implicit Flushes</em>  sections of the OpenMP Specifications document).</p>
-<p>The examples that follow in this section illustrate how acquire and release flushes may be employed, implicitly or explicitly, for synchronizing threads. A  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive without a list and without any memory ordering clause can also function as both an acquire and release flush for facilitating thread synchronization.  Flushes implied on entry to, or exit from, an atomic operation (specified by an  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct) may function as an acquire flush or a release flush if a memory ordering clause appears on the construct. On entry to and exit from a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct there is now an implicit acquire flush and release flush, respectively.</p>
-<p>The first example illustrates how the release and acquire flushes implied by a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region guarantee a value written by the first thread is visible to a read of the value on the second thread. Thread 0 writes to  <em>x</em>  and then executes a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region in which it writes to  <em>y</em> ; the write to  <em>x</em>  happens before the execution of the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region, consistent with the program order of the thread.  Meanwhile, thread 1 executes a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region in a loop until it reads a non-zero value from  <em>y</em>  in the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region, after which it prints the value of  <em>x</em> ; again, the execution of the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions happen before the read from  <em>x</em>  based on the program order of the thread. The  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions executed by the two threads execute in a serial manner, with a pair-wise synchronization from the exit of one  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region to the entry to the next  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region.  These pair-wise synchronizations result from the implicit release flushes that occur on exit from  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions and the implicit acquire flushes that occur on entry to  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions; hence, the execution of each  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region in the sequence happens before the execution of the next  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region. A “happens before’’ order is therefore established between the assignment to  <em>x</em>  by thread 0 and the read from  <em>x</em>  by thread 1, and so thread 1 must see that  <em>x</em>  equals 10.</p>
+<p>As explained in the Memory Model chapter of this document, a flush operation may be an <strong>acquire flush</strong> and/or a <strong>release flush</strong>, and OpenMP 5.0 defines acquire/release semantics in terms of these fundamental flush operations.  For any synchronization between two threads that is specified by OpenMP, a release flush logically occurs at the source of the synchronization and an acquire flush logically occurs at the sink of the synchronization. OpenMP 5.0 added memory ordering clauses – <code class="docutils literal notranslate"><span class="pre">acquire</span></code>, <code class="docutils literal notranslate"><span class="pre">release</span></code>, and <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code> – to the <code class="docutils literal notranslate"><span class="pre">flush</span></code> and <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs for explicitly requesting acquire/release semantics.  Furthermore, implicit flushes for all OpenMP constructs and runtime routines that synchronize OpenMP threads in some manner were redefined in terms of synchronizing release and acquire flushes to avoid the requirement of strong memory fences (see the  <em>Flush Synchronization and Happens Before</em>  and  <em>Implicit Flushes</em>  sections of the OpenMP Specifications document).</p>
+<p>The examples that follow in this section illustrate how acquire and release flushes may be employed, implicitly or explicitly, for synchronizing threads. A <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive without a list and without any memory ordering clause can also function as both an acquire and release flush for facilitating thread synchronization.  Flushes implied on entry to, or exit from, an atomic operation (specified by an <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct) may function as an acquire flush or a release flush if a memory ordering clause appears on the construct. On entry to and exit from a <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct there is now an implicit acquire flush and release flush, respectively.</p>
+<p>The first example illustrates how the release and acquire flushes implied by a <code class="docutils literal notranslate"><span class="pre">critical</span></code> region guarantee a value written by the first thread is visible to a read of the value on the second thread. Thread 0 writes to  <em>x</em>  and then executes a <code class="docutils literal notranslate"><span class="pre">critical</span></code> region in which it writes to  <em>y</em> ; the write to  <em>x</em>  happens before the execution of the <code class="docutils literal notranslate"><span class="pre">critical</span></code> region, consistent with the program order of the thread.  Meanwhile, thread 1 executes a <code class="docutils literal notranslate"><span class="pre">critical</span></code> region in a loop until it reads a non-zero value from  <em>y</em>  in the <code class="docutils literal notranslate"><span class="pre">critical</span></code> region, after which it prints the value of  <em>x</em> ; again, the execution of the <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions happen before the read from  <em>x</em>  based on the program order of the thread. The <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions executed by the two threads execute in a serial manner, with a pair-wise synchronization from the exit of one <code class="docutils literal notranslate"><span class="pre">critical</span></code> region to the entry to the next <code class="docutils literal notranslate"><span class="pre">critical</span></code> region.  These pair-wise synchronizations result from the implicit release flushes that occur on exit from <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions and the implicit acquire flushes that occur on entry to <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions; hence, the execution of each <code class="docutils literal notranslate"><span class="pre">critical</span></code> region in the sequence happens before the execution of the next <code class="docutils literal notranslate"><span class="pre">critical</span></code> region. A “happens before’’ order is therefore established between the assignment to  <em>x</em>  by thread 0 and the read from  <em>x</em>  by thread 1, and so thread 1 must see that  <em>x</em>  equals 10.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: acquire_release.1.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+/*
+* name: acquire_release.1.c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-         <span class="cp">#pragma omp critical</span>
-         <span class="p">{</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-         <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-         <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-           <span class="cp">#pragma omp critical</span>
-           <span class="p">{</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span> <span class="p">}</span>
-         <span class="p">}</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span> <span class="c1">// always &quot;x = 10&quot;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
+
+int main()
+{
+   int x = 0, y = 0;
+   #pragma omp parallel num_threads(2)
+   {
+      int thrd = omp_get_thread_num();
+      if (thrd == 0) {
+         x = 10;
+         #pragma omp critical
+         { y = 1; }
+      } else {
+         int tmp = 0;
+         while (tmp == 0) {
+           #pragma omp critical
+           { tmp = y; }
+         }
+         printf(&quot;x = %d\n&quot;, x); // always &quot;x = 10&quot;
+      }
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1309,160 +1336,75 @@ synchronization semantics of the construct.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">acquire_release</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: acquire_release.1.f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">program</span> <span class="n">rel_acq_ex1</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span>
-      <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-         <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-      <span class="k">else</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
-         <span class="k">do</span> <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-         <span class="n">end</span> <span class="k">do</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>  <span class="o">!!</span> <span class="n">always</span> <span class="s">&quot;x = 10&quot;</span>
-      <span class="n">end</span> <span class="k">if</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the second example, the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  constructs are exchanged with  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs that have textit{explicit} memory ordering specified. When the atomic read operation on thread 1 reads a non-zero value from  <em>y</em> , this results in a release/acquire synchronization that in turn implies that the assignment to  <em>x</em>  on thread 0 happens before the read of  <em>x</em>  on thread 1. Therefore, thread 1 will print “x = 10’’.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: acquire_release.2.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
-       <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-          <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-          <span class="cp">#pragma omp atomic write release </span><span class="c1">// or seq_cst</span>
-          <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-          <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="cp">#pragma omp atomic read acquire </span><span class="c1">// or seq_cst</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-          <span class="p">}</span>
-          <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span> <span class="c1">// always &quot;x = 10&quot;</span>
-       <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+program rel_acq_ex1
+   use omp_lib
+   integer :: x, y, thrd, tmp
+   x = 0
+   y = 0
+   !$omp parallel num_threads(2) private(thrd, tmp)
+      thrd = omp_get_thread_num()
+      if (thrd == 0) then
+         x = 10
+         !$omp critical
+         y = 1
+         !$omp end critical
+      else
+         tmp = 0
+         do while (tmp == 0)
+            !$omp critical
+            tmp = y
+            !$omp end critical
+         end do
+         print *, &quot;x = &quot;, x  !! always &quot;x = 10&quot;
+      end if
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>In the second example, the <code class="docutils literal notranslate"><span class="pre">critical</span></code> constructs are exchanged with <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs that have 	extit{explicit} memory ordering specified. When the atomic read operation on thread 1 reads a non-zero value from  <em>y</em> , this results in a release/acquire synchronization that in turn implies that the assignment to  <em>x</em>  on thread 0 happens before the read of  <em>x</em>  on thread 1. Therefore, thread 1 will print “x = 10’’.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">acquire_release</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="n">program</span> <span class="n">rel_acq_ex2</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span>
-      <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">write</span> <span class="n">release</span> <span class="o">!</span> <span class="n">or</span> <span class="n">seq_cst</span>
-          <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-      <span class="k">else</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
-         <span class="k">do</span> <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">read</span> <span class="n">acquire</span> <span class="o">!</span> <span class="n">or</span> <span class="n">seq_cst</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-         <span class="n">end</span> <span class="k">do</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>  <span class="o">!!</span> <span class="n">always</span> <span class="s">&quot;x = 10&quot;</span>
-      <span class="n">end</span> <span class="k">if</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+/*
+* name: acquire_release.2.c
+* type: C
+* version: omp_5.0
+*/
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>In the third example,  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs that specify relaxed atomic operations are used with explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directives to enforce memory ordering between the two threads. The explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive on thread 0 must specify a release flush and the explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive on thread 1 must specify an acquire flush to establish a release/acquire synchronization between the two threads. The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  and  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs encountered by thread 0 can be replaced by the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct used in Example 2 for thread 0, and similarly the  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  and  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs encountered by thread 1 can be replaced by the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct used in Example 2 for thread 1.</p>
-<p>3</p>
-<p>For this example, the implicit release flush of the  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive for thread 0 creates
-a source synchronization with release memory ordering, while the implicit release flush of the
-<code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive for thread 1 creates a sink synchronization with acquire memory ordering.
-The  performs the same thread synchronization of the previous example, with only a slight<br />
-coding change.
-The explicit  <code class="docutils literal notranslate"><span class="pre">release</span></code>  and  <code class="docutils literal notranslate"><span class="pre">acquire</span></code>  clauses of the atomic construct has been<br />
-replaced with implicit release and aquire flushes of explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  constructs.
-(Here, the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  constructs have  <em>relaxed</em>  operations.)
-}</p>
-<p>3</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: acquire_release.3.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-         <span class="cp">#pragma omp flush </span><span class="c1">// or with acq_rel or release clause</span>
-         <span class="cp">#pragma omp atomic write </span><span class="c1">// or with relaxed clause</span>
-         <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-         <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-         <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-           <span class="cp">#pragma omp atomic read </span><span class="c1">// or with relaxed clause</span>
-           <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-         <span class="p">}</span>
-         <span class="cp">#pragma omp flush </span><span class="c1">// or with acq_rel or acquire clause</span>
-         <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span>  <span class="c1">// always &quot;x = 10&quot;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+   int x = 0, y = 0;
+   #pragma omp parallel num_threads(2)
+   {
+      int thrd = omp_get_thread_num();
+       if (thrd == 0) {
+          x = 10;
+          #pragma omp atomic write release // or seq_cst
+          y = 1;
+       } else {
+          int tmp = 0;
+          while (tmp == 0) {
+            #pragma omp atomic read acquire // or seq_cst
+            tmp = y;
+          }
+          printf(&quot;x = %d\n&quot;, x); // always &quot;x = 10&quot;
+       }
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1470,95 +1412,77 @@ replaced with implicit release and aquire flushes of explicit  <code class="docu
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">acquire_release</span><span class="mf">.3</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: acquire_release.2.f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">program</span> <span class="n">rel_acq_ex3</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">thrd</span><span class="p">,</span> <span class="n">tmp</span><span class="p">)</span>
-      <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">flush</span> <span class="o">!</span> <span class="n">or</span> <span class="n">with</span> <span class="n">acq_rel</span> <span class="n">or</span> <span class="n">release</span> <span class="n">clause</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">write</span>
-         <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-      <span class="k">else</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
-         <span class="k">do</span> <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">read</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span>
-            <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-         <span class="n">end</span> <span class="k">do</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">flush</span> <span class="o">!</span> <span class="n">or</span> <span class="n">with</span> <span class="n">acq_rel</span> <span class="n">or</span> <span class="n">acquire</span> <span class="n">clause</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>  <span class="o">!!</span> <span class="n">always</span> <span class="s">&quot;x = 10&quot;</span>
-      <span class="n">end</span> <span class="k">if</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+program rel_acq_ex2
+   use omp_lib
+   integer :: x, y, thrd, tmp
+   x = 0
+   y = 0
+   !$omp parallel num_threads(2) private(thrd, tmp)
+      thrd = omp_get_thread_num()
+      if (thrd == 0) then
+         x = 10
+         !$omp atomic write release ! or seq_cst
+          y = 1
+         !$omp end atomic
+      else
+         tmp = 0
+         do while (tmp == 0)
+            !$omp atomic read acquire ! or seq_cst
+            tmp = y
+            !$omp end atomic
+         end do
+         print *, &quot;x = &quot;, x  !! always &quot;x = 10&quot;
+      end if
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Example 4 will fail to order the write to  <em>x</em>  on thread 0 before the read from  <em>x</em>  on thread 1. Importantly, the implicit release flush on exit from the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  region will not synchronize with the acquire flush that occurs on the atomic read operation performed by thread 1. This is because implicit release flushes that occur on a given construct may only synchronize with implicit acquire flushes on a compatible construct (and vice-versa) that internally makes use of the same synchronization variable. For a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct, this might correspond to a  <em>lock</em>  object that is used by a given implementation (for the synchronization semantics of other constructs due to implicit release and acquire flushes, refer to the  <em>Implicit Flushes</em>  section of the OpenMP Specifications document).  Either an explicit  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive that provides a release flush (i.e., a flush without a list that does not have the  <code class="docutils literal notranslate"><span class="pre">acquire</span></code>  clause) must be specified between the  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct and the atomic write, or an atomic operation that modifies  <em>y</em>  and provides release semantics must be specified.</p>
-<p>In the following example synchronization between the acquire flush of the atomic read
-of  <em>y</em>  by thread 1 is not synchronized with the relaxed atomic construct that
-assigns a value to  <em>y</em>  by thread 0.
-While there is a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct and implicit release flush
-for the  <em>x</em>  assignment of thread 0,
-a release flush association with the  <em>y</em>  assignment of
-thread 0 is not formed.  A  <code class="docutils literal notranslate"><span class="pre">release</span></code>  or  <code class="docutils literal notranslate"><span class="pre">acq-rel</span></code>  clause on the
-<code class="docutils literal notranslate"><span class="pre">atomic</span> <span class="pre">write</span></code>  construct or a  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive after the assignment to  <em>y</em><br />
-will form a synchronization and will guarantee  memory ordering of the x and y assignments
-by thread 0.
-}</p>
+<p>In the third example, <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs that specify relaxed atomic operations are used with explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives to enforce memory ordering between the two threads. The explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive on thread 0 must specify a release flush and the explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive on thread 1 must specify an acquire flush to establish a release/acquire synchronization between the two threads. The <code class="docutils literal notranslate"><span class="pre">flush</span></code> and <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs encountered by thread 0 can be replaced by the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct used in Example 2 for thread 0, and similarly the <code class="docutils literal notranslate"><span class="pre">flush</span></code> and <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs encountered by thread 1 can be replaced by the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct used in Example 2 for thread 1.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: acquire_release.4.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+/*
+* name: acquire_release.3.c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-<span class="c1">// !!! THIS CODE WILL FAIL TO PRODUCE CONSISTENT RESULTS !!!!!!!</span>
-<span class="c1">// !!! DO NOT PROGRAM SYNCHRONIZATION THIS WAY !!!!!!!</span>
-
-   <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel num_threads(2)</span>
-   <span class="p">{</span>
-      <span class="kt">int</span> <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-         <span class="cp">#pragma omp critical</span>
-         <span class="p">{</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="p">}</span>
-         <span class="c1">// an explicit flush directive that provides</span>
-         <span class="c1">// release semantics is needed here</span>
-         <span class="c1">// to complete the synchronization.</span>
-         <span class="cp">#pragma omp atomic write</span>
-         <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-         <span class="kt">int</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-         <span class="k">while</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="cp">#pragma omp atomic read acquire </span><span class="c1">// or seq_cst</span>
-            <span class="n">tmp</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
-         <span class="p">}</span>
-         <span class="cp">#pragma omp critical</span>
-         <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">);</span> <span class="p">}</span>  <span class="c1">// !! NOT ALWAYS 10</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+int main()
+{
+   int x = 0, y = 0;
+   #pragma omp parallel num_threads(2)
+   {
+      int thrd = omp_get_thread_num();
+      if (thrd == 0) {
+         x = 10;
+         #pragma omp flush // or with acq_rel or release clause
+         #pragma omp atomic write // or with relaxed clause
+         y = 1;
+      } else {
+         int tmp = 0;
+         while (tmp == 0) {
+           #pragma omp atomic read // or with relaxed clause
+           tmp = y;
+         }
+         #pragma omp flush // or with acq_rel or acquire clause
+         printf(&quot;x = %d\n&quot;, x);  // always &quot;x = 10&quot;
+      }
+   }
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1566,45 +1490,132 @@ by thread 0.
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">acquire_release</span><span class="mf">.4</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: acquire_release.3.f90
+! type: F-free
+! version: omp_5.0
 
-<span class="n">program</span> <span class="n">rel_acq_ex4</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">thrd</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">tmp</span>
-   <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+program rel_acq_ex3
+   use omp_lib
+   integer :: x, y, thrd, tmp
+   x = 0
+   y = 0
+   !$omp parallel num_threads(2) private(thrd, tmp)
+      thrd = omp_get_thread_num()
+      if (thrd == 0) then
+         x = 10
+         !$omp flush ! or with acq_rel or release clause
+         !$omp atomic write
+         y = 1
+         !$omp end atomic
+      else
+         tmp = 0
+         do while (tmp == 0)
+            !$omp atomic read
+            tmp = y
+            !$omp end atomic
+         end do
+         !$omp flush ! or with acq_rel or acquire clause
+         print *, &quot;x = &quot;, x  !! always &quot;x = 10&quot;
+      end if
+   !$omp end parallel
+end program
 
-<span class="o">!!</span> <span class="o">!!!</span> <span class="n">THIS</span> <span class="n">CODE</span> <span class="n">WILL</span> <span class="n">FAIL</span> <span class="n">TO</span> <span class="n">PRODUCE</span> <span class="n">CONSISTENT</span> <span class="n">RESULTS</span> <span class="o">!!!!!!!</span>
-<span class="o">!!</span> <span class="o">!!!</span> <span class="n">DO</span> <span class="n">NOT</span> <span class="n">PROGRAM</span> <span class="n">SYNCHRONIZATION</span> <span class="n">THIS</span> <span class="n">WAY</span> <span class="o">!!!!!!!</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Example 4 will fail to order the write to  <em>x</em>  on thread 0 before the read from  <em>x</em>  on thread 1. Importantly, the implicit release flush on exit from the <code class="docutils literal notranslate"><span class="pre">critical</span></code> region will not synchronize with the acquire flush that occurs on the atomic read operation performed by thread 1. This is because implicit release flushes that occur on a given construct may only synchronize with implicit acquire flushes on a compatible construct (and vice-versa) that internally makes use of the same synchronization variable. For a <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct, this might correspond to a  <em>lock</em>  object that is used by a given implementation (for the synchronization semantics of other constructs due to implicit release and acquire flushes, refer to the  <em>Implicit Flushes</em>  section of the OpenMP Specifications document).  Either an explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive that provides a release flush (i.e., a flush without a list that does not have the <code class="docutils literal notranslate"><span class="pre">acquire</span></code> clause) must be specified between the <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct and the atomic write, or an atomic operation that modifies  <em>y</em>  and provides release semantics must be specified.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">thrd</span><span class="p">)</span> <span class="n">private</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-      <span class="n">thrd</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">thrd</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">then</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-         <span class="o">!</span> <span class="n">an</span> <span class="n">explicit</span> <span class="n">flush</span> <span class="n">directive</span> <span class="n">that</span> <span class="n">provides</span>
-         <span class="o">!</span> <span class="n">release</span> <span class="n">semantics</span> <span class="n">is</span> <span class="n">needed</span> <span class="n">here</span> <span class="n">to</span>
-         <span class="o">!</span> <span class="n">complete</span> <span class="n">the</span> <span class="n">synchronization</span><span class="p">.</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">write</span>
-         <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-      <span class="k">else</span>
-         <span class="n">tmp</span> <span class="o">=</span> <span class="mi">0</span>
-         <span class="k">do</span> <span class="k">while</span><span class="p">(</span><span class="n">tmp</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
-           <span class="o">!</span><span class="n">$omp</span> <span class="n">atomic</span> <span class="n">read</span> <span class="n">acquire</span> <span class="o">!</span> <span class="n">or</span> <span class="n">seq_cst</span>
-           <span class="n">tmp</span> <span class="o">=</span> <span class="n">x</span>
-           <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">atomic</span>
-         <span class="n">end</span> <span class="k">do</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">critical</span>
-         <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;x = &quot;</span><span class="p">,</span> <span class="n">x</span>  <span class="o">!!</span> <span class="o">!!</span> <span class="n">NOT</span> <span class="n">ALWAYS</span> <span class="mi">10</span>
-         <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">critical</span>
-      <span class="n">end</span> <span class="k">if</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">program</span>
+/*
+* name: acquire_release.4.c
+* type: C
+* version: omp_5.0
+*/
+
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
+
+int main()
+{
+
+// !!! THIS CODE WILL FAIL TO PRODUCE CONSISTENT RESULTS !!!!!!!
+// !!! DO NOT PROGRAM SYNCHRONIZATION THIS WAY !!!!!!!
+
+   int x = 0, y;
+   #pragma omp parallel num_threads(2)
+   {
+      int thrd = omp_get_thread_num();
+      if (thrd == 0) {
+         #pragma omp critical
+         { x = 10; }
+         // an explicit flush directive that provides
+         // release semantics is needed here
+         // to complete the synchronization.
+         #pragma omp atomic write
+         y = 1;
+      } else {
+         int tmp = 0;
+         while (tmp == 0) {
+            #pragma omp atomic read acquire // or seq_cst
+            tmp = y;
+         }
+         #pragma omp critical
+         { printf(&quot;x = %d\n&quot;, x); }  // !! NOT ALWAYS 10
+      }
+   }
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: acquire_release.4.f90
+! type: F-free
+! version: omp_5.0
+
+program rel_acq_ex4
+   use omp_lib
+   integer :: x, y, thrd
+   integer :: tmp
+   x = 0
+
+!! !!! THIS CODE WILL FAIL TO PRODUCE CONSISTENT RESULTS !!!!!!!
+!! !!! DO NOT PROGRAM SYNCHRONIZATION THIS WAY !!!!!!!
+
+   !$omp parallel num_threads(2) private(thrd) private(tmp)
+      thrd = omp_get_thread_num()
+      if (thrd == 0) then
+         !$omp critical
+         x = 10
+         !$omp end critical
+         ! an explicit flush directive that provides
+         ! release semantics is needed here to
+         ! complete the synchronization.
+         !$omp atomic write
+         y = 1
+         !$omp end atomic
+      else
+         tmp = 0
+         do while(tmp == 0)
+           !$omp atomic read acquire ! or seq_cst
+           tmp = x
+           !$omp end atomic
+         end do
+         !$omp critical
+         print *, &quot;x = &quot;, x  !! !! NOT ALWAYS 10
+         !$omp end critical
+      end if
+   !$omp end parallel
+end program
 
 </pre></div>
 </div>
@@ -1637,8 +1648,8 @@ by thread 0.
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_flush_nolist.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  Construct without a List</a>
-    <a class='right-next' id="next-link" href="Examples_ordered.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Clause and the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_flush_nolist.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">flush</span></code> Construct without a List</a>
+    <a class='right-next' id="next-link" href="Examples_ordered.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Clause and the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Construct</a>
 
         </div>
         

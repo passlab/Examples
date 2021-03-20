@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,13 +1291,13 @@
                 
   <div class="section" id="devices">
 <h1>Devices<a class="headerlink" href="#devices" title="Permalink to this headline">¶</a></h1>
-<p>The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct consists of a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive  and an execution region. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region is executed on the default device or the device specified in the  <code class="docutils literal notranslate"><span class="pre">device</span></code>   clause.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">target</span></code> construct consists of a <code class="docutils literal notranslate"><span class="pre">target</span></code> directive  and an execution region. The <code class="docutils literal notranslate"><span class="pre">target</span></code> region is executed on the default device or the device specified in the <code class="docutils literal notranslate"><span class="pre">device</span></code>  clause.</p>
 <p>In OpenMP version 4.0, by default, all variables within the lexical scope of the construct are copied  <em>to</em>  and  <em>from</em>  the device, unless the device is the host, or the data exists on the device from a previously executed data-type construct that has created space on the device and possibly copied host data to the device storage.</p>
-<p>The constructs that explicitly create storage, transfer data, and free storage on the device are catagorized as structured and unstructured. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct is structured. It creates a data region around  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs, and is convenient for providing persistent data throughout multiple  <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">enter</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  and   <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">exit</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  constructs are unstructured, because  they can occur anywhere and do not support a ‘structure’  (a region) for enclosing  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs, as does the  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause is used on  <code class="docutils literal notranslate"><span class="pre">target</span></code>   constructs and the data-type constructs to map host data. It  specifies the device storage and data movement  <code class="docutils literal notranslate"><span class="pre">to</span></code>  and  <code class="docutils literal notranslate"><span class="pre">from</span></code>  the device, and controls on the storage duration.</p>
-<p>There is an important change in the OpenMP 4.5 specification that alters the data model for scalar variables and C/C++ pointer variables. The default behavior for scalar variables and C/C++ pointer variables in an 4.5 compliant  is  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> . Example s that have been updated to reflect this new behavior are annotated with a description that describes changes required for correct execution. Often it is a simple matter of mapping the variable as  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>  to obtain the intended 4.0 behavior.</p>
-<p>In OpenMP version 4.5 the mechanism for target execution is specified as occuring through a  <em>target task</em> .  When the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct is encountered a new   <em>target task</em>  is generated. The  <em>target task</em>   completes after the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region has executed and all data  transfers have finished.</p>
-<p>This new specification does not affect the execution of  pre-4.5 ; it is a necessary element for asynchronous  execution of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region when using the new  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>   clause introduced in OpenMP 4.5.</p>
+<p>The constructs that explicitly create storage, transfer data, and free storage on the device are catagorized as structured and unstructured. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct is structured. It creates a data region around <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs, and is convenient for providing persistent data throughout multiple <code class="docutils literal notranslate"><span class="pre">target</span></code> regions. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">enter</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> and  <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">exit</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> constructs are unstructured, because  they can occur anywhere and do not support a “structure”  (a region) for enclosing <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs, as does the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause is used on <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs and the data-type constructs to map host data. It  specifies the device storage and data movement <code class="docutils literal notranslate"><span class="pre">to</span></code> and <code class="docutils literal notranslate"><span class="pre">from</span></code> the device, and controls on the storage duration.</p>
+<p>There is an important change in the OpenMP 4.5 specification that alters the data model for scalar variables and C/C++ pointer variables. The default behavior for scalar variables and C/C++ pointer variables in an 4.5 compliant code is <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>. Example codes that have been updated to reflect this new behavior are annotated with a description that describes changes required for correct execution. Often it is a simple matter of mapping the variable as <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> to obtain the intended 4.0 behavior.</p>
+<p>In OpenMP version 4.5 the mechanism for target execution is specified as occuring through a  <em>target task</em> .  When the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct is encountered a new   <em>target task</em>  is generated. The  <em>target task</em>   completes after the <code class="docutils literal notranslate"><span class="pre">target</span></code> region has executed and all data  transfers have finished.</p>
+<p>This new specification does not affect the execution of  pre-4.5 code; it is a necessary element for asynchronous  execution of the <code class="docutils literal notranslate"><span class="pre">target</span></code> region when using the new <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause introduced in OpenMP 4.5.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1289,8 +1327,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_parallel_master_taskloop.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span> <span class="pre">taskloop</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_target.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_parallel_master_taskloop.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span> <span class="pre">taskloop</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_target.html" title="next page"><code class="docutils literal notranslate"><span class="pre">target</span></code> Construct</a>
 
         </div>
         

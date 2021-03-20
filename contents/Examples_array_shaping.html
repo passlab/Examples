@@ -52,8 +52,6 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="declare mapper Construct" href="Examples_target_mapper.html" />
@@ -550,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1038,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1087,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1109,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1255,56 +1291,123 @@
                 
   <div class="section" id="array-shaping">
 <h1>Array Shaping<a class="headerlink" href="#array-shaping" title="Permalink to this headline">¶</a></h1>
-<p>A pointer variable can be shaped to a multi-dimensional array to facilitate data access. This is achieved by a  <em>shape-operator</em>  casted in front of  a pointer (lvalue expression):   <code class="docutils literal notranslate"><span class="pre">([s_1][s_2]...[s_n])</span></code>  <em>pointer</em>   where each <span class="math notranslate nohighlight">\(s_i\)</span> is an integral-type expression of positive value. The shape-operator can appear in either the  <em>motion-clause</em>  of the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive or the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause.</p>
-<p>The following example shows the use of the shape-operator in the   <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive. The shape-operator  <code class="docutils literal notranslate"><span class="pre">([nx][ny+2])</span></code>  casts pointer variable <span class="math notranslate nohighlight">\(a\)</span> to a 2-dimentional array of size  <em>nx</em> <span class="math notranslate nohighlight">\(times\)</span> <em>(ny+2)</em> .  The resulting array is then accessed as array sections (such as  <code class="docutils literal notranslate"><span class="pre">[0:nx][1]</span></code>  and  <code class="docutils literal notranslate"><span class="pre">[0:nx][ny]</span></code> )  in the  <code class="docutils literal notranslate"><span class="pre">from</span></code>  or  <code class="docutils literal notranslate"><span class="pre">to</span></code>  clause for transferring two columns of  noncontiguous boundary data from or to the device.   Note the use of additional parentheses around the shape-operator and <span class="math notranslate nohighlight">\(a\)</span> to ensure the correct precedence  over array-section operations.</p>
+<p>A pointer variable can be shaped to a multi-dimensional array to facilitate data access. This is achieved by a  <em>shape-operator</em>  casted in front of  a pointer (lvalue expression):  <code class="docutils literal notranslate"><span class="pre">([</span> <span class="pre">s_1</span> <span class="pre">][</span> <span class="pre">s_2</span> <span class="pre">]...[</span> <span class="pre">s_n</span> <span class="pre">])</span></code> <em>pointer</em>   where each  s_i  is an integral-type expression of positive value. The shape-operator can appear in either the  <em>motion-clause</em>  of the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive or the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause.</p>
+<p>The following example shows the use of the shape-operator in the  <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive. The shape-operator <code class="docutils literal notranslate"><span class="pre">([nx][ny+2])</span></code> casts pointer variable  a  to a 2-dimentional array of size  <em>nx</em>  x  <em>(ny+2)</em> .  The resulting array is then accessed as array sections (such as <code class="docutils literal notranslate"><span class="pre">[0:nx][1]</span></code> and <code class="docutils literal notranslate"><span class="pre">[0:nx][ny]</span></code>)  in the <code class="docutils literal notranslate"><span class="pre">from</span></code> or <code class="docutils literal notranslate"><span class="pre">to</span></code> clause for transferring two columns of  noncontiguous boundary data from or to the device.   Note the use of additional parentheses around the shape-operator and  a  to ensure the correct precedence  over array-section operations.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: array_shaping.1.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">int</span> <span class="nf">do_work</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ny</span><span class="p">);</span>
-<span class="kt">int</span> <span class="nf">other_work</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ny</span><span class="p">);</span>
-<span class="cp">#pragma omp end declare target</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">exch_data</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ny</span><span class="p">);</span>
+/*
+* name: array_shaping.1.c
+* type: C
+* version: omp_5.0
+*/
+#pragma omp declare target
+int do_work(double *a, int nx, int ny);
+int other_work(double *a, int nx, int ny);
+#pragma omp end declare target
 
-<span class="kt">void</span> <span class="nf">array_shaping</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nx</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ny</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="c1">// map data to device and do work</span>
-   <span class="cp">#pragma omp target data map(a[0:nx*(ny+2)])</span>
-   <span class="p">{</span>
-      <span class="c1">// do work on the device</span>
-      <span class="cp">#pragma omp target  </span><span class="c1">// map(a[0:nx*(ny+2)]) is optional here</span>
-      <span class="n">do_work</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">);</span>
+void exch_data(double *a, int nx, int ny);
 
-      <span class="c1">// update boundary points (two columns of 2D array) on the host</span>
-      <span class="c1">// pointer is shaped to 2D array using the shape-operator</span>
-      <span class="cp">#pragma omp target update from( (([nx][ny+2])a)[0:nx][1], \</span>
-<span class="cp">                                      (([nx][ny+2])a)[0:nx][ny] )</span>
+void array_shaping(double *a, int nx, int ny)
+{
+   // map data to device and do work
+   #pragma omp target data map(a[0:nx*(ny+2)])
+   {
+      // do work on the device
+      #pragma omp target  // map(a[0:nx*(ny+2)]) is optional here
+      do_work(a, nx, ny);
 
-      <span class="c1">// exchange ghost points with neighbors</span>
-      <span class="n">exch_data</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">);</span>
+      // update boundary points (two columns of 2D array) on the host
+      // pointer is shaped to 2D array using the shape-operator
+      #pragma omp target update from( (([nx][ny+2])a)[0:nx][1], \
+                                      (([nx][ny+2])a)[0:nx][ny] )
 
-      <span class="c1">// update ghost points (two columns of 2D array) on the device</span>
-      <span class="c1">// pointer is shaped to 2D array using the shape-operator</span>
-      <span class="cp">#pragma omp target update to( (([nx][ny+2])a)[0:nx][0], \</span>
-<span class="cp">                                    (([nx][ny+2])a)[0:nx][ny+1] )</span>
+      // exchange ghost points with neighbors
+      exch_data(a, nx, ny);
 
-      <span class="c1">// perform other work on the device</span>
-      <span class="cp">#pragma omp target  </span><span class="c1">// map(a[0:nx*(ny+2)]) is optional here</span>
-      <span class="n">other_work</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+      // update ghost points (two columns of 2D array) on the device
+      // pointer is shaped to 2D array using the shape-operator
+      #pragma omp target update to( (([nx][ny+2])a)[0:nx][0], \
+                                    (([nx][ny+2])a)[0:nx][ny+1] )
+
+      // perform other work on the device
+      #pragma omp target  // map(a[0:nx*(ny+2)]) is optional here
+      other_work(a, nx, ny);
+   }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The shape operator is not defined for Fortran.  Explicit array shaping of procedure arguments can be used instead to achieve a similar goal. Below is the Fortran-equivalent of the above example that illustrates the support of transferring two rows of noncontiguous boundary data in the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive.  ffreeexample[5.0]{array_shaping}{1}</p>
+<p>The shape operator is not defined for Fortran.  Explicit array shaping of procedure arguments can be used instead to achieve a similar goal. Below is the Fortran-equivalent of the above example that illustrates the support of transferring two rows of noncontiguous boundary data in the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: array_shaping.1.f90
+! type: F-free
+! version: omp_5.0
+module m
+   interface
+      subroutine do_work(a, nx, ny)
+         !$omp declare target to(do_work)
+         integer, intent(in) :: nx, ny
+         double precision a(0:nx+1,ny)
+      end subroutine do_work
+
+      subroutine other_work(a, nx, ny)
+         !$omp declare target to(other_work)
+         integer, intent(in) :: nx, ny
+         double precision a(0:nx+1,ny)
+      end subroutine other_work
+
+      subroutine exch_data(a, nx, ny)
+         integer, intent(in) :: nx, ny
+         double precision a(0:nx+1,ny)
+      end subroutine exch_data
+   end interface
+end module m
+
+subroutine array_shaping(a, nx, ny)
+   use m
+   implicit none
+   integer, intent(in) :: nx, ny
+   double precision a(0:nx+1,ny)
+
+   ! map data to device and do work
+   !$omp target data map(a)
+
+      ! do work on the device
+      !$omp target      ! map(a) is optional here
+      call do_work(a, nx, ny)
+      !$omp end target
+
+      ! update boundary points (two rows of 2D array) on the host.
+      ! data transferred are noncontiguous
+      !$omp target update from( a(1,1:ny), a(nx,1:ny) )
+
+      ! exchange ghost points with neighbors
+      call exch_data(a, nx, ny)
+
+      ! update ghost points (two rows of 2D array) on the device.
+      ! data transferred are noncontiguous
+      !$omp target update to( a(0,1:ny), a(nx+1,1:ny) )
+
+      ! perform other work on the device
+      !$omp target      ! map(a) is optional here
+      call other_work(a, nx, ny)
+      !$omp end target
+
+   !$omp end target data
+
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -1333,7 +1436,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_array_sections.html" title="previous page">Array Sections in Device Constructs</a>
-    <a class='right-next' id="next-link" href="Examples_target_mapper.html" title="next page"><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_target_mapper.html" title="next page"><code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">mapper</span></code> Construct</a>
 
         </div>
         

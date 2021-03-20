@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The critical Construct" href="Examples_critical.html" />
-    <link rel="prev" title="ref , val , uval Modifiers for linear Clause" href="Examples_linear_modifier.html" />
+    <link rel="prev" title="ref, val, uval Modifiers for linear Clause" href="Examples_linear_modifier.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,14 +1291,14 @@
                 
   <div class="section" id="synchronization">
 <h1>Synchronization<a class="headerlink" href="#synchronization" title="Permalink to this headline">¶</a></h1>
-<p>The  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  construct is a stand-alone directive that requires all threads of a team (within a contention group) to execute the barrier and complete execution of all tasks within the region, before continuing past the barrier.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct is a directive that contains a structured block.  The construct allows only a single thread at a time to execute the structured block (region). Multiple critical regions may exist in a parallel region, and may act cooperatively (only one thread at a time in all  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions), or separately (only one thread at a time in each  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  regions when a unique name is supplied on each  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct). An optional (lock)  <code class="docutils literal notranslate"><span class="pre">hint</span></code>  clause may be specified on a named  <code class="docutils literal notranslate"><span class="pre">critical</span></code>   construct to provide the OpenMP runtime guidance in selection a locking  mechanism.</p>
-<p>On a finer scale the  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct allows only a single thread at  a time to have atomic access to a storage location involving a single read,  write, update or capture statement, and a limited number of combinations  when specifying the  <code class="docutils literal notranslate"><span class="pre">capture</span></code>   <em>atomic-clause</em>  clause.  The  <em>atomic-clause</em>  clause is required for some expression statements, but is not required for  <code class="docutils literal notranslate"><span class="pre">update</span></code>  statements. The  <em>memory-order</em>  clause can be used to specify the degree of memory ordering enforced by an  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  construct. From weakest to strongest, they are  <code class="docutils literal notranslate"><span class="pre">relaxed</span></code>  (the default), acquire and/or release clauses (specified with  <code class="docutils literal notranslate"><span class="pre">acquire</span></code> ,  <code class="docutils literal notranslate"><span class="pre">release</span></code> , or  <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code> ), and  <code class="docutils literal notranslate"><span class="pre">seq_cst</span></code> .  Please see the details in the  <em>atomic Construct</em>  #### of the  <em>Directives</em>  chapter in the OpenMP Specifications document.</p>
-<p>Since OpenMP 4.5 the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  construct can also be a stand-alone  directive that specifies cross-iteration dependences in a doacross loop nest.   The  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause uses a  <code class="docutils literal notranslate"><span class="pre">sink</span></code>   <em>dependence-type</em> , along with a  iteration vector argument (vec) to indicate the iteration that satisfies the  dependence.  The  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause with a  <code class="docutils literal notranslate"><span class="pre">source</span></code>   <em>dependence-type</em>  specifies dependence satisfaction.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive is a stand-alone construct for enforcing consistency between a thread’s view of memory and the view of memory for other threads (see the Memory Model chapter of this document for more details). When the construct is used with an explicit variable list, a  <em>strong flush</em>  that forces a thread’s temporary view of memory to be consistent with the actual memory is applied to all listed variables. When the construct is used without an explicit variable list and without a  <em>memory-order</em>  clause, a strong flush is applied to all locally thread-visible data as defined by the base language, and additionally the construct provides both acquire and release memory ordering semantics.  When an explicit variable list is not present and a  <em>memory-order</em>  clause is present, the construct provides acquire and/or release memory ordering semantics according to the  <em>memory-order</em>  clause, but no strong flush is performed. A resulting strong flush that applies to a set of variables effectively ensures that no memory (load or store) operation for the affected variables may be reordered across the  <code class="docutils literal notranslate"><span class="pre">flush</span></code>  directive.</p>
-<p>General-purpose routines provide mutual exclusion semantics through locks,  represented by lock variables.   The semantics allows a task to  <em>set</em> , and hence   <em>own</em>  a lock, until it is  <em>unset</em>  by the task that set it. A   <em>nestable</em>  lock can be set multiple times by a task, and is used when in  requires nested control of locks.  A  <em>simple lock</em>  can only be set once by the owning task. There are specific calls for the two types of locks, and the variable of a specific lock type cannot be used by the other lock type.</p>
-<p>Any explicit task will observe the synchronization prescribed in a   <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  construct and an implied barrier.  Also, additional synchronizations  are available for tasks.  All children of a task will wait at a  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  (for  their siblings to complete).  A  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct creates a region in which the current task is suspended at the end of the region until all sibling tasks,  and their descendants, have completed.  Scheduling constraints on task execution can be prescribed by the  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clause to enforce dependence on previously generated tasks. More details on controlling task executions can be found in the  <em>Tasking</em>  Chapter in the OpenMP Specifications document.
-(DO REF. RIGHT.)</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct is a stand-alone directive that requires all threads of a team (within a contention group) to execute the barrier and complete execution of all tasks within the region, before continuing past the barrier.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct is a directive that contains a structured block.  The construct allows only a single thread at a time to execute the structured block (region). Multiple critical regions may exist in a parallel region, and may act cooperatively (only one thread at a time in all <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions), or separately (only one thread at a time in each <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions when a unique name is supplied on each <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct). An optional (lock) <code class="docutils literal notranslate"><span class="pre">hint</span></code> clause may be specified on a named <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct to provide the OpenMP runtime guidance in selection a locking  mechanism.</p>
+<p>On a finer scale the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct allows only a single thread at  a time to have atomic access to a storage location involving a single read,  write, update or capture statement, and a limited number of combinations  when specifying the <code class="docutils literal notranslate"><span class="pre">capture</span></code>  <em>atomic-clause</em>  clause.  The  <em>atomic-clause</em>  clause is required for some expression statements, but is not required for <code class="docutils literal notranslate"><span class="pre">update</span></code> statements. The  <em>memory-order</em>  clause can be used to specify the degree of memory ordering enforced by an <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct. From weakest to strongest, they are <code class="docutils literal notranslate"><span class="pre">relaxed</span></code> (the default), acquire and/or release clauses (specified with <code class="docutils literal notranslate"><span class="pre">acquire</span></code>, <code class="docutils literal notranslate"><span class="pre">release</span></code>, or <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code>), and <code class="docutils literal notranslate"><span class="pre">seq_cst</span></code>.  Please see the details in the  <em>atomic Construct</em>  subsection of the  <em>Directives</em>  chapter in the OpenMP Specifications document.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct either specifies a structured block in a loop,  simd, or loop SIMD region that will be executed in the order of the loop  iterations.  The ordered construct sequentializes and orders the execution  of ordered regions while allowing code outside the region to run in parallel.</p>
+<p>Since OpenMP 4.5 the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct can also be a stand-alone  directive that specifies cross-iteration dependences in a doacross loop nest.   The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause uses a <code class="docutils literal notranslate"><span class="pre">sink</span></code>  <em>dependence-type</em> , along with a  iteration vector argument (vec) to indicate the iteration that satisfies the  dependence.  The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause with a <code class="docutils literal notranslate"><span class="pre">source</span></code>  <em>dependence-type</em>  specifies dependence satisfaction.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive is a stand-alone construct for enforcing consistency between a thread’s view of memory and the view of memory for other threads (see the Memory Model chapter of this document for more details). When the construct is used with an explicit variable list, a  <em>strong flush</em>  that forces a thread’s temporary view of memory to be consistent with the actual memory is applied to all listed variables. When the construct is used without an explicit variable list and without a  <em>memory-order</em>  clause, a strong flush is applied to all locally thread-visible data as defined by the base language, and additionally the construct provides both acquire and release memory ordering semantics.  When an explicit variable list is not present and a  <em>memory-order</em>  clause is present, the construct provides acquire and/or release memory ordering semantics according to the  <em>memory-order</em>  clause, but no strong flush is performed. A resulting strong flush that applies to a set of variables effectively ensures that no memory (load or store) operation for the affected variables may be reordered across the <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive.</p>
+<p>General-purpose routines provide mutual exclusion semantics through locks,  represented by lock variables.   The semantics allows a task to  <em>set</em> , and hence   <em>own</em>  a lock, until it is  <em>unset</em>  by the task that set it. A   <em>nestable</em>  lock can be set multiple times by a task, and is used when in code requires nested control of locks.  A  <em>simple lock</em>  can only be set once by the owning task. There are specific calls for the two types of locks, and the variable of a specific lock type cannot be used by the other lock type.</p>
+<p>Any explicit task will observe the synchronization prescribed in a  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct and an implied barrier.  Also, additional synchronizations  are available for tasks.  All children of a task will wait at a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> (for  their siblings to complete).  A <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct creates a region in which the current task is suspended at the end of the region until all sibling tasks,  and their descendants, have completed.  Scheduling constraints on task execution can be prescribed by the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause to enforce dependence on previously generated tasks. More details on controlling task executions can be found in the  <em>Tasking</em>  Chapter in the OpenMP Specifications document.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1290,8 +1328,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_linear_modifier.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">ref</span></code> ,  <code class="docutils literal notranslate"><span class="pre">val</span></code> ,  <code class="docutils literal notranslate"><span class="pre">uval</span></code>  Modifiers for  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  Clause</a>
-    <a class='right-next' id="next-link" href="Examples_critical.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_linear_modifier.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">uval</span></code> Modifiers for <code class="docutils literal notranslate"><span class="pre">linear</span></code> Clause</a>
+    <a class='right-next' id="next-link" href="Examples_critical.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">critical</span></code> Construct</a>
 
         </div>
         

@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,99 +1290,39 @@
               <div>
                 
   <div class="section" id="the-ordered-clause-and-the-ordered-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Clause and the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  Construct<a class="headerlink" href="#the-ordered-clause-and-the-ordered-construct" title="Permalink to this headline">¶</a></h1>
+<h1>The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Clause and the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> Construct<a class="headerlink" href="#the-ordered-clause-and-the-ordered-construct" title="Permalink to this headline">¶</a></h1>
 <p>Ordered constructs  are useful for sequentially ordering the output from work that  is done in parallel. The following program prints out the indices in sequential  order:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: ordered.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="cp">#pragma omp ordered</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">);</span>
-<span class="p">}</span>
+/*
+* name: ordered.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
 
-<span class="kt">void</span> <span class="nf">ordered_example</span><span class="p">(</span><span class="kt">int</span> <span class="n">lb</span><span class="p">,</span> <span class="kt">int</span> <span class="n">ub</span><span class="p">,</span> <span class="kt">int</span> <span class="n">stride</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+void work(int k)
+{
+  #pragma omp ordered
+    printf(&quot; %d\n&quot;, k);
+}
 
-  <span class="cp">#pragma omp parallel for ordered schedule(dynamic)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="n">lb</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">ub</span><span class="p">;</span> <span class="n">i</span><span class="o">+=</span><span class="n">stride</span><span class="p">)</span>
-    <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-<span class="p">}</span>
+void ordered_example(int lb, int ub, int stride)
+{
+  int i;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">ordered_example</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">5</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  #pragma omp parallel for ordered schedule(dynamic)
+  for (i=lb; i&lt;ub; i+=stride)
+    work(i);
+}
 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">ordered</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK</span><span class="p">(</span><span class="n">K</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">k</span>
-
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">ORDERED</span>
-        <span class="n">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">K</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">ORDERED</span>
-
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK</span>
-
-      <span class="n">SUBROUTINE</span> <span class="n">SUB</span><span class="p">(</span><span class="n">LB</span><span class="p">,</span> <span class="n">UB</span><span class="p">,</span> <span class="n">STRIDE</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">LB</span><span class="p">,</span> <span class="n">UB</span><span class="p">,</span> <span class="n">STRIDE</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span> <span class="n">DO</span> <span class="n">ORDERED</span> <span class="n">SCHEDULE</span><span class="p">(</span><span class="n">DYNAMIC</span><span class="p">)</span>
-        <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="n">LB</span><span class="p">,</span><span class="n">UB</span><span class="p">,</span><span class="n">STRIDE</span>
-          <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-        <span class="n">END</span> <span class="n">DO</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">DO</span>
-
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">SUB</span>
-
-      <span class="n">PROGRAM</span> <span class="n">ORDERED_EXAMPLE</span>
-        <span class="n">CALL</span> <span class="n">SUB</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">PROGRAM</span> <span class="n">ORDERED_EXAMPLE</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>It is possible to have multiple  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  constructs within a loop region  with the  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  clause specified. The first example is non-conforming  because all iterations execute two  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  regions. An iteration of a  loop must not execute more than one  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  region:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: ordered.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span>
-
-<span class="kt">void</span> <span class="nf">ordered_wrong</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="cp">#pragma omp for ordered</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-<span class="cm">/* incorrect because an iteration may not execute more than one</span>
-<span class="cm">   ordered region */</span>
-    <span class="cp">#pragma omp ordered</span>
-      <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="cp">#pragma omp ordered</span>
-      <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+int main()
+{
+  ordered_example(0, 100, 5);
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1352,87 +1330,153 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">ordered</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">I</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WORK</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: ordered.1f
+! type: F-fixed
+      SUBROUTINE WORK(K)
+        INTEGER k
 
-      <span class="n">SUBROUTINE</span> <span class="n">ORDERED_WRONG</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
+!$OMP ORDERED
+        WRITE(*,*) K
+!$OMP END ORDERED
 
-        <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">DO</span> <span class="n">ORDERED</span>
-        <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span>
-<span class="o">!</span> <span class="n">incorrect</span> <span class="n">because</span> <span class="n">an</span> <span class="n">iteration</span> <span class="n">may</span> <span class="n">not</span> <span class="n">execute</span> <span class="n">more</span> <span class="n">than</span> <span class="n">one</span>
-<span class="o">!</span> <span class="n">ordered</span> <span class="n">region</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ORDERED</span>
-            <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">ORDERED</span>
+      END SUBROUTINE WORK
 
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">ORDERED</span>
-            <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">ORDERED</span>
-        <span class="n">END</span> <span class="n">DO</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">ORDERED_WRONG</span>
+      SUBROUTINE SUB(LB, UB, STRIDE)
+        INTEGER LB, UB, STRIDE
+        INTEGER I
 
-</pre></div>
-</div>
-</div>
-</div>
-<p>The following is a conforming example with more than one  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  construct.  Each iteration will execute only one  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  region:</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: ordered.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span>
-<span class="kt">void</span> <span class="nf">ordered_good</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-<span class="cp">#pragma omp for ordered</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-      <span class="cp">#pragma omp ordered</span>
-         <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
-      <span class="cp">#pragma omp ordered</span>
-        <span class="n">work</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+!$OMP PARALLEL DO ORDERED SCHEDULE(DYNAMIC)
+        DO I=LB,UB,STRIDE
+          CALL WORK(I)
+        END DO
+!$OMP END PARALLEL DO
+
+      END SUBROUTINE SUB
+
+      PROGRAM ORDERED_EXAMPLE
+        CALL SUB(1,100,5)
+      END PROGRAM ORDERED_EXAMPLE
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>It is possible to have multiple <code class="docutils literal notranslate"><span class="pre">ordered</span></code> constructs within a loop region  with the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> clause specified. The first example is non-conforming  because all iterations execute two <code class="docutils literal notranslate"><span class="pre">ordered</span></code> regions. An iteration of a  loop must not execute more than one <code class="docutils literal notranslate"><span class="pre">ordered</span></code> region:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">ordered</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">ORDERED_GOOD</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">DO</span> <span class="n">ORDERED</span>
-        <span class="n">DO</span> <span class="n">I</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-          <span class="n">IF</span> <span class="p">(</span><span class="n">I</span> <span class="o">&lt;=</span> <span class="mi">10</span><span class="p">)</span> <span class="n">THEN</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">ORDERED</span>
-              <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">END</span> <span class="n">ORDERED</span>
-          <span class="n">ENDIF</span>
+/*
+* name: ordered.2c
+* type: C
+*/
+void work(int i) {}
 
-          <span class="n">IF</span> <span class="p">(</span><span class="n">I</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">)</span> <span class="n">THEN</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">ORDERED</span>
-              <span class="n">CALL</span> <span class="n">WORK</span><span class="p">(</span><span class="n">I</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">END</span> <span class="n">ORDERED</span>
-          <span class="n">ENDIF</span>
-        <span class="n">ENDDO</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">ORDERED_GOOD</span>
+void ordered_wrong(int n)
+{
+  int i;
+  #pragma omp for ordered
+  for (i=0; i&lt;n; i++) {
+/* incorrect because an iteration may not execute more than one
+   ordered region */
+    #pragma omp ordered
+      work(i);
+    #pragma omp ordered
+      work(i+1);
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: ordered.2f
+! type: F-fixed
+      SUBROUTINE WORK(I)
+      INTEGER I
+      END SUBROUTINE WORK
+
+      SUBROUTINE ORDERED_WRONG(N)
+      INTEGER N
+
+        INTEGER I
+!$OMP   DO ORDERED
+        DO I = 1, N
+! incorrect because an iteration may not execute more than one
+! ordered region
+!$OMP     ORDERED
+            CALL WORK(I)
+!$OMP     END ORDERED
+
+!$OMP     ORDERED
+            CALL WORK(I+1)
+!$OMP     END ORDERED
+        END DO
+      END SUBROUTINE ORDERED_WRONG
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following is a conforming example with more than one <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct.  Each iteration will execute only one <code class="docutils literal notranslate"><span class="pre">ordered</span></code> region:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: ordered.3c
+* type: C
+*/
+void work(int i) {}
+void ordered_good(int n)
+{
+  int i;
+#pragma omp for ordered
+  for (i=0; i&lt;n; i++) {
+    if (i &lt;= 10) {
+      #pragma omp ordered
+         work(i);
+    }
+    if (i &gt; 10) {
+      #pragma omp ordered
+        work(i+1);
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: ordered.3f
+! type: F-fixed
+      SUBROUTINE ORDERED_GOOD(N)
+      INTEGER N
+
+!$OMP   DO ORDERED
+        DO I = 1,N
+          IF (I &lt;= 10) THEN
+!$OMP       ORDERED
+              CALL WORK(I)
+!$OMP       END ORDERED
+          ENDIF
+
+          IF (I &gt; 10) THEN
+!$OMP       ORDERED
+              CALL WORK(I+1)
+!$OMP       END ORDERED
+          ENDIF
+        ENDDO
+      END SUBROUTINE ORDERED_GOOD
 
 </pre></div>
 </div>
@@ -1466,7 +1510,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_acquire_release.html" title="previous page">Synchronization Based on Acquire/Release Semantics</a>
-    <a class='right-next' id="next-link" href="Examples_depobj.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">depobj</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_depobj.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">depobj</span></code> Construct</a>
 
         </div>
         

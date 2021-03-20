@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,14 +1291,183 @@
                 
   <div class="section" id="target-offload">
 <h1>Target Offload<a class="headerlink" href="#target-offload" title="Permalink to this headline">¶</a></h1>
-<p>In the OpenMP 5.0 implementation the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  environment variable was defined to change  <em>default</em>  offload behavior.  By  <em>default</em>  the target  (region) is executed on the host if the target device  does not exist or the implementation does not support the target device.<br />
-Last sentence uses words of the 5.0 spec pg. 21 lines 7-8</p>
-<p>In an OpenMP 5.0 compliant implementation, setting the   <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  variable to  <code class="docutils literal notranslate"><span class="pre">MANDATORY</span></code>  will  force the program to terminate execution when a  <code class="docutils literal notranslate"><span class="pre">target</span></code>   construct is encountered and the target device is not supported or is not available. With a value  <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code>  the target region will execute on a device if the  device exists and is supported by the implementation, otherwise it will execute on the host. Support for the  <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code>  value is optional; when it is supported the behavior is as if only the  host device exists (other devices are considered non-existent to the runtime),  and target regions are executed on the host.</p>
-<p>The following example reports execution behavior for different  values of the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  variable. A handy routine  for extracting the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  environment variable value is deployed here, because the OpenMP API does not have a routine  for obtaining the value.
-({yet}).</p>
-<p>Note:  The example issues a warning when a pre-5.0 implementation is used, indicating that the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  is ignored. The value of the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  variable is reported  when the  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_ENV</span></code>   environment variable is set to  <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>  or  <code class="docutils literal notranslate"><span class="pre">5.0.1BOSE</span></code> .</p>
-<p>cexample[5.0]{target_offload_control}{1}</p>
-<p>ffreeexample[5.0]{target_offload_control}{1}</p>
+<p>In the OpenMP 5.0 implementation the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> environment variable was defined to change  <em>default</em>  offload behavior.  By  <em>default</em>  the target code (region) is executed on the host if the target device  does not exist or the implementation does not support the target device.</p>
+<p>In an OpenMP 5.0 compliant implementation, setting the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> variable to <code class="docutils literal notranslate"><span class="pre">MANDATORY</span></code> will  force the program to terminate execution when a <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct is encountered and the target device is not supported or is not available. With a value <code class="docutils literal notranslate"><span class="pre">DEFAULT</span></code> the target region will execute on a device if the  device exists and is supported by the implementation, otherwise it will execute on the host. Support for the <code class="docutils literal notranslate"><span class="pre">DISABLED</span></code> value is optional; when it is supported the behavior is as if only the  host device exists (other devices are considered non-existent to the runtime),  and target regions are executed on the host.</p>
+<p>The following example reports execution behavior for different  values of the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> variable. A handy routine  for extracting the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> environment variable value is deployed here, because the OpenMP API does not have a routine  for obtaining the value.</p>
+<p>Note:  The example issues a warning when a pre-5.0 implementation is used, indicating that the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> is ignored. The value of the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> variable is reported  when the <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_ENV</span></code>  environment variable is set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> or <code class="docutils literal notranslate"><span class="pre">VERBOSE</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_offload_control.1c
+* type: C
+* version: omp_5.0
+*/
+
+#include    &lt;omp.h&gt;
+#include  &lt;stdio.h&gt;
+#include  &lt;ctype.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+typedef enum offload_policy
+{MANDATORY, DISABLED, DEFAULT, UNKNOWN, NOTSET} offload_policy_t;
+
+
+offload_policy_t get_offload_policy()
+{
+   char *env, *end;
+   size_t n;
+
+   env = getenv(&quot;OMP_TARGET_OFFLOAD&quot;);
+   if(env  == NULL) return NOTSET;
+
+   end = env + strlen(env);                //Find trimmed beginning/end
+   while (      *env &amp;&amp; isspace(*(env  )) ) env++;
+   while (end != env &amp;&amp; isspace(*(end-1)) ) end--;
+   n = (int)(end - env);
+
+                    //Find ONLY string -nothing more, case insensitive
+   if      (n == 9 &amp;&amp; !strncasecmp(env, &quot;MANDATORY&quot;,n)) return MANDATORY;
+   else if (n == 8 &amp;&amp; !strncasecmp(env, &quot;DISABLED&quot; ,n)) return DISABLED ;
+   else if (n == 7 &amp;&amp; !strncasecmp(env, &quot;DEFAULT&quot;  ,n)) return DEFAULT  ;
+   else                                                 return UNKNOWN  ;
+}
+
+
+int main()
+{
+   int i;
+   int device_num, on_init_dev;
+
+                              // get policy from OMP_TARGET_OFFLOAD variable
+   offload_policy_t policy = get_offload_policy();
+
+   if(_OPENMP&lt; 201811)
+   {
+      printf(&quot;Warning: OMP_TARGET_OFFLOAD NOT supported by VER. %d\n&quot;,_OPENMP );
+      printf(&quot;         If OMP_TARGET_OFFLOAD is set, it will be ignored.\n&quot;);
+   }
+
+                              // Set target device number to an unavailable
+                              // device to test offload policy.
+   device_num = omp_get_num_devices() + 1;
+
+                                   // Policy:
+   printf(&quot;OMP_TARGET_OFFLOAD Policy:  &quot;);
+   if     (policy==MANDATORY) printf(&quot;MANDATORY-Terminate if dev. not avail\n&quot;);
+   else if(policy==DISABLED ) printf(&quot;DISABLED -(if supported) Only on Host\n&quot;);
+   else if(policy==DEFAULT  ) printf(&quot;DEFAULT  -On host if device not avail\n&quot;);
+   else if(policy==UNKNOWN  ) printf(&quot;OMP_TARGET_OFFLOAD has unknown value\n&quot; );
+   else if(policy==NOTSET   ) printf(&quot;OMP_TARGET_OFFLOAD not set\n&quot; );
+
+
+   on_init_dev = 1;
+                                         // device# out of range--not supported
+   #pragma omp target device(device_num) map(tofrom: on_init_dev)
+     on_init_dev=omp_is_initial_device();
+
+   if (policy == MANDATORY &amp;&amp; _OPENMP &gt;= 201811)
+      printf(&quot;ERROR: OpenMP 5.0 implementation ignored MANDATORY policy.\n&quot;);
+
+   printf(&quot;Target region executed on init dev %s\n&quot;, on_init_dev ? &quot;TRUE&quot;:&quot;FALSE&quot;);
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_offload_control.1f90
+! type: F-free
+! version: omp_5.0
+
+
+module offload_policy
+  implicit none
+  integer, parameter :: LEN_POLICY=10
+contains
+  character(LEN_POLICY) function get_offload_policy()
+     character(64) :: env
+     integer       :: length, i
+     env=repeat(&#39; &#39;,len(env))
+                                    !policy is blank if not found *
+     call get_environment_variable(&quot;OMP_TARGET_OFFLOAD&quot;,env,length)
+
+     do i = 1,len(env)              !Makes a-z upper case
+        if(iachar(env(i:i))&gt;96) env(i:i)=achar(iachar(env(i:i))-32)
+     end do
+
+     get_offload_policy = trim(adjustl(env)) !remove peripheral spaces
+
+     if(length==0) get_offload_policy=&quot;NOTSET&quot;
+
+     return
+
+  end function
+
+end module
+
+program policy_test
+
+  use omp_lib
+  use offload_policy
+
+  integer                :: i, device_num
+  logical                :: on_init_dev
+  character(LEN_POLICY)  :: policy
+
+  policy = get_offload_policy() !!Get OMP_TARGET_OFFLOAD value
+
+  if (OPENMP_VERSION &lt; 201811) then
+     print*,&quot;Warning: OMP_TARGET_OFFLOAD NOT supported by VER.&quot;,OPENMP_VERSION
+     print*,&quot;         If OMP_TARGET_OFFLOAD is set, it will be ignored.&quot;
+  endif
+
+     !Set target device number to an unavailable device to test offload policy.
+  device_num = omp_get_num_devices() + 1
+
+                      !!Report OMP_TARGET_OFFOAD value
+  select CASE (policy)
+     case(&quot;MANDATORY&quot;)
+                     print*,&quot;Policy:  MANDATORY-Terminate if dev. not avail.&quot;
+     case(&quot;DISABLED&quot;)
+                     print*,&quot;Policy:  DISABLED-(if supported) Only on Host.&quot;
+     case(&quot;DEFAULT&quot;)
+                     print*,&quot;Policy:  DEFAULT On host if device not avail.&quot;
+     case(&quot;NOTSET&quot;)
+                     print*,&quot;         OMP_TARGET_OFFLOAD is not set.&quot;
+     case DEFAULT
+                     print*,&quot;         OMP_TARGET_OFFLOAD has unknown value.&quot;
+                     print*,&quot;         UPPER CASE VALUE=&quot;,policy
+  end select
+
+
+  on_init_dev = .FALSE.
+                                      !! device# out of range--not supported
+  !$omp target  device(device_num) map(tofrom: on_init_dev)
+     on_init_dev=omp_is_initial_device()
+  !$omp end target
+
+  if (policy==&quot;MANDATORY&quot; .and. OPENMP_VERSION&gt;=201811) then
+     print*,&quot;OMP ERROR: OpenMP 5.0 implementation ignored MANDATORY policy.&quot;
+     print*,&quot;           Termination should have occurred at target directive.&quot;
+  endif
+
+  print*, &quot;Target executed on init dev (T|F): &quot;, on_init_dev
+
+end program policy_test
+
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

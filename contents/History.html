@@ -547,11 +547,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1035,10 +1030,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1084,6 +1094,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1106,7 +1145,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1294,32 +1332,47 @@
 <h1>Document Revision History<a class="headerlink" href="#document-revision-history" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="changes-from-5-0-0-to-5-0-1">
 <h2>Changes from 5.0.0 to 5.0.1<a class="headerlink" href="#changes-from-5-0-0-to-5-0-1" title="Permalink to this headline">¶</a></h2>
-<p>`{itemize}</p>
 <ul class="simple">
-<li><p>Added version tags ({omp_} <em>x.y</em> ) in example labels  and the corresponding source s for all examples that feature OpenMP 3.0 and later.`</p></li>
+<li><p>Added version tags (<code class="docutils literal notranslate"><span class="pre">omp_</span></code> <em>x.y</em> ) in example labels  and the corresponding source codes for all examples that feature OpenMP 3.0 and later.</p></li>
 </ul>
 <ul class="simple">
 <li><p>Included additional examples for the 5.0 features:</p></li>
 </ul>
 <ul class="simple">
-<li><p>Extension to the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause ()</p></li>
-<li><p>Transferring noncontiguous data with the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive in Fortran ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">conditional</span></code>  modifier for the  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  clause                             ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">task</span></code>  modifier for the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause                                      ()</p></li>
-<li><p>Reduction on combined target constructs                                                     ()</p></li>
-<li><p>Task reduction with target constructs     ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">scan</span></code>  directive for returning the {prefix sum} of a reduction                  ()</p></li>
+<li><p>Extension to the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause ( defaultmap )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Transferring noncontiguous data with the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive in Fortran ( array-shaping )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">conditional</span></code> modifier for the <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause                             ( lastprivate )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">task</span></code> modifier for the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause                                      ( task_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Reduction on combined target constructs                                                     ( target_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Task reduction with target constructs     ( target_task_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">scan</span></code> directive for returning the <strong>prefix sum</strong> of a reduction                  ( scan )</p></li>
 </ul>
 <ul class="simple">
 <li><p>Included additional examples for the 4.x features:</p></li>
 </ul>
 <ul class="simple">
-<li><p>Dependence for undeferred tasks ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ref</span></code> ,  <code class="docutils literal notranslate"><span class="pre">val</span></code> ,  <code class="docutils literal notranslate"><span class="pre">uval</span></code>  modifiers for  <code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause ()</p></li>
+<li><p>Dependence for undeferred tasks ( depend_undefer_task )</p></li>
 </ul>
 <ul class="simple">
-<li><p>Clarified the description of pointer mapping and pointer attachment in  .</p></li>
-<li><p>Clarified the description of memory model examples in .</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ref</span></code>, <code class="docutils literal notranslate"><span class="pre">val</span></code>, <code class="docutils literal notranslate"><span class="pre">uval</span></code> modifiers for <code class="docutils literal notranslate"><span class="pre">linear</span></code> clause ( linear_modifier )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Clarified the description of pointer mapping and pointer attachment in   pointer_mapping .</p></li>
+</ul>
+<ul class="simple">
+<li><p>Clarified the description of memory model examples in  mem_model .</p></li>
 </ul>
 </div>
 <div class="section" id="changes-from-4-5-0-to-5-0-0">
@@ -1328,70 +1381,147 @@
 <li><p>Added the following examples for the 5.0 features:</p></li>
 </ul>
 <ul class="simple">
-<li><p>Extended  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct for host execution     ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">loop</span></code>  and  <code class="docutils literal notranslate"><span class="pre">teams</span></code> ~ <code class="docutils literal notranslate"><span class="pre">loop</span></code>  constructs specify loop iterations that can execute concurrently                                                               ()</p></li>
-<li><p>Task data affinity is indicated by  <code class="docutils literal notranslate"><span class="pre">affinity</span></code>  clause of  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct                                                              ()</p></li>
-<li><p>Display thread affinity with  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code>  environment variable or  <code class="docutils literal notranslate"><span class="pre">omp_display_affinity()</span></code>  API routine                                                              ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  with dependences                       ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code>  task dependences                  ()</p></li>
-<li><p>Multidependence Iterators (in  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses)   ()</p></li>
-<li><p>Combined constructs:  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">master</span></code> ~ <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  and  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">master</span></code> ~ <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>                                                                                    ()</p></li>
-<li><p>Reverse Offload through  <em>ancestor</em>  modifier of  <code class="docutils literal notranslate"><span class="pre">device</span></code>  clause.    ()</p></li>
-<li><p>Pointer Mapping  - behavior of mapped pointers                              ()<br />
-Example_target_ptr_map*</p></li>
-<li><p>Structure Mapping  - behavior of mapped structures                          ()
-Examples_target_structure_mapping.tex target_struct_map*</p></li>
-<li><p>Array Shaping with the  <em>shape-operator</em>                                  ()</p></li>
-<li><p>The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">mapper</span></code>  construct                                  ()</p></li>
-<li><p>Acquire and Release Semantics Synchronization: Memory ordering        clauses  <code class="docutils literal notranslate"><span class="pre">acquire</span></code> ,  <code class="docutils literal notranslate"><span class="pre">release</span></code> , and  <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code>  were added       to flush and atomic constructs                                                                                   ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">depobj</span></code>  construct provides dependence objects for subsequent use in  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses                                                                                   ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause for  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct                           ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause for  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct                       ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause for  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct           ()</p></li>
-<li><p>Memory Allocators for making OpenMP memory requests with traits             ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">requires</span></code>  directive specifies required features of implementation     ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directive - for function variants             ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">metadirective</span></code>  directive  - for directive variants                    ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  Environment Variable  - controls offload behavior ()</p></li>
+<li><p>Extended <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct for host execution     ( host_teams )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">loop</span></code> and <code class="docutils literal notranslate"><span class="pre">teams</span></code> <code class="docutils literal notranslate"><span class="pre">loop</span></code> constructs specify loop iterations that can execute concurrently                                                               ( loop )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Task data affinity is indicated by <code class="docutils literal notranslate"><span class="pre">affinity</span></code> clause of <code class="docutils literal notranslate"><span class="pre">task</span></code> construct                                                              (  task_affinity )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Display thread affinity with <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_AFFINITY</span></code> environment variable or <code class="docutils literal notranslate"><span class="pre">omp_display_affinity()</span></code> API routine                                                              ( affinity_display )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">taskwait</span></code> with dependences                       ( taskwait_depend )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">mutexinoutset</span></code> task dependences                  ( task_dep_mutexinoutset )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Multidependence Iterators (in <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses)   ( depend_iterator )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Combined constructs: <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">master</span></code> <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> and <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">master</span></code> <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code>                                                                                   ( parallel_master_taskloop )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Reverse Offload through  <em>ancestor</em>  modifier of <code class="docutils literal notranslate"><span class="pre">device</span></code> clause.    ( target_reverse_offload )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Pointer Mapping  - behavior of mapped pointers                              ( pointer_mapping )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Structure Mapping  - behavior of mapped structures                          ( structure_mapping )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Array Shaping with the  <em>shape-operator</em>                                  ( array-shaping )</p></li>
+</ul>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">mapper</span></code> construct                                  ( declare_mapper )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Acquire and Release Semantics Synchronization: Memory ordering        clauses <code class="docutils literal notranslate"><span class="pre">acquire</span></code>, <code class="docutils literal notranslate"><span class="pre">release</span></code>, and <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code> were added       to flush and atomic constructs                                                                                   ( acquire_and_release_semantics )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">depobj</span></code> construct provides dependence objects for subsequent use in <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses                                                                                   ( depobj )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause for <code class="docutils literal notranslate"><span class="pre">task</span></code> construct                           ( task_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause for <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct                       ( taskloop_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause for <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct           ( taskloop_reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Memory Allocators for making OpenMP memory requests with traits             ( allocators )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">requires</span></code> directive specifies required features of implementation     ( requires )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directive - for function variants             ( declare_variant )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">metadirective</span></code> directive  - for directive variants                    ( metadirective )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> Environment Variable  - controls offload behavior ( target_offload )</p></li>
 </ul>
 <ul class="simple">
 <li><p>Included the following additional examples for the 4.x features:</p></li>
-<li><p>more taskloop examples ()</p></li>
-<li><p>user-defined reduction (UDR) ()
-NEW 5.0</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">enter</span></code>  and  <code class="docutils literal notranslate"><span class="pre">exit</span></code>   <code class="docutils literal notranslate"><span class="pre">data</span></code>  unstructured data constructs  ()
-Example_target_unstructured_data.* ?</p></li>
+</ul>
+<ul class="simple">
+<li><p>more taskloop examples ( taskloop )</p></li>
+</ul>
+<ul class="simple">
+<li><p>user-defined reduction (UDR) ( UDR )</p></li>
 </ul>
 </div>
 <div class="section" id="changes-from-4-0-2-to-4-5-0">
 <h2>Changes from 4.0.2 to 4.5.0<a class="headerlink" href="#changes-from-4-0-2-to-4-5-0" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Reorganized into chapters of major topics</p></li>
+</ul>
+<ul class="simple">
 <li><p>Included file extensions in example labels to indicate source type</p></li>
-<li><p>Applied the explicit  <code class="docutils literal notranslate"><span class="pre">map(tofrom)</span></code>  for scalar variables        in a number of examples to comply with        the change of the default behavior for scalar variables from         <code class="docutils literal notranslate"><span class="pre">map(tofrom)</span></code>  to  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  in the 4.5 specification</p></li>
+</ul>
+<ul class="simple">
+<li><p>Applied the explicit <code class="docutils literal notranslate"><span class="pre">map(tofrom)</span></code> for scalar variables        in a number of examples to comply with        the change of the default behavior for scalar variables from        <code class="docutils literal notranslate"><span class="pre">map(tofrom)</span></code> to <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> in the 4.5 specification</p></li>
+</ul>
+<ul class="simple">
 <li><p>Added the following new examples:</p></li>
 </ul>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">linear</span></code>  clause in loop constructs     ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">priority</span></code>  clause for  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct                   ()</p></li>
-<li><p><em>directive-name</em>  modifier in multiple  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clauses on a combined construct                              ()</p></li>
-<li><p>unstructured data mapping                   ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">link</span></code>  clause for  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive                                                    ()</p></li>
-<li><p>asynchronous target execution with  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause ()</p></li>
-<li><p>device memory routines and device pointers  ()</p></li>
-<li><p>doacross loop nest                          ()</p></li>
-<li><p>locks with hints                            ()</p></li>
-<li><p>C/C++ array reduction                       ()</p></li>
-<li><p>C++ reference types in data sharing clauses ()</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">linear</span></code> clause in loop constructs     ( linear_in_loop )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">priority</span></code> clause for <code class="docutils literal notranslate"><span class="pre">task</span></code> construct ( task_priority )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct                   ( taskloop )</p></li>
+</ul>
+<ul class="simple">
+<li><p><em>directive-name</em>  modifier in multiple <code class="docutils literal notranslate"><span class="pre">if</span></code> clauses on a combined construct                              ( target_if )</p></li>
+</ul>
+<ul class="simple">
+<li><p>unstructured data mapping                   ( target_enter_exit_data )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">link</span></code> clause for <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive                                                    ( declare_target_link )</p></li>
+</ul>
+<ul class="simple">
+<li><p>asynchronous target execution with <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause ( async_target_exec_depend )</p></li>
+</ul>
+<ul class="simple">
+<li><p>device memory routines and device pointers  ( target_mem_and_device_ptrs )</p></li>
+</ul>
+<ul class="simple">
+<li><p>doacross loop nest                          ( doacross )</p></li>
+</ul>
+<ul class="simple">
+<li><p>locks with hints                            ( locks )</p></li>
+</ul>
+<ul class="simple">
+<li><p>C/C++ array reduction                       ( reduction )</p></li>
+</ul>
+<ul class="simple">
+<li><p>C++ reference types in data sharing clauses ( cpp_reference )</p></li>
 </ul>
 </div>
 <div class="section" id="changes-from-4-0-1-to-4-0-2">
 <h2>Changes from 4.0.1 to 4.0.2<a class="headerlink" href="#changes-from-4-0-1-to-4-0-2" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Names of examples were changed from numbers to mnemonics</p></li>
-<li><p>Added SIMD examples                         ()</p></li>
-<li><p>Applied miscellaneous fixes in several source s</p></li>
+</ul>
+<ul class="simple">
+<li><p>Added SIMD examples                         ( SIMD )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Applied miscellaneous fixes in several source codes</p></li>
+</ul>
+<ul class="simple">
 <li><p>Added the revision history</p></li>
 </ul>
 </div>
@@ -1399,28 +1529,52 @@ Example_target_unstructured_data.* ?</p></li>
 <h2>Changes from 4.0 to 4.0.1<a class="headerlink" href="#changes-from-4-0-to-4-0-1" title="Permalink to this headline">¶</a></h2>
 <p>Added the following new examples:</p>
 <ul class="simple">
-<li><p>the  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  clause   ()</p></li>
-<li><p>the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct ()</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause   ( affinity )</p></li>
+</ul>
+<ul class="simple">
+<li><p>the <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct ( taskgroup )</p></li>
 </ul>
 </div>
 <div class="section" id="changes-from-3-1-to-4-0">
 <h2>Changes from 3.1 to 4.0<a class="headerlink" href="#changes-from-3-1-to-4-0" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Beginning with OpenMP 4.0, examples were placed in a separate document       from the specification document.</p></li>
+</ul>
+<ul class="simple">
 <li><p>Version 4.0 added the following new examples:</p></li>
 </ul>
 <ul class="simple">
-<li><p>task dependences                       ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code>  construct                ()</p></li>
-<li><p>array sections in device constructs    ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct    ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">update</span></code>  construct  ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct ()</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">teams</span></code>  constructs                ()</p></li>
-<li><p>asynchronous execution of a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region using tasks ()</p></li>
-<li><p>device runtime routines                ()</p></li>
-<li><p>Fortran ASSOCIATE construct            ()</p></li>
-<li><p>cancellation constructs                ()</p></li>
+<li><p>task dependences                       ( task_depend )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> construct                ( target )</p></li>
+</ul>
+<ul class="simple">
+<li><p>array sections in device constructs    ( array_sections )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct    ( target_data )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> construct  ( target_update )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> construct ( declare_target )</p></li>
+</ul>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">teams</span></code> constructs                ( teams )</p></li>
+</ul>
+<ul class="simple">
+<li><p>asynchronous execution of a <code class="docutils literal notranslate"><span class="pre">target</span></code> region using tasks ( async_target_with_tasks )</p></li>
+</ul>
+<ul class="simple">
+<li><p>device runtime routines                ( device )</p></li>
+</ul>
+<ul class="simple">
+<li><p>Fortran ASSOCIATE construct            ( associate )</p></li>
+</ul>
+<ul class="simple">
+<li><p>cancellation constructs                ( cancellation )</p></li>
 </ul>
 </div>
 </div>

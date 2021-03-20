@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>declare ~ variant Directive &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>declare variant Directive &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,107 +1290,215 @@
               <div>
                 
   <div class="section" id="declare-variant-directive">
-<h1><code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  Directive<a class="headerlink" href="#declare-variant-directive" title="Permalink to this headline">¶</a></h1>
-<p>A  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">variant</span></code>  directive specifies that the following function is an alternate function,<br />
-a  <em>function variant</em> , to be used in place of the specified  <em>base function</em><br />
-when the trait within the  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause has a valid context.</p>
-<p>A  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directive specifies an alternate function,   <em>function variant</em> , to be used in place of the  <em>base function</em><br />
-when the trait within the  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause has a valid context. when the trait within the  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause matches the OpenMP context at a given call site. The base function follows the directive in the C and C++ languages. In Fortran, either a subroutine or function may be used as the  <em>base function</em> , and the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directive must be in the specification  part of a subroutine or function (unless a  <em>base-proc-name</em>  modifier is used, as in the case of a procedure declaration statement). See the OpenMP 5.0 Specification for details on the modifier.</p>
-<p>When multiple  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directives are used  a function variant becomes a candidate for replacing the base function if the
-base function call context matches the traits of all selectors in the  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause. context at the base function call matches the traits of all selectors in the  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause. If there are multiple candidates, a score is assigned with rules for each of the selector traits. The scoring algorithm can be found in the OpenMP 5.0 Specification.</p>
-<p>In the first example the  <em>vxv()</em>  function is called within a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region, and in a sequential part of the program.  Two function variants,  <em>p_vxv()</em>  and  <em>t_vxv()</em> , are defined for the first two regions by using  <em>parallel</em>  and  <em>target</em>  selectors (within the  <em>construct</em>  trait set) in a  <code class="docutils literal notranslate"><span class="pre">match</span></code>  clause.  The  <em>p_vxv()</em>  function variant includes a  <code class="docutils literal notranslate"><span class="pre">for</span></code>  construct ( <code class="docutils literal notranslate"><span class="pre">do</span></code>  construct for Fortran) for the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region,  while  <em>t_vxv()</em>  includes a  <code class="docutils literal notranslate"><span class="pre">distribute</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct for the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. The  <em>t_vxv()</em>  function is explicitly compiled for the device using a  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive.</p>
-<p>Since the two  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directives have no selectors that match traits for the context of the base function call in the sequential part of the program, the base  <em>vxv()</em>  function is used there,  as expected. (The vectors in the  <em>p_vxv</em>  and  <em>t_vxv</em>  functions have been multiplied by 3 and 2, respectively, for checking the validity of the replacement. Normally the purpose of a function variant is to produce the same results by a different method.)</p>
-<p>Note: a  <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">teams</span></code>  construct is used to direct execution onto a device, with a
-<code class="docutils literal notranslate"><span class="pre">distribute</span> <span class="pre">simd</span></code>  construct in the function variant. As of the OpenMP 5.0 implementation
-no intervening  is allowed between a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct. So
-using a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct to direct execution onto a device, and including<br />
-<code class="docutils literal notranslate"><span class="pre">teams</span> <span class="pre">distribute</span> <span class="pre">simd</span></code>  in the variant function would produce non conforming .</p>
-<p>cexample[5.0]{declare_variant}{1}</p>
+<h1><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> Directive<a class="headerlink" href="#declare-variant-directive" title="Permalink to this headline">¶</a></h1>
+<p>A <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directive specifies an alternate function,   <em>function variant</em> , to be used in place of the  <em>base function</em>   when the trait within the <code class="docutils literal notranslate"><span class="pre">match</span></code> clause matches the OpenMP context at a given call site. The base function follows the directive in the C and C++ languages. In Fortran, either a subroutine or function may be used as the  <em>base function</em> , and the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directive must be in the specification  part of a subroutine or function (unless a  <em>base-proc-name</em>  modifier is used, as in the case of a procedure declaration statement). See the OpenMP 5.0 Specification for details on the modifier.</p>
+<p>When multiple <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directives are used  a function variant becomes a candidate for replacing the base function if the context at the base function call matches the traits of all selectors in the <code class="docutils literal notranslate"><span class="pre">match</span></code> clause. If there are multiple candidates, a score is assigned with rules for each of the selector traits. The scoring algorithm can be found in the OpenMP 5.0 Specification.</p>
+<p>In the first example the  <em>vxv()</em>  function is called within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, a <code class="docutils literal notranslate"><span class="pre">target</span></code> region, and in a sequential part of the program.  Two function variants,  <em>p_vxv()</em>  and  <em>t_vxv()</em> , are defined for the first two regions by using  <em>parallel</em>  and  <em>target</em>  selectors (within the  <em>construct</em>  trait set) in a <code class="docutils literal notranslate"><span class="pre">match</span></code> clause.  The  <em>p_vxv()</em>  function variant includes a <code class="docutils literal notranslate"><span class="pre">for</span></code> construct (<code class="docutils literal notranslate"><span class="pre">do</span></code> construct for Fortran) for the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region,  while  <em>t_vxv()</em>  includes a <code class="docutils literal notranslate"><span class="pre">distribute</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct for the <code class="docutils literal notranslate"><span class="pre">target</span></code> region. The  <em>t_vxv()</em>  function is explicitly compiled for the device using a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive.</p>
+<p>Since the two <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directives have no selectors that match traits for the context of the base function call in the sequential part of the program, the base  <em>vxv()</em>  function is used there,  as expected. (The vectors in the  <em>p_vxv</em>  and  <em>t_vxv</em>  functions have been multiplied by 3 and 2, respectively, for checking the validity of the replacement. Normally the purpose of a function variant is to produce the same results by a different method.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_variant</span><span class="mf">.1f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="n">module</span> <span class="n">subs</span>
-  <span class="n">use</span> <span class="n">omp_lib</span>
-<span class="n">contains</span>
-   <span class="n">subroutine</span> <span class="n">vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">)</span>             <span class="o">!!</span> <span class="n">base</span> <span class="n">function</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>  <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="o">:</span><span class="p">),</span><span class="n">v2</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">::</span> <span class="n">v3</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span>             <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">n</span>
-      <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">variant</span><span class="p">(</span> <span class="n">p_vxv</span> <span class="p">)</span> <span class="n">match</span><span class="p">(</span> <span class="n">construct</span><span class="o">=</span><span class="p">{</span><span class="n">parallel</span><span class="p">}</span> <span class="p">)</span>
-      <span class="o">!</span><span class="n">$omp</span>  <span class="n">declare</span> <span class="n">variant</span><span class="p">(</span> <span class="n">t_vxv</span> <span class="p">)</span> <span class="n">match</span><span class="p">(</span> <span class="n">construct</span><span class="o">=</span><span class="p">{</span><span class="n">target</span><span class="p">}</span>   <span class="p">)</span>
+/*
+* name: declare_variant.1c
+* type: C
+* version: omp_5.0
+*/
 
-      <span class="n">n</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">;</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="n">enddo</span>
+#define N 100
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-   <span class="n">end</span> <span class="n">subroutine</span>
+void p_vxv(int *v1,int *v2,int *v3,int n);
+void t_vxv(int *v1,int *v2,int *v3,int n);
 
-   <span class="n">subroutine</span> <span class="n">p_vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">)</span>            <span class="o">!!</span> <span class="n">function</span> <span class="n">variant</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>  <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="o">:</span><span class="p">),</span><span class="n">v2</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">::</span> <span class="n">v3</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span>             <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">n</span>
-      <span class="n">n</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+#pragma omp declare variant( p_vxv ) match( construct={parallel} )
+#pragma omp declare variant( t_vxv ) match( construct={target}   )
+void vxv(int *v1,int *v2,int *v3,int n)     // base function
+{
+   for (int i= 0; i&lt; n; i++)  v3[i] = v1[i] * v2[i];
+}
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="k">do</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">;</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">;</span> <span class="n">enddo</span>
+void p_vxv(int *v1,int *v2,int *v3,int n)   // function variant
+{
+   #pragma omp for
+   for (int i= 0; i&lt; n; i++)  v3[i] = v1[i] * v2[i]*3;
+}
 
-   <span class="n">end</span> <span class="n">subroutine</span>
+#pragma omp declare target
+void t_vxv(int *v1,int *v2,int *v3,int n)   // function variant
+{
+   #pragma omp distribute simd
+   for (int i= 0; i&lt; n; i++)  v3[i] = v1[i] * v2[i]*2;
+}
+#pragma omp end declare target
 
-   <span class="n">subroutine</span> <span class="n">t_vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">)</span>            <span class="o">!!</span> <span class="n">function</span> <span class="n">variant</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span>  <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="o">:</span><span class="p">),</span><span class="n">v2</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span> <span class="o">::</span> <span class="n">v3</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
-      <span class="n">integer</span>             <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">n</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-      <span class="n">n</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">v1</span><span class="p">)</span>
+int main()
+{
+   int v1[N], v2[N], v3[N];
+   for(int i=0; i&lt;N; i++){ v1[i]=(i+1); v2[i]=-(i+1); v3[i]=0; }   //init
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">distribute</span> <span class="n">simd</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">n</span><span class="p">;</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">;</span> <span class="n">enddo</span>
+   #pragma omp parallel
+   {
+      vxv(v1,v2,v3,N);
+   }
+   printf(&quot; %d  %d\n&quot;,v3[0],v3[N-1]); //from p_vxv --  output: -3  -30000
 
-   <span class="n">end</span> <span class="n">subroutine</span>
+   #pragma omp target teams map(to: v1[:N],v2[:N]) map(from: v3[:N])
+   {
+      vxv(v1,v2,v3,N);
+   }
+   printf(&quot; %d  %d\n&quot;,v3[0],v3[N-1]); //from t_vxv --  output: -2  -20000
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">subs</span>
+   vxv(v1,v2,v3,N);
+   printf(&quot; %d  %d\n&quot;,v3[0],v3[N-1]); //from   vxv --  output: -1  -10000
 
-
-<span class="n">program</span> <span class="n">main</span>
-   <span class="n">use</span> <span class="n">omp_lib</span>
-   <span class="n">use</span> <span class="n">subs</span>
-   <span class="n">integer</span><span class="p">,</span><span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">100</span>
-   <span class="n">integer</span>           <span class="o">::</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span> <span class="n">i</span><span class="p">;</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span> <span class="o">-</span><span class="n">i</span><span class="p">;</span> <span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span>  <span class="n">enddo</span>  <span class="o">!!</span> <span class="n">init</span>
-
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-      <span class="n">call</span> <span class="n">vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">v3</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v3</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>    <span class="o">!!</span> <span class="n">from</span> <span class="n">p_vxv</span> <span class="o">--</span> <span class="nl">output</span><span class="p">:</span> <span class="mi">-3</span>  <span class="mi">-30000</span>
-
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">teams</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span> <span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span> <span class="n">v3</span><span class="p">)</span>
-      <span class="n">call</span> <span class="n">vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">v3</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span> <span class="n">teams</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v3</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>    <span class="o">!!</span> <span class="n">from</span> <span class="n">t_vxv</span> <span class="o">--</span> <span class="nl">output</span><span class="p">:</span> <span class="mi">-2</span>  <span class="mi">-20000</span>
-
-   <span class="n">call</span> <span class="n">vxv</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">,</span><span class="n">v3</span><span class="p">)</span>
-   <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v3</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>    <span class="o">!!</span> <span class="n">from</span>   <span class="n">vxv</span> <span class="o">--</span> <span class="nl">output</span><span class="p">:</span> <span class="mi">-1</span>  <span class="mi">-10000</span>
-
-<span class="n">end</span> <span class="n">program</span>
+   return 0;
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In this example, traits from the  <em>device</em>  set are used to select a function variant. In the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">variant</span></code>  directive, an  <em>isa</em>  selector specifies that if the implementation of the ” <em>core-avx512</em> ‘’  instruction set is detected at compile time the  <em>avx512_saxpy()</em>  variant function is used for the call to  <em>base_saxpy()</em> .</p>
-<p>A compilation of  <em>avx512_saxpy()</em>  is aware of the AVX-512 instruction set that supports 512-bit vector extensions (for Xeon or Xeon Phi architectures).  Within  <em>avx512_saxpy()</em> , the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for</span></code> ~ <code class="docutils literal notranslate"><span class="pre">simd</span></code>  construct performs parallel execution, and takes advantage of 64-byte data alignment.  When the  <em>avx512_saxpy()</em>  function variant is not selected, the base  <em>base_saxpy()</em>  function variant containing only a basic  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ~ <code class="docutils literal notranslate"><span class="pre">for</span></code>  construct is used for the call to  <em>base_saxpy()</em> .</p>
-<p>Note:
-An allocator is used to set the alignment to 64 bytes when an OpenMP compilation is performed.<br />
-Details about allocator variable declarations and functions
-can be found in the allocator example of the Memory Management Chapter.</p>
-<p>cexample[5.0]{declare_variant}{2}</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_variant.1f90
+! type: F-free
+! version: omp_5.0
+
+module subs
+  use omp_lib
+contains
+   subroutine vxv(v1, v2, v3)             !! base function
+      integer,intent(in)  :: v1(:),v2(:)
+      integer,intent(out) :: v3(:)
+      integer             :: i,n
+      !$omp  declare variant( p_vxv ) match( construct={parallel} )
+      !$omp  declare variant( t_vxv ) match( construct={target}   )
+
+      n=size(v1)
+      do i = 1,n; v3(i) = v1(i) * v2(i); enddo
+
+   end subroutine
+
+   subroutine p_vxv(v1, v2, v3)            !! function variant
+      integer,intent(in)  :: v1(:),v2(:)
+      integer,intent(out) :: v3(:)
+      integer             :: i,n
+      n=size(v1)
+
+      !$omp do
+      do i = 1,n; v3(i) = v1(i) * v2(i) * 3; enddo
+
+   end subroutine
+
+   subroutine t_vxv(v1, v2, v3)            !! function variant
+      integer,intent(in)  :: v1(:),v2(:)
+      integer,intent(out) :: v3(:)
+      integer             :: i,n
+      !$omp declare target
+      n=size(v1)
+
+      !$omp distribute simd
+      do i = 1,n; v3(i) = v1(i) * v2(i) * 2; enddo
+
+   end subroutine
+
+end module subs
+
+
+program main
+   use omp_lib
+   use subs
+   integer,parameter :: N = 100
+   integer           :: v1(N), v2(N), v3(N)
+
+   do i= 1,N; v1(i)= i; v2(i)= -i; v3(i)= 0;  enddo  !! init
+
+   !$omp parallel
+      call vxv(v1,v2,v3)
+   !$omp end parallel
+   print *, v3(1),v3(N)    !! from p_vxv -- output: -3  -30000
+
+   !$omp target teams map(to: v1,v2) map(from: v3)
+      call vxv(v1,v2,v3)
+   !$omp end target teams
+   print *, v3(1),v3(N)    !! from t_vxv -- output: -2  -20000
+
+   call vxv(v1,v2,v3)
+   print *, v3(1),v3(N)    !! from   vxv -- output: -1  -10000
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, traits from the  <em>device</em>  set are used to select a function variant. In the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directive, an  <em>isa</em>  selector specifies that if the implementation of the ” <em>core-avx512</em> ‘’  instruction set is detected at compile time the  <em>avx512_saxpy()</em>  variant function is used for the call to  <em>base_saxpy()</em> .</p>
+<p>A compilation of  <em>avx512_saxpy()</em>  is aware of the AVX-512 instruction set that supports 512-bit vector extensions (for Xeon or Xeon Phi architectures).  Within  <em>avx512_saxpy()</em> , the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct performs parallel execution, and takes advantage of 64-byte data alignment.  When the  <em>avx512_saxpy()</em>  function variant is not selected, the base  <em>base_saxpy()</em>  function variant containing only a basic <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for</span></code> construct is used for the call to  <em>base_saxpy()</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: declare_variant.2c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;omp.h&gt;
+
+void   base_saxpy(int, float, float *, float *);
+void avx512_saxpy(int, float, float *, float *);
+
+#pragma omp declare variant( avx512_saxpy ) \
+                      match( device={isa(&quot;core-avx512&quot;)} )
+void base_saxpy(int n, float s, float *x, float *y)    // base function
+{
+   #pragma omp parallel for
+   for(int i=0; i&lt;n; i++) y[i] = s*x[i] + y[i];
+}
+
+void avx512_saxpy(int n, float s, float *x, float *y)    //function variant
+{
+                                     //assume 64-byte alignment for AVX-512
+   #pragma omp parallel for simd simdlen(16) aligned(x,y:64)
+   for(int i=0; i&lt;n; i++) y[i] = s*x[i] + y[i];
+}
+
+// Above may be in another file scope.
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+#define N 1000
+
+int main()
+{
+   static float x[N],y[N] __attribute__ ((aligned(64)));
+   float s=2.0;
+                         // Check for 64-byte aligned
+   if( ((intptr_t)y)%64 != 0 || ((intptr_t)x)%64 != 0 )
+   { printf(&quot;ERROR: x|y not 64-Byte aligned\n&quot;); exit(1); }
+
+   for(int i=0; i&lt;N; i++){ x[i]=i+1; y[i]=i+1; } // initialize
+
+   base_saxpy(N,s,x,y);
+
+   printf(&quot;y[0],y[N-1]: %5.0f %5.0f\n&quot;,y[0],y[N-1]); //output: y...   3  3000
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: declare_variant.2f90
 ! type: F-free
 ! version: omp_5.0
@@ -1448,7 +1594,7 @@ end program
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_requires.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">requires</span></code>  Directive</a>
+    <a class='left-prev' id="prev-link" href="Examples_requires.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">requires</span></code> Directive</a>
     <a class='right-next' id="next-link" href="Examples_metadirective.html" title="next page">Metadirective Directive</a>
 
         </div>

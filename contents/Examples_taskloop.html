@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,36 +1290,38 @@
               <div>
                 
   <div class="section" id="the-taskloop-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  Construct<a class="headerlink" href="#the-taskloop-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following example illustrates how to execute a long running task concurrently with tasks created with a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  directive for a loop having unbalanced amounts of work for its iterations.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">grainsize</span></code>  clause specifies that each task is to execute at least 500 iterations of the loop.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">nogroup</span></code>  clause removes the implicit taskgroup of the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct; the explicit  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct in the example ensures that the function is not exited before the long-running task and the loops have finished execution.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> Construct<a class="headerlink" href="#the-taskloop-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following example illustrates how to execute a long running task concurrently with tasks created with a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> directive for a loop having unbalanced amounts of work for its iterations.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">grainsize</span></code> clause specifies that each task is to execute at least 500 iterations of the loop.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">nogroup</span></code> clause removes the implicit taskgroup of the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct; the explicit <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct in the example ensures that the function is not exited before the long-running task and the loops have finished execution.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: taskloop.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">long_running_task</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">loop_body</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">parallel_work</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">;</span>
-<span class="cp">#pragma omp taskgroup</span>
-   <span class="p">{</span>
-<span class="cp">#pragma omp task</span>
-      <span class="n">long_running_task</span><span class="p">();</span> <span class="c1">// can execute concurrently</span>
+/*
+* name: taskloop.c
+* type: C
+* version: omp_4.5
+*/
+void long_running_task(void);
+void loop_body(int i, int j);
 
-<span class="cp">#pragma omp taskloop private(j) grainsize(500) nogroup</span>
-      <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10000</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// can execute concurrently</span>
-         <span class="k">for</span> <span class="p">(</span><span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">i</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">loop_body</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">);</span>
-         <span class="p">}</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+void parallel_work(void) {
+   int i, j;
+#pragma omp taskgroup
+   {
+#pragma omp task
+      long_running_task(); // can execute concurrently
+
+#pragma omp taskloop private(j) grainsize(500) nogroup
+      for (i = 0; i &lt; 10000; i++) { // can execute concurrently
+         for (j = 0; j &lt; i; j++) {
+            loop_body(i, j);
+         }
+      }
+   }
+}
 
 </pre></div>
 </div>
@@ -1289,80 +1329,83 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">taskloop</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">subroutine</span> <span class="n">parallel_work</span>
-   <span class="n">integer</span> <span class="n">i</span>
-   <span class="n">integer</span> <span class="n">j</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: taskloop.1f
+! type: F-free
+! version:    omp_4.5
+subroutine parallel_work
+   integer i
+   integer j
+!$omp taskgroup
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-   <span class="n">call</span> <span class="n">long_running_task</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+!$omp task
+   call long_running_task()
+!$omp end task
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskloop</span> <span class="n">private</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="n">grainsize</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span> <span class="n">nogroup</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="mi">10000</span>
-      <span class="k">do</span> <span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">i</span>
-         <span class="n">call</span> <span class="n">loop_body</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
-      <span class="n">end</span> <span class="k">do</span>
-   <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskloop</span>
+!$omp taskloop private(j) grainsize(500) nogroup
+   do i=1,10000
+      do j=1,i
+         call loop_body(i, j)
+      end do
+   end do
+!$omp end taskloop
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span>
-<span class="n">end</span> <span class="n">subroutine</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>Because a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct encloses a loop, it is often incorrectly  perceived as a worksharing construct (when it is directly nested in  a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region).</p>
-<p>While a worksharing construct distributes the loop iterations across all threads in a team, the entire loop of a  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct is executed by every thread of the team.</p>
-<p>In the example below the first taskloop occurs closely nested within  a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region and the entire loop is executed by each of the  <em>T</em>  threads;  hence the reduction sum is executed  <em>T</em> * <em>N</em>  times.   The loop of the second taskloop is within a  <code class="docutils literal notranslate"><span class="pre">single</span></code>  region and is executed by a single thread so that only  <em>N</em>  reduction sums occur.  (The other  <em>N</em> -1 threads of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region will participate in executing the  tasks. This is the common use case for the  <code class="docutils literal notranslate"><span class="pre">taskloop</span></code>  construct.)</p>
-<p>In the example, the  thus prints  <code class="docutils literal notranslate"><span class="pre">x1</span> <span class="pre">=</span> <span class="pre">16384</span></code>  ( <em>T</em> * <em>N</em> ) and   <code class="docutils literal notranslate"><span class="pre">x2</span> <span class="pre">=</span> <span class="pre">1024</span></code>  ( <em>N</em> ).</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:   taskloop.2c</span>
-<span class="cm">* type:   C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-
-<span class="cp">#define T 16</span>
-<span class="cp">#define N 1024</span>
-
-<span class="kt">void</span> <span class="nf">parallel_work</span><span class="p">()</span> <span class="p">{</span>
-    <span class="kt">int</span> <span class="n">x1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="cp">#pragma omp parallel shared(x1,x2) num_threads(T)</span>
-    <span class="p">{</span>
-        <span class="cp">#pragma omp taskloop</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="cp">#pragma omp atomic</span>
-            <span class="n">x1</span><span class="o">++</span><span class="p">;</span>          <span class="c1">// executed T*N times</span>
-        <span class="p">}</span>
-
-        <span class="cp">#pragma omp single</span>
-        <span class="cp">#pragma omp taskloop</span>
-        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="cp">#pragma omp atomic</span>
-            <span class="n">x2</span><span class="o">++</span><span class="p">;</span>          <span class="c1">// executed N times</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;x1 = %d, x2 = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">);</span>
-<span class="p">}</span>
+!$omp end taskgroup
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>Because a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct encloses a loop, it is often incorrectly  perceived as a worksharing construct (when it is directly nested in  a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region).</p>
+<p>While a worksharing construct distributes the loop iterations across all threads in a team, the entire loop of a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct is executed by every thread of the team.</p>
+<p>In the example below the first taskloop occurs closely nested within  a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region and the entire loop is executed by each of the  <em>T</em>  threads;  hence the reduction sum is executed  <em>T</em> * <em>N</em>  times.</p>
+<p>The loop of the second taskloop is within a <code class="docutils literal notranslate"><span class="pre">single</span></code> region and is executed by a single thread so that only  <em>N</em>  reduction sums occur.  (The other  <em>N</em> -1 threads of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region will participate in executing the  tasks. This is the common use case for the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct.)</p>
+<p>In the example, the code thus prints <code class="docutils literal notranslate"><span class="pre">x1</span> <span class="pre">=</span> <span class="pre">16384</span></code> ( <em>T</em> * <em>N</em> ) and  <code class="docutils literal notranslate"><span class="pre">x2</span> <span class="pre">=</span> <span class="pre">1024</span></code> ( <em>N</em> ).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:   taskloop.2c
+* type:   C
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
+
+#define T 16
+#define N 1024
+
+void parallel_work() {
+    int x1 = 0, x2 = 0;
+
+    #pragma omp parallel shared(x1,x2) num_threads(T)
+    {
+        #pragma omp taskloop
+        for (int i = 0; i &lt; N; ++i) {
+            #pragma omp atomic
+            x1++;          // executed T*N times
+        }
+
+        #pragma omp single
+        #pragma omp taskloop
+        for (int i = 0; i &lt; N; ++i) {
+            #pragma omp atomic
+            x2++;          // executed N times
+        }
+    }
+
+    printf(&quot;x1 = %d, x2 = %d\n&quot;, x1, x2);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name:   taskloop.2f
 ! type:   F-free
 ! version: omp_4.5
@@ -1429,8 +1472,8 @@ end subroutine
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_taskyield.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_parallel_master_taskloop.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span> <span class="pre">taskloop</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_taskyield.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_parallel_master_taskloop.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">master</span> <span class="pre">taskloop</span></code> Construct</a>
 
         </div>
         

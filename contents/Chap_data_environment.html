@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,18 +1291,18 @@
                 
   <div class="section" id="data-environment">
 <h1>Data Environment<a class="headerlink" href="#data-environment" title="Permalink to this headline">¶</a></h1>
-<p>The OpenMP  <em>data environment</em>  contains data attributes of variables and objects.  Many constructs (such as  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ,  <code class="docutils literal notranslate"><span class="pre">simd</span></code> ,  <code class="docutils literal notranslate"><span class="pre">task</span></code> )  accept clauses to control  <em>data-sharing</em>  attributes of referenced variables in the construct, where  <em>data-sharing</em>  applies to whether the attribute of the variable is  <em>shared</em> ,  is  <em>private</em>  storage, or has special operational characteristics  (as found in the  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> ,  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> ,  <code class="docutils literal notranslate"><span class="pre">linear</span></code> , or  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause).</p>
+<p>The OpenMP  <em>data environment</em>  contains data attributes of variables and objects.  Many constructs (such as <code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">simd</span></code>, <code class="docutils literal notranslate"><span class="pre">task</span></code>)  accept clauses to control  <em>data-sharing</em>  attributes of referenced variables in the construct, where  <em>data-sharing</em>  applies to whether the attribute of the variable is  <em>shared</em> ,  is  <em>private</em>  storage, or has special operational characteristics  (as found in the <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">linear</span></code>, or <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause).</p>
 <p>The data environment for a device (distinguished as a  <em>device data environment</em> ) is controlled on the host by  <em>data-mapping</em>  attributes, which determine the relationship of the data on the host, the  <em>original</em>  data, and the data on the device, the  <em>corresponding</em>  data.</p>
 <p>DATA-SHARING ATTRIBUTES</p>
 <p>Data-sharing attributes of variables can be classified as being  <em>predetermined</em> ,  <em>explicitly determined</em>  or  <em>implicitly determined</em> .</p>
-<p>Certain variables and objects have predetermined attributes.   A commonly found case is the loop iteration variable in associated loops  of a  <code class="docutils literal notranslate"><span class="pre">for</span></code>  or  <code class="docutils literal notranslate"><span class="pre">do</span></code>  construct. It has a private data-sharing attribute. Variables with predetermined data-sharing attributes can not be listed in a data-sharing clause; but there are some exceptions (mainly concerning loop iteration variables).</p>
-<p>Variables with explicitly determined data-sharing attributes are those that are referenced in a given construct and are listed in a data-sharing attribute clause on the construct. Some of the common data-sharing clauses are:  <code class="docutils literal notranslate"><span class="pre">shared</span></code> ,  <code class="docutils literal notranslate"><span class="pre">private</span></code> ,  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> ,  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> ,   <code class="docutils literal notranslate"><span class="pre">linear</span></code> , and  <code class="docutils literal notranslate"><span class="pre">reduction</span></code> .</p>
-<p>Variables with implicitly determined data-sharing attributes are those that are referenced in a given construct, do not have predetermined data-sharing attributes, and are not listed in a data-sharing attribute clause of an enclosing construct. For a complete list of variables and objects with predetermined and implicitly determined attributes, please refer to the  <em>Data-sharing Attribute Rules for Variables Referenced in a Construct</em>  #### of the OpenMP Specifications document.</p>
+<p>Certain variables and objects have predetermined attributes.   A commonly found case is the loop iteration variable in associated loops  of a <code class="docutils literal notranslate"><span class="pre">for</span></code> or <code class="docutils literal notranslate"><span class="pre">do</span></code> construct. It has a private data-sharing attribute. Variables with predetermined data-sharing attributes can not be listed in a data-sharing clause; but there are some exceptions (mainly concerning loop iteration variables).</p>
+<p>Variables with explicitly determined data-sharing attributes are those that are referenced in a given construct and are listed in a data-sharing attribute clause on the construct. Some of the common data-sharing clauses are: <code class="docutils literal notranslate"><span class="pre">shared</span></code>, <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>,  <code class="docutils literal notranslate"><span class="pre">linear</span></code>, and <code class="docutils literal notranslate"><span class="pre">reduction</span></code>.</p>
+<p>Variables with implicitly determined data-sharing attributes are those that are referenced in a given construct, do not have predetermined data-sharing attributes, and are not listed in a data-sharing attribute clause of an enclosing construct. For a complete list of variables and objects with predetermined and implicitly determined attributes, please refer to the  <em>Data-sharing Attribute Rules for Variables Referenced in a Construct</em>  subsection of the OpenMP Specifications document.</p>
 <p>DATA-MAPPING ATTRIBUTES</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause on a device construct explicitly specifies how the list items in the clause are mapped from the encountering task’s data environment (on the host) to the corresponding item in the device data environment (on the device). The common  <em>list items</em>  are arrays, array sections, scalars, pointers, and structure elements (members).</p>
-<p>Procedures and global variables have predetermined data mapping if they appear within the list or block of a  <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">target</span></code>  directive. Also, a C/C++ pointer is mapped as a zero-length array section, as is a C++ variable that is a reference to a pointer.</p>
-<p>Without explicit mapping, non-scalar and non-pointer variables within the scope of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct are implicitly mapped with a  <em>map-type</em>  of  <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> . Without explicit mapping, scalar variables within the scope of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct are not mapped, but have an implicit firstprivate data-sharing attribute. (That is, the value of the original variable is given to a private variable of the same name on the device.) This behavior can be changed with the  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause can appear on  <code class="docutils literal notranslate"><span class="pre">target</span></code> ,  <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">data</span></code>  and   <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">enter/exit</span> <span class="pre">data</span></code>  constructs.  The operations of creation and removal of device storage as well as assignment of the original list item  values to the corresponding list items may be complicated when the list  item appears on multiple constructs or when the host and device storage  is shared. In these cases the item’s reference count, the number of times it has been referenced (+1 on entry and -1 on exited) in nested (structured) map regions and/or accumulative (unstructured) mappings, determines the operation. Details of the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause and reference count operation are specified  in the  <em>map Clause</em>  #### of the OpenMP Specifications document.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause on a device construct explicitly specifies how the list items in the clause are mapped from the encountering task’s data environment (on the host) to the corresponding item in the device data environment (on the device). The common  <em>list items</em>  are arrays, array sections, scalars, pointers, and structure elements (members).</p>
+<p>Procedures and global variables have predetermined data mapping if they appear within the list or block of a <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">target</span></code> directive. Also, a C/C++ pointer is mapped as a zero-length array section, as is a C++ variable that is a reference to a pointer.</p>
+<p>Without explicit mapping, non-scalar and non-pointer variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are implicitly mapped with a  <em>map-type</em>  of <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>. Without explicit mapping, scalar variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are not mapped, but have an implicit firstprivate data-sharing attribute. (That is, the value of the original variable is given to a private variable of the same name on the device.) This behavior can be changed with the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause can appear on <code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">data</span></code> and  <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">enter/exit</span> <span class="pre">data</span></code> constructs.  The operations of creation and removal of device storage as well as assignment of the original list item  values to the corresponding list items may be complicated when the list  item appears on multiple constructs or when the host and device storage  is shared. In these cases the item’s reference count, the number of times it has been referenced (+1 on entry and -1 on exited) in nested (structured) map regions and/or accumulative (unstructured) mappings, determines the operation. Details of the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause and reference count operation are specified  in the  <em>map Clause</em>  subsection of the OpenMP Specifications document.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>
@@ -1295,7 +1333,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_nestable_lock.html" title="previous page">Nestable Lock Routines</a>
-    <a class='right-next' id="next-link" href="Examples_threadprivate.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  Directive</a>
+    <a class='right-next' id="next-link" href="Examples_threadprivate.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> Directive</a>
 
         </div>
         

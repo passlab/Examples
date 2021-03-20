@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,182 +1290,182 @@
               <div>
                 
   <div class="section" id="the-workshare-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  Construct<a class="headerlink" href="#the-workshare-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following are examples of the  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  construct.</p>
-<p>In the following example,  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  spreads work across the threads executing  the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, and there is a barrier after the last statement.  Implementations must enforce Fortran execution rules inside of the  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>   block.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">workshare</span></code> Construct<a class="headerlink" href="#the-workshare-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following are examples of the <code class="docutils literal notranslate"><span class="pre">workshare</span></code> construct.</p>
+<p>In the following example, <code class="docutils literal notranslate"><span class="pre">workshare</span></code> spreads work across the threads executing  the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, and there is a barrier after the last statement.  Implementations must enforce Fortran execution rules inside of the <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  block.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE1</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">EE</span><span class="p">,</span> <span class="n">FF</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">EE</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">FF</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.1f
+! type: F-fixed
+      SUBROUTINE WSHARE1(AA, BB, CC, DD, EE, FF, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N), DD(N,N), EE(N,N), FF(N,N)
 
-<span class="o">!</span><span class="n">$OMP</span>    <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span>
-            <span class="n">EE</span> <span class="o">=</span> <span class="n">FF</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP    PARALLEL
+!$OMP     WORKSHARE
+            AA = BB
+            CC = DD
+            EE = FF
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE1</span>
+      END SUBROUTINE WSHARE1
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, the barrier at the end of the first  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>   region is eliminated with a  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause. Threads doing  <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">=</span>&#160; <span class="pre">DD</span></code>  immediately begin work on  <code class="docutils literal notranslate"><span class="pre">EE</span> <span class="pre">=</span> <span class="pre">FF</span></code>  when they are done with  <code class="docutils literal notranslate"><span class="pre">CC</span>&#160; <span class="pre">=</span> <span class="pre">DD</span></code> .</p>
+<p>In the following example, the barrier at the end of the first <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  region is eliminated with a <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause. Threads doing <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">=</span>&#160; <span class="pre">DD</span></code> immediately begin work on <code class="docutils literal notranslate"><span class="pre">EE</span> <span class="pre">=</span> <span class="pre">FF</span></code> when they are done with <code class="docutils literal notranslate"><span class="pre">CC</span>&#160; <span class="pre">=</span> <span class="pre">DD</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE2</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">EE</span><span class="p">,</span> <span class="n">FF</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">REAL</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">EE</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">FF</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.2f
+! type: F-fixed
+      SUBROUTINE WSHARE2(AA, BB, CC, DD, EE, FF, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N)
+      REAL DD(N,N), EE(N,N), FF(N,N)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span> <span class="n">NOWAIT</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">EE</span> <span class="o">=</span> <span class="n">FF</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-       <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE2</span>
+!$OMP   PARALLEL
+!$OMP     WORKSHARE
+            AA = BB
+            CC = DD
+!$OMP     END WORKSHARE NOWAIT
+!$OMP     WORKSHARE
+            EE = FF
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
+       END SUBROUTINE WSHARE2
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows the use of an  <code class="docutils literal notranslate"><span class="pre">atomic</span></code>  directive inside a  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>   construct. The computation of  <code class="docutils literal notranslate"><span class="pre">SUM(AA)</span></code>  is workshared, but the update to   <code class="docutils literal notranslate"><span class="pre">R</span></code>  is atomic.</p>
+<p>The following example shows the use of an <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directive inside a <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  construct. The computation of <code class="docutils literal notranslate"><span class="pre">SUM(AA)</span></code> is workshared, but the update to  <code class="docutils literal notranslate"><span class="pre">R</span></code> is atomic.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE3</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">REAL</span> <span class="n">R</span>
-        <span class="n">R</span><span class="o">=</span><span class="mi">0</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-<span class="o">!</span><span class="n">$OMP</span>       <span class="n">ATOMIC</span> <span class="n">UPDATE</span>
-              <span class="n">R</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">SUM</span><span class="p">(</span><span class="n">AA</span><span class="p">)</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE3</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.3f
+! type: F-fixed
+      SUBROUTINE WSHARE3(AA, BB, CC, DD, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N), DD(N,N)
+      REAL R
+        R=0
+!$OMP   PARALLEL
+!$OMP     WORKSHARE
+            AA = BB
+!$OMP       ATOMIC UPDATE
+              R = R + SUM(AA)
+            CC = DD
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
+      END SUBROUTINE WSHARE3
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Fortran  <code class="docutils literal notranslate"><span class="pre">WHERE</span></code>  and  <code class="docutils literal notranslate"><span class="pre">FORALL</span></code>  statements are {compound statements},  made up of a {control} part and a {statement} part. When  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>   is applied to one of these compound statements, both the control and the statement  parts are workshared. The following example shows the use of a  <code class="docutils literal notranslate"><span class="pre">WHERE</span></code>  statement  in a  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  construct.</p>
+<p>Fortran <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> and <code class="docutils literal notranslate"><span class="pre">FORALL</span></code> statements are <strong>compound statements</strong>,  made up of a <strong>control</strong> part and a <strong>statement</strong> part. When <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  is applied to one of these compound statements, both the control and the statement  parts are workshared. The following example shows the use of a <code class="docutils literal notranslate"><span class="pre">WHERE</span></code> statement  in a <code class="docutils literal notranslate"><span class="pre">workshare</span></code> construct.</p>
 <p>Each task gets worked on in order by the threads:</p>
-<p><code class="docutils literal notranslate"><span class="pre">AA</span> <span class="pre">=</span> <span class="pre">BB</span></code>  then   <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">=</span> <span class="pre">DD</span></code>  then   <code class="docutils literal notranslate"><span class="pre">EE</span> <span class="pre">.ne.</span> <span class="pre">0</span></code>  then   <code class="docutils literal notranslate"><span class="pre">FF</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">EE</span></code>  then   <code class="docutils literal notranslate"><span class="pre">GG</span> <span class="pre">=</span> <span class="pre">HH</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">AA</span> <span class="pre">=</span> <span class="pre">BB</span></code> then  <code class="docutils literal notranslate"><span class="pre">CC</span> <span class="pre">=</span> <span class="pre">DD</span></code> then  <code class="docutils literal notranslate"><span class="pre">EE</span> <span class="pre">.ne.</span> <span class="pre">0</span></code> then  <code class="docutils literal notranslate"><span class="pre">FF</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">/</span> <span class="pre">EE</span></code> then  <code class="docutils literal notranslate"><span class="pre">GG</span> <span class="pre">=</span> <span class="pre">HH</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE4</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">EE</span><span class="p">,</span> <span class="n">FF</span><span class="p">,</span> <span class="n">GG</span><span class="p">,</span> <span class="n">HH</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">REAL</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">EE</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">FF</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">REAL</span> <span class="n">GG</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">HH</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.4f
+! type: F-fixed
+      SUBROUTINE WSHARE4(AA, BB, CC, DD, EE, FF, GG, HH, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N)
+      REAL DD(N,N), EE(N,N), FF(N,N)
+      REAL GG(N,N), HH(N,N)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span>
-            <span class="n">WHERE</span> <span class="p">(</span><span class="n">EE</span> <span class="p">.</span><span class="n">ne</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">FF</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">EE</span>
-            <span class="n">GG</span> <span class="o">=</span> <span class="n">HH</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL
+!$OMP     WORKSHARE
+            AA = BB
+            CC = DD
+            WHERE (EE .ne. 0) FF = 1 / EE
+            GG = HH
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE4</span>
+      END SUBROUTINE WSHARE4
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example, an assignment to a shared scalar variable is performed  by one thread in a  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  while all other threads in the team wait.</p>
+<p>In the following example, an assignment to a shared scalar variable is performed  by one thread in a <code class="docutils literal notranslate"><span class="pre">workshare</span></code> while all other threads in the team wait.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE5</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.5f
+! type: F-fixed
+      SUBROUTINE WSHARE5(AA, BB, CC, DD, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N), DD(N,N)
 
-        <span class="n">INTEGER</span> <span class="n">SHR</span>
+        INTEGER SHR
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">SHARED</span><span class="p">(</span><span class="n">SHR</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-            <span class="n">SHR</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span> <span class="o">*</span> <span class="n">SHR</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL SHARED(SHR)
+!$OMP     WORKSHARE
+            AA = BB
+            SHR = 1
+            CC = DD * SHR
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE5</span>
+      END SUBROUTINE WSHARE5
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example contains an assignment to a private scalar variable, which  is performed by one thread in a  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  while all other threads wait.  It is non-conforming because the private scalar variable is undefined after the  assignment statement.</p>
+<p>The following example contains an assignment to a private scalar variable, which  is performed by one thread in a <code class="docutils literal notranslate"><span class="pre">workshare</span></code> while all other threads wait.  It is non-conforming because the private scalar variable is undefined after the  assignment statement.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE6_WRONG</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">DD</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">),</span> <span class="n">DD</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.6f
+! type: F-fixed
+      SUBROUTINE WSHARE6_WRONG(AA, BB, CC, DD, N)
+      INTEGER N
+      REAL AA(N,N), BB(N,N), CC(N,N), DD(N,N)
 
-        <span class="n">INTEGER</span> <span class="n">PRI</span>
+        INTEGER PRI
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">PRIVATE</span><span class="p">(</span><span class="n">PRI</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span> <span class="o">=</span> <span class="n">BB</span>
-            <span class="n">PRI</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">CC</span> <span class="o">=</span> <span class="n">DD</span> <span class="o">*</span> <span class="n">PRI</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL PRIVATE(PRI)
+!$OMP     WORKSHARE
+            AA = BB
+            PRI = 1
+            CC = DD * PRI
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE6_WRONG</span>
+      END SUBROUTINE WSHARE6_WRONG
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Fortran execution rules must be enforced inside a  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  construct.  In the following example, the same result is produced in the following program  fragment regardless of whether the  is executed sequentially or inside an OpenMP  program with multiple threads:</p>
+<p>Fortran execution rules must be enforced inside a <code class="docutils literal notranslate"><span class="pre">workshare</span></code> construct.  In the following example, the same result is produced in the following program  fragment regardless of whether the code is executed sequentially or inside an OpenMP  program with multiple threads:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">workshare</span><span class="mf">.7f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">WSHARE7</span><span class="p">(</span><span class="n">AA</span><span class="p">,</span> <span class="n">BB</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-      <span class="n">INTEGER</span> <span class="n">N</span>
-      <span class="n">REAL</span> <span class="n">AA</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">BB</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">CC</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: workshare.7f
+! type: F-fixed
+      SUBROUTINE WSHARE7(AA, BB, CC, N)
+      INTEGER N
+      REAL AA(N), BB(N), CC(N)
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">WORKSHARE</span>
-            <span class="n">AA</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="mi">50</span><span class="p">)</span>  <span class="o">=</span> <span class="n">BB</span><span class="p">(</span><span class="mi">11</span><span class="o">:</span><span class="mi">60</span><span class="p">)</span>
-            <span class="n">CC</span><span class="p">(</span><span class="mi">11</span><span class="o">:</span><span class="mi">20</span><span class="p">)</span> <span class="o">=</span> <span class="n">AA</span><span class="p">(</span><span class="mi">1</span><span class="o">:</span><span class="mi">10</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$OMP</span>     <span class="n">END</span> <span class="n">WORKSHARE</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span>
+!$OMP   PARALLEL
+!$OMP     WORKSHARE
+            AA(1:50)  = BB(11:60)
+            CC(11:20) = AA(1:10)
+!$OMP     END WORKSHARE
+!$OMP   END PARALLEL
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">WSHARE7</span>
+      END SUBROUTINE WSHARE7
 
 </pre></div>
 </div>
@@ -1460,8 +1498,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_single.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">single</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_master.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">master</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_single.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">single</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_master.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">master</span></code> Construct</a>
 
         </div>
         

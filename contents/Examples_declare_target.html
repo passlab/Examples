@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1374,7 +1412,6 @@
      declare
     </span>
    </code>
-   ~
    <code class="docutils literal notranslate">
     <span class="pre">
      target
@@ -1402,87 +1439,89 @@
               <div>
                 
   <div class="section" id="declare-target-construct">
-<h1><code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct<a class="headerlink" href="#declare-target-construct" title="Permalink to this headline">¶</a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> Construct<a class="headerlink" href="#declare-target-construct" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="declare-target-and-end-declare-target-for-a-function">
-<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  for a Function<a class="headerlink" href="#declare-target-and-end-declare-target-for-a-function" title="Permalink to this headline">¶</a></h2>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive  is used to indicate that the corresponding call inside a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region  is to a  <code class="docutils literal notranslate"><span class="pre">fib</span></code>  function that can execute on the default target device.</p>
-<p>A version of the function is also available on the host device. When the  <code class="docutils literal notranslate"><span class="pre">if</span></code>   clause conditional expression on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct evaluates to  <em>false</em> ,  the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region (thus  <code class="docutils literal notranslate"><span class="pre">fib</span></code> ) will execute on the host device.</p>
-<p>For C/C++ s the declaration of the function  <code class="docutils literal notranslate"><span class="pre">fib</span></code>  appears between the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>    <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> for a Function<a class="headerlink" href="#declare-target-and-end-declare-target-for-a-function" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive  is used to indicate that the corresponding call inside a <code class="docutils literal notranslate"><span class="pre">target</span></code> region  is to a <code class="docutils literal notranslate"><span class="pre">fib</span></code> function that can execute on the default target device.</p>
+<p>A version of the function is also available on the host device. When the <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause conditional expression on the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct evaluates to  <em>false</em> ,  the <code class="docutils literal notranslate"><span class="pre">target</span></code> region (thus <code class="docutils literal notranslate"><span class="pre">fib</span></code>) will execute on the host device.</p>
+<p>For C/C++ codes the declaration of the function <code class="docutils literal notranslate"><span class="pre">fib</span></code> appears between the <code class="docutils literal notranslate"><span class="pre">declare</span></code>  <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">fib</span><span class="p">(</span><span class="kt">int</span> <span class="n">N</span><span class="p">);</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="cp">#define THRESHOLD 1000000</span>
-<span class="kt">void</span> <span class="nf">fib_wrapper</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="cp">#pragma omp target if(n &gt; THRESHOLD)</span>
-   <span class="p">{</span>
-      <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: declare_target.1c
+* type: C
+* version: omp_4.0
+*/
+#pragma omp declare target
+extern void fib(int N);
+#pragma omp end declare target
+#define THRESHOLD 1000000
+void fib_wrapper(int n)
+{
+   #pragma omp target if(n &gt; THRESHOLD)
+   {
+      fib(n);
+   }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran  <code class="docutils literal notranslate"><span class="pre">fib</span></code>  subroutine contains a  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  declaration  to indicate to the compiler to create an device executable version of the procedure.  The subroutine name has not been included on the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>   directive and is, therefore, implicitly assumed.</p>
-<p>The program uses the  <code class="docutils literal notranslate"><span class="pre">module_fib</span></code>  module, which presents an explicit interface to  the compiler with the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  declarations for processing  the  <code class="docutils literal notranslate"><span class="pre">fib</span></code>  call.</p>
+<p>The Fortran <code class="docutils literal notranslate"><span class="pre">fib</span></code> subroutine contains a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> declaration  to indicate to the compiler to create an device executable version of the procedure.  The subroutine name has not been included on the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive and is, therefore, implicitly assumed.</p>
+<p>The program uses the <code class="docutils literal notranslate"><span class="pre">module_fib</span></code> module, which presents an explicit interface to  the compiler with the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> declarations for processing  the <code class="docutils literal notranslate"><span class="pre">fib</span></code> call.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">module_fib</span>
-<span class="n">contains</span>
-   <span class="n">subroutine</span> <span class="n">fib</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-      <span class="n">integer</span> <span class="o">::</span> <span class="n">N</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-      <span class="o">!</span><span class="p">...</span>
-   <span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">module</span> <span class="n">params</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">THRESHOLD</span><span class="o">=</span><span class="mi">1000000</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">program</span> <span class="n">my_fib</span>
-<span class="n">use</span> <span class="n">params</span>
-<span class="n">use</span> <span class="n">module_fib</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="k">if</span><span class="p">(</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="n">THRESHOLD</span> <span class="p">)</span>
-      <span class="n">call</span> <span class="n">fib</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.1f
+! type: F-free
+! version: omp_4.0
+module module_fib
+contains
+   subroutine fib(N)
+      integer :: N
+      !$omp declare target
+      !...
+   end subroutine
+end module
+module params
+integer :: THRESHOLD=1000000
+end module
+program my_fib
+use params
+use module_fib
+   !$omp target if( N &gt; THRESHOLD )
+      call fib(N)
+   !$omp end target
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The next Fortran example shows the use of an external subroutine. Without an explicit  interface (through module use or an interface block) the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>   declarations within a external subroutine are unknown to the main program unit;  therefore, a  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  must be provided within the program  scope for the compiler to determine that a target binary should be available.</p>
+<p>The next Fortran example shows the use of an external subroutine. Without an explicit  interface (through module use or an interface block) the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code>  declarations within a external subroutine are unknown to the main program unit;  therefore, a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> must be provided within the program  scope for the compiler to determine that a target binary should be available.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">my_fib</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">N</span> <span class="o">=</span> <span class="mi">8</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span><span class="p">(</span><span class="n">fib</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>
-      <span class="n">call</span> <span class="n">fib</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-<span class="n">end</span> <span class="n">program</span>
-<span class="n">subroutine</span> <span class="n">fib</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">N</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-     <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot;hello from fib&quot;</span>
-     <span class="o">!</span><span class="p">...</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.2f
+! type: F-free
+! version: omp_4.0
+program my_fib
+integer :: N = 8
+!$omp declare target(fib)
+   !$omp target
+      call fib(N)
+   !$omp end target
+end program
+subroutine fib(N)
+integer :: N
+!$omp declare target
+     print*,&quot;hello from fib&quot;
+     !...
+end subroutine
 
 </pre></div>
 </div>
@@ -1490,38 +1529,40 @@
 </div>
 </div>
 <div class="section" id="declare-target-construct-for-class-type">
-<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  Construct for Class Type<a class="headerlink" href="#declare-target-construct-for-class-type" title="Permalink to this headline">¶</a></h2>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>    <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives are used to enclose the declaration  of a variable  <em>varY</em>  with a class type  <code class="docutils literal notranslate"><span class="pre">typeY</span></code> . The member function  <code class="docutils literal notranslate"><span class="pre">typeY::foo()</span></code>  cannot  be accessed on a target device because its declaration did not appear between  <code class="docutils literal notranslate"><span class="pre">declare</span></code>    <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> Construct for Class Type<a class="headerlink" href="#declare-target-construct-for-class-type" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>  <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directives are used to enclose the declaration  of a variable  <em>varY</em>  with a class type <code class="docutils literal notranslate"><span class="pre">typeY</span></code>. The member function <code class="docutils literal notranslate"><span class="pre">typeY::foo()</span></code> cannot  be accessed on a target device because its declaration did not appear between <code class="docutils literal notranslate"><span class="pre">declare</span></code>  <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.2c</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="k">struct</span> <span class="nc">typeX</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="n">class</span> <span class="n">typeY</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">a</span><span class="p">;</span>
-  <span class="nl">public</span><span class="p">:</span>
-   <span class="kt">int</span> <span class="n">foo</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="n">a</span><span class="o">^</span><span class="mh">0x01</span><span class="p">;}</span>
-<span class="p">};</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="k">struct</span> <span class="nc">typeX</span> <span class="n">varX</span><span class="p">;</span>  <span class="c1">// ok</span>
-<span class="n">class</span> <span class="n">typeY</span> <span class="n">varY</span><span class="p">;</span> <span class="c1">// ok if varY.foo() not called on target device</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="kt">void</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="cp">#pragma omp target</span>
-   <span class="p">{</span>
-      <span class="n">varX</span><span class="p">.</span><span class="n">a</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span> <span class="c1">// ok</span>
-      <span class="n">varY</span><span class="p">.</span><span class="n">foo</span><span class="p">();</span> <span class="c1">// error foo() is not available on a target device</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: declare_target.2c
+* type: C++
+* version: omp_4.0
+*/
+struct typeX
+{
+   int a;
+};
+class typeY
+{
+   int a;
+  public:
+   int foo() { return a^0x01;}
+};
+#pragma omp declare target
+struct typeX varX;  // ok
+class typeY varY; // ok if varY.foo() not called on target device
+#pragma omp end declare target
+void foo()
+{
+   #pragma omp target
+   {
+      varX.a = 100; // ok
+      varY.foo(); // error foo() is not available on a target device
+   }
+}
 
 </pre></div>
 </div>
@@ -1529,141 +1570,145 @@
 </div>
 </div>
 <div class="section" id="declare-target-and-end-declare-target-for-variables">
-<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  for Variables<a class="headerlink" href="#declare-target-and-end-declare-target-for-variables" title="Permalink to this headline">¶</a></h2>
-<p>The following examples show how the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>    <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives are used to indicate that global variables  are mapped to the implicit device data environment of each target device.</p>
-<p>In the following example, the declarations of the variables  <em>p</em> ,  <em>v1</em> , and  <em>v2</em>  appear  between  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>   directives indicating that the variables are mapped to the implicit device data  environment of each target device. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive  is then used to manage the consistency of the variables  <em>p</em> ,  <em>v1</em> , and  <em>v2</em>  between the  data environment of the encountering host device task and the implicit device data  environment of the default target device.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> for Variables<a class="headerlink" href="#declare-target-and-end-declare-target-for-variables" title="Permalink to this headline">¶</a></h2>
+<p>The following examples show how the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>  <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directives are used to indicate that global variables  are mapped to the implicit device data environment of each target device.</p>
+<p>In the following example, the declarations of the variables  <em>p</em> ,  <em>v1</em> , and  <em>v2</em>  appear  between <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives indicating that the variables are mapped to the implicit device data  environment of each target device. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive  is then used to manage the consistency of the variables  <em>p</em> ,  <em>v1</em> , and  <em>v2</em>  between the  data environment of the encountering host device task and the implicit device data  environment of the default target device.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.3c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 1000</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">float</span> <span class="n">p</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">v2</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">output</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">vec_mult</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-   <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target update to(v1, v2)</span>
-   <span class="cp">#pragma omp target</span>
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-   <span class="cp">#pragma omp target update from(p)</span>
-   <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: declare_target.3c
+* type: C
+* version: omp_4.0
+*/
+#define N 1000
+#pragma omp declare target
+float p[N], v1[N], v2[N];
+#pragma omp end declare target
+extern void init(float *, float *, int);
+extern void output(float *, int);
+void vec_mult()
+{
+   int i;
+   init(v1, v2, N);
+   #pragma omp target update to(v1, v2)
+   #pragma omp target
+   #pragma omp parallel for
+   for (i=0; i&lt;N; i++)
+     p[i] = v1[i] * v2[i];
+   #pragma omp target update from(p)
+   output(p, N);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran version of the above C  uses a different syntax. Fortran modules  use a list syntax on the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive to declare  mapped variables.</p>
+<p>The Fortran version of the above C code uses a different syntax. Fortran modules  use a list syntax on the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive to declare  mapped variables.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">my_arrays</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">1000</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">p</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">subroutine</span> <span class="n">vec_mult</span><span class="p">()</span>
-<span class="n">use</span> <span class="n">my_arrays</span>
-   <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
-   <span class="n">call</span> <span class="n">init</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">update</span> <span class="n">to</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-   <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-     <span class="n">p</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">update</span> <span class="n">from</span> <span class="p">(</span><span class="n">p</span><span class="p">)</span>
-   <span class="n">call</span> <span class="n">output</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">subroutine</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.3f
+! type: F-free
+! version: omp_4.0
+module my_arrays
+!$omp declare target (N, p, v1, v2)
+integer, parameter :: N=1000
+real               :: p(N), v1(N), v2(N)
+end module
+subroutine vec_mult()
+use my_arrays
+   integer :: i
+   call init(v1, v2, N);
+   !$omp target update to(v1, v2)
+   !$omp target
+   !$omp parallel do
+   do i = 1,N
+     p(i) = v1(i) * v2(i)
+   end do
+   !$omp end target
+   !$omp target update from (p)
+   call output(p, N)
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example also indicates that the function  <code class="docutils literal notranslate"><span class="pre">Pfun()</span></code>  is available on the  target device, as well as the variable  <em>Q</em> , which is mapped to the implicit device  data environment of each target device. The  <code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">update</span></code>  directive  is then used to manage the consistency of the variable  <em>Q</em>  between the data environment  of the encountering host device task and the implicit device data environment of  the default target device.</p>
-<p>In the following example, the function and variable declarations appear between  the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>   directives.</p>
+<p>The following example also indicates that the function <code class="docutils literal notranslate"><span class="pre">Pfun()</span></code> is available on the  target device, as well as the variable  <em>Q</em> , which is mapped to the implicit device  data environment of each target device. The <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> directive  is then used to manage the consistency of the variable  <em>Q</em>  between the data environment  of the encountering host device task and the implicit device data environment of  the default target device.</p>
+<p>In the following example, the function and variable declarations appear between  the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.4c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 10000</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">float</span> <span class="n">Q</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
-<span class="kt">float</span> <span class="nf">Pfun</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
-<span class="p">{</span> <span class="k">return</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">Q</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">];</span> <span class="p">}</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="kt">float</span> <span class="nf">accum</span><span class="p">(</span><span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">float</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-    <span class="cp">#pragma omp target update to(Q)</span>
-    <span class="cp">#pragma omp target map(tofrom: tmp)</span>
-    <span class="cp">#pragma omp parallel for reduction(+:tmp)</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-        <span class="n">tmp</span> <span class="o">+=</span> <span class="n">Pfun</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cm">/* Note:  The variable tmp is now mapped with tofrom, for correct</span>
-<span class="cm">   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.</span>
-<span class="cm"> */</span>
+/*
+* name: declare_target.4c
+* type: C
+* version: omp_4.0
+*/
+#define N 10000
+#pragma omp declare target
+float Q[N][N];
+float Pfun(const int i, const int k)
+{ return Q[i][k] * Q[k][i]; }
+#pragma omp end declare target
+float accum(int k)
+{
+    float tmp = 0.0;
+    #pragma omp target update to(Q)
+    #pragma omp target map(tofrom: tmp)
+    #pragma omp parallel for reduction(+:tmp)
+    for(int i=0; i &lt; N; i++)
+        tmp += Pfun(i,k);
+    return tmp;
+}
+
+/* Note:  The variable tmp is now mapped with tofrom, for correct
+   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
+ */
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran version of the above C  uses a different syntax. In Fortran modules  a list syntax on the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive is used to declare  mapped variables and procedures. The  <em>N</em>  and  <em>Q</em>  variables are declared as a comma  separated list. When the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive is used to  declare just the procedure, the procedure name need not be listed – it is implicitly  assumed, as illustrated in the  <code class="docutils literal notranslate"><span class="pre">Pfun()</span></code>  function.</p>
+<p>The Fortran version of the above C code uses a different syntax. In Fortran modules  a list syntax on the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive is used to declare  mapped variables and procedures. The  <em>N</em>  and  <em>Q</em>  variables are declared as a comma  separated list. When the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive is used to  declare just the procedure, the procedure name need not be listed – it is implicitly  assumed, as illustrated in the <code class="docutils literal notranslate"><span class="pre">Pfun()</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.4f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">my_global_array</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">Q</span><span class="p">)</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">10</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">Q</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">contains</span>
-<span class="n">function</span> <span class="n">Pfun</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">Pfun</span>
-<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span><span class="n">k</span>
-   <span class="n">Pfun</span><span class="o">=</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">))</span>
-<span class="n">end</span> <span class="n">function</span>
-<span class="n">end</span> <span class="n">module</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.4f
+! type: F-free
+! version: omp_4.0
+module my_global_array
+!$omp declare target (N,Q)
+integer, parameter :: N=10
+real               :: Q(N,N)
+contains
+function Pfun(i,k)
+!$omp declare target
+real               :: Pfun
+integer,intent(in) :: i,k
+   Pfun=(Q(i,k) * Q(k,i))
+end function
+end module
 
-<span class="n">function</span> <span class="n">accum</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-<span class="n">use</span> <span class="n">my_global_array</span>
-<span class="n">real</span>    <span class="o">::</span> <span class="n">tmp</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span>
-   <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0e0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span> <span class="n">tmp</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">tmp</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">+</span> <span class="n">Pfun</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-<span class="n">end</span> <span class="n">function</span>
+function accum(k) result(tmp)
+use my_global_array
+real    :: tmp
+integer :: i, k
+   tmp = 0.0e0
+   !$omp target map(tofrom: tmp)
+   !$omp parallel do reduction(+:tmp)
+   do i=1,N
+      tmp = tmp + Pfun(k,i)
+   end do
+   !$omp end target
+end function
 
-<span class="o">!</span> <span class="nl">Note</span><span class="p">:</span>  <span class="n">The</span> <span class="n">variable</span> <span class="n">tmp</span> <span class="n">is</span> <span class="n">now</span> <span class="n">mapped</span> <span class="n">with</span> <span class="n">tofrom</span><span class="p">,</span> <span class="k">for</span> <span class="n">correct</span>
-<span class="o">!</span> <span class="n">execution</span> <span class="n">with</span> <span class="mf">4.5</span> <span class="p">(</span><span class="n">and</span> <span class="n">pre</span><span class="mf">-4.5</span><span class="p">)</span> <span class="n">compliant</span> <span class="n">compilers</span><span class="p">.</span> <span class="n">See</span> <span class="n">Devices</span> <span class="n">Intro</span><span class="p">.</span>
+! Note:  The variable tmp is now mapped with tofrom, for correct
+! execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
 
 </pre></div>
 </div>
@@ -1671,93 +1716,95 @@
 </div>
 </div>
 <div class="section" id="declare-target-and-end-declare-target-with-declare-simd">
-<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>   <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  with  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code><a class="headerlink" href="#declare-target-and-end-declare-target-with-declare-simd" title="Permalink to this headline">¶</a></h2>
-<p>The following example shows how the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  and  <code class="docutils literal notranslate"><span class="pre">end</span></code>    <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  directives are used to indicate that a function  is available on a target device. The  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive indicates  that there is a SIMD version of the function  <code class="docutils literal notranslate"><span class="pre">P()</span></code>  that is available on the target  device as well as one that is available on the host device.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> with <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code><a class="headerlink" href="#declare-target-and-end-declare-target-with-declare-simd" title="Permalink to this headline">¶</a></h2>
+<p>The following example shows how the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code>  <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directives are used to indicate that a function  is available on a target device. The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directive indicates  that there is a SIMD version of the function <code class="docutils literal notranslate"><span class="pre">P()</span></code> that is available on the target  device as well as one that is available on the host device.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.5c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 10000</span>
-<span class="cp">#define M 1024</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">float</span> <span class="n">Q</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">];</span>
-<span class="cp">#pragma omp declare simd uniform(i) linear(k) notinbranch</span>
-<span class="kt">float</span> <span class="nf">P</span><span class="p">(</span><span class="k">const</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">int</span> <span class="n">k</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">return</span> <span class="n">Q</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">Q</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">i</span><span class="p">];</span>
-<span class="p">}</span>
-<span class="cp">#pragma omp end declare target</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">float</span> <span class="nf">accum</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">float</span> <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span><span class="p">;</span>
-<span class="cp">#pragma omp target map(tofrom: tmp)</span>
-<span class="cp">#pragma omp parallel for reduction(+:tmp)</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">float</span> <span class="n">tmp1</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
-<span class="cp">#pragma omp simd reduction(+:tmp1)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">M</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">tmp1</span> <span class="o">+=</span> <span class="n">P</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="n">tmp</span> <span class="o">+=</span> <span class="n">tmp1</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">return</span> <span class="n">tmp</span><span class="p">;</span>
-<span class="p">}</span>
+/*
+* name: declare_target.5c
+* type: C
+* version: omp_4.0
+*/
+#define N 10000
+#define M 1024
+#pragma omp declare target
+float Q[N][N];
+#pragma omp declare simd uniform(i) linear(k) notinbranch
+float P(const int i, const int k)
+{
+  return Q[i][k] * Q[k][i];
+}
+#pragma omp end declare target
 
-<span class="cm">/* Note:  The variable tmp is now mapped with tofrom, for correct</span>
-<span class="cm">   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.</span>
-<span class="cm"> */</span>
+float accum(void)
+{
+  float tmp = 0.0;
+  int i, k;
+#pragma omp target map(tofrom: tmp)
+#pragma omp parallel for reduction(+:tmp)
+  for (i=0; i &lt; N; i++) {
+    float tmp1 = 0.0;
+#pragma omp simd reduction(+:tmp1)
+    for (k=0; k &lt; M; k++) {
+      tmp1 += P(i,k);
+    }
+    tmp += tmp1;
+  }
+  return tmp;
+}
+
+/* Note:  The variable tmp is now mapped with tofrom, for correct
+   execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
+ */
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The Fortran version of the above C  uses a different syntax. Fortran modules  use a list syntax of the  <code class="docutils literal notranslate"><span class="pre">declare</span></code>   <code class="docutils literal notranslate"><span class="pre">target</span></code>  declaration for the mapping.  Here the  <em>N</em>  and  <em>Q</em>  variables are declared in the list form as a comma separated list.  The function declaration does not use a list and implicitly assumes the function  name. In this Fortran example row and column indices are reversed relative to the  C/C++ example, as is usual for s optimized for memory access.</p>
+<p>The Fortran version of the above C code uses a different syntax. Fortran modules  use a list syntax of the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> declaration for the mapping.  Here the  <em>N</em>  and  <em>Q</em>  variables are declared in the list form as a comma separated list.  The function declaration does not use a list and implicitly assumes the function  name. In this Fortran example row and column indices are reversed relative to the  C/C++ example, as is usual for codes optimized for memory access.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.5f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">my_global_array</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">Q</span><span class="p">)</span>
-<span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">M</span><span class="o">=</span><span class="mi">1024</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">Q</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">N</span><span class="p">)</span>
-<span class="n">contains</span>
-<span class="n">function</span> <span class="n">P</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">simd</span> <span class="n">uniform</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="n">linear</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="n">notinbranch</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-<span class="n">real</span>               <span class="o">::</span> <span class="n">P</span>
-<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">k</span><span class="p">,</span><span class="n">i</span>
-   <span class="n">P</span><span class="o">=</span><span class="p">(</span><span class="n">Q</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
-<span class="n">end</span> <span class="n">function</span>
-<span class="n">end</span> <span class="n">module</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.5f
+! type: F-free
+! version: omp_4.0
+module my_global_array
+!$omp declare target (N,Q)
+integer, parameter :: N=10000, M=1024
+real               :: Q(N,N)
+contains
+function P(k,i)
+!$omp declare simd uniform(i) linear(k) notinbranch
+!$omp declare target
+real               :: P
+integer,intent(in) :: k,i
+   P=(Q(k,i) * Q(i,k))
+end function
+end module
 
-<span class="n">function</span> <span class="n">accum</span><span class="p">()</span> <span class="n">result</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-<span class="n">use</span> <span class="n">my_global_array</span>
-<span class="n">real</span>    <span class="o">::</span> <span class="n">tmp</span><span class="p">,</span> <span class="n">tmp1</span>
-<span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
-   <span class="n">tmp</span> <span class="o">=</span> <span class="mf">0.0e0</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">tofrom</span><span class="p">:</span> <span class="n">tmp</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">private</span><span class="p">(</span><span class="n">tmp1</span><span class="p">)</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">tmp</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-      <span class="n">tmp1</span> <span class="o">=</span> <span class="mf">0.0e0</span>
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">simd</span> <span class="n">reduction</span><span class="p">(</span><span class="o">+:</span><span class="n">tmp1</span><span class="p">)</span>
-      <span class="k">do</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">M</span>
-         <span class="n">tmp1</span> <span class="o">=</span> <span class="n">tmp1</span> <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">end</span> <span class="k">do</span>
-      <span class="n">tmp</span> <span class="o">=</span> <span class="n">tmp</span> <span class="o">+</span> <span class="n">tmp1</span>
-   <span class="n">end</span> <span class="k">do</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-<span class="n">end</span> <span class="n">function</span>
+function accum() result(tmp)
+use my_global_array
+real    :: tmp, tmp1
+integer :: i
+   tmp = 0.0e0
+   !$omp target map(tofrom: tmp)
+   !$omp parallel do private(tmp1) reduction(+:tmp)
+   do i=1,N
+      tmp1 = 0.0e0
+      !$omp simd reduction(+:tmp1)
+      do k = 1,M
+         tmp1 = tmp1 + P(k,i)
+      end do
+      tmp = tmp + tmp1
+   end do
+   !$omp end target
+end function
 
-<span class="o">!</span> <span class="nl">Note</span><span class="p">:</span>  <span class="n">The</span> <span class="n">variable</span> <span class="n">tmp</span> <span class="n">is</span> <span class="n">now</span> <span class="n">mapped</span> <span class="n">with</span> <span class="n">tofrom</span><span class="p">,</span> <span class="k">for</span> <span class="n">correct</span>
-<span class="o">!</span> <span class="n">execution</span> <span class="n">with</span> <span class="mf">4.5</span> <span class="p">(</span><span class="n">and</span> <span class="n">pre</span><span class="mf">-4.5</span><span class="p">)</span> <span class="n">compliant</span> <span class="n">compilers</span><span class="p">.</span> <span class="n">See</span> <span class="n">Devices</span> <span class="n">Intro</span><span class="p">.</span>
+! Note:  The variable tmp is now mapped with tofrom, for correct
+! execution with 4.5 (and pre-4.5) compliant compilers. See Devices Intro.
 
 </pre></div>
 </div>
@@ -1765,65 +1812,67 @@
 </div>
 </div>
 <div class="section" id="declare-target-directive-with-link-clause">
-<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  Directive with  <code class="docutils literal notranslate"><span class="pre">link</span></code>  Clause<a class="headerlink" href="#declare-target-directive-with-link-clause" title="Permalink to this headline">¶</a></h2>
-<p>In the OpenMP 4.5 standard the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive was extended to allow static data to be mapped, {when needed}, through a  <code class="docutils literal notranslate"><span class="pre">link</span></code>  clause.</p>
-<p>Data storage for items listed in the  <code class="docutils literal notranslate"><span class="pre">link</span></code>  clause becomes available on the device when it is mapped implicitly or explicitly in a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause, and it persists for the scope of the mapping (as specified by a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct,  a  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  construct, or   <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">enter/exit</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  constructs).</p>
-<p>Tip: When all the global data items will not fit on a device and are not needed simultaneously, use the  <code class="docutils literal notranslate"><span class="pre">link</span></code>  clause and map the data only when it is needed.</p>
-<p>The following C and Fortran examples show two sets of data (single precision and double precision) that are global on the host for the entire execution on the host; but are only used globally on the device for part of the program execution. The single precision data are allocated and persist only for the first  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. Similarly, the double precision data are in scope on the device only for the second  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region.</p>
+<h2><code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> Directive with <code class="docutils literal notranslate"><span class="pre">link</span></code> Clause<a class="headerlink" href="#declare-target-directive-with-link-clause" title="Permalink to this headline">¶</a></h2>
+<p>In the OpenMP 4.5 standard the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive was extended to allow static data to be mapped, <strong>when needed</strong>, through a <code class="docutils literal notranslate"><span class="pre">link</span></code> clause.</p>
+<p>Data storage for items listed in the <code class="docutils literal notranslate"><span class="pre">link</span></code> clause becomes available on the device when it is mapped implicitly or explicitly in a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, and it persists for the scope of the mapping (as specified by a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct,  a <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> construct, or  <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">enter/exit</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> constructs).</p>
+<p>Tip: When all the global data items will not fit on a device and are not needed simultaneously, use the <code class="docutils literal notranslate"><span class="pre">link</span></code> clause and map the data only when it is needed.</p>
+<p>The following C and Fortran examples show two sets of data (single precision and double precision) that are global on the host for the entire execution on the host; but are only used globally on the device for part of the program execution. The single precision data are allocated and persist only for the first <code class="docutils literal notranslate"><span class="pre">target</span></code> region. Similarly, the double precision data are in scope on the device only for the second <code class="docutils literal notranslate"><span class="pre">target</span></code> region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: declare_target.6.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.5</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 100000000</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">float</span>  <span class="n">sp</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">sv1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">sv2</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="kt">double</span> <span class="n">dp</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">dv1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">dv2</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="cp">#pragma omp declare target link(sp,sv1,sv2) \</span>
-<span class="cp">                           link(dp,dv1,dv2)</span>
+/*
+* name: declare_target.6.c
+* type: C
+* version: omp_4.5
+*/
+#define N 100000000
 
-<span class="kt">void</span> <span class="nf">s_init</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">d_init</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="p">,</span> <span class="kt">double</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">s_output</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">d_output</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="p">,</span> <span class="kt">int</span><span class="p">);</span>
+float  sp[N], sv1[N], sv2[N];
+double dp[N], dv1[N], dv2[N];
+#pragma omp declare target link(sp,sv1,sv2) \
+                           link(dp,dv1,dv2)
 
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">void</span> <span class="nf">s_vec_mult_accum</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+void s_init(float *, float *, int);
+void d_init(double *, double *, int);
+void s_output(float *, int);
+void d_output(double *, int);
 
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="n">sp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sv1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">sv2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="p">}</span>
+#pragma omp declare target
+void s_vec_mult_accum()
+{
+   int i;
 
-<span class="kt">void</span> <span class="nf">d_vec_mult_accum</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+   #pragma omp parallel for
+   for (i=0; i&lt;N; i++)
+     sp[i] = sv1[i] * sv2[i];
+}
 
-   <span class="cp">#pragma omp parallel for</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dv1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">dv2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-<span class="p">}</span>
-<span class="cp">#pragma omp end declare target</span>
+void d_vec_mult_accum()
+{
+   int i;
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="n">s_init</span><span class="p">(</span><span class="n">sv1</span><span class="p">,</span> <span class="n">sv2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target map(to:sv1,sv2) map(from:sp)</span>
-      <span class="n">s_vec_mult_accum</span><span class="p">();</span>
-   <span class="n">s_output</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+   #pragma omp parallel for
+   for (i=0; i&lt;N; i++)
+     dp[i] = dv1[i] * dv2[i];
+}
+#pragma omp end declare target
 
-   <span class="n">d_init</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-   <span class="cp">#pragma omp target map(to:dv1,dv2) map(from:dp)</span>
-      <span class="n">d_vec_mult_accum</span><span class="p">();</span>
-   <span class="n">d_output</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
+int main()
+{
+   s_init(sv1, sv2, N);
+   #pragma omp target map(to:sv1,sv2) map(from:sp)
+      s_vec_mult_accum();
+   s_output(sp, N);
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   d_init(dv1, dv2, N);
+   #pragma omp target map(to:dv1,dv2) map(from:dp)
+      d_vec_mult_accum();
+   d_output(dp, N);
+
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1831,58 +1880,58 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">declare_target</span><span class="mf">.6</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.5</span>
-<span class="n">module</span> <span class="n">m_dat</span>
-   <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">100000000</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="n">link</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span><span class="n">sv1</span><span class="p">,</span><span class="n">sv2</span><span class="p">)</span>
-   <span class="n">real</span> <span class="o">::</span> <span class="n">sp</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">sv1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">sv2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: declare_target.6.f90
+! type: F-free
+! version: omp_4.5
+module m_dat
+   integer, parameter :: N=100000000
+   !$omp declare target link(sp,sv1,sv2)
+   real :: sp(N), sv1(N), sv2(N)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span> <span class="n">link</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span><span class="n">dv1</span><span class="p">,</span><span class="n">dv2</span><span class="p">)</span>
-   <span class="kt">double</span> <span class="n">precision</span> <span class="o">::</span> <span class="n">dp</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">dv1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">dv2</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+   !$omp declare target link(dp,dv1,dv2)
+   double precision :: dp(N), dv1(N), dv2(N)
 
-<span class="n">contains</span>
-   <span class="n">subroutine</span> <span class="n">s_vec_mult_accum</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-      <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+contains
+   subroutine s_vec_mult_accum()
+   !$omp declare target
+      integer :: i
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-        <span class="n">sp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">sv1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">sv2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">end</span> <span class="k">do</span>
+      !$omp parallel do
+      do i = 1,N
+        sp(i) = sv1(i) * sv2(i)
+      end do
 
-   <span class="n">end</span> <span class="n">subroutine</span> <span class="n">s_vec_mult_accum</span>
+   end subroutine s_vec_mult_accum
 
-   <span class="n">subroutine</span> <span class="n">d_vec_mult_accum</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">target</span>
-      <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+   subroutine d_vec_mult_accum()
+   !$omp declare target
+      integer :: i
 
-      <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span>
-      <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="n">N</span>
-        <span class="n">dp</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">dv1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">dv2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">end</span> <span class="k">do</span>
+      !$omp parallel do
+      do i = 1,N
+        dp(i) = dv1(i) * dv2(i)
+      end do
 
-   <span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span> <span class="n">m_dat</span>
+   end subroutine
+end module m_dat
 
-<span class="n">program</span> <span class="n">prec_vec_mult</span>
-   <span class="n">use</span> <span class="n">m_dat</span>
+program prec_vec_mult
+   use m_dat
 
-   <span class="n">call</span> <span class="n">s_init</span><span class="p">(</span><span class="n">sv1</span><span class="p">,</span> <span class="n">sv2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span><span class="n">sv1</span><span class="p">,</span><span class="n">sv2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span><span class="n">sp</span><span class="p">)</span>
-     <span class="n">call</span> <span class="n">s_vec_mult_accum</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="n">call</span> <span class="n">s_output</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+   call s_init(sv1, sv2, N)
+   !$omp target map(to:sv1,sv2) map(from:sp)
+     call s_vec_mult_accum()
+   !$omp end target
+   call s_output(sp, N)
 
-   <span class="n">call</span> <span class="n">d_init</span><span class="p">(</span><span class="n">dv1</span><span class="p">,</span> <span class="n">dv2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">target</span> <span class="n">map</span><span class="p">(</span><span class="nl">to</span><span class="p">:</span><span class="n">dv1</span><span class="p">,</span><span class="n">dv2</span><span class="p">)</span> <span class="n">map</span><span class="p">(</span><span class="nl">from</span><span class="p">:</span><span class="n">dp</span><span class="p">)</span>
-     <span class="n">call</span> <span class="n">d_vec_mult_accum</span><span class="p">()</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">target</span>
-   <span class="n">call</span> <span class="n">d_output</span><span class="p">(</span><span class="n">dp</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+   call d_init(dv1, dv2, N)
+   !$omp target map(to:dv1,dv2) map(from:dp)
+     call d_vec_mult_accum()
+   !$omp end target
+   call d_output(dp, N)
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
@@ -1916,8 +1965,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_target_update.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">target</span></code>   <code class="docutils literal notranslate"><span class="pre">update</span></code>  Construct</a>
-    <a class='right-next' id="next-link" href="Examples_teams.html" title="next page"><code class="docutils literal notranslate"><span class="pre">teams</span></code>  Constructs</a>
+    <a class='left-prev' id="prev-link" href="Examples_target_update.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> Construct</a>
+    <a class='right-next' id="next-link" href="Examples_teams.html" title="next page"><code class="docutils literal notranslate"><span class="pre">teams</span></code> Constructs</a>
 
         </div>
         

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Placement of flush, barrier, taskwait and taskyield Directives &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -92,7 +92,7 @@
   </a>
  </li>
 </ul>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="Foreword_Chapt.html">
    Foreword
@@ -545,11 +545,6 @@
       </span>
      </code>
      Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
     </a>
    </li>
    <li class="toctree-l2">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1069,11 +1079,11 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
+ <li class="toctree-l1 current active collapsible-parent">
   <a class="reference internal" href="Chap_program_control.html">
    Program Control
   </a>
-  <ul class="collapse-ul">
+  <ul class="current collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="Examples_cond_comp.html">
      Conditional Compilation
@@ -1082,6 +1092,35 @@
    <li class="toctree-l2">
     <a class="reference internal" href="Examples_icv.html">
      Internal Control Variables (ICVs)
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
     </a>
    </li>
    <li class="toctree-l2">
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1243,16 +1281,6 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i>
-            Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="simple nav section-nav flex-column">
-</ul>
-
-        </nav>
-        
         </div>
     </div>
 </div>
@@ -1261,177 +1289,182 @@
         
               <div>
                 
-  <p>section{Placement of  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code></p>
-<p>and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  Directives}</p>
-<p>The following example is non-conforming, because the  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,   <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> , and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>   directives are stand-alone directives  and cannot be the immediate substatement of an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  statement.</p>
+  <div class="section" id="placement-of-flush-barrier-taskwait-and-taskyield-directives">
+<h1>Placement of <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> Directives<a class="headerlink" href="#placement-of-flush-barrier-taskwait-and-taskyield-directives" title="Permalink to this headline">¶</a></h1>
+<p>The following example is non-conforming, because the <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>, and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  directives are stand-alone directives  and cannot be the immediate substatement of an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: standalone.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">void</span> <span class="nf">standalone_wrong</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+/*
+* name: standalone.1c
+* type: C
+* version: omp_3.1
+*/
 
- <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="cp">#pragma omp flush(a)</span>
-<span class="cm">/* incorrect as flush cannot be immediate substatement</span>
-<span class="cm">   of if statement */</span>
+void standalone_wrong()
+{
+  int a = 1;
 
- <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="cp">#pragma omp barrier</span>
-<span class="cm">/* incorrect as barrier cannot be immediate substatement</span>
-<span class="cm">   of if statement */</span>
+ if (a != 0)
+  #pragma omp flush(a)
+/* incorrect as flush cannot be immediate substatement
+   of if statement */
 
- <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span>
-  <span class="cp">#pragma omp taskyield</span>
-<span class="cm">/* incorrect as taskyield cannot be immediate substatement of if statement</span>
-<span class="cm">*/</span>
+ if (a != 0)
+  #pragma omp barrier
+/* incorrect as barrier cannot be immediate substatement
+   of if statement */
 
- <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
-  <span class="cp">#pragma omp taskwait</span>
-<span class="cm">/* incorrect as taskwait cannot be immediate substatement</span>
-<span class="cm">   of if statement */</span>
+ if (a!=0)
+  #pragma omp taskyield
+/* incorrect as taskyield cannot be immediate substatement of if statement
+*/
 
-<span class="p">}</span>
+ if (a != 0)
+  #pragma omp taskwait
+/* incorrect as taskwait cannot be immediate substatement
+   of if statement */
+
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example is non-conforming, because the  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,   <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> , and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>   directives are stand-alone directives  and cannot be the action statement of an  <code class="docutils literal notranslate"><span class="pre">if</span></code>  statement or a labeled branch  target.</p>
+<p>The following example is non-conforming, because the <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>, and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  directives are stand-alone directives  and cannot be the action statement of an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement or a labeled branch  target.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">standalone</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>     <span class="n">omp_3</span><span class="mf">.1</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: standalone.1f
+! type: F-free
+! version:     omp_3.1
 
 
-<span class="n">SUBROUTINE</span> <span class="n">STANDALONE_WRONG</span><span class="p">()</span>
+SUBROUTINE STANDALONE_WRONG()
 
-  <span class="n">INTEGER</span>  <span class="n">A</span>
+  INTEGER  A
 
-  <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
+  A = 1
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">FLUSH</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">the</span> <span class="n">action</span> <span class="n">statement</span>
-  <span class="o">!</span> <span class="n">in</span> <span class="n">an</span> <span class="n">IF</span> <span class="n">statement</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">FLUSH</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
+  ! the FLUSH directive must not be the action statement
+  ! in an IF statement
+  IF (A .NE. 0) !$OMP FLUSH(A)
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">BARRIER</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">the</span> <span class="n">action</span> <span class="n">statement</span>
-  <span class="o">!</span> <span class="n">in</span> <span class="n">an</span> <span class="n">IF</span> <span class="n">statement</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
+  ! the BARRIER directive must not be the action statement
+  ! in an IF statement
+  IF (A .NE. 0) !$OMP BARRIER
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">TASKWAIT</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">the</span> <span class="n">action</span> <span class="n">statement</span>
-  <span class="o">!</span> <span class="n">in</span> <span class="n">an</span> <span class="n">IF</span> <span class="n">statement</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
+  ! the TASKWAIT directive must not be the action statement
+  ! in an IF statement
+  IF (A .NE. 0) !$OMP TASKWAIT
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">TASKYIELD</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">the</span> <span class="n">action</span> <span class="n">statement</span>
-  <span class="o">!</span> <span class="n">in</span> <span class="n">an</span> <span class="n">IF</span> <span class="n">statement</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKYIELD</span>
+  ! the TASKYIELD directive must not be the action statement
+  ! in an IF statement
+  IF (A .NE. 0) !$OMP TASKYIELD
 
-  <span class="n">GOTO</span> <span class="mi">100</span>
+  GOTO 100
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">FLUSH</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">a</span> <span class="n">labeled</span> <span class="n">branch</span> <span class="n">target</span>
-  <span class="o">!</span> <span class="n">statement</span>
-  <span class="mi">100</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">FLUSH</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-  <span class="n">GOTO</span> <span class="mi">200</span>
+  ! the FLUSH directive must not be a labeled branch target
+  ! statement
+  100 !$OMP FLUSH(A)
+  GOTO 200
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">BARRIER</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">a</span> <span class="n">labeled</span> <span class="n">branch</span> <span class="n">target</span>
-  <span class="o">!</span> <span class="n">statement</span>
-  <span class="mi">200</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
-  <span class="n">GOTO</span> <span class="mi">300</span>
+  ! the BARRIER directive must not be a labeled branch target
+  ! statement
+  200 !$OMP BARRIER
+  GOTO 300
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">TASKWAIT</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">a</span> <span class="n">labeled</span> <span class="n">branch</span> <span class="n">target</span>
-  <span class="o">!</span> <span class="n">statement</span>
-  <span class="mi">300</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
-  <span class="n">GOTO</span> <span class="mi">400</span>
+  ! the TASKWAIT directive must not be a labeled branch target
+  ! statement
+  300 !$OMP TASKWAIT
+  GOTO 400
 
-  <span class="o">!</span> <span class="n">the</span> <span class="n">TASKYIELD</span> <span class="n">directive</span> <span class="n">must</span> <span class="n">not</span> <span class="n">be</span> <span class="n">a</span> <span class="n">labeled</span> <span class="n">branch</span> <span class="n">target</span>
-  <span class="o">!</span> <span class="n">statement</span>
-  <span class="mi">400</span> <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKYIELD</span>
+  ! the TASKYIELD directive must not be a labeled branch target
+  ! statement
+  400 !$OMP TASKYIELD
 
-<span class="n">END</span> <span class="n">SUBROUTINE</span>
+END SUBROUTINE
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following version of the above example is conforming because the  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,   <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> , and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  directives are enclosed  in a compound statement.</p>
+<p>The following version of the above example is conforming because the <code class="docutils literal notranslate"><span class="pre">flush</span></code>,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>, and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> directives are enclosed  in a compound statement.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: standalone.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_3.1</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">standalone_ok</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-     <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-  <span class="cp">#pragma omp flush(a)</span>
-     <span class="p">}</span>
-     <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-  <span class="cp">#pragma omp barrier</span>
-     <span class="p">}</span>
-     <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-  <span class="cp">#pragma omp taskwait</span>
-     <span class="p">}</span>
- <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-  <span class="cp">#pragma omp taskyield</span>
- <span class="p">}</span>
-  <span class="p">}</span>
-<span class="p">}</span>
+/*
+* name: standalone.2c
+* type: C
+* version: omp_3.1
+*/
+void standalone_ok()
+{
+  int a = 1;
+
+  #pragma omp parallel
+  {
+     if (a != 0) {
+  #pragma omp flush(a)
+     }
+     if (a != 0) {
+  #pragma omp barrier
+     }
+     if (a != 0) {
+  #pragma omp taskwait
+     }
+ if (a != 0) {
+  #pragma omp taskyield
+ }
+  }
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example is conforming because the  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,   <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> , and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  directives are enclosed in an  <code class="docutils literal notranslate"><span class="pre">if</span></code>   construct or follow the labeled branch target.</p>
+<p>The following example is conforming because the <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>, and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> directives are enclosed in an <code class="docutils literal notranslate"><span class="pre">if</span></code>  construct or follow the labeled branch target.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">standalone</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>     <span class="n">omp_3</span><span class="mf">.1</span>
-<span class="n">SUBROUTINE</span> <span class="n">STANDALONE_OK</span><span class="p">()</span>
-  <span class="n">INTEGER</span>  <span class="n">A</span>
-  <span class="n">A</span> <span class="o">=</span> <span class="mi">1</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">FLUSH</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-  <span class="n">ENDIF</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
-  <span class="n">ENDIF</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
-  <span class="n">ENDIF</span>
-  <span class="n">IF</span> <span class="p">(</span><span class="n">A</span> <span class="p">.</span><span class="n">NE</span><span class="p">.</span> <span class="mi">0</span><span class="p">)</span> <span class="n">THEN</span>
-    <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKYIELD</span>
-  <span class="n">ENDIF</span>
-  <span class="n">GOTO</span> <span class="mi">100</span>
-  <span class="mi">100</span> <span class="n">CONTINUE</span>
-  <span class="o">!</span><span class="n">$OMP</span> <span class="n">FLUSH</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-  <span class="n">GOTO</span> <span class="mi">200</span>
-  <span class="mi">200</span> <span class="n">CONTINUE</span>
-  <span class="o">!</span><span class="n">$OMP</span> <span class="n">BARRIER</span>
-  <span class="n">GOTO</span> <span class="mi">300</span>
-  <span class="mi">300</span> <span class="n">CONTINUE</span>
-  <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKWAIT</span>
-  <span class="n">GOTO</span> <span class="mi">400</span>
-  <span class="mi">400</span> <span class="n">CONTINUE</span>
-  <span class="o">!</span><span class="n">$OMP</span> <span class="n">TASKYIELD</span>
-<span class="n">END</span> <span class="n">SUBROUTINE</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: standalone.2f
+! type: F-free
+! version:     omp_3.1
+SUBROUTINE STANDALONE_OK()
+  INTEGER  A
+  A = 1
+  IF (A .NE. 0) THEN
+    !$OMP FLUSH(A)
+  ENDIF
+  IF (A .NE. 0) THEN
+    !$OMP BARRIER
+  ENDIF
+  IF (A .NE. 0) THEN
+    !$OMP TASKWAIT
+  ENDIF
+  IF (A .NE. 0) THEN
+    !$OMP TASKYIELD
+  ENDIF
+  GOTO 100
+  100 CONTINUE
+  !$OMP FLUSH(A)
+  GOTO 200
+  200 CONTINUE
+  !$OMP BARRIER
+  GOTO 300
+  300 CONTINUE
+  !$OMP TASKWAIT
+  GOTO 400
+  400 CONTINUE
+  !$OMP TASKYIELD
+END SUBROUTINE
 
 </pre></div>
+</div>
 </div>
 </div>
 </div>

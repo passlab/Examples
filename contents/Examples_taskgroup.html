@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,70 +1290,72 @@
               <div>
                 
   <div class="section" id="the-taskgroup-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  Construct<a class="headerlink" href="#the-taskgroup-construct" title="Permalink to this headline">¶</a></h1>
-<p>In this example, tasks are grouped and synchronized using the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>   construct.</p>
-<p>Initially, one task (the task executing the  <code class="docutils literal notranslate"><span class="pre">start_background_work()</span></code>   call) is created in the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, and later a parallel tree traversal  is started (the task executing the root of the recursive  <code class="docutils literal notranslate"><span class="pre">compute_tree()</span></code>   calls). While synchronizing tasks at the end of each tree traversal, using the   <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct ensures that the formerly started background task  does not participate in the synchronization, and is left free to execute in parallel.  This is opposed to the behavior of the  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  construct, which would  include the background tasks in the synchronization.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> Construct<a class="headerlink" href="#the-taskgroup-construct" title="Permalink to this headline">¶</a></h1>
+<p>In this example, tasks are grouped and synchronized using the <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  construct.</p>
+<p>Initially, one task (the task executing the <code class="docutils literal notranslate"><span class="pre">start_background_work()</span></code>  call) is created in the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, and later a parallel tree traversal  is started (the task executing the root of the recursive <code class="docutils literal notranslate"><span class="pre">compute_tree()</span></code>  calls). While synchronizing tasks at the end of each tree traversal, using the  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct ensures that the formerly started background task  does not participate in the synchronization, and is left free to execute in parallel.  This is opposed to the behavior of the <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> construct, which would  include the background tasks in the synchronization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: taskgroup.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">start_background_work</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">check_step</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">print_results</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-<span class="k">struct</span> <span class="nc">tree_node</span>
-<span class="p">{</span>
-   <span class="k">struct</span> <span class="nc">tree_node</span> <span class="o">*</span><span class="n">left</span><span class="p">;</span>
-   <span class="k">struct</span> <span class="nc">tree_node</span> <span class="o">*</span><span class="n">right</span><span class="p">;</span>
-<span class="p">};</span>
-<span class="k">typedef</span> <span class="k">struct</span> <span class="nc">tree_node</span><span class="o">*</span> <span class="n">tree_type</span><span class="p">;</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">init_tree</span><span class="p">(</span><span class="n">tree_type</span><span class="p">);</span>
-<span class="cp">#define max_steps 100</span>
-<span class="kt">void</span> <span class="nf">compute_something</span><span class="p">(</span><span class="n">tree_type</span> <span class="n">tree</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="c1">// some computation</span>
-<span class="p">}</span>
-<span class="kt">void</span> <span class="nf">compute_tree</span><span class="p">(</span><span class="n">tree_type</span> <span class="n">tree</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">)</span>
-   <span class="p">{</span>
-     <span class="cp">#pragma omp task</span>
-       <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">left</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="k">if</span> <span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">)</span>
-   <span class="p">{</span>
-     <span class="cp">#pragma omp task</span>
-       <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">-&gt;</span><span class="n">right</span><span class="p">);</span>
-   <span class="p">}</span>
-   <span class="cp">#pragma omp task</span>
-   <span class="n">compute_something</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="n">tree_type</span> <span class="n">tree</span><span class="p">;</span>
-  <span class="n">init_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
-  <span class="cp">#pragma omp parallel</span>
-  <span class="cp">#pragma omp single</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp task</span>
-      <span class="n">start_background_work</span><span class="p">();</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">max_steps</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="cp">#pragma omp taskgroup</span>
-        <span class="p">{</span>
-           <span class="cp">#pragma omp task</span>
-             <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
-        <span class="p">}</span> <span class="c1">// wait on tree traversal in this step</span>
-        <span class="n">check_step</span><span class="p">();</span>
-    <span class="p">}</span>
-  <span class="p">}</span> <span class="c1">// only now is background work required to be complete</span>
-  <span class="n">print_results</span><span class="p">();</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: taskgroup.1c
+* type: C
+* version: omp_4.0
+*/
+extern void start_background_work(void);
+extern void check_step(void);
+extern void print_results(void);
+struct tree_node
+{
+   struct tree_node *left;
+   struct tree_node *right;
+};
+typedef struct tree_node* tree_type;
+extern void init_tree(tree_type);
+#define max_steps 100
+void compute_something(tree_type tree)
+{
+   // some computation
+}
+void compute_tree(tree_type tree)
+{
+   if (tree-&gt;left)
+   {
+     #pragma omp task
+       compute_tree(tree-&gt;left);
+   }
+   if (tree-&gt;right)
+   {
+     #pragma omp task
+       compute_tree(tree-&gt;right);
+   }
+   #pragma omp task
+   compute_something(tree);
+}
+int main()
+{
+  int i;
+  tree_type tree;
+  init_tree(tree);
+  #pragma omp parallel
+  #pragma omp single
+  {
+    #pragma omp task
+      start_background_work();
+    for (i = 0; i &lt; max_steps; i++)
+    {
+        #pragma omp taskgroup
+        {
+           #pragma omp task
+             compute_tree(tree);
+        } // wait on tree traversal in this step
+        check_step();
+    }
+  } // only now is background work required to be complete
+  print_results();
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1323,58 +1363,58 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">taskgroup</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">tree_type_mod</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">max_steps</span><span class="o">=</span><span class="mi">100</span>
-  <span class="n">type</span> <span class="n">tree_type</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">tree_type</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span>
-  <span class="n">end</span> <span class="n">type</span>
-  <span class="n">contains</span>
-    <span class="n">subroutine</span> <span class="n">compute_something</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-      <span class="n">type</span><span class="p">(</span><span class="n">tree_type</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">tree</span>
-<span class="o">!</span> <span class="n">some</span> <span class="n">computation</span>
-    <span class="n">end</span> <span class="n">subroutine</span>
-    <span class="n">recursive</span> <span class="n">subroutine</span> <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-      <span class="n">type</span><span class="p">(</span><span class="n">tree_type</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">tree</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">left</span><span class="p">))</span> <span class="n">then</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-        <span class="n">call</span> <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">left</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="n">endif</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">associated</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">right</span><span class="p">))</span> <span class="n">then</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-        <span class="n">call</span> <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="o">%</span><span class="n">right</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-      <span class="n">endif</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-      <span class="n">call</span> <span class="n">compute_something</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-    <span class="n">end</span> <span class="n">subroutine</span>
-<span class="n">end</span> <span class="n">module</span>
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">use</span> <span class="n">tree_type_mod</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">tree_type</span><span class="p">),</span> <span class="n">pointer</span> <span class="o">::</span> <span class="n">tree</span>
-  <span class="n">call</span> <span class="n">init_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">);</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-  <span class="n">call</span> <span class="n">start_background_work</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-  <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_steps</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">taskgroup</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">task</span>
-    <span class="n">call</span> <span class="n">compute_tree</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">taskgroup</span> <span class="o">!</span> <span class="n">wait</span> <span class="n">on</span> <span class="n">tree</span> <span class="n">traversal</span> <span class="n">in</span> <span class="n">this</span> <span class="n">step</span>
-    <span class="n">call</span> <span class="n">check_step</span><span class="p">()</span>
-  <span class="n">enddo</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>    <span class="o">!</span> <span class="n">only</span> <span class="n">now</span> <span class="n">is</span> <span class="n">background</span> <span class="n">work</span> <span class="n">required</span> <span class="n">to</span> <span class="n">be</span> <span class="n">complete</span>
-  <span class="n">call</span> <span class="n">print_results</span><span class="p">()</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: taskgroup.1f
+! type: F-free
+! version:    omp_4.0
+module tree_type_mod
+  integer, parameter :: max_steps=100
+  type tree_type
+    type(tree_type), pointer :: left, right
+  end type
+  contains
+    subroutine compute_something(tree)
+      type(tree_type), pointer :: tree
+! some computation
+    end subroutine
+    recursive subroutine compute_tree(tree)
+      type(tree_type), pointer :: tree
+      if (associated(tree%left)) then
+!$omp task
+        call compute_tree(tree%left)
+!$omp end task
+      endif
+      if (associated(tree%right)) then
+!$omp task
+        call compute_tree(tree%right)
+!$omp end task
+      endif
+!$omp task
+      call compute_something(tree)
+!$omp end task
+    end subroutine
+end module
+program main
+  use tree_type_mod
+  type(tree_type), pointer :: tree
+  call init_tree(tree);
+!$omp parallel
+!$omp single
+!$omp task
+  call start_background_work()
+!$omp end task
+  do i=1, max_steps
+!$omp taskgroup
+!$omp task
+    call compute_tree(tree)
+!$omp end task
+!$omp end taskgroup ! wait on tree traversal in this step
+    call check_step()
+  enddo
+!$omp end single
+!$omp end parallel    ! only now is background work required to be complete
+  call print_results()
+end program
 
 </pre></div>
 </div>
@@ -1408,7 +1448,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_task_dep.html" title="previous page">Task Dependences</a>
-    <a class='right-next' id="next-link" href="Examples_taskyield.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>  Construct</a>
+    <a class='right-next' id="next-link" href="Examples_taskyield.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> Construct</a>
 
         </div>
         

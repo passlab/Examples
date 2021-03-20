@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1256,65 +1294,67 @@
 <p>The following example demonstrates how a nestable lock can be used to synchronize  updates both to a whole structure and to one of its members.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: nestable_lock.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+/*
+* name: nestable_lock.1c
+* type: C
+*/
 
-<span class="k">typedef</span> <span class="k">struct</span> <span class="p">{</span>
-   <span class="kt">int</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">;</span>
-   <span class="n">omp_nest_lock_t</span> <span class="n">lck</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">pair</span><span class="p">;</span>
+#include &lt;omp.h&gt;
 
-<span class="kt">int</span> <span class="nf">work1</span><span class="p">();</span>
-<span class="kt">int</span> <span class="nf">work2</span><span class="p">();</span>
-<span class="kt">int</span> <span class="nf">work3</span><span class="p">();</span>
+typedef struct {
+   int a,b;
+   omp_nest_lock_t lck;
+} pair;
 
-<span class="kt">void</span> <span class="nf">incr_a</span><span class="p">(</span><span class="n">pair</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">)</span>
-<span class="p">{</span>
+int work1();
+int work2();
+int work3();
 
-  <span class="cm">/* Called only from incr_pair, no need to lock. */</span>
-  <span class="n">p</span><span class="o">-&gt;</span><span class="n">a</span> <span class="o">+=</span> <span class="n">a</span><span class="p">;</span>
+void incr_a(pair *p, int a)
+{
 
-<span class="p">}</span>
+  /* Called only from incr_pair, no need to lock. */
+  p-&gt;a += a;
 
-<span class="kt">void</span> <span class="nf">incr_b</span><span class="p">(</span><span class="n">pair</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
+}
 
-  <span class="cm">/* Called both from incr_pair and elsewhere, */</span>
-  <span class="cm">/* so need a nestable lock. */</span>
+void incr_b(pair *p, int b)
+{
 
-  <span class="n">omp_set_nest_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="n">p</span><span class="o">-&gt;</span><span class="n">b</span> <span class="o">+=</span> <span class="n">b</span><span class="p">;</span>
-  <span class="n">omp_unset_nest_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lck</span><span class="p">);</span>
+  /* Called both from incr_pair and elsewhere, */
+  /* so need a nestable lock. */
 
-<span class="p">}</span>
+  omp_set_nest_lock(&amp;p-&gt;lck);
+  p-&gt;b += b;
+  omp_unset_nest_lock(&amp;p-&gt;lck);
 
-<span class="kt">void</span> <span class="nf">incr_pair</span><span class="p">(</span><span class="n">pair</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
+}
 
-  <span class="n">omp_set_nest_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="n">incr_a</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">a</span><span class="p">);</span>
-  <span class="n">incr_b</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
-  <span class="n">omp_unset_nest_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">p</span><span class="o">-&gt;</span><span class="n">lck</span><span class="p">);</span>
+void incr_pair(pair *p, int a, int b)
+{
 
-<span class="p">}</span>
+  omp_set_nest_lock(&amp;p-&gt;lck);
+  incr_a(p, a);
+  incr_b(p, b);
+  omp_unset_nest_lock(&amp;p-&gt;lck);
 
-<span class="kt">void</span> <span class="nf">nestlock</span><span class="p">(</span><span class="n">pair</span> <span class="o">*</span><span class="n">p</span><span class="p">)</span>
-<span class="p">{</span>
+}
 
-  <span class="cp">#pragma omp parallel sections</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp section</span>
-      <span class="n">incr_pair</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">work1</span><span class="p">(),</span> <span class="n">work2</span><span class="p">());</span>
-    <span class="cp">#pragma omp section</span>
-      <span class="n">incr_b</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">work3</span><span class="p">());</span>
-  <span class="p">}</span>
+void nestlock(pair *p)
+{
 
-<span class="p">}</span>
+  #pragma omp parallel sections
+  {
+    #pragma omp section
+      incr_pair(p, work1(), work2());
+    #pragma omp section
+      incr_b(p, work3());
+  }
+
+}
 
 </pre></div>
 </div>
@@ -1322,67 +1362,67 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">nestable_lock</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">MODULE</span> <span class="n">DATA</span>
-        <span class="n">USE</span> <span class="n">OMP_LIB</span><span class="p">,</span> <span class="nl">ONLY</span><span class="p">:</span> <span class="n">OMP_NEST_LOCK_KIND</span>
-        <span class="n">TYPE</span> <span class="n">LOCKED_PAIR</span>
-          <span class="n">INTEGER</span> <span class="n">A</span>
-          <span class="n">INTEGER</span> <span class="n">B</span>
-          <span class="n">INTEGER</span> <span class="p">(</span><span class="n">OMP_NEST_LOCK_KIND</span><span class="p">)</span> <span class="n">LCK</span>
-       <span class="n">END</span> <span class="n">TYPE</span>
-      <span class="n">END</span> <span class="n">MODULE</span> <span class="n">DATA</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: nestable_lock.1f
+! type: F-fixed
+      MODULE DATA
+        USE OMP_LIB, ONLY: OMP_NEST_LOCK_KIND
+        TYPE LOCKED_PAIR
+          INTEGER A
+          INTEGER B
+          INTEGER (OMP_NEST_LOCK_KIND) LCK
+       END TYPE
+      END MODULE DATA
 
-      <span class="n">SUBROUTINE</span> <span class="n">INCR_A</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
-        <span class="o">!</span> <span class="n">called</span> <span class="n">only</span> <span class="n">from</span> <span class="n">INCR_PAIR</span><span class="p">,</span> <span class="n">no</span> <span class="n">need</span> <span class="n">to</span> <span class="n">lock</span>
-        <span class="n">USE</span> <span class="n">DATA</span>
-        <span class="n">TYPE</span><span class="p">(</span><span class="n">LOCKED_PAIR</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">A</span>
-        <span class="n">P</span><span class="o">%</span><span class="n">A</span> <span class="o">=</span> <span class="n">P</span><span class="o">%</span><span class="n">A</span> <span class="o">+</span> <span class="n">A</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INCR_A</span>
+      SUBROUTINE INCR_A(P, A)
+        ! called only from INCR_PAIR, no need to lock
+        USE DATA
+        TYPE(LOCKED_PAIR) :: P
+        INTEGER A
+        P%A = P%A + A
+      END SUBROUTINE INCR_A
 
-      <span class="n">SUBROUTINE</span> <span class="n">INCR_B</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
-        <span class="o">!</span> <span class="n">called</span> <span class="n">from</span> <span class="n">both</span> <span class="n">INCR_PAIR</span> <span class="n">and</span> <span class="n">elsewhere</span><span class="p">,</span>
-        <span class="o">!</span> <span class="n">so</span> <span class="n">we</span> <span class="n">need</span> <span class="n">a</span> <span class="n">nestable</span> <span class="n">lock</span>
-        <span class="n">USE</span> <span class="n">OMP_LIB</span>       <span class="o">!</span> <span class="n">or</span> <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>
-        <span class="n">USE</span> <span class="n">DATA</span>
-        <span class="n">TYPE</span><span class="p">(</span><span class="n">LOCKED_PAIR</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">B</span>
-        <span class="n">CALL</span> <span class="n">OMP_SET_NEST_LOCK</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">LCK</span><span class="p">)</span>
-        <span class="n">P</span><span class="o">%</span><span class="n">B</span> <span class="o">=</span> <span class="n">P</span><span class="o">%</span><span class="n">B</span> <span class="o">+</span> <span class="n">B</span>
-        <span class="n">CALL</span> <span class="n">OMP_UNSET_NEST_LOCK</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">LCK</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INCR_B</span>
+      SUBROUTINE INCR_B(P, B)
+        ! called from both INCR_PAIR and elsewhere,
+        ! so we need a nestable lock
+        USE OMP_LIB       ! or INCLUDE &quot;omp_lib.h&quot;
+        USE DATA
+        TYPE(LOCKED_PAIR) :: P
+        INTEGER B
+        CALL OMP_SET_NEST_LOCK(P%LCK)
+        P%B = P%B + B
+        CALL OMP_UNSET_NEST_LOCK(P%LCK)
+      END SUBROUTINE INCR_B
 
-      <span class="n">SUBROUTINE</span> <span class="n">INCR_PAIR</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
-        <span class="n">USE</span> <span class="n">OMP_LIB</span>        <span class="o">!</span> <span class="n">or</span> <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>
-        <span class="n">USE</span> <span class="n">DATA</span>
-        <span class="n">TYPE</span><span class="p">(</span><span class="n">LOCKED_PAIR</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">A</span>
-        <span class="n">INTEGER</span> <span class="n">B</span>
+      SUBROUTINE INCR_PAIR(P, A, B)
+        USE OMP_LIB        ! or INCLUDE &quot;omp_lib.h&quot;
+        USE DATA
+        TYPE(LOCKED_PAIR) :: P
+        INTEGER A
+        INTEGER B
 
-        <span class="n">CALL</span> <span class="n">OMP_SET_NEST_LOCK</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">LCK</span><span class="p">)</span>
-        <span class="n">CALL</span> <span class="n">INCR_A</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">A</span><span class="p">)</span>
-        <span class="n">CALL</span> <span class="n">INCR_B</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
-        <span class="n">CALL</span> <span class="n">OMP_UNSET_NEST_LOCK</span><span class="p">(</span><span class="n">P</span><span class="o">%</span><span class="n">LCK</span><span class="p">)</span>
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">INCR_PAIR</span>
+        CALL OMP_SET_NEST_LOCK(P%LCK)
+        CALL INCR_A(P, A)
+        CALL INCR_B(P, B)
+        CALL OMP_UNSET_NEST_LOCK(P%LCK)
+      END SUBROUTINE INCR_PAIR
 
-      <span class="n">SUBROUTINE</span> <span class="n">NESTLOCK</span><span class="p">(</span><span class="n">P</span><span class="p">)</span>
-        <span class="n">USE</span> <span class="n">OMP_LIB</span>        <span class="o">!</span> <span class="n">or</span> <span class="n">INCLUDE</span> <span class="s">&quot;omp_lib.h&quot;</span>
-        <span class="n">USE</span> <span class="n">DATA</span>
-        <span class="n">TYPE</span><span class="p">(</span><span class="n">LOCKED_PAIR</span><span class="p">)</span> <span class="o">::</span> <span class="n">P</span>
-        <span class="n">INTEGER</span> <span class="n">WORK1</span><span class="p">,</span> <span class="n">WORK2</span><span class="p">,</span> <span class="n">WORK3</span>
-        <span class="n">EXTERNAL</span> <span class="n">WORK1</span><span class="p">,</span> <span class="n">WORK2</span><span class="p">,</span> <span class="n">WORK3</span>
+      SUBROUTINE NESTLOCK(P)
+        USE OMP_LIB        ! or INCLUDE &quot;omp_lib.h&quot;
+        USE DATA
+        TYPE(LOCKED_PAIR) :: P
+        INTEGER WORK1, WORK2, WORK3
+        EXTERNAL WORK1, WORK2, WORK3
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">PARALLEL</span> <span class="n">SECTIONS</span>
+!$OMP   PARALLEL SECTIONS
 
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SECTION</span>
-          <span class="n">CALL</span> <span class="n">INCR_PAIR</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">WORK1</span><span class="p">(),</span> <span class="n">WORK2</span><span class="p">())</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">SECTION</span>
-          <span class="n">CALL</span> <span class="n">INCR_B</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">WORK3</span><span class="p">())</span>
-<span class="o">!</span><span class="n">$OMP</span>   <span class="n">END</span> <span class="n">PARALLEL</span> <span class="n">SECTIONS</span>
+!$OMP   SECTION
+          CALL INCR_PAIR(P, WORK1(), WORK2())
+!$OMP   SECTION
+          CALL INCR_B(P, WORK3())
+!$OMP   END PARALLEL SECTIONS
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">NESTLOCK</span>
+      END SUBROUTINE NESTLOCK
 
 </pre></div>
 </div>

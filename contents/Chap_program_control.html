@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,31 +1291,18 @@
                 
   <div class="section" id="program-control">
 <h1>Program Control<a class="headerlink" href="#program-control" title="Permalink to this headline">¶</a></h1>
-<p>Some specific and elementary concepts of controlling program execution are illustrated in the examples of this chapter.  Control can be directly managed with conditional control  (ifdef’s with the  <code class="docutils literal notranslate"><span class="pre">_OPENMP</span></code>   macro, and the Fortran sentinel ( <code class="docutils literal notranslate"><span class="pre">!$</span></code> )  for conditionally compiling). The  <code class="docutils literal notranslate"><span class="pre">if</span></code>  clause on some constructs can direct the runtime to ignore or alter the behavior of the construct. Of course, the base-language  <code class="docutils literal notranslate"><span class="pre">if</span></code>  statements can be used to control the ‘execution’  of stand-alone directives (such as  <code class="docutils literal notranslate"><span class="pre">flush</span></code> ,  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> ,  <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> ,  and   <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> ). However, the directives must appear in a block structure, and not as a substatement as shown in examples 1 and 2 of this chapter.</p>
+<p>Some specific and elementary concepts of controlling program execution are illustrated in the examples of this chapter.  Control can be directly managed with conditional control code (ifdef’s with the <code class="docutils literal notranslate"><span class="pre">_OPENMP</span></code>  macro, and the Fortran sentinel (<code class="docutils literal notranslate"><span class="pre">!$</span></code>)  for conditionally compiling). The <code class="docutils literal notranslate"><span class="pre">if</span></code> clause on some constructs can direct the runtime to ignore or alter the behavior of the construct. Of course, the base-language <code class="docutils literal notranslate"><span class="pre">if</span></code> statements can be used to control the “execution”  of stand-alone directives (such as <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>,  and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>). However, the directives must appear in a block structure, and not as a substatement as shown in examples 1 and 2 of this chapter.</p>
 <p>CANCELLATION</p>
-<p>Cancellation (termination) of the normal sequence of execution for the threads in an OpenMP region can be  accomplished with the  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  construct.  The construct uses a  <em>construct-type-clause</em>  to set the region-type to activate for the cancellation.  That is, inclusion  of one of the  <em>construct-type-clause</em>  names  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> ,  <code class="docutils literal notranslate"><span class="pre">for</span></code> ,   <code class="docutils literal notranslate"><span class="pre">do</span></code> ,  <code class="docutils literal notranslate"><span class="pre">sections</span></code>  or  <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code>  on the directive line  activates the corresponding region.   The  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  construct is activated by the first encountering thread,  and it continues execution at the end of the named region. The  <code class="docutils literal notranslate"><span class="pre">cancel</span></code>  construct is also a cancellation point for any other thread of the team  to also continue execution at the end of the named region.</p>
-<p>Also, once the specified region has been activated for cancellation any thread that encounnters  a  <code class="docutils literal notranslate"><span class="pre">cancellation</span> <span class="pre">point</span></code>  construct with the same named region ( <em>construct-type-clause</em> ), continues execution at the end of the region.</p>
-<p>For an activated  <code class="docutils literal notranslate"><span class="pre">cancel</span> <span class="pre">taskgroup</span></code>  construct, the tasks that belong to the taskgroup set of the innermost enclosing taskgroup region will be canceled.</p>
-<p>A task that encounters the cancel taskgroup construct continues execution at the end of its task region. Any task of the taskgroup that has already begun execution will run to completion, unless it encounters a  <code class="docutils literal notranslate"><span class="pre">cancellation</span> <span class="pre">point</span></code> ; tasks that have not begun execution ‘may’ be discarded as completed tasks.</p>
+<p>Cancellation (termination) of the normal sequence of execution for the threads in an OpenMP region can be  accomplished with the <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct.  The construct uses a  <em>construct-type-clause</em>  to set the region-type to activate for the cancellation.  That is, inclusion  of one of the  <em>construct-type-clause</em>  names <code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code>,  <code class="docutils literal notranslate"><span class="pre">do</span></code>, <code class="docutils literal notranslate"><span class="pre">sections</span></code> or <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> on the directive line  activates the corresponding region.   The <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct is activated by the first encountering thread,  and it continues execution at the end of the named region. The <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct is also a cancellation point for any other thread of the team  to also continue execution at the end of the named region.</p>
+<p>Also, once the specified region has been activated for cancellation any thread that encounnters  a <code class="docutils literal notranslate"><span class="pre">cancellation</span> <span class="pre">point</span></code> construct with the same named region ( <em>construct-type-clause</em> ), continues execution at the end of the region.</p>
+<p>For an activated <code class="docutils literal notranslate"><span class="pre">cancel</span> <span class="pre">taskgroup</span></code> construct, the tasks that belong to the taskgroup set of the innermost enclosing taskgroup region will be canceled.</p>
+<p>A task that encounters the cancel taskgroup construct continues execution at the end of its task region. Any task of the taskgroup that has already begun execution will run to completion, unless it encounters a <code class="docutils literal notranslate"><span class="pre">cancellation</span> <span class="pre">point</span></code>; tasks that have not begun execution “may” be discarded as completed tasks.</p>
 <p>CONTROL VARIABLES</p>
-<p>Internal control variables (ICV) are used by implementations to hold values which control the execution   of OpenMP regions.  Control (and hence the ICVs) may be set as implementation defaults,    or set and adjusted through environment variables, clauses, and API functions.  Many of the ICV control   values are accessible through API function calls.  Also, initial ICV values are reported by the runtime   if the  <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_ENV</span></code>  environment variable has been set to  <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> .</p>
-<p>As an example, the  <em>nthreads-var</em>  is the ICV that holds the number of threads<br />
-to be used in a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.  It can be set with the  <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>  environment variable,<br />
-the  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads()</span></code>  API function, or the  <code class="docutils literal notranslate"><span class="pre">num_threads</span></code>  clause.  The default  <em>nthreads-var</em><br />
-value is implementation defined.  All of the ICVs are presented in the  <em>Internal Control Variables</em>  section<br />
-of the  <em>Directives</em>  chapter of the OpenMP Specifications document.  Within the same document section, override<br />
-relationships and scoping information can be found for applying user specifications and understanding the<br />
-extent of the control.</p>
+<p>Internal control variables (ICV) are used by implementations to hold values which control the execution   of OpenMP regions.  Control (and hence the ICVs) may be set as implementation defaults,    or set and adjusted through environment variables, clauses, and API functions.  Many of the ICV control   values are accessible through API function calls.  Also, initial ICV values are reported by the runtime   if the <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_ENV</span></code> environment variable has been set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code>.</p>
 <p>NESTED CONSTRUCTS</p>
 <p>Certain combinations of nested constructs are permitted, giving rise to a  <em>combined</em>  construct consisting of two or more constructs.  These can be used when the two (or several) constructs would be used immediately in succession (closely nested). A combined construct can use the clauses of the component constructs without restrictions. A  <em>composite</em>  construct is a combined construct which has one or more clauses with (an often obviously) modified or restricted meaning, relative to when the constructs are uncombined.</p>
-<p>[appear separately (singly).</p>
-<p>The combined  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">do</span></code>  and  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">for</span></code>  constructs are formed by combining the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code><br />
-construct with one of the loops constructs  <code class="docutils literal notranslate"><span class="pre">do</span></code>  or  <code class="docutils literal notranslate"><span class="pre">for</span></code> .  The
-<code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">do</span> <span class="pre">SIMD</span></code>  and  <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">for</span> <span class="pre">SIMD</span></code>  constructs are composite constructs (composed from
-the parallel loop constructs and the  <code class="docutils literal notranslate"><span class="pre">SIMD</span></code>  construct), because the  <code class="docutils literal notranslate"><span class="pre">collapse</span></code>  clause must
-explicitly address the ordering of loop chunking  <em>and</em>  SIMD ‘combined’ execution.</p>
-<p>Certain nestings are forbidden, and often the reasoning is obvious.  Worksharing constructs cannot be nested, and the  <code class="docutils literal notranslate"><span class="pre">barrier</span></code>  construct cannot be nested inside a worksharing construct, or a  <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct.  Also,  <code class="docutils literal notranslate"><span class="pre">target</span></code>  constructs cannot be nested.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct can be nested, as well as the  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct.  The parallel execution in the nested  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct(s) is control by the  <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code>  and   <code class="docutils literal notranslate"><span class="pre">OMP_MAX_ACTIVE_LEVELS</span></code>  environment variables, and the  <code class="docutils literal notranslate"><span class="pre">omp_set_nested()</span></code>  and   <code class="docutils literal notranslate"><span class="pre">omp_set_max_active_levels()</span></code>  functions.</p>
+<p>Certain nestings are forbidden, and often the reasoning is obvious.  Worksharing constructs cannot be nested, and the <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct cannot be nested inside a worksharing construct, or a <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct.  Also, <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs cannot be nested.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct can be nested, as well as the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.  The parallel execution in the nested <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct(s) is control by the <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code> and  <code class="docutils literal notranslate"><span class="pre">OMP_MAX_ACTIVE_LEVELS</span></code> environment variables, and the <code class="docutils literal notranslate"><span class="pre">omp_set_nested()</span></code> and  <code class="docutils literal notranslate"><span class="pre">omp_set_max_active_levels()</span></code> functions.</p>
 <p>More details on nesting can be found in the  <em>Nesting of Regions</em>  of the  <em>Directives</em>   chapter in the OpenMP Specifications document.</p>
 <div class="toctree-wrapper compound">
 </div>

@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="Examples_standalone.html" />
+    <link rel="next" title="Placement of flush, barrier, taskwait and taskyield Directives" href="Examples_standalone.html" />
     <link rel="prev" title="Conditional Compilation" href="Examples_cond_comp.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1254,60 +1292,62 @@
   <div class="section" id="internal-control-variables-icvs">
 <h1>Internal Control Variables (ICVs)<a class="headerlink" href="#internal-control-variables-icvs" title="Permalink to this headline">¶</a></h1>
 <p>According to Section 2.3 of the OpenMP 4.0 specification, an OpenMP implementation must act as if there are ICVs that control  the behavior of the program.  This example illustrates two ICVs,  <em>nthreads-var</em>   and  <em>max-active-levels-var</em> . The  <em>nthreads-var</em>  ICV controls the  number of threads requested for encountered parallel regions; there is one copy  of this ICV per task. The  <em>max-active-levels-var</em>  ICV controls the maximum  number of nested active parallel regions; there is one copy of this ICV for the  whole program.</p>
-<p>In the following example, the  <em>nest-var</em> ,  <em>max-active-levels-var</em> ,   <em>dyn-var</em> , and  <em>nthreads-var</em>  ICVs are modified through calls to  the runtime library routines  <code class="docutils literal notranslate"><span class="pre">omp_set_nested</span></code> ,  <code class="docutils literal notranslate"><span class="pre">omp_set_max_active_levels</span></code> , <code class="docutils literal notranslate">&#160; <span class="pre">omp_set_dynamic</span></code> , and  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code>  respectively. These ICVs  affect the operation of  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  regions. Each implicit task generated  by a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region has its own copy of the  <em>nest-var, dyn-var</em> ,  and  <em>nthreads-var</em>  ICVs.</p>
-<p>In the following example, the new value of  <em>nthreads-var</em>  applies only to  the implicit tasks that execute the call to  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code> . There  is one copy of the  <em>max-active-levels-var</em>  ICV for the whole program and  its value is the same for all tasks. This example assumes that nested parallelism  is supported.</p>
-<p>The outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region creates a team of two threads; each of the threads  will execute one of the two implicit tasks generated by the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region.</p>
-<p>Each implicit task generated by the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region calls  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads(3)</span></code> ,  assigning the value 3 to its respective copy of  <em>nthreads-var</em> . Then each  implicit task encounters an inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region that creates a team  of three threads; each of the threads will execute one of the three implicit tasks  generated by that inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
-<p>Since the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region is executed by 2 threads, and the inner  by 3, there will be a total of 6 implicit tasks generated by the two inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   regions.</p>
-<p>Each implicit task generated by an inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region will execute  the call to  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads(4)</span></code> , assigning the value 4 to its respective  copy of  <em>nthreads-var</em> .</p>
-<p>The print statement in the outer  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region is executed by only one  of the threads in the team. So it will be executed only once.</p>
-<p>The print statement in an inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region is also executed by only  one of the threads in the team. Since we have a total of two inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   regions, the print statement will be executed twice – once per inner  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region.</p>
+<p>In the following example, the  <em>nest-var</em> ,  <em>max-active-levels-var</em> ,   <em>dyn-var</em> , and  <em>nthreads-var</em>  ICVs are modified through calls to  the runtime library routines <code class="docutils literal notranslate"><span class="pre">omp_set_nested</span></code>, <code class="docutils literal notranslate"><span class="pre">omp_set_max_active_levels</span></code>,<code class="docutils literal notranslate">&#160; <span class="pre">omp_set_dynamic</span></code>, and <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code> respectively. These ICVs  affect the operation of <code class="docutils literal notranslate"><span class="pre">parallel</span></code> regions. Each implicit task generated  by a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region has its own copy of the  <em>nest-var, dyn-var</em> ,  and  <em>nthreads-var</em>  ICVs.</p>
+<p>In the following example, the new value of  <em>nthreads-var</em>  applies only to  the implicit tasks that execute the call to <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads</span></code>. There  is one copy of the  <em>max-active-levels-var</em>  ICV for the whole program and  its value is the same for all tasks. This example assumes that nested parallelism  is supported.</p>
+<p>The outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region creates a team of two threads; each of the threads  will execute one of the two implicit tasks generated by the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
+<p>Each implicit task generated by the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region calls <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads(3)</span></code>,  assigning the value 3 to its respective copy of  <em>nthreads-var</em> . Then each  implicit task encounters an inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region that creates a team  of three threads; each of the threads will execute one of the three implicit tasks  generated by that inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<p>Since the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region is executed by 2 threads, and the inner  by 3, there will be a total of 6 implicit tasks generated by the two inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  regions.</p>
+<p>Each implicit task generated by an inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region will execute  the call to <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads(4)</span></code>, assigning the value 4 to its respective  copy of  <em>nthreads-var</em> .</p>
+<p>The print statement in the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region is executed by only one  of the threads in the team. So it will be executed only once.</p>
+<p>The print statement in an inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region is also executed by only  one of the threads in the team. Since we have a total of two inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  regions, the print statement will be executed twice – once per inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: icv.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">omp_set_nested</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-  <span class="n">omp_set_max_active_levels</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
-  <span class="n">omp_set_dynamic</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-  <span class="cp">#pragma omp parallel</span>
-    <span class="p">{</span>
-      <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+/*
+* name: icv.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-      <span class="cp">#pragma omp parallel</span>
-        <span class="p">{</span>
-          <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
-          <span class="cp">#pragma omp single</span>
-            <span class="p">{</span>
-                 <span class="c1">// The following should print:</span>
-                 <span class="c1">// Inner: max_act_lev=8, num_thds=3, max_thds=4</span>
-                 <span class="c1">// Inner: max_act_lev=8, num_thds=3, max_thds=4</span>
-              <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Inner: max_act_lev=%d, num_thds=%d, max_thds=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
-              <span class="n">omp_get_max_active_levels</span><span class="p">(),</span> <span class="n">omp_get_num_threads</span><span class="p">(),</span>
-              <span class="n">omp_get_max_threads</span><span class="p">());</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
+int main (void)
+{
+  omp_set_nested(1);
+  omp_set_max_active_levels(8);
+  omp_set_dynamic(0);
+  omp_set_num_threads(2);
+  #pragma omp parallel
+    {
+      omp_set_num_threads(3);
 
-      <span class="cp">#pragma omp barrier</span>
-      <span class="cp">#pragma omp single</span>
-        <span class="p">{</span>
-                 <span class="c1">// The following should print:</span>
-                 <span class="c1">// Outer: max_act_lev=8, num_thds=2, max_thds=3</span>
-          <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;Outer: max_act_lev=%d, num_thds=%d, max_thds=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
-                  <span class="n">omp_get_max_active_levels</span><span class="p">(),</span> <span class="n">omp_get_num_threads</span><span class="p">(),</span>
-                  <span class="n">omp_get_max_threads</span><span class="p">());</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+      #pragma omp parallel
+        {
+          omp_set_num_threads(4);
+          #pragma omp single
+            {
+                 // The following should print:
+                 // Inner: max_act_lev=8, num_thds=3, max_thds=4
+                 // Inner: max_act_lev=8, num_thds=3, max_thds=4
+              printf (&quot;Inner: max_act_lev=%d, num_thds=%d, max_thds=%d\n&quot;,
+              omp_get_max_active_levels(), omp_get_num_threads(),
+              omp_get_max_threads());
+            }
+        }
+
+      #pragma omp barrier
+      #pragma omp single
+        {
+                 // The following should print:
+                 // Outer: max_act_lev=8, num_thds=2, max_thds=3
+          printf (&quot;Outer: max_act_lev=%d, num_thds=%d, max_thds=%d\n&quot;,
+                  omp_get_max_active_levels(), omp_get_num_threads(),
+                  omp_get_max_threads());
+        }
+    }
+    return 0;
+}
 
 </pre></div>
 </div>
@@ -1315,42 +1355,42 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">icv</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">program</span> <span class="n">icv</span>
-      <span class="n">use</span> <span class="n">omp_lib</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: icv.1f
+! type: F-fixed
+      program icv
+      use omp_lib
 
-      <span class="n">call</span> <span class="n">omp_set_nested</span><span class="p">(.</span><span class="nb">true</span><span class="p">.)</span>
-      <span class="n">call</span> <span class="n">omp_set_max_active_levels</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-      <span class="n">call</span> <span class="n">omp_set_dynamic</span><span class="p">(.</span><span class="nb">false</span><span class="p">.)</span>
-      <span class="n">call</span> <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+      call omp_set_nested(.true.)
+      call omp_set_max_active_levels(8)
+      call omp_set_dynamic(.false.)
+      call omp_set_num_threads(2)
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-      <span class="n">call</span> <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+!$omp parallel
+      call omp_set_num_threads(3)
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-      <span class="n">call</span> <span class="n">omp_set_num_threads</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-<span class="o">!</span>      <span class="n">The</span> <span class="n">following</span> <span class="n">should</span> <span class="nl">print</span><span class="p">:</span>
-<span class="o">!</span>      <span class="nl">Inner</span><span class="p">:</span> <span class="n">max_act_lev</span><span class="o">=</span> <span class="mi">8</span> <span class="p">,</span> <span class="n">num_thds</span><span class="o">=</span> <span class="mi">3</span> <span class="p">,</span> <span class="n">max_thds</span><span class="o">=</span> <span class="mi">4</span>
-<span class="o">!</span>      <span class="nl">Inner</span><span class="p">:</span> <span class="n">max_act_lev</span><span class="o">=</span> <span class="mi">8</span> <span class="p">,</span> <span class="n">num_thds</span><span class="o">=</span> <span class="mi">3</span> <span class="p">,</span> <span class="n">max_thds</span><span class="o">=</span> <span class="mi">4</span>
-       <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Inner: max_act_lev=&quot;</span><span class="p">,</span> <span class="n">omp_get_max_active_levels</span><span class="p">(),</span>
-     <span class="o">&amp;</span>           <span class="s">&quot;, num_thds=&quot;</span><span class="p">,</span> <span class="n">omp_get_num_threads</span><span class="p">(),</span>
-     <span class="o">&amp;</span>           <span class="s">&quot;, max_thds=&quot;</span><span class="p">,</span> <span class="n">omp_get_max_threads</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+!$omp parallel
+      call omp_set_num_threads(4)
+!$omp single
+!      The following should print:
+!      Inner: max_act_lev= 8 , num_thds= 3 , max_thds= 4
+!      Inner: max_act_lev= 8 , num_thds= 3 , max_thds= 4
+       print *, &quot;Inner: max_act_lev=&quot;, omp_get_max_active_levels(),
+     &amp;           &quot;, num_thds=&quot;, omp_get_num_threads(),
+     &amp;           &quot;, max_thds=&quot;, omp_get_max_threads()
+!$omp end single
+!$omp end parallel
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">barrier</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">single</span>
-<span class="o">!</span>      <span class="n">The</span> <span class="n">following</span> <span class="n">should</span> <span class="nl">print</span><span class="p">:</span>
-<span class="o">!</span>      <span class="nl">Outer</span><span class="p">:</span> <span class="n">max_act_lev</span><span class="o">=</span> <span class="mi">8</span> <span class="p">,</span> <span class="n">num_thds</span><span class="o">=</span> <span class="mi">2</span> <span class="p">,</span> <span class="n">max_thds</span><span class="o">=</span> <span class="mi">3</span>
-       <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;Outer: max_act_lev=&quot;</span><span class="p">,</span> <span class="n">omp_get_max_active_levels</span><span class="p">(),</span>
-     <span class="o">&amp;</span>           <span class="s">&quot;, num_thds=&quot;</span><span class="p">,</span> <span class="n">omp_get_num_threads</span><span class="p">(),</span>
-     <span class="o">&amp;</span>           <span class="s">&quot;, max_thds=&quot;</span><span class="p">,</span> <span class="n">omp_get_max_threads</span><span class="p">()</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">single</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-       <span class="n">end</span>
+!$omp barrier
+!$omp single
+!      The following should print:
+!      Outer: max_act_lev= 8 , num_thds= 2 , max_thds= 3
+       print *, &quot;Outer: max_act_lev=&quot;, omp_get_max_active_levels(),
+     &amp;           &quot;, num_thds=&quot;, omp_get_num_threads(),
+     &amp;           &quot;, max_thds=&quot;, omp_get_max_threads()
+!$omp end single
+!$omp end parallel
+       end
 
 </pre></div>
 </div>
@@ -1384,7 +1424,7 @@
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_cond_comp.html" title="previous page">Conditional Compilation</a>
-    <a class='right-next' id="next-link" href="Examples_standalone.html" title="next page">&lt;no title&gt;</a>
+    <a class='right-next' id="next-link" href="Examples_standalone.html" title="next page">Placement of <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>  and <code class="docutils literal notranslate"><span class="pre">taskyield</span></code> Directives</a>
 
         </div>
         

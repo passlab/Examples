@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1254,28 +1292,31 @@
   <div class="section" id="parallel-execution">
 <h1>Parallel Execution<a class="headerlink" href="#parallel-execution" title="Permalink to this headline">¶</a></h1>
 <p>A single thread, the  <em>initial thread</em> , begins sequential execution of  an OpenMP enabled program, as if the whole program is in an implicit parallel region consisting of an implicit task executed by the  <em>initial thread</em> .</p>
-<p>A  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct encloses ,  forming a parallel region.  An  <em>initial thread</em>  encountering a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region forks (creates) a team of threads at the beginning of the   <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, and joins them (removes from execution) at the  end of the region.  The initial thread becomes the master thread of the team in a   <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region with a  <em>thread</em>  number equal to zero, the other  threads are numbered from 1 to number of threads minus 1.  A team may be comprised of just a single thread.</p>
-<p>Each thread of a team is assigned an implicit task consisting of  within the  parallel region. The task that creates a parallel region is suspended while the tasks of the team are executed.  A thread is tied to its task; that is, only the thread assigned to the task can execute that task.  After completion  of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, the master thread resumes execution of the generating task.</p>
-<p>After the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region the master thread becomes the initial<br />
-thread again, and continues to execute the  <em>sequential part</em> .</p>
-<p>Any task within a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region is allowed to encounter another  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region to form a nested  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region. The  parallelism of a nested  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region (whether it forks additional  threads, or is executed serially by the encountering task) can be controlled by the  <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code>  environment variable or the  <code class="docutils literal notranslate"><span class="pre">omp_set_nested()</span></code>   API routine with arguments indicating true or false.</p>
-<p>The number of threads of a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region can be set by the  <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code>  environment variable, the  <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads()</span></code>  routine, or on the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   directive with the  <code class="docutils literal notranslate"><span class="pre">num_threads</span></code>  clause. The routine overrides the environment variable, and the clause overrides all.  Use the  <code class="docutils literal notranslate"><span class="pre">OMP_DYNAMIC</span></code>  or the  <code class="docutils literal notranslate"><span class="pre">omp_set_dynamic()</span></code>  function to specify that the OpenMP implementation dynamically adjust the number of threads for  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  regions.  The default setting for dynamic adjustment is implementation defined. When dynamic adjustment is on and the number of threads is specified, the number of threads becomes an upper limit for the number of threads to be provided by the OpenMP runtime.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct encloses code,  forming a parallel region.  An  <em>initial thread</em>  encountering a <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region forks (creates) a team of threads at the beginning of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, and joins them (removes from execution) at the  end of the region.  The initial thread becomes the master thread of the team in a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region with a  <em>thread</em>  number equal to zero, the other  threads are numbered from 1 to number of threads minus 1.  A team may be comprised of just a single thread.</p>
+<p>Each thread of a team is assigned an implicit task consisting of code within the  parallel region. The task that creates a parallel region is suspended while the tasks of the team are executed.  A thread is tied to its task; that is, only the thread assigned to the task can execute that task.  After completion  of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, the master thread resumes execution of the generating task.</p>
+<p>Any task within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region is allowed to encounter another <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region to form a nested <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region. The  parallelism of a nested <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region (whether it forks additional  threads, or is executed serially by the encountering task) can be controlled by the <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">omp_set_nested()</span></code>  API routine with arguments indicating true or false.</p>
+<p>The number of threads of a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region can be set by the <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> environment variable, the <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads()</span></code> routine, or on the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  directive with the <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clause. The routine overrides the environment variable, and the clause overrides all.  Use the <code class="docutils literal notranslate"><span class="pre">OMP_DYNAMIC</span></code> or the <code class="docutils literal notranslate"><span class="pre">omp_set_dynamic()</span></code> function to specify that the OpenMP implementation dynamically adjust the number of threads for <code class="docutils literal notranslate"><span class="pre">parallel</span></code> regions.  The default setting for dynamic adjustment is implementation defined. When dynamic adjustment is on and the number of threads is specified, the number of threads becomes an upper limit for the number of threads to be provided by the OpenMP runtime.</p>
 <p>WORKSHARING CONSTRUCTS</p>
 <p>A worksharing construct distributes the execution of the associated region among the members of the team that encounter it.  There is an implied barrier at the end of the worksharing region (there is no barrier at the beginning). The worksharing constructs are:</p>
 <ul class="simple">
-<li><p>loop constructs: { <code class="docutils literal notranslate"><span class="pre">for</span></code>  and  <code class="docutils literal notranslate"><span class="pre">do</span></code>  }</p></li>
+<li><p>loop constructs: {<code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span></code> }</p></li>
+</ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">sections</span></code></p></li>
+</ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">single</span></code></p></li>
+</ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">workshare</span></code></p></li>
 </ul>
-<p>The  <code class="docutils literal notranslate"><span class="pre">for</span></code>  and  <code class="docutils literal notranslate"><span class="pre">do</span></code>  constructs (loop constructs) create a region  consisting of a loop.  A loop controlled by a loop construct is called  an  <em>associated</em>  loop.  Nested loops can form a single region when the   <code class="docutils literal notranslate"><span class="pre">collapse</span></code>  clause (with an integer argument) designates the number of   <em>associated</em>  loops to be executed in parallel, by forming a  ‘single iteration space’ for the specified number of nested loops.   The  <code class="docutils literal notranslate"><span class="pre">ordered</span></code>  clause can also control multiple associated loops.</p>
-<p>An associated loop must adhere to a ‘canonical form’ (specified in the   <em>Canonical Loop Form</em>  of the OpenMP Specifications document) which allows the  iteration count (of all associated loops) to be computed before the  (outermost) loop is executed.
-[58:27-29].   Most common loops comply with the canonical form, including C++ iterators.</p>
-<p>A  <code class="docutils literal notranslate"><span class="pre">single</span></code>  construct forms a region in which only one thread (any one  of the team) executes the region.  The other threads wait at the implied  barrier at the end, unless the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause is specified.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">sections</span></code>  construct forms a region that contains one or more  structured blocks.  Each block of a  <code class="docutils literal notranslate"><span class="pre">sections</span></code>  directive is  constructed with a  <code class="docutils literal notranslate"><span class="pre">section</span></code>  construct, and executed once by  one of the threads (any one) in the team.  (If only one block is  formed in the region, the  <code class="docutils literal notranslate"><span class="pre">section</span></code>  construct, which is used to separate blocks, is not required.) The other threads wait at the implied  barrier at the end, unless the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause is specified.</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  construct is a Fortran feature that consists of a region with a single structure block (section of ). Statements in the  <code class="docutils literal notranslate"><span class="pre">workshare</span></code>  region are divided into units of work, and executed (once) by threads of the team.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span></code> constructs (loop constructs) create a region  consisting of a loop.  A loop controlled by a loop construct is called  an  <em>associated</em>  loop.  Nested loops can form a single region when the  <code class="docutils literal notranslate"><span class="pre">collapse</span></code> clause (with an integer argument) designates the number of   <em>associated</em>  loops to be executed in parallel, by forming a  “single iteration space” for the specified number of nested loops.   The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> clause can also control multiple associated loops.</p>
+<p>An associated loop must adhere to a “canonical form” (specified in the   <em>Canonical Loop Form</em>  of the OpenMP Specifications document) which allows the  iteration count (of all associated loops) to be computed before the  (outermost) loop is executed. Most common loops comply with the canonical form, including C++ iterators.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">single</span></code> construct forms a region in which only one thread (any one  of the team) executes the region.  The other threads wait at the implied  barrier at the end, unless the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause is specified.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">sections</span></code> construct forms a region that contains one or more  structured blocks.  Each block of a <code class="docutils literal notranslate"><span class="pre">sections</span></code> directive is  constructed with a <code class="docutils literal notranslate"><span class="pre">section</span></code> construct, and executed once by  one of the threads (any one) in the team.  (If only one block is  formed in the region, the <code class="docutils literal notranslate"><span class="pre">section</span></code> construct, which is used to separate blocks, is not required.) The other threads wait at the implied  barrier at the end, unless the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause is specified.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">workshare</span></code> construct is a Fortran feature that consists of a region with a single structure block (section of code). Statements in the <code class="docutils literal notranslate"><span class="pre">workshare</span></code> region are divided into units of work, and executed (once) by threads of the team.</p>
 <p>MASTER CONSTRUCT</p>
-<p>The  <code class="docutils literal notranslate"><span class="pre">master</span></code>  construct is not a worksharing construct.  The master region is is executed only by the master thread. There is no implicit barrier (and flush)  at the end of the  <code class="docutils literal notranslate"><span class="pre">master</span></code>  region; hence the other threads of the team continue execution beyond  statements beyond the  <code class="docutils literal notranslate"><span class="pre">master</span></code>  region.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">master</span></code> construct is not a worksharing construct.  The master region is is executed only by the master thread. There is no implicit barrier (and flush)  at the end of the <code class="docutils literal notranslate"><span class="pre">master</span></code> region; hence the other threads of the team continue execution beyond code statements beyond the <code class="docutils literal notranslate"><span class="pre">master</span></code> region.</p>
 <div class="toctree-wrapper compound">
 </div>
 </div>

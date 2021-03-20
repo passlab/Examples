@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,48 +1291,50 @@
                 
   <div class="section" id="simple-lock-routines">
 <h1>Simple Lock Routines<a class="headerlink" href="#simple-lock-routines" title="Permalink to this headline">¶</a></h1>
-<p>In the following example, the lock routines cause the threads to be idle while  waiting for entry to the first critical section, but to do other work while waiting  for entry to the second. The  <code class="docutils literal notranslate"><span class="pre">omp_set_lock</span></code>  function blocks, but the  <code class="docutils literal notranslate"><span class="pre">omp_test_lock</span></code>   function does not, allowing the work in  <code class="docutils literal notranslate"><span class="pre">skip</span></code>  to be done.</p>
-<p>Note that the argument to the lock routines should have type  <code class="docutils literal notranslate"><span class="pre">omp_lock_t</span></code> ,  and that there is no need to flush it.</p>
+<p>In the following example, the lock routines cause the threads to be idle while  waiting for entry to the first critical section, but to do other work while waiting  for entry to the second. The <code class="docutils literal notranslate"><span class="pre">omp_set_lock</span></code> function blocks, but the <code class="docutils literal notranslate"><span class="pre">omp_test_lock</span></code>  function does not, allowing the work in <code class="docutils literal notranslate"><span class="pre">skip</span></code> to be done.</p>
+<p>Note that the argument to the lock routines should have type <code class="docutils literal notranslate"><span class="pre">omp_lock_t</span></code>,  and that there is no need to flush it.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: simple_lock.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="kt">void</span> <span class="nf">skip</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span>
-<span class="kt">void</span> <span class="nf">work</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{}</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">omp_lock_t</span> <span class="n">lck</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">id</span><span class="p">;</span>
-  <span class="n">omp_init_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="cp">#pragma omp parallel shared(lck) private(id)</span>
-  <span class="p">{</span>
-    <span class="n">id</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">();</span>
+/*
+* name: simple_lock.1c
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
+void skip(int i) {}
+void work(int i) {}
+int main()
+{
+  omp_lock_t lck;
+  int id;
+  omp_init_lock(&amp;lck);
 
-    <span class="n">omp_set_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-    <span class="cm">/*  only one thread at a time can execute this printf */</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;My thread id is %d.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">id</span><span class="p">);</span>
-    <span class="n">omp_unset_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
+  #pragma omp parallel shared(lck) private(id)
+  {
+    id = omp_get_thread_num();
 
-    <span class="k">while</span> <span class="p">(</span><span class="o">!</span> <span class="n">omp_test_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">))</span> <span class="p">{</span>
-      <span class="n">skip</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>   <span class="cm">/* we do not yet have the lock,</span>
-<span class="cm">                     so we must do something else */</span>
-    <span class="p">}</span>
+    omp_set_lock(&amp;lck);
+    /*  only one thread at a time can execute this printf */
+    printf(&quot;My thread id is %d.\n&quot;, id);
+    omp_unset_lock(&amp;lck);
 
-    <span class="n">work</span><span class="p">(</span><span class="n">id</span><span class="p">);</span>      <span class="cm">/* we now have the lock</span>
-<span class="cm">                      and can do the work */</span>
+    while (! omp_test_lock(&amp;lck)) {
+      skip(id);   /* we do not yet have the lock,
+                     so we must do something else */
+    }
 
-    <span class="n">omp_unset_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="p">}</span>
-  <span class="n">omp_destroy_lock</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
+    work(id);      /* we now have the lock
+                      and can do the work */
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    omp_unset_lock(&amp;lck);
+  }
+  omp_destroy_lock(&amp;lck);
+
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1303,7 +1343,7 @@
 <p>Note that there is no need to flush the lock variable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: simple_lock.1f
 ! type: F-fixed
       SUBROUTINE SKIP(ID)

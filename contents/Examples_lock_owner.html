@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,41 +1291,43 @@
                 
   <div class="section" id="ownership-of-locks">
 <h1>Ownership of Locks<a class="headerlink" href="#ownership-of-locks" title="Permalink to this headline">¶</a></h1>
-<p>Ownership of locks has changed since OpenMP 2.5. In OpenMP 2.5, locks are owned  by threads; so a lock released by the  <code class="docutils literal notranslate"><span class="pre">omp_unset_lock</span></code>  routine must be  owned by the same thread executing the routine.  Beginning with OpenMP 3.0, locks are owned  by task regions; so a lock released by the  <code class="docutils literal notranslate"><span class="pre">omp_unset_lock</span></code>  routine in  a task region must be owned by the same task region.</p>
-<p>This change in ownership requires extra care when using locks. The following program  is conforming in OpenMP 2.5 because the thread that releases the lock  <code class="docutils literal notranslate"><span class="pre">lck</span></code>   in the parallel region is the same thread that acquired the lock in the sequential  part of the program (master thread of parallel region and the initial thread are  the same). However, it is not conforming beginning with OpenMP 3.0, because the task  region that releases the lock  <code class="docutils literal notranslate"><span class="pre">lck</span></code>  is different from the task region that  acquires the lock.</p>
+<p>Ownership of locks has changed since OpenMP 2.5. In OpenMP 2.5, locks are owned  by threads; so a lock released by the <code class="docutils literal notranslate"><span class="pre">omp_unset_lock</span></code> routine must be  owned by the same thread executing the routine.  Beginning with OpenMP 3.0, locks are owned  by task regions; so a lock released by the <code class="docutils literal notranslate"><span class="pre">omp_unset_lock</span></code> routine in  a task region must be owned by the same task region.</p>
+<p>This change in ownership requires extra care when using locks. The following program  is conforming in OpenMP 2.5 because the thread that releases the lock <code class="docutils literal notranslate"><span class="pre">lck</span></code>  in the parallel region is the same thread that acquired the lock in the sequential  part of the program (master thread of parallel region and the initial thread are  the same). However, it is not conforming beginning with OpenMP 3.0, because the task  region that releases the lock <code class="docutils literal notranslate"><span class="pre">lck</span></code> is different from the task region that  acquires the lock.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: lock_owner.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-  <span class="n">omp_lock_t</span> <span class="n">lck</span><span class="p">;</span>
+/*
+* name: lock_owner.1c
+* type: C
+*/
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
 
-  <span class="n">omp_init_lock</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="n">omp_set_lock</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+int main()
+{
+  int x;
+  omp_lock_t lck;
 
-<span class="cp">#pragma omp parallel shared (x)</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp master</span>
-      <span class="p">{</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-        <span class="n">omp_unset_lock</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-      <span class="p">}</span>
+  omp_init_lock (&amp;lck);
+  omp_set_lock (&amp;lck);
+  x = 0;
 
-    <span class="cm">/* Some more stuff. */</span>
-  <span class="p">}</span>
-  <span class="n">omp_destroy_lock</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lck</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+#pragma omp parallel shared (x)
+  {
+    #pragma omp master
+      {
+        x = x + 1;
+        omp_unset_lock (&amp;lck);
+      }
+
+    /* Some more stuff. */
+  }
+  omp_destroy_lock (&amp;lck);
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1295,29 +1335,29 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">lock_owner</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-        <span class="n">program</span> <span class="n">lock</span>
-        <span class="n">use</span> <span class="n">omp_lib</span>
-        <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-        <span class="n">integer</span> <span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">omp_lock_kind</span><span class="p">)</span> <span class="o">::</span> <span class="n">lck</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: lock_owner.1f
+! type: F-fixed
+        program lock
+        use omp_lib
+        integer :: x
+        integer (kind=omp_lock_kind) :: lck
 
-        <span class="n">call</span> <span class="n">omp_init_lock</span> <span class="p">(</span><span class="n">lck</span><span class="p">)</span>
-        <span class="n">call</span> <span class="n">omp_set_lock</span><span class="p">(</span><span class="n">lck</span><span class="p">)</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        call omp_init_lock (lck)
+        call omp_set_lock(lck)
+        x = 0
 
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">shared</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">master</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="n">call</span> <span class="n">omp_unset_lock</span><span class="p">(</span><span class="n">lck</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">master</span>
+!$omp parallel shared (x)
+!$omp master
+        x = x + 1
+        call omp_unset_lock(lck)
+!$omp end master
 
-<span class="o">!</span>       <span class="n">Some</span> <span class="n">more</span> <span class="n">stuff</span><span class="p">.</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+!       Some more stuff.
+!$omp end parallel
 
-        <span class="n">call</span> <span class="n">omp_destroy_lock</span><span class="p">(</span><span class="n">lck</span><span class="p">)</span>
-        <span class="n">end</span>
+        call omp_destroy_lock(lck)
+        end
 
 </pre></div>
 </div>
@@ -1350,7 +1390,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_init_lock_with_hint.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">omp_init_lock_with_hint</span></code>  Routine</a>
+    <a class='left-prev' id="prev-link" href="Examples_init_lock_with_hint.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">omp_init_lock_with_hint</span></code> Routine</a>
     <a class='right-next' id="next-link" href="Examples_simple_lock.html" title="next page">Simple Lock Routines</a>
 
         </div>

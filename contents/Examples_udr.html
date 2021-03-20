@@ -52,8 +52,6 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="The scan Directive" href="Examples_scan.html" />
@@ -550,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1038,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1087,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1109,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1255,305 +1291,309 @@
                 
   <div class="section" id="user-defined-reduction">
 <h1>User-Defined Reduction<a class="headerlink" href="#user-defined-reduction" title="Permalink to this headline">¶</a></h1>
-<p>The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive can be used to specify  user-defined reductions (UDR) for user data types.</p>
-<p>The following examples show how user-defined reductions can be used to support user data types in the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause.</p>
-<p>The following example computes the enclosing rectangle of a set of points. The point data structure ( <code class="docutils literal notranslate"><span class="pre">struct</span></code> ~ <code class="docutils literal notranslate"><span class="pre">point</span></code> ) is not supported by the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. Using two  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directives we define how a reduction for the point data structure is done for the  <em>min</em>  and  <em>max</em>  operations. Each  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive calls the appropriate function that passes the two special variables that can be used in the user-defined reduction expression:  <code class="docutils literal notranslate"><span class="pre">omp_in</span></code> , which holds one of the two values to reduce, and  <code class="docutils literal notranslate"><span class="pre">omp_out</span></code> , which holds the other value and should hold also the result of the reduction once the expression has been executed. Note, also, that when defining the user-defined reduction for  <em>min</em>  we specify how the private variables of each thread are to be initialized (that is, the neutral value). This is not the case for  <em>max</em>  as the default values (that is, zero filling) are already adequate.</p>
-<p>In the following example,  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directives are used to define  <em>min</em>  and  <em>max</em>  operations for the  <em>point</em>  data structure for computing the rectangle that encloses a set of 2-D points.</p>
-<p>Each  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive defines new reduction identifiers,  <em>min</em>  and  <em>max</em> , to be used in a  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. The next item in the declaration list is the data type ( <em>struct</em>   <em>point</em> ) used in the reduction, followed by the combiner, here the functions  <em>minproc</em>  and  <em>maxproc</em>  perform the min and max operations, respectively, on the user data (of type  <em>struct</em>   <em>point</em> ). In the function argument list are two special OpenMP variable identifiers,  <code class="docutils literal notranslate"><span class="pre">omp_in</span></code>  and  <code class="docutils literal notranslate"><span class="pre">omp_out</span></code> , that denote the two values to be combined in the ‘real’ function; the  <code class="docutils literal notranslate"><span class="pre">omp_out</span></code>  identifier indicates which one is to hold the result.</p>
-<p>The initializer of the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive specifies the initial value for the private variable of each implicit task. The  <code class="docutils literal notranslate"><span class="pre">omp_priv</span></code>  identifier is used to denote the private variable.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive can be used to specify  user-defined reductions (UDR) for user data types.</p>
+<p>In the following example, <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directives are used to define  <em>min</em>  and  <em>max</em>  operations for the  <em>point</em>  data structure for computing the rectangle that encloses a set of 2-D points.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive defines new reduction identifiers,  <em>min</em>  and  <em>max</em> , to be used in a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause. The next item in the declaration list is the data type ( <em>struct</em>   <em>point</em> ) used in the reduction, followed by the combiner, here the functions  <em>minproc</em>  and  <em>maxproc</em>  perform the min and max operations, respectively, on the user data (of type  <em>struct</em>   <em>point</em> ). In the function argument list are two special OpenMP variable identifiers, <code class="docutils literal notranslate"><span class="pre">omp_in</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_out</span></code>, that denote the two values to be combined in the “real” function; the <code class="docutils literal notranslate"><span class="pre">omp_out</span></code> identifier indicates which one is to hold the result.</p>
+<p>The initializer of the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies the initial value for the private variable of each implicit task. The <code class="docutils literal notranslate"><span class="pre">omp_priv</span></code> identifier is used to denote the private variable.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: udr.1.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">struct</span> <span class="nc">point</span> <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
-<span class="p">};</span>
+/*
+* name: udr.1.c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
 
-<span class="kt">void</span> <span class="nf">minproc</span> <span class="p">(</span> <span class="k">struct</span> <span class="nc">point</span> <span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">point</span> <span class="o">*</span><span class="n">in</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">x</span> <span class="p">)</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">y</span> <span class="p">)</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
-<span class="p">}</span>
+struct point {
+  int x;
+  int y;
+};
 
-<span class="kt">void</span> <span class="nf">maxproc</span> <span class="p">(</span> <span class="k">struct</span> <span class="nc">point</span> <span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">point</span> <span class="o">*</span><span class="n">in</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">x</span> <span class="p">)</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">x</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">x</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">y</span> <span class="p">)</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">y</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">y</span><span class="p">;</span>
-<span class="p">}</span>
+void minproc ( struct point *out, struct point *in )
+{
+  if ( in-&gt;x &lt; out-&gt;x ) out-&gt;x = in-&gt;x;
+  if ( in-&gt;y &lt; out-&gt;y ) out-&gt;y = in-&gt;y;
+}
 
-<span class="cp">#pragma omp declare reduction(min : struct point : \</span>
-<span class="cp">        minproc(&amp;omp_out, &amp;omp_in)) \</span>
-<span class="cp"> initializer( omp_priv = { INT_MAX, INT_MAX } )</span>
+void maxproc ( struct point *out, struct point *in )
+{
+  if ( in-&gt;x &gt; out-&gt;x ) out-&gt;x = in-&gt;x;
+  if ( in-&gt;y &gt; out-&gt;y ) out-&gt;y = in-&gt;y;
+}
 
-<span class="cp">#pragma omp declare reduction(max : struct point : \</span>
-<span class="cp">        maxproc(&amp;omp_out, &amp;omp_in)) \</span>
-<span class="cp"> initializer( omp_priv = { 0, 0 } )</span>
+#pragma omp declare reduction(min : struct point : \
+        minproc(&amp;omp_out, &amp;omp_in)) \
+ initializer( omp_priv = { INT_MAX, INT_MAX } )
 
-<span class="kt">void</span> <span class="nf">find_enclosing_rectangle</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">point</span> <span class="n">points</span><span class="p">[]</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">struct</span> <span class="nc">point</span> <span class="n">minp</span> <span class="o">=</span> <span class="p">{</span> <span class="n">INT_MAX</span><span class="p">,</span> <span class="n">INT_MAX</span> <span class="p">},</span> <span class="n">maxp</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+#pragma omp declare reduction(max : struct point : \
+        maxproc(&amp;omp_out, &amp;omp_in)) \
+ initializer( omp_priv = { 0, 0 } )
 
-<span class="cp">#pragma omp parallel for reduction(min:minp) reduction(max:maxp)</span>
-  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-     <span class="n">minproc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">minp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-     <span class="n">maxproc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">maxp</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-  <span class="p">}</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;min = (%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">minp</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">minp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;max = (%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">maxp</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">maxp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
+void find_enclosing_rectangle ( int n, struct point points[] )
+{
+  struct point minp = { INT_MAX, INT_MAX }, maxp = {0,0};
+  int i;
+
+#pragma omp parallel for reduction(min:minp) reduction(max:maxp)
+  for ( i = 0; i &lt; n; i++ ) {
+     minproc(&amp;minp, &amp;points[i]);
+     maxproc(&amp;maxp, &amp;points[i]);
+  }
+  printf(&quot;min = (%d, %d)\n&quot;, minp.x, minp.y);
+  printf(&quot;max = (%d, %d)\n&quot;, maxp.x, maxp.y);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows the corresponding  in Fortran.  The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directives are specified as part of  the declaration in subroutine  <em>find_enclosing_rectangle</em>  and  the procedures that perform the min and max operations are specified as subprograms.</p>
+<p>The following example shows the corresponding code in Fortran.  The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directives are specified as part of  the declaration in subroutine  <em>find_enclosing_rectangle</em>  and  the procedures that perform the min and max operations are specified as subprograms.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">udr</span><span class="mf">.1</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">data_type</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.1.f90
+! type: F-free
+! version: omp_4.0
+module data_type
 
-  <span class="n">type</span> <span class="o">::</span> <span class="n">point</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">y</span>
-  <span class="n">end</span> <span class="n">type</span>
+  type :: point
+    integer :: x
+    integer :: y
+  end type
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">data_type</span>
+end module data_type
 
-<span class="n">subroutine</span> <span class="n">find_enclosing_rectangle</span> <span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">points</span> <span class="p">)</span>
-  <span class="n">use</span> <span class="n">data_type</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">::</span> <span class="n">points</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+subroutine find_enclosing_rectangle ( n, points )
+  use data_type
+  implicit none
+  integer :: n
+  type(point) :: points(*)
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">min</span> <span class="p">:</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">minproc</span><span class="p">(</span><span class="n">omp_out</span><span class="p">,</span> <span class="n">omp_in</span><span class="p">))</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>  <span class="n">initializer</span><span class="p">(</span> <span class="n">omp_priv</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+  !$omp declare reduction(min : point : minproc(omp_out, omp_in)) &amp;
+  !$omp&amp;  initializer( omp_priv = point( HUGE(0), HUGE(0) ) )
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">max</span> <span class="p">:</span> <span class="nl">point</span> <span class="p">:</span> <span class="n">maxproc</span><span class="p">(</span><span class="n">omp_out</span><span class="p">,</span> <span class="n">omp_in</span><span class="p">))</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>  <span class="n">initializer</span><span class="p">(</span> <span class="n">omp_priv</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">)</span>
+  !$omp declare reduction(max : point : maxproc(omp_out, omp_in)) &amp;
+  !$omp&amp;  initializer( omp_priv = point( 0, 0 ) )
 
-  <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">::</span> <span class="n">minp</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">),</span> <span class="n">maxp</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+  type(point) :: minp = point( HUGE(0), HUGE(0) ), maxp = point( 0, 0 )
+  integer :: i
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">min</span><span class="p">:</span><span class="n">minp</span><span class="p">)</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">max</span><span class="p">:</span><span class="n">maxp</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-     <span class="n">call</span> <span class="n">minproc</span><span class="p">(</span><span class="n">minp</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-     <span class="n">call</span> <span class="n">maxproc</span><span class="p">(</span><span class="n">maxp</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-  <span class="n">end</span> <span class="k">do</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;min = (&quot;</span><span class="p">,</span> <span class="n">minp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">minp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="s">&quot;)&quot;</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;max = (&quot;</span><span class="p">,</span> <span class="n">maxp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">maxp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="s">&quot;)&quot;</span>
+  !$omp parallel do reduction(min:minp) reduction(max:maxp)
+  do i = 1, n
+     call minproc(minp, points(i))
+     call maxproc(maxp, points(i))
+  end do
+  print *, &quot;min = (&quot;, minp%x, minp%y, &quot;)&quot;
+  print *, &quot;max = (&quot;, maxp%x, maxp%y, &quot;)&quot;
 
- <span class="n">contains</span>
-  <span class="n">subroutine</span> <span class="n">minproc</span> <span class="p">(</span> <span class="n">out</span><span class="p">,</span> <span class="n">in</span> <span class="p">)</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="o">::</span> <span class="n">out</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">in</span>
+ contains
+  subroutine minproc ( out, in )
+    implicit none
+    type(point), intent(inout) :: out
+    type(point), intent(in) :: in
 
-    <span class="n">out</span><span class="o">%</span><span class="n">x</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span> <span class="n">out</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">in</span><span class="o">%</span><span class="n">x</span> <span class="p">)</span>
-    <span class="n">out</span><span class="o">%</span><span class="n">y</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span> <span class="n">out</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">in</span><span class="o">%</span><span class="n">y</span> <span class="p">)</span>
-  <span class="n">end</span> <span class="n">subroutine</span> <span class="n">minproc</span>
+    out%x = min( out%x, in%x )
+    out%y = min( out%y, in%y )
+  end subroutine minproc
 
-  <span class="n">subroutine</span> <span class="n">maxproc</span> <span class="p">(</span> <span class="n">out</span><span class="p">,</span> <span class="n">in</span> <span class="p">)</span>
-    <span class="n">implicit</span> <span class="n">none</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span> <span class="o">::</span> <span class="n">out</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">in</span>
+  subroutine maxproc ( out, in )
+    implicit none
+    type(point), intent(inout) :: out
+    type(point), intent(in) :: in
 
-    <span class="n">out</span><span class="o">%</span><span class="n">x</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span> <span class="n">out</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">in</span><span class="o">%</span><span class="n">x</span> <span class="p">)</span>
-    <span class="n">out</span><span class="o">%</span><span class="n">y</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span> <span class="n">out</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">in</span><span class="o">%</span><span class="n">y</span> <span class="p">)</span>
-  <span class="n">end</span> <span class="n">subroutine</span> <span class="n">maxproc</span>
+    out%x = max( out%x, in%x )
+    out%y = max( out%y, in%y )
+  end subroutine maxproc
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows the same computation as  <em>udr.1</em>  but it illustrates that you can craft complex expressions in the user-defined reduction declaration. In this case, instead of calling the  <em>minproc</em>  and  <em>maxproc</em>  functions we inline the  in a single expression.</p>
+<p>The following example shows the same computation as  <em>udr.1</em>  but it illustrates that you can craft complex expressions in the user-defined reduction declaration. In this case, instead of calling the  <em>minproc</em>  and  <em>maxproc</em>  functions we inline the code in a single expression.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: udr.2.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;limits.h&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="k">struct</span> <span class="nc">point</span> <span class="p">{</span>
-  <span class="kt">int</span> <span class="n">x</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">y</span><span class="p">;</span>
-<span class="p">};</span>
+/*
+* name: udr.2.c
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
 
-<span class="cp">#pragma omp declare reduction(min : struct point : \</span>
-<span class="cp">        omp_out.x = omp_in.x &gt; omp_out.x  ? omp_out.x : omp_in.x, \</span>
-<span class="cp">        omp_out.y = omp_in.y &gt; omp_out.y  ? omp_out.y : omp_in.y ) \</span>
-<span class="cp">        initializer( omp_priv = { INT_MAX, INT_MAX } )</span>
+struct point {
+  int x;
+  int y;
+};
 
-<span class="cp">#pragma omp declare reduction(max : struct point : \</span>
-<span class="cp">        omp_out.x = omp_in.x &lt; omp_out.x  ? omp_out.x : omp_in.x,  \</span>
-<span class="cp">        omp_out.y = omp_in.y &lt; omp_out.y  ? omp_out.y : omp_in.y ) \</span>
-<span class="cp">        initializer( omp_priv = { 0, 0 } )</span>
+#pragma omp declare reduction(min : struct point : \
+        omp_out.x = omp_in.x &gt; omp_out.x  ? omp_out.x : omp_in.x, \
+        omp_out.y = omp_in.y &gt; omp_out.y  ? omp_out.y : omp_in.y ) \
+        initializer( omp_priv = { INT_MAX, INT_MAX } )
 
-<span class="kt">void</span> <span class="nf">find_enclosing_rectangle</span> <span class="p">(</span> <span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">point</span> <span class="n">points</span><span class="p">[]</span> <span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">struct</span> <span class="nc">point</span> <span class="n">minp</span> <span class="o">=</span> <span class="p">{</span> <span class="n">INT_MAX</span><span class="p">,</span> <span class="n">INT_MAX</span> <span class="p">},</span> <span class="n">maxp</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">};</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+#pragma omp declare reduction(max : struct point : \
+        omp_out.x = omp_in.x &lt; omp_out.x  ? omp_out.x : omp_in.x,  \
+        omp_out.y = omp_in.y &lt; omp_out.y  ? omp_out.y : omp_in.y ) \
+        initializer( omp_priv = { 0, 0 } )
 
-<span class="cp">#pragma omp parallel for reduction(min:minp) reduction(max:maxp)</span>
-  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">minp</span><span class="p">.</span><span class="n">x</span> <span class="p">)</span> <span class="n">minp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">minp</span><span class="p">.</span><span class="n">y</span> <span class="p">)</span> <span class="n">minp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">maxp</span><span class="p">.</span><span class="n">x</span> <span class="p">)</span> <span class="n">maxp</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">x</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span> <span class="o">&gt;</span> <span class="n">maxp</span><span class="p">.</span><span class="n">y</span> <span class="p">)</span> <span class="n">maxp</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">y</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;min = (%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">minp</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">minp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot;max = (%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">maxp</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">maxp</span><span class="p">.</span><span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
+void find_enclosing_rectangle ( int n, struct point points[] )
+{
+  struct point minp = { INT_MAX, INT_MAX }, maxp = {0,0};
+  int i;
+
+#pragma omp parallel for reduction(min:minp) reduction(max:maxp)
+  for ( i = 0; i &lt; n; i++ ) {
+    if ( points[i].x &lt; minp.x ) minp.x = points[i].x;
+    if ( points[i].y &lt; minp.y ) minp.y = points[i].y;
+    if ( points[i].x &gt; maxp.x ) maxp.x = points[i].x;
+    if ( points[i].y &gt; maxp.y ) maxp.y = points[i].y;
+  }
+  printf(&quot;min = (%d, %d)\n&quot;, minp.x, minp.y);
+  printf(&quot;max = (%d, %d)\n&quot;, maxp.x, maxp.y);
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The corresponding  of the same example in Fortran is very similar except that the assignment expression in the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive can only be used for a single variable, in this case through a type structure constructor  <em>point(<span class="math notranslate nohighlight">\(ldots\)</span>)</em> .</p>
+<p>The corresponding code of the same example in Fortran is very similar except that the assignment expression in the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive can only be used for a single variable, in this case through a type structure constructor  <em>point( … )</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">udr</span><span class="mf">.2</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">data_type</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.2.f90
+! type: F-free
+! version: omp_4.0
+module data_type
 
-  <span class="n">type</span> <span class="o">::</span> <span class="n">point</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">x</span>
-    <span class="n">integer</span> <span class="o">::</span> <span class="n">y</span>
-  <span class="n">end</span> <span class="n">type</span>
+  type :: point
+    integer :: x
+    integer :: y
+  end type
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">data_type</span>
+end module data_type
 
-<span class="n">subroutine</span> <span class="n">find_enclosing_rectangle</span> <span class="p">(</span> <span class="n">n</span><span class="p">,</span> <span class="n">points</span> <span class="p">)</span>
-  <span class="n">use</span> <span class="n">data_type</span>
-  <span class="n">implicit</span> <span class="n">none</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">n</span>
-  <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">::</span> <span class="n">points</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+subroutine find_enclosing_rectangle ( n, points )
+  use data_type
+  implicit none
+  integer :: n
+  type(point) :: points(*)
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">reduction</span><span class="p">(</span> <span class="nl">min</span> <span class="p">:</span> <span class="nl">point</span> <span class="p">:</span>  <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>   <span class="n">omp_out</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span><span class="n">min</span><span class="p">(</span> <span class="n">omp_out</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">omp_in</span><span class="o">%</span><span class="n">x</span> <span class="p">),</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                   <span class="n">min</span><span class="p">(</span> <span class="n">omp_out</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">omp_in</span><span class="o">%</span><span class="n">y</span> <span class="p">))</span> <span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>   <span class="n">initializer</span><span class="p">(</span> <span class="n">omp_priv</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span>
+  !$omp declare reduction( min : point :  &amp;
+  !$omp&amp;   omp_out = point(min( omp_out%x, omp_in%x ), &amp;
+  !$omp&amp;                   min( omp_out%y, omp_in%y )) ) &amp;
+  !$omp&amp;   initializer( omp_priv = point( HUGE(0), HUGE(0) ) )
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">reduction</span><span class="p">(</span> <span class="nl">max</span> <span class="p">:</span> <span class="nl">point</span> <span class="p">:</span>  <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>   <span class="n">omp_out</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span><span class="n">max</span><span class="p">(</span> <span class="n">omp_out</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">omp_in</span><span class="o">%</span><span class="n">x</span> <span class="p">),</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>                   <span class="n">max</span><span class="p">(</span> <span class="n">omp_out</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">omp_in</span><span class="o">%</span><span class="n">y</span> <span class="p">))</span> <span class="p">)</span> <span class="o">&amp;</span>
-  <span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span>   <span class="n">initializer</span><span class="p">(</span> <span class="n">omp_priv</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span> <span class="p">)</span>
+  !$omp declare reduction( max : point :  &amp;
+  !$omp&amp;   omp_out = point(max( omp_out%x, omp_in%x ), &amp;
+  !$omp&amp;                   max( omp_out%y, omp_in%y )) ) &amp;
+  !$omp&amp;   initializer( omp_priv = point( 0, 0 ) )
 
-  <span class="n">type</span><span class="p">(</span><span class="n">point</span><span class="p">)</span> <span class="o">::</span> <span class="n">minp</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">HUGE</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">),</span> <span class="n">maxp</span> <span class="o">=</span> <span class="n">point</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">)</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+  type(point) :: minp = point( HUGE(0), HUGE(0) ), maxp = point( 0, 0 )
+  integer :: i
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">min</span><span class="p">:</span> <span class="n">minp</span><span class="p">)</span> <span class="n">reduction</span><span class="p">(</span><span class="nl">max</span><span class="p">:</span> <span class="n">maxp</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-     <span class="n">minp</span><span class="o">%</span><span class="n">x</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">minp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="n">x</span><span class="p">)</span>
-     <span class="n">minp</span><span class="o">%</span><span class="n">y</span> <span class="o">=</span> <span class="n">min</span><span class="p">(</span><span class="n">minp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="n">y</span><span class="p">)</span>
-     <span class="n">maxp</span><span class="o">%</span><span class="n">x</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="n">x</span><span class="p">)</span>
-     <span class="n">maxp</span><span class="o">%</span><span class="n">y</span> <span class="o">=</span> <span class="n">max</span><span class="p">(</span><span class="n">maxp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="n">points</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">%</span><span class="n">y</span><span class="p">)</span>
-  <span class="n">end</span> <span class="k">do</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;min = (&quot;</span><span class="p">,</span> <span class="n">minp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">minp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="s">&quot;)&quot;</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="s">&quot;max = (&quot;</span><span class="p">,</span> <span class="n">maxp</span><span class="o">%</span><span class="n">x</span><span class="p">,</span> <span class="n">maxp</span><span class="o">%</span><span class="n">y</span><span class="p">,</span> <span class="s">&quot;)&quot;</span>
+  !$omp parallel do reduction(min: minp) reduction(max: maxp)
+  do i = 1, n
+     minp%x = min(minp%x, points(i)%x)
+     minp%y = min(minp%y, points(i)%y)
+     maxp%x = max(maxp%x, points(i)%x)
+     maxp%y = max(maxp%y, points(i)%y)
+  end do
+  print *, &quot;min = (&quot;, minp%x, minp%y, &quot;)&quot;
+  print *, &quot;max = (&quot;, maxp%x, maxp%y, &quot;)&quot;
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example shows the use of special variables in arguments for combiner ( <code class="docutils literal notranslate"><span class="pre">omp_in</span></code>  and  <code class="docutils literal notranslate"><span class="pre">omp_out</span></code> ) and initializer ( <code class="docutils literal notranslate"><span class="pre">omp_priv</span></code>  and  <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code> ) routines.  This example returns the maximum value of an array and the corresponding index value. The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive specifies a user-defined reduction operation  <em>maxloc</em>  for data type  <em>struct</em>   <em>mx_s</em> . The function  <em>mx_combine</em>  is the combiner and the function  <em>mx_init</em>  is the initializer.</p>
+<p>The following example shows the use of special variables in arguments for combiner (<code class="docutils literal notranslate"><span class="pre">omp_in</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_out</span></code>) and initializer (<code class="docutils literal notranslate"><span class="pre">omp_priv</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code>) routines.  This example returns the maximum value of an array and the corresponding index value. The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies a user-defined reduction operation  <em>maxloc</em>  for data type  <em>struct</em>   <em>mx_s</em> . The function  <em>mx_combine</em>  is the combiner and the function  <em>mx_init</em>  is the initializer.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: udr.3.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
+/*
+* name: udr.3.c
+* type: C
+* version: omp_4.0
+*/
 
-<span class="k">struct</span> <span class="nc">mx_s</span> <span class="p">{</span>
-   <span class="kt">float</span> <span class="n">value</span><span class="p">;</span>
-   <span class="kt">int</span> <span class="n">index</span><span class="p">;</span>
-<span class="p">};</span>
+#include &lt;stdio.h&gt;
+#define N 100
 
-<span class="cm">/* prototype functions for combiner and initializer in</span>
-<span class="cm">   the declare reduction */</span>
-<span class="kt">void</span> <span class="nf">mx_combine</span><span class="p">(</span><span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">in</span><span class="p">);</span>
-<span class="kt">void</span> <span class="nf">mx_init</span><span class="p">(</span><span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">priv</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">orig</span><span class="p">);</span>
+struct mx_s {
+   float value;
+   int index;
+};
 
-<span class="cp">#pragma omp declare reduction(maxloc: struct mx_s: \</span>
-<span class="cp">        mx_combine(&amp;omp_out, &amp;omp_in)) \</span>
-<span class="cp">        initializer(mx_init(&amp;omp_priv, &amp;omp_orig))</span>
+/* prototype functions for combiner and initializer in
+   the declare reduction */
+void mx_combine(struct mx_s *out, struct mx_s *in);
+void mx_init(struct mx_s *priv, struct mx_s *orig);
 
-<span class="kt">void</span> <span class="nf">mx_combine</span><span class="p">(</span><span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">out</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">in</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">if</span> <span class="p">(</span> <span class="n">out</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">value</span> <span class="p">)</span> <span class="p">{</span>
-      <span class="n">out</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
-      <span class="n">out</span><span class="o">-&gt;</span><span class="n">index</span> <span class="o">=</span> <span class="n">in</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">;</span>
-   <span class="p">}</span>
-<span class="p">}</span>
+#pragma omp declare reduction(maxloc: struct mx_s: \
+        mx_combine(&amp;omp_out, &amp;omp_in)) \
+        initializer(mx_init(&amp;omp_priv, &amp;omp_orig))
 
-<span class="kt">void</span> <span class="nf">mx_init</span><span class="p">(</span><span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">priv</span><span class="p">,</span> <span class="k">struct</span> <span class="nc">mx_s</span> <span class="o">*</span><span class="n">orig</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="n">priv</span><span class="o">-&gt;</span><span class="n">value</span> <span class="o">=</span> <span class="n">orig</span><span class="o">-&gt;</span><span class="n">value</span><span class="p">;</span>
-   <span class="n">priv</span><span class="o">-&gt;</span><span class="n">index</span> <span class="o">=</span> <span class="n">orig</span><span class="o">-&gt;</span><span class="n">index</span><span class="p">;</span>
-<span class="p">}</span>
+void mx_combine(struct mx_s *out, struct mx_s *in)
+{
+   if ( out-&gt;value &lt; in-&gt;value ) {
+      out-&gt;value = in-&gt;value;
+      out-&gt;index = in-&gt;index;
+   }
+}
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="k">struct</span> <span class="nc">mx_s</span> <span class="n">mx</span><span class="p">;</span>
-   <span class="kt">float</span> <span class="n">val</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">d</span><span class="p">;</span>
-   <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="n">N</span><span class="p">;</span>
+void mx_init(struct mx_s *priv, struct mx_s *orig)
+{
+   priv-&gt;value = orig-&gt;value;
+   priv-&gt;index = orig-&gt;index;
+}
 
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="mf">0.8f</span> <span class="o">-</span> <span class="n">i</span><span class="p">);</span>
-      <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="n">N</span> <span class="o">-</span> <span class="n">d</span> <span class="o">*</span> <span class="n">d</span><span class="p">;</span>
-   <span class="p">}</span>
+int main(void)
+{
+   struct mx_s mx;
+   float val[N], d;
+   int i, count = N;
 
-   <span class="n">mx</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-   <span class="n">mx</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-   <span class="cp">#pragma omp parallel for reduction(maxloc: mx)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">mx</span><span class="p">.</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-      <span class="p">{</span>
-         <span class="n">mx</span><span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">val</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-         <span class="n">mx</span><span class="p">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
+   for (i = 0; i &lt; count; i++) {
+      d = (N*0.8f - i);
+      val[i] = N * N - d * d;
+   }
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;max value = %g, index = %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">mx</span><span class="p">.</span><span class="n">value</span><span class="p">,</span> <span class="n">mx</span><span class="p">.</span><span class="n">index</span><span class="p">);</span>
-   <span class="cm">/* prints 10000, 80 */</span>
+   mx.value = val[0];
+   mx.index = 0;
+   #pragma omp parallel for reduction(maxloc: mx)
+   for (i = 1; i &lt; count; i++) {
+      if (mx.value &lt; val[i])
+      {
+         mx.value = val[i];
+         mx.index = i;
+      }
+   }
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   printf(&quot;max value = %g, index = %d\n&quot;, mx.value, mx.index);
+   /* prints 10000, 80 */
+
+   return 0;
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>Below is the corresponding Fortran version of the above example.  The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive specifies the user-defined operation  <em>maxloc</em>  for user-derived type  <em>mx_s</em> .  The combiner  <em>mx_combine</em>  and the initializer  <em>mx_init</em>  are specified as subprograms.</p>
+<p>Below is the corresponding Fortran version of the above example.  The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies the user-defined operation  <em>maxloc</em>  for user-derived type  <em>mx_s</em> .  The combiner  <em>mx_combine</em>  and the initializer  <em>mx_init</em>  are specified as subprograms.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: udr.3.f90
 ! type: F-free
 ! version: omp_4.0
@@ -1621,123 +1661,126 @@ end program
 </div>
 </div>
 </div>
-<p>The following example explains a few details of the user-defined reduction  in Fortran through modules. The  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive is declared in a module ( <em>data_red</em> ).  The reduction-identifier  <em>.add.</em>  is a user-defined operator that is to allow accessibility in the scope that performs the reduction operation. The user-defined operator  <em>.add.</em>  and the subroutine  <em>dt_init</em>  specified in the  <code class="docutils literal notranslate"><span class="pre">initializer</span></code>  clause are defined in the same subprogram.</p>
-<p>The reduction operation (that is, the  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause) is in the main program. The reduction identifier  <em>.add.</em>  is accessible by use association. Since  <em>.add.</em>  is a user-defined operator, the explicit interface should also be accessible by use association in the current program unit. Since the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  associated to this  <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause has the  <code class="docutils literal notranslate"><span class="pre">initializer</span></code>  clause, the subroutine specified on the clause must be accessible in the current scoping unit.  In this case, the subroutine  <em>dt_init</em>  is accessible by use association.</p>
+<p>The following example explains a few details of the user-defined reduction  in Fortran through modules. The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive is declared in a module ( <em>data_red</em> ).  The reduction-identifier  <em>.add.</em>  is a user-defined operator that is to allow accessibility in the scope that performs the reduction operation. The user-defined operator  <em>.add.</em>  and the subroutine  <em>dt_init</em>  specified in the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause are defined in the same subprogram.</p>
+<p>The reduction operation (that is, the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause) is in the main program. The reduction identifier  <em>.add.</em>  is accessible by use association. Since  <em>.add.</em>  is a user-defined operator, the explicit interface should also be accessible by use association in the current program unit. Since the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> associated to this <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause has the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause, the subroutine specified on the clause must be accessible in the current scoping unit.  In this case, the subroutine  <em>dt_init</em>  is accessible by use association.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">udr</span><span class="mf">.4</span><span class="p">.</span><span class="n">f90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">module</span> <span class="n">data_red</span>
-<span class="o">!</span> <span class="n">Declare</span> <span class="n">data</span> <span class="n">type</span><span class="p">.</span>
-  <span class="n">type</span> <span class="n">dt</span>
-    <span class="n">real</span> <span class="o">::</span> <span class="n">r1</span>
-    <span class="n">real</span> <span class="o">::</span> <span class="n">r2</span>
-  <span class="n">end</span> <span class="n">type</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.4.f90
+! type: F-free
+! version: omp_4.0
+module data_red
+! Declare data type.
+  type dt
+    real :: r1
+    real :: r2
+  end type
 
-<span class="o">!</span> <span class="n">Declare</span> <span class="n">the</span> <span class="n">user</span><span class="o">-</span><span class="n">defined</span> <span class="n">operator</span> <span class="p">.</span><span class="n">add</span><span class="p">.</span>
-  <span class="n">interface</span> <span class="n">operator</span><span class="p">(.</span><span class="n">add</span><span class="p">.)</span>
-    <span class="n">module</span> <span class="n">procedure</span> <span class="n">addc</span>
-  <span class="n">end</span> <span class="n">interface</span>
+! Declare the user-defined operator .add.
+  interface operator(.add.)
+    module procedure addc
+  end interface
 
-<span class="o">!</span> <span class="n">Declare</span> <span class="n">the</span> <span class="n">user</span><span class="o">-</span><span class="n">defined</span> <span class="n">reduction</span> <span class="n">operator</span> <span class="p">.</span><span class="n">add</span><span class="p">.</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">declare</span> <span class="n">reduction</span><span class="p">(.</span><span class="n">add</span><span class="p">.</span><span class="o">:</span><span class="nl">dt</span><span class="p">:</span><span class="n">omp_out</span><span class="o">=</span><span class="n">omp_out</span><span class="p">.</span><span class="n">add</span><span class="p">.</span><span class="n">omp_in</span><span class="p">)</span> <span class="o">&amp;</span>
-<span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span> <span class="n">initializer</span><span class="p">(</span><span class="n">dt_init</span><span class="p">(</span><span class="n">omp_priv</span><span class="p">))</span>
+! Declare the user-defined reduction operator .add.
+!$omp declare reduction(.add.:dt:omp_out=omp_out.add.omp_in) &amp;
+!$omp&amp; initializer(dt_init(omp_priv))
 
- <span class="n">contains</span>
-<span class="o">!</span> <span class="n">Declare</span> <span class="n">the</span> <span class="n">initialization</span> <span class="n">routine</span><span class="p">.</span>
-  <span class="n">subroutine</span> <span class="n">dt_init</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">::</span> <span class="n">u</span>
-    <span class="n">u</span><span class="o">%</span><span class="n">r1</span> <span class="o">=</span> <span class="mf">0.0</span>
-    <span class="n">u</span><span class="o">%</span><span class="n">r2</span> <span class="o">=</span> <span class="mf">0.0</span>
-  <span class="n">end</span> <span class="n">subroutine</span>
+ contains
+! Declare the initialization routine.
+  subroutine dt_init(u)
+    type(dt) :: u
+    u%r1 = 0.0
+    u%r2 = 0.0
+  end subroutine
 
-<span class="o">!</span> <span class="n">Declare</span> <span class="n">the</span> <span class="n">specific</span> <span class="n">procedure</span> <span class="k">for</span> <span class="n">the</span> <span class="p">.</span><span class="n">add</span><span class="p">.</span> <span class="n">operator</span><span class="p">.</span>
-  <span class="n">function</span> <span class="n">addc</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">xresult</span><span class="p">)</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">dt</span><span class="p">),</span> <span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="o">::</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span>
-    <span class="n">type</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">::</span> <span class="n">xresult</span>
-    <span class="n">xresult</span><span class="o">%</span><span class="n">r1</span> <span class="o">=</span> <span class="n">x1</span><span class="o">%</span><span class="n">r1</span> <span class="o">+</span> <span class="n">x2</span><span class="o">%</span><span class="n">r2</span>
-    <span class="n">xresult</span><span class="o">%</span><span class="n">r2</span> <span class="o">=</span> <span class="n">x1</span><span class="o">%</span><span class="n">r2</span> <span class="o">+</span> <span class="n">x2</span><span class="o">%</span><span class="n">r1</span>
-  <span class="n">end</span> <span class="n">function</span>
+! Declare the specific procedure for the .add. operator.
+  function addc(x1, x2) result(xresult)
+    type(dt), intent(in) :: x1, x2
+    type(dt) :: xresult
+    xresult%r1 = x1%r1 + x2%r2
+    xresult%r2 = x1%r2 + x2%r1
+  end function
 
-<span class="n">end</span> <span class="n">module</span> <span class="n">data_red</span>
+end module data_red
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">use</span> <span class="n">data_red</span><span class="p">,</span> <span class="nl">only</span> <span class="p">:</span> <span class="n">dt</span><span class="p">,</span> <span class="n">dt_init</span><span class="p">,</span> <span class="n">operator</span><span class="p">(.</span><span class="n">add</span><span class="p">.)</span>
+program main
+  use data_red, only : dt, dt_init, operator(.add.)
 
-  <span class="n">type</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">::</span> <span class="n">xdt1</span><span class="p">,</span> <span class="n">xdt2</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">i</span>
+  type(dt) :: xdt1, xdt2
+  integer :: i
 
-  <span class="n">xdt1</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">)</span>
-  <span class="n">xdt2</span> <span class="o">=</span> <span class="n">dt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">)</span>
+  xdt1 = dt(1.0,2.0)
+  xdt2 = dt(2.0,3.0)
 
-<span class="o">!</span> <span class="n">The</span> <span class="n">reduction</span> <span class="n">operation</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">reduction</span><span class="p">(.</span><span class="n">add</span><span class="p">.</span><span class="o">:</span> <span class="n">xdt1</span><span class="p">)</span>
-  <span class="k">do</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span>
-    <span class="n">xdt1</span> <span class="o">=</span> <span class="n">xdt1</span> <span class="p">.</span><span class="n">add</span><span class="p">.</span> <span class="n">xdt2</span>
-  <span class="n">end</span> <span class="k">do</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span> <span class="k">do</span>
+! The reduction operation
+!$omp parallel do reduction(.add.: xdt1)
+  do i = 1, 10
+    xdt1 = xdt1 .add. xdt2
+  end do
+!$omp end parallel do
 
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">xdt1</span>
+  print *, xdt1
 
-<span class="n">end</span> <span class="n">program</span>
+end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example uses user-defined reductions to declare a plus (+) reduction for a C++ class. As the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive is inside the context of the  <em>V</em>  class the expressions in the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  directive are resolved in the context of the class. Also, note that the  <code class="docutils literal notranslate"><span class="pre">initializer</span></code>  clause uses a copy constructor to initialize the private variables of the reduction and it uses as parameter to its original variable by using the special variable  <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code> .</p>
+<p>The following example uses user-defined reductions to declare a plus (+) reduction for a C++ class. As the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive is inside the context of the  <em>V</em>  class the expressions in the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive are resolved in the context of the class. Also, note that the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause uses a copy constructor to initialize the private variables of the reduction and it uses as parameter to its original variable by using the special variable <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: udr.5.cpp</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="n">class</span> <span class="n">V</span> <span class="p">{</span>
-   <span class="kt">float</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-   <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="nl">public</span><span class="p">:</span>
-   <span class="n">V</span><span class="p">(</span> <span class="kt">int</span> <span class="n">_n</span> <span class="p">)</span>     <span class="o">:</span> <span class="n">n</span><span class="p">(</span><span class="n">_n</span><span class="p">)</span>  <span class="p">{</span> <span class="n">p</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">float</span><span class="p">[</span><span class="n">n</span><span class="p">];</span> <span class="p">}</span>
-   <span class="n">V</span><span class="p">(</span> <span class="k">const</span> <span class="n">V</span><span class="o">&amp;</span> <span class="n">m</span> <span class="p">)</span> <span class="o">:</span> <span class="n">n</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">n</span><span class="p">)</span> <span class="p">{</span> <span class="n">p</span> <span class="o">=</span> <span class="n">new</span> <span class="kt">float</span><span class="p">[</span><span class="n">n</span><span class="p">];</span> <span class="p">}</span>
-   <span class="o">~</span><span class="n">V</span><span class="p">()</span> <span class="p">{</span> <span class="n">delete</span><span class="p">[]</span> <span class="n">p</span><span class="p">;</span> <span class="p">}</span>
+/*
+* name: udr.5.cpp
+* type: C++
+* version: omp_4.0
+*/
+class V {
+   float *p;
+   int n;
 
-   <span class="n">V</span><span class="o">&amp;</span> <span class="n">operator</span><span class="o">+=</span> <span class="p">(</span> <span class="k">const</span> <span class="n">V</span><span class="o">&amp;</span> <span class="p">);</span>
+public:
+   V( int _n )     : n(_n)  { p = new float[n]; }
+   V( const V&amp; m ) : n(m.n) { p = new float[n]; }
+   ~V() { delete[] p; }
 
-   <span class="cp">#pragma omp declare reduction( + : V : omp_out += omp_in ) \</span>
-<span class="cp">           initializer(omp_priv(omp_orig))</span>
-<span class="p">};</span>
+   V&amp; operator+= ( const V&amp; );
+
+   #pragma omp declare reduction( + : V : omp_out += omp_in ) \
+           initializer(omp_priv(omp_orig))
+};
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following examples shows how user-defined reductions can be defined for some STL containers. The first  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  defines the plus (+) operation for  <em>std::vector<int></em>  by making use of the  <em>std::transform</em>  algorithm. The second and third define the merge (or concatenation) operation for  <em>std::vector<int></em>  and  <em>std::list<int></em> .<br />
-It shows how the same user-defined reduction operation can be defined to be done differently depending on the specified data type. It shows how the user-defined reduction operation can be applied to specific data types of an STL.</p>
+<p>The following examples shows how user-defined reductions can be defined for some STL containers. The first <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> defines the plus (+) operation for  <em>std::vector<int></em>  by making use of the  <em>std::transform</em>  algorithm. The second and third define the merge (or concatenation) operation for  <em>std::vector<int></em>  and  <em>std::list<int></em> .  It shows how the user-defined reduction operation can be applied to specific data types of an STL.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: udr.6.cpp</span>
-<span class="cm">* type: C++</span>
-<span class="cm">* version: omp_4.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;list&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#pragma omp declare reduction( + : std::vector&lt;int&gt; : \</span>
-<span class="cp">     std::transform (omp_out.begin(), omp_out.end(),  \</span>
-<span class="cp">        omp_in.begin(), omp_in.end(),std::plus&lt;int&gt;()))</span>
+/*
+* name: udr.6.cpp
+* type: C++
+* version: omp_4.0
+*/
+#include &lt;algorithm&gt;
+#include &lt;list&gt;
+#include &lt;vector&gt;
 
-<span class="cp">#pragma omp declare reduction( merge : std::vector&lt;int&gt; : \</span>
-<span class="cp">     omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))</span>
+#pragma omp declare reduction( + : std::vector&lt;int&gt; : \
+     std::transform (omp_out.begin(), omp_out.end(),  \
+        omp_in.begin(), omp_in.end(),std::plus&lt;int&gt;()))
 
-<span class="cp">#pragma omp declare reduction( merge : std::list&lt;int&gt; : \</span>
-<span class="cp">     omp_out.merge(omp_in))</span>
+#pragma omp declare reduction( merge : std::vector&lt;int&gt; : \
+     omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
+
+#pragma omp declare reduction( merge : std::list&lt;int&gt; : \
+     omp_out.merge(omp_in))
 
 </pre></div>
 </div>
@@ -1771,7 +1814,7 @@ It shows how the same user-defined reduction operation can be defined to be done
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="Examples_reduction.html" title="previous page">Reduction</a>
-    <a class='right-next' id="next-link" href="Examples_scan.html" title="next page">The  <code class="docutils literal notranslate"><span class="pre">scan</span></code>  Directive</a>
+    <a class='right-next' id="next-link" href="Examples_scan.html" title="next page">The <code class="docutils literal notranslate"><span class="pre">scan</span></code> Directive</a>
 
         </div>
         

@@ -54,6 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Memory Model" href="Chap_memory_model.html" />
+    <link rel="prev" title="C++ Reference in Data-Sharing Clauses" href="Examples_cpp_reference.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -90,7 +92,7 @@
   </a>
  </li>
 </ul>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="Foreword_Chapt.html">
    Foreword
@@ -546,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -898,11 +895,11 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
+ <li class="toctree-l1 current active collapsible-parent">
   <a class="reference internal" href="Chap_data_environment.html">
    Data Environment
   </a>
-  <ul class="collapse-ul">
+  <ul class="current collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="Examples_threadprivate.html">
      The
@@ -1034,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 current active collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="current collapse-ul">
+     <li class="toctree-l3 current active">
+      <a class="current reference internal" href="#">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1083,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1105,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1250,67 +1290,67 @@
               <div>
                 
   <div class="section" id="fortran-associate-construct">
-<h1>Fortran  <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code>  Construct<a class="headerlink" href="#fortran-associate-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following is an invalid example of specifying an associate name on a data-sharing attribute  clause. The constraint in the Data Sharing Attribute Rules section in the OpenMP  4.0 API Specifications states that an associate name preserves the association  with the selector established at the  <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code>  statement. The associate  name  <em>b</em>  is associated with the shared variable  <em>a</em> . With the predetermined data-sharing  attribute rule, the associate name  <em>b</em>  is not allowed to be specified on the  <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause.</p>
+<h1>Fortran <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> Construct<a class="headerlink" href="#fortran-associate-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following is an invalid example of specifying an associate name on a data-sharing attribute  clause. The constraint in the Data Sharing Attribute Rules section in the OpenMP  4.0 API Specifications states that an associate name preserves the association  with the selector established at the <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> statement. The associate  name  <em>b</em>  is associated with the shared variable  <em>a</em> . With the predetermined data-sharing  attribute rule, the associate name  <em>b</em>  is not allowed to be specified on the <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">associate</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-      <span class="n">program</span> <span class="n">example_broken</span>
-      <span class="n">real</span> <span class="o">::</span> <span class="n">a</span><span class="p">,</span> <span class="n">c</span>
-      <span class="n">associate</span> <span class="p">(</span><span class="n">b</span> <span class="o">=&gt;</span> <span class="n">a</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">private</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>        <span class="o">!</span> <span class="n">invalid</span> <span class="n">to</span> <span class="n">privatize</span> <span class="n">b</span>
-      <span class="n">c</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">b</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-      <span class="n">end</span> <span class="n">associate</span>
-      <span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.1f
+! type: F-fixed
+! version: omp_4.0
+      program example_broken
+      real :: a, c
+      associate (b =&gt; a)
+!$omp parallel private(b, c)        ! invalid to privatize b
+      c = 2.0*b
+!$omp end parallel
+      end associate
+      end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In next example, within the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct, the association name  <em>thread_id</em>   is associated with the private copy of  <em>i</em> . The print statement should output the  unique thread number.</p>
+<p>In next example, within the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct, the association name  <em>thread_id</em>   is associated with the private copy of  <em>i</em> . The print statement should output the  unique thread number.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">associate</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-      <span class="n">program</span> <span class="n">example</span>
-      <span class="n">use</span> <span class="n">omp_lib</span>
-      <span class="n">integer</span>  <span class="n">i</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">private</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-      <span class="n">i</span> <span class="o">=</span> <span class="n">omp_get_thread_num</span><span class="p">()</span>
-      <span class="n">associate</span><span class="p">(</span><span class="n">thread_id</span> <span class="o">=&gt;</span> <span class="n">i</span><span class="p">)</span>
-        <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">thread_id</span>       <span class="o">!</span> <span class="n">print</span> <span class="n">private</span> <span class="n">i</span> <span class="n">value</span>
-      <span class="n">end</span> <span class="n">associate</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-      <span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.2f
+! type: F-fixed
+! version: omp_4.0
+      program example
+      use omp_lib
+      integer  i
+!$omp parallel private(i)
+      i = omp_get_thread_num()
+      associate(thread_id =&gt; i)
+        print *, thread_id       ! print private i value
+      end associate
+!$omp end parallel
+      end program
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>The following example illustrates the effect of specifying a selector name on a data-sharing  attribute clause. The associate name  <em>u</em>  is associated with  <em>v</em>  and the variable  <em>v</em>   is specified on the  <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  construct.  The construct association is established prior to the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region.  The association between  <em>u</em>  and the original  <em>v</em>  is retained (see the Data Sharing  Attribute Rules section in the OpenMP 4.0 API Specifications). Inside the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>   region,  <em>v</em>  has the value of -1 and  <em>u</em>  has the value of the original  <em>v</em> .</p>
+<p>The following example illustrates the effect of specifying a selector name on a data-sharing  attribute clause. The associate name  <em>u</em>  is associated with  <em>v</em>  and the variable  <em>v</em>   is specified on the <code class="docutils literal notranslate"><span class="pre">private</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.  The construct association is established prior to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.  The association between  <em>u</em>  and the original  <em>v</em>  is retained (see the Data Sharing  Attribute Rules section in the OpenMP 4.0 API Specifications). Inside the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region,  <em>v</em>  has the value of -1 and  <em>u</em>  has the value of the original  <em>v</em> .</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">associate</span><span class="mf">.3f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_4</span><span class="mf">.0</span>
-<span class="n">program</span> <span class="n">example</span>
-  <span class="n">integer</span> <span class="o">::</span> <span class="n">v</span>
-  <span class="n">v</span> <span class="o">=</span> <span class="mi">15</span>
-<span class="n">associate</span><span class="p">(</span><span class="n">u</span> <span class="o">=&gt;</span> <span class="n">v</span><span class="p">)</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="n">private</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-  <span class="n">v</span> <span class="o">=</span> <span class="mi">-1</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">v</span>               <span class="o">!</span> <span class="n">private</span> <span class="n">v</span><span class="o">=</span><span class="mi">-1</span>
-  <span class="n">print</span> <span class="o">*</span><span class="p">,</span> <span class="n">u</span>               <span class="o">!</span> <span class="n">original</span> <span class="n">v</span><span class="o">=</span><span class="mi">15</span>
-<span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
-<span class="n">end</span> <span class="n">associate</span>
-<span class="n">end</span> <span class="n">program</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.3f
+! type: F-free
+! version: omp_4.0
+program example
+  integer :: v
+  v = 15
+associate(u =&gt; v)
+!$omp parallel private(v)
+  v = -1
+  print *, v               ! private v=-1
+  print *, u               ! original v=15
+!$omp end parallel
+end associate
+end program
 
 </pre></div>
 </div>
@@ -1343,6 +1383,8 @@
         
         <div class='prev-next-bottom'>
             
+    <a class='left-prev' id="prev-link" href="Examples_cpp_reference.html" title="previous page">C++ Reference in Data-Sharing Clauses</a>
+    <a class='right-next' id="next-link" href="Chap_memory_model.html" title="next page">Memory Model</a>
 
         </div>
         

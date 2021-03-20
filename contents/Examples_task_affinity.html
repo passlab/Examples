@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,36 +1291,38 @@
                 
   <div class="section" id="task-affinity">
 <h1>Task Affinity<a class="headerlink" href="#task-affinity" title="Permalink to this headline">¶</a></h1>
-<p>The next example illustrates the use of the  <code class="docutils literal notranslate"><span class="pre">affinity</span></code>  clause with a  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct. The variables in the  <code class="docutils literal notranslate"><span class="pre">affinity</span></code>  clause provide a hint to the runtime that the task should execute ‘close’ to the physical storage location of the variables. For example, on a two-socket platform with a local memory component close to each processor socket, the runtime will attempt to schedule the task execution on the socket where the storage is located.</p>
-<p>Because the C/C++  employs a pointer, an array section is used in the  <code class="docutils literal notranslate"><span class="pre">affinity</span></code>  clause. Fortran  can use an array reference to specify the storage, as shown here.</p>
-<p>Note, in the second task of the C/C++  the  <em>B</em>  pointer is declared shared.  Otherwise, by default, it would be firstprivate since it is a local variable, and would probably be saved for the second task before being assigned a storage address by the first task.  Also, one might think it reasonable to use the  <code class="docutils literal notranslate"><span class="pre">affinity</span></code>  clause  <em>affinity(B[:N])</em>  on the second  <code class="docutils literal notranslate"><span class="pre">task</span></code>  construct. However, the storage behind  <em>B</em>  is created in the first task, and the  array section reference may not be valid when the second task is generated. The use of the  <em>A</em>  array is sufficient for this case, because one would expect the storage for  <em>A</em>  and  <em>B</em>  would be physically ‘close’ (as provided by the hint in the first task).</p>
+<p>The next example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">affinity</span></code> clause with a <code class="docutils literal notranslate"><span class="pre">task</span></code> construct. The variables in the <code class="docutils literal notranslate"><span class="pre">affinity</span></code> clause provide a hint to the runtime that the task should execute “close” to the physical storage location of the variables. For example, on a two-socket platform with a local memory component close to each processor socket, the runtime will attempt to schedule the task execution on the socket where the storage is located.</p>
+<p>Because the C/C++ code employs a pointer, an array section is used in the <code class="docutils literal notranslate"><span class="pre">affinity</span></code> clause. Fortran code can use an array reference to specify the storage, as shown here.</p>
+<p>Note, in the second task of the C/C++ code the  <em>B</em>  pointer is declared shared.  Otherwise, by default, it would be firstprivate since it is a local variable, and would probably be saved for the second task before being assigned a storage address by the first task.  Also, one might think it reasonable to use the <code class="docutils literal notranslate"><span class="pre">affinity</span></code> clause  <em>affinity(B[:N])</em>  on the second <code class="docutils literal notranslate"><span class="pre">task</span></code> construct. However, the storage behind  <em>B</em>  is created in the first task, and the  array section reference may not be valid when the second task is generated. The use of the  <em>A</em>  array is sufficient for this case, because one would expect the storage for  <em>A</em>  and  <em>B</em>  would be physically “close” (as provided by the hint in the first task).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: affinity.1.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">double</span> <span class="o">*</span> <span class="nf">alloc_init_B</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">);</span>
-<span class="kt">void</span>     <span class="nf">compute_on_B</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">B</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">);</span>
+/*
+* name: affinity.1.c
+* type: C
+* version: omp_5.0
+*/
 
-<span class="kt">void</span> <span class="nf">task_affinity</span><span class="p">(</span><span class="kt">double</span> <span class="o">*</span><span class="n">A</span><span class="p">,</span> <span class="kt">int</span> <span class="n">N</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">double</span> <span class="o">*</span> <span class="n">B</span><span class="p">;</span>
-   <span class="cp">#pragma omp task depend(out:B) shared(B) affinity(A[0:N])</span>
-   <span class="p">{</span>
-     <span class="n">B</span> <span class="o">=</span> <span class="n">alloc_init_B</span><span class="p">(</span><span class="n">A</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-   <span class="p">}</span>
+double * alloc_init_B(double *A, int N);
+void     compute_on_B(double *B, int N);
 
-   <span class="cp">#pragma omp task depend( in:B) shared(B) affinity(A[0:N])</span>
-   <span class="p">{</span>
-     <span class="n">compute_on_B</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">N</span><span class="p">);</span>
-   <span class="p">}</span>
+void task_affinity(double *A, int N)
+{
+   double * B;
+   #pragma omp task depend(out:B) shared(B) affinity(A[0:N])
+   {
+     B = alloc_init_B(A,N);
+   }
 
-   <span class="cp">#pragma omp taskwait</span>
-<span class="p">}</span>
+   #pragma omp task depend( in:B) shared(B) affinity(A[0:N])
+   {
+     compute_on_B(B,N);
+   }
+
+   #pragma omp taskwait
+}
 
 
 </pre></div>
@@ -1291,28 +1331,28 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">affinity</span><span class="mf">.6f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       affinity.6f
+! type:       F-free
+! version: omp_5.0
 
-<span class="n">subroutine</span> <span class="n">task_affinity</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+subroutine task_affinity(A, N)
 
-  <span class="n">external</span> <span class="n">alloc_init_B</span>
-  <span class="n">external</span> <span class="n">compute_on_B</span>
-  <span class="kt">double</span> <span class="n">precision</span><span class="p">,</span> <span class="n">allocatable</span> <span class="o">::</span> <span class="n">B</span><span class="p">(</span><span class="o">:</span><span class="p">)</span>
+  external alloc_init_B
+  external compute_on_B
+  double precision, allocatable :: B(:)
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">out</span><span class="p">:</span><span class="n">B</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="n">affinity</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-     <span class="n">call</span> <span class="n">alloc_init_B</span><span class="p">(</span><span class="n">B</span><span class="p">,</span><span class="n">A</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+   !$omp task depend(out:B) shared(B) affinity(A)
+     call alloc_init_B(B,A)
+   !$omp end task
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">task</span> <span class="n">depend</span><span class="p">(</span><span class="nl">in</span><span class="p">:</span><span class="n">B</span><span class="p">)</span> <span class="n">shared</span><span class="p">(</span><span class="n">B</span><span class="p">)</span> <span class="n">affinity</span><span class="p">(</span><span class="n">A</span><span class="p">)</span>
-     <span class="n">call</span> <span class="n">compute_on_B</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">task</span>
+   !$omp task depend(in:B) shared(B) affinity(A)
+     call compute_on_B(B)
+   !$omp end task
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">taskwait</span>
+   !$omp taskwait
 
-<span class="n">end</span> <span class="n">subroutine</span>
+end subroutine
 
 
 </pre></div>
@@ -1346,7 +1386,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_affinity.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_affinity.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> Clause</a>
     <a class='right-next' id="next-link" href="Examples_affinity_display.html" title="next page">Affinity Display</a>
 
         </div>

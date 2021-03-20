@@ -52,8 +52,6 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Structure mapping" href="Examples_target_structure_mapping.html" />
@@ -550,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1038,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1087,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1109,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1256,229 +1292,241 @@
   <div class="section" id="pointer-mapping">
 <h1>Pointer mapping<a class="headerlink" href="#pointer-mapping" title="Permalink to this headline">¶</a></h1>
 <p>Pointers that contain host addresses require that those addresses are translated to device addresses for them to be useful in the context of a device data environment. Broadly speaking, there are two scenarios where this is important.</p>
-<p>The first scenario is where the pointer is mapped to the device data environment, such that references to the pointer inside a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region are to the corresponding pointer. Pointer attachment ensures that the corresponding pointer will contain a device address when all of the following conditions are true:</p>
+<p>The first scenario is where the pointer is mapped to the device data environment, such that references to the pointer inside a <code class="docutils literal notranslate"><span class="pre">target</span></code> region are to the corresponding pointer. Pointer attachment ensures that the corresponding pointer will contain a device address when all of the following conditions are true:</p>
 <ul class="simple">
-<li><p>the pointer is mapped by directive <span class="math notranslate nohighlight">\(A\)</span> to a device;</p></li>
-<li><p>a list item that uses the pointer as its base pointer (call it the {pointee}) is mapped, to the same device, by directive <span class="math notranslate nohighlight">\(B\)</span>, which may be the same as <span class="math notranslate nohighlight">\(A\)</span>;</p></li>
-<li><p>the effect of directive <span class="math notranslate nohighlight">\(B\)</span> is to create either the corresponding pointer or pointee in the device data environment of the device.</p></li>
+<li><p>the pointer is mapped by directive  A  to a device;</p></li>
 </ul>
-<p>Given the above conditions, pointer attachment is initiated as a result of directive <span class="math notranslate nohighlight">\(B\)</span> and subsequent references to the pointee list item in a target region that use the pointer will access the corresponding pointee. The corresponding pointer remains in this {attached} state until it is removed from the device data environment.</p>
-<p>The second scenario, which is only applicable for C/C++, is where the pointer is implicitly privatized inside a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct when it appears as the base pointer to a list item on the construct and does not appear explicitly as a list item in a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause,  <code class="docutils literal notranslate"><span class="pre">is_device_ptr</span></code>  clause, or data-sharing attribute clause. This scenario can be further split into two cases: the list item is a zero-length array section (e.g.,  <em>p[:0]</em> ) or it is not.</p>
-<p>If it is a zero-length array section, this will trigger a runtime check on entry to the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region for a previously mapped list item where the value of the pointer falls within the range of its base address and ending address. If such a match is found the private pointer is initialized to the device address corresponding to the value of the original pointer, and otherwise it is initialized to NULL (or retains its original value if the  <code class="docutils literal notranslate"><span class="pre">unified_address</span></code>  requirement is specified for that compilation unit).</p>
-<p>If the list item (again, call it the {pointee}) is not a zero-length array section, the private pointer will be initialized such that references in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region to the pointee list item that use the pointer will access the corresponding pointee.</p>
+<ul class="simple">
+<li><p>a list item that uses the pointer as its base pointer (call it the <strong>pointee</strong>) is mapped, to the same device, by directive  B , which may be the same as  A ;</p></li>
+</ul>
+<ul class="simple">
+<li><p>the effect of directive  B  is to create either the corresponding pointer or pointee in the device data environment of the device.</p></li>
+</ul>
+<p>Given the above conditions, pointer attachment is initiated as a result of directive  B  and subsequent references to the pointee list item in a target region that use the pointer will access the corresponding pointee. The corresponding pointer remains in this <strong>attached</strong> state until it is removed from the device data environment.</p>
+<p>The second scenario, which is only applicable for C/C++, is where the pointer is implicitly privatized inside a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct when it appears as the base pointer to a list item on the construct and does not appear explicitly as a list item in a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, <code class="docutils literal notranslate"><span class="pre">is_device_ptr</span></code> clause, or data-sharing attribute clause. This scenario can be further split into two cases: the list item is a zero-length array section (e.g.,  <em>p[:0]</em> ) or it is not.</p>
+<p>If it is a zero-length array section, this will trigger a runtime check on entry to the <code class="docutils literal notranslate"><span class="pre">target</span></code> region for a previously mapped list item where the value of the pointer falls within the range of its base address and ending address. If such a match is found the private pointer is initialized to the device address corresponding to the value of the original pointer, and otherwise it is initialized to NULL (or retains its original value if the <code class="docutils literal notranslate"><span class="pre">unified_address</span></code> requirement is specified for that compilation unit).</p>
+<p>If the list item (again, call it the <strong>pointee</strong>) is not a zero-length array section, the private pointer will be initialized such that references in the <code class="docutils literal notranslate"><span class="pre">target</span></code> region to the pointee list item that use the pointer will access the corresponding pointee.</p>
 <p>The following example shows the basics of mapping pointers with and without associated storage on the host.</p>
-<p>Storage for pointers  <em>ptr1</em>  and  <em>ptr2</em>  is created on the host.  To map storage that is associated with a pointer on the host, the data can be explicitly mapped as an array section so that the compiler knows  the amount of data to be assigned in the device (to the ‘corresponding’ data storage area). On the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct array sections are mapped; however, the pointer  <em>ptr1</em>  is mapped, while  <em>ptr2</em>  is not. Since  <em>ptr2</em>  is not explicitly mapped, it is firstprivate.  This creates a subtle difference in the way these pointers can be used.</p>
-<p>As a firstprivate pointer,  <em>ptr2</em>  can be manipulated on the device; however, as an explicitly mapped pointer,   <em>ptr1</em>  becomes an {attached} pointer and cannot be manipulated. In both cases the host pointer is not updated with the device pointer  address—as one would expect for distributed memory.  The storage data on the host is updated from the corresponding device data at the end of the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region.</p>
+<p>Storage for pointers  <em>ptr1</em>  and  <em>ptr2</em>  is created on the host.  To map storage that is associated with a pointer on the host, the data can be explicitly mapped as an array section so that the compiler knows  the amount of data to be assigned in the device (to the “corresponding” data storage area). On the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct array sections are mapped; however, the pointer  <em>ptr1</em>  is mapped, while  <em>ptr2</em>  is not. Since  <em>ptr2</em>  is not explicitly mapped, it is firstprivate.  This creates a subtle difference in the way these pointers can be used.</p>
+<p>As a firstprivate pointer,  <em>ptr2</em>  can be manipulated on the device; however, as an explicitly mapped pointer,   <em>ptr1</em>  becomes an <strong>attached</strong> pointer and cannot be manipulated. In both cases the host pointer is not updated with the device pointer  address—as one would expect for distributed memory.  The storage data on the host is updated from the corresponding device data at the end of the <code class="docutils literal notranslate"><span class="pre">target</span></code> region.</p>
 <p>As a comparison, note that the  <em>aray</em>  array is automatically mapped,  since the compiler knows the extent of the array.</p>
-<p>The pointer  <em>ptr3</em>  is used inside the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, but it does not appear in a data-mapping or data-sharing clause. Nor is there a  <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  clause on the construct to indicate what its implicit data-mapping or data-sharing attribute should be. For such a case,  <em>ptr3</em>  will be implicitly privatized within the construct and there will be a runtime check to see if the host memory to which it is pointing has corresponding memory in the device data environment. If this runtime check passes, the private  <em>ptr3</em>  would be initialized to point to the corresponding memory. But in this case the check does not pass and so it is initialized to null. Since  <em>ptr3</em>  is private, the value to which it is assigned in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region is not returned into the original  <em>ptr3</em>  on the host.</p>
+<p>The pointer  <em>ptr3</em>  is used inside the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, but it does not appear in a data-mapping or data-sharing clause. Nor is there a <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause on the construct to indicate what its implicit data-mapping or data-sharing attribute should be. For such a case,  <em>ptr3</em>  will be implicitly privatized within the construct and there will be a runtime check to see if the host memory to which it is pointing has corresponding memory in the device data environment. If this runtime check passes, the private  <em>ptr3</em>  would be initialized to point to the corresponding memory. But in this case the check does not pass and so it is initialized to null. Since  <em>ptr3</em>  is private, the value to which it is assigned in the <code class="docutils literal notranslate"><span class="pre">target</span></code> region is not returned into the original  <em>ptr3</em>  on the host.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_ptr_map.1</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="o">*</span><span class="n">ptr1</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="o">*</span><span class="n">ptr2</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="o">*</span><span class="n">ptr3</span><span class="p">;</span>
-  <span class="kt">int</span> <span class="n">aray</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+/*
+* name:       target_ptr_map.1
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 100
 
-  <span class="n">ptr1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">);</span>
-  <span class="n">ptr2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">);</span>
+int main()
+{
+  int *ptr1;
+  int *ptr2;
+  int *ptr3;
+  int aray[N];
 
-  <span class="cp">#pragma omp target map(ptr1, ptr1[:N]) map(ptr2[:N] )</span>
-  <span class="p">{</span>
-     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-     <span class="p">{</span>
-         <span class="n">ptr1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-         <span class="n">ptr2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-         <span class="n">aray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-     <span class="p">}</span>
+  ptr1 = (int *)malloc(sizeof(int)*N);
+  ptr2 = (int *)malloc(sizeof(int)*N);
 
-   <span class="c1">//*(++ptr1) = 9;  //NOT ALLOWED since ptr1 is an attached pointer</span>
-     <span class="o">*</span><span class="p">(</span><span class="o">++</span><span class="n">ptr2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>  <span class="c1">//    allowed since ptr2 is firstprivate</span>
+  #pragma omp target map(ptr1, ptr1[:N]) map(ptr2[:N] )
+  {
+     for (int i=0; i&lt;N; i++)
+     {
+         ptr1[i] = i;
+         ptr2[i] = i;
+         aray[i] = i;
+     }
 
-     <span class="n">ptr3</span><span class="o">=</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">);</span> <span class="c1">// ptr3 is firstprivate</span>
-                                        <span class="c1">// ptr3 value not returned</span>
-     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">ptr3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   //*(++ptr1) = 9;  //NOT ALLOWED since ptr1 is an attached pointer
+     *(++ptr2) = 9;  //    allowed since ptr2 is firstprivate
 
-     <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">ptr1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">ptr3</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+     ptr3=(int *)malloc(sizeof(int)*N); // ptr3 is firstprivate
+                                        // ptr3 value not returned
+     for (int i=0; i&lt;N; i++) ptr3[i] = 5;
 
-     <span class="n">free</span><span class="p">(</span><span class="n">ptr3</span><span class="p">);</span>     <span class="c1">// explicitly free allocated storage on device</span>
-   <span class="p">}</span>
+     for (int i=0; i&lt;N; i++) ptr1[i] += ptr3[i];
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">ptr1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ptr2</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-   <span class="c1">//        6  9</span>
+     free(ptr3);     // explicitly free allocated storage on device
+   }
 
-   <span class="n">free</span><span class="p">(</span><span class="n">ptr1</span><span class="p">);</span>
-   <span class="n">free</span><span class="p">(</span><span class="n">ptr2</span><span class="p">);</span>
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   printf(&quot; %d %d\n&quot;,ptr1[1],ptr2[1]);
+   //        6  9
+
+   free(ptr1);
+   free(ptr2);
+   return 0;
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the following example the global pointer  <em>p</em>  appears in a  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive.  Hence, the pointer  <em>p</em>  will  persist on the device throughout executions in all  <code class="docutils literal notranslate"><span class="pre">target</span></code>  regions.</p>
-<p>The pointer is also used in an array section of a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause on  a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.  When storage associated with  a  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  pointer is mapped, as for the array section  <em>p[:N]</em>  in the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, the array section on the device is {attached} to the device pointer  <em>p</em>  on entry to the construct, and the value of the device pointer  <em>p</em>  becomes undefined on exit.  (Of course, storage allocation for the array section on the device will occur before the  pointer on the device is {attached}.)</p>
+<p>In the following example the global pointer  <em>p</em>  appears in a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive.  Hence, the pointer  <em>p</em>  will  persist on the device throughout executions in all <code class="docutils literal notranslate"><span class="pre">target</span></code> regions.</p>
+<p>The pointer is also used in an array section of a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause on  a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  When storage associated with  a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> pointer is mapped, as for the array section  <em>p[:N]</em>  in the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, the array section on the device is <strong>attached</strong> to the device pointer  <em>p</em>  on entry to the construct, and the value of the device pointer  <em>p</em>  becomes undefined on exit.  (Of course, storage allocation for the array section on the device will occur before the  pointer on the device is <strong>attached</strong>.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_ptr_map.2c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">;</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">use_arg_p</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">p</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">use_global_p</span><span class="p">(</span>     <span class="kt">int</span> <span class="n">n</span><span class="p">);</span>
-<span class="cp">#pragma omp end declare target</span>
+/*
+* name:       target_ptr_map.2c
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#define N 100
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="p">)</span><span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="n">N</span><span class="p">);</span>
+#pragma omp declare target
+int *p;
+extern void use_arg_p(int *p, int n);
+extern void use_global_p(     int n);
+#pragma omp end declare target
 
-  <span class="cp">#pragma omp target map(p[:N])  </span><span class="c1">// device p attached to array section</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
-    <span class="n">use_arg_p</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">N</span><span class="p">);</span>
-    <span class="n">use_global_p</span><span class="p">(</span><span class="n">N</span><span class="p">);</span>
-  <span class="p">}</span>                              <span class="c1">// value of host p is preserved</span>
+int main()
+{
+  int i;
+  p = (int *)malloc(sizeof(int)*N);
 
-  <span class="n">printf</span><span class="p">(</span><span class="s">&quot; %3.3d %3.3d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">p</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
-         <span class="c1">// 003   297   &lt;- output</span>
+  #pragma omp target map(p[:N])  // device p attached to array section
+  {
+    for (i=0; i&lt;N; i++) p[i] = i;
+    use_arg_p(p, N);
+    use_global_p(N);
+  }                              // value of host p is preserved
 
-  <span class="n">free</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+  printf(&quot; %3.3d %3.3d\n&quot;, p[1], p[N-1]);
+         // 003   297   &lt;- output
 
-<span class="c1">//#pragma omp declare target (optional here because of prototype spec)</span>
-<span class="kt">void</span> <span class="nf">use_arg_p</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">q</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
+  free(p);
+  return 0;
+}
 
-<span class="kt">void</span> <span class="nf">use_global_p</span><span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-    <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">i</span><span class="p">;</span>   <span class="c1">// valid since p is in declare target and called from</span>
-                 <span class="c1">// inside target region where p was attached to valid memory</span>
-<span class="p">}</span>
-<span class="c1">//#pragma omp end declare target (optional here because of prototype spec)</span>
+//#pragma omp declare target (optional here because of prototype spec)
+void use_arg_p(int *q, int n)
+{
+  int i;
+  for (i=0; i&lt;n; i++)
+    q[i] *= 2;
+}
+
+void use_global_p(int n)
+{
+  int i;
+  for (i=0; i&lt;n; i++)
+    p[i] += i;   // valid since p is in declare target and called from
+                 // inside target region where p was attached to valid memory
+}
+//#pragma omp end declare target (optional here because of prototype spec)
 
 </pre></div>
 </div>
 </div>
 </div>
 <p>The following two examples illustrate subtle differences in pointer attachment to device address because of the order of data mapping.</p>
-<p>In example  <em>target_ptr_map.3a</em>   the global pointer  <em>p1</em>  points to array  <em>x</em>  and  <em>p2</em>  points to array  <em>y</em>  on the host. The array section  <em>x[:N]</em>  is mapped by the  <code class="docutils literal notranslate"><span class="pre">target</span></code> ~ <code class="docutils literal notranslate"><span class="pre">enter</span></code> ~ <code class="docutils literal notranslate"><span class="pre">data</span></code>  directive while array  <em>y</em>  is mapped on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct.  Since the  <code class="docutils literal notranslate"><span class="pre">declare</span></code> ~ <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive is applied to the declaration of  <em>p1</em> ,  <em>p1</em>  is a treated like a mapped variable on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct and references to  <em>p1</em>  inside the construct will be to the corresponding  <em>p1</em>  that exists on the device.  However, the corresponding  <em>p1</em>  will be undefined since there is no pointer attachment for it. Pointer attachment for  <em>p1</em>  would require that (1)  <em>p1</em>  (or an lvalue expression that refers to the same storage as  <em>p1</em> ) appears as a base pointer to a list item in a  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause, and (2) the construct that has the  <code class="docutils literal notranslate"><span class="pre">map</span></code>  clause causes the list item to transition from {not mapped} to {mapped}. The conditions are clearly not satisifed for this example.</p>
-<p>The problem for  <em>p2</em>  in this example is also subtle. It will be privatized inside the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, with a runtime check for whether the memory to which it is pointing has corresponding memory that is accessible on the device. If this check is successful then the  <em>p2</em>  inside the construct would be appropriately initialized to point to that corresponding memory. Unfortunately, despite there being an implicit map of the array  <em>y</em>  (to which  <em>p2</em>  is pointing) on the construct, the order of this map relative to the initialization of  <em>p2</em>  is unspecified. Therefore, the initial value of  <em>p2</em>  will also be undefined.</p>
-<p>Thus, referencing values via either  <em>p1</em>  or  <em>p2</em>  inside the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region would be invalid.</p>
+<p>In example  <em>target_ptr_map.3a</em>   the global pointer  <em>p1</em>  points to array  <em>x</em>  and  <em>p2</em>  points to array  <em>y</em>  on the host. The array section  <em>x[:N]</em>  is mapped by the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">enter</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> directive while array  <em>y</em>  is mapped on the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  Since the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive is applied to the declaration of  <em>p1</em> ,  <em>p1</em>  is a treated like a mapped variable on the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct and references to  <em>p1</em>  inside the construct will be to the corresponding  <em>p1</em>  that exists on the device.  However, the corresponding  <em>p1</em>  will be undefined since there is no pointer attachment for it. Pointer attachment for  <em>p1</em>  would require that (1)  <em>p1</em>  (or an lvalue expression that refers to the same storage as  <em>p1</em> ) appears as a base pointer to a list item in a <code class="docutils literal notranslate"><span class="pre">map</span></code> clause, and (2) the construct that has the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause causes the list item to transition from <strong>not mapped</strong> to <strong>mapped</strong>. The conditions are clearly not satisifed for this example.</p>
+<p>The problem for  <em>p2</em>  in this example is also subtle. It will be privatized inside the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, with a runtime check for whether the memory to which it is pointing has corresponding memory that is accessible on the device. If this check is successful then the  <em>p2</em>  inside the construct would be appropriately initialized to point to that corresponding memory. Unfortunately, despite there being an implicit map of the array  <em>y</em>  (to which  <em>p2</em>  is pointing) on the construct, the order of this map relative to the initialization of  <em>p2</em>  is unspecified. Therefore, the initial value of  <em>p2</em>  will also be undefined.</p>
+<p>Thus, referencing values via either  <em>p1</em>  or  <em>p2</em>  inside the <code class="docutils literal notranslate"><span class="pre">target</span></code> region would be invalid.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_ptr_map.3a.c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">int</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="kt">int</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+/*
+* name:       target_ptr_map.3a.c
+* type:       C
+* version: omp_5.0
+*/
+#define N 100
 
-<span class="kt">int</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">p1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="n">p2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+int x[N], y[N];
+#pragma omp declare target
+int *p1;
+#pragma omp end declare target
+int *p2;
 
-  <span class="c1">// Explicitly map array section x[:N]</span>
-  <span class="cp">#pragma omp target enter data map(x[:N])</span>
+int foo()
+{
+  p1 = &amp;x[0];
+  p2 = &amp;y[0];
 
-  <span class="cp">#pragma omp target  </span><span class="c1">// as if .. map(p1) map(p1[:0]) map(p2[:0]) map(y)</span>
-  <span class="p">{</span>
-    <span class="c1">// Accessing the mapped arrays x,y is OK here.</span>
-    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+  // Explicitly map array section x[:N]
+  #pragma omp target enter data map(x[:N])
 
-    <span class="c1">// Pointer attachment for p1 does not occur here</span>
-    <span class="c1">//   because p1[:0] does not allocate a new array section and</span>
-    <span class="c1">//   array x is present on the target construct as it was mapped</span>
-    <span class="c1">//   before by the target enter data directive.</span>
-    <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>      <span class="c1">// accessing p1 is undefined</span>
+  #pragma omp target  // as if .. map(p1) map(p1[:0]) map(p2[:0]) map(y)
+  {
+    // Accessing the mapped arrays x,y is OK here.
+    x[0] = 1;
+    y[1] = 2;
 
-    <span class="c1">// The initial value of p2 in the target region is undefined</span>
-    <span class="c1">//   because map(y) may occur after map(p2[:0]).</span>
-    <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>      <span class="c1">// accessing p2 is undefined</span>
-  <span class="p">}</span>
+    // Pointer attachment for p1 does not occur here
+    //   because p1[:0] does not allocate a new array section and
+    //   array x is present on the target construct as it was mapped
+    //   before by the target enter data directive.
+    p1[0] = 3;      // accessing p1 is undefined
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    // The initial value of p2 in the target region is undefined
+    //   because map(y) may occur after map(p2[:0]).
+    p2[1] = 4;      // accessing p2 is undefined
+  }
+
+  return 0;
+}
 
 </pre></div>
 </div>
 </div>
 </div>
-<p>In example  <em>target_ptr_map.3b</em>  the mapping orders for arrays  <em>x</em>  and  <em>y</em>  were rearranged to allow proper pointer attachments. On the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, the  <code class="docutils literal notranslate"><span class="pre">map(x)</span></code>  clause triggers pointer attachment for  <em>p1</em>  to the device address of  <em>x</em> .  Pointer  <em>p2</em>  is assigned the device address of the previously mapped  array  <em>y</em> . Referencing values via either  <em>p1</em>  or  <em>p2</em>  inside the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region is now valid.</p>
+<p>In example  <em>target_ptr_map.3b</em>  the mapping orders for arrays  <em>x</em>  and  <em>y</em>  were rearranged to allow proper pointer attachments. On the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, the <code class="docutils literal notranslate"><span class="pre">map(x)</span></code> clause triggers pointer attachment for  <em>p1</em>  to the device address of  <em>x</em> .  Pointer  <em>p2</em>  is assigned the device address of the previously mapped  array  <em>y</em> . Referencing values via either  <em>p1</em>  or  <em>p2</em>  inside the <code class="docutils literal notranslate"><span class="pre">target</span></code> region is now valid.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name:       target_ptr_map.3b.c</span>
-<span class="cm">* type:       C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#define N 100</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-<span class="cp">#pragma omp declare target</span>
-<span class="kt">int</span> <span class="o">*</span><span class="n">p1</span><span class="p">;</span>
-<span class="cp">#pragma omp end declare target</span>
-<span class="kt">int</span> <span class="o">*</span><span class="n">p2</span><span class="p">;</span>
+/*
+* name:       target_ptr_map.3b.c
+* type:       C
+* version: omp_5.0
+*/
+#define N 100
 
-<span class="kt">int</span> <span class="nf">foo</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="n">p1</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-  <span class="n">p2</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+int x[N], y[N];
+#pragma omp declare target
+int *p1;
+#pragma omp end declare target
+int *p2;
 
-  <span class="c1">// Explicitly map array section y[:N]</span>
-  <span class="cp">#pragma omp target enter data map(y[:N])</span>
+int foo()
+{
+  p1 = &amp;x[0];
+  p2 = &amp;y[0];
 
-  <span class="cp">#pragma omp target map(x[:N]) map(p1[:N]) map(p2[:0])</span>
-  <span class="p">{</span>
-    <span class="c1">// Accessing the mapped arrays x,y is OK here.</span>
-    <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+  // Explicitly map array section y[:N]
+  #pragma omp target enter data map(y[:N])
 
-    <span class="c1">// Pointer attachment for p1 occurs here when array x is mapped</span>
-    <span class="c1">//   on the target construct (as p1 = &amp;x[0] on the device)</span>
-    <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>      <span class="c1">// accessing p1 is OK</span>
+  #pragma omp target map(x[:N]) map(p1[:N]) map(p2[:0])
+  {
+    // Accessing the mapped arrays x,y is OK here.
+    x[0] = 1;
+    y[1] = 2;
 
-    <span class="c1">// p2 in the target region is initialized to &amp;y[0]</span>
-    <span class="n">p2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>      <span class="c1">// accessing p2 is OK</span>
-  <span class="p">}</span>
+    // Pointer attachment for p1 occurs here when array x is mapped
+    //   on the target construct (as p1 = &amp;x[0] on the device)
+    p1[0] = 3;      // accessing p1 is OK
 
-  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+    // p2 in the target region is initialized to &amp;y[0]
+    p2[1] = 4;      // accessing p2 is OK
+  }
+
+  return 0;
+}
 
 </pre></div>
 </div>
@@ -1511,7 +1559,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_target_defaultmap.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">defaultmap</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_target_defaultmap.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> Clause</a>
     <a class='right-next' id="next-link" href="Examples_target_structure_mapping.html" title="next page">Structure mapping</a>
 
         </div>

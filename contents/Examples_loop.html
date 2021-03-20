@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,31 +1290,33 @@
               <div>
                 
   <div class="section" id="the-loop-construct">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">loop</span></code>  Construct<a class="headerlink" href="#the-loop-construct" title="Permalink to this headline">¶</a></h1>
-<p>The following example illustrates the use of the OpenMP 5.0  <code class="docutils literal notranslate"><span class="pre">loop</span></code>  construct for the execution of a loop. The  <code class="docutils literal notranslate"><span class="pre">loop</span></code>  construct asserts to the compiler that the iterations  of the loop are free of data dependencies and may be executed concurrently. It allows the compiler to use heuristics to select the parallelization scheme and compiler-level optimizations for the concurrency.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">loop</span></code> Construct<a class="headerlink" href="#the-loop-construct" title="Permalink to this headline">¶</a></h1>
+<p>The following example illustrates the use of the OpenMP 5.0 <code class="docutils literal notranslate"><span class="pre">loop</span></code> construct for the execution of a loop. The <code class="docutils literal notranslate"><span class="pre">loop</span></code> construct asserts to the compiler that the iterations  of the loop are free of data dependencies and may be executed concurrently. It allows the compiler to use heuristics to select the parallelization scheme and compiler-level optimizations for the concurrency.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: loop.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span>  <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 100</span>
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-  <span class="kt">float</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
-  <span class="kt">float</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span><span class="p">;}</span>   <span class="c1">// initialize</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp loop</span>
-    <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-  <span class="p">}</span>
-  <span class="k">if</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]</span> <span class="o">!=</span> <span class="p">(</span><span class="n">N</span><span class="mi">-1</span><span class="p">)</span><span class="o">*</span><span class="mf">2.0</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error: 2*(N-1) != y[N-1]=%f&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
-<span class="p">}</span>
+/*
+* name: loop.2c
+* type: C
+* version: omp_5.0
+*/
+#include  &lt;stdio.h&gt;
+#define N 100
+int main()
+{
+  float x[N], y[N];
+  float a = 2.0;
+  for(int i=0;i&lt;N;i++){ x[i]=i; y[i]=0;}   // initialize
+
+  #pragma omp parallel
+  {
+    #pragma omp loop
+    for(int i = 0; i &lt; N; ++i) y[i] = a*x[i] + y[i];
+  }
+  if(y[N-1] != (N-1)*2.0) printf(&quot;Error: 2*(N-1) != y[N-1]=%f&quot;,y[N-1]);
+}
 
 </pre></div>
 </div>
@@ -1284,25 +1324,25 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span>       <span class="n">loop</span><span class="mf">.2f</span><span class="mi">90</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span>       <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span>    <span class="n">omp_5</span><span class="mf">.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       loop.2f90
+! type:       F-free
+! version:    omp_5.0
 
-<span class="n">program</span> <span class="n">main</span>
-  <span class="n">integer</span><span class="p">,</span> <span class="n">parameter</span> <span class="o">::</span> <span class="n">N</span><span class="o">=</span><span class="mi">100</span>
-  <span class="n">real</span> <span class="o">::</span> <span class="n">x</span><span class="p">(</span><span class="n">N</span><span class="p">),</span> <span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-  <span class="n">real</span> <span class="o">::</span> <span class="n">a</span> <span class="o">=</span> <span class="mf">2.0e0</span>
+program main
+  integer, parameter :: N=100
+  real :: x(N), y(N)
+  real :: a = 2.0e0
 
-  <span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="o">/</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">)</span> <span class="o">/</span><span class="p">);</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.0e0</span>                    <span class="o">!!</span> <span class="n">initialize</span>
+  x=(/ (i,i=1,N) /); y=1.0e0                    !! initialize
 
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span>
-    <span class="o">!</span><span class="n">$omp</span> <span class="n">loop</span>
-       <span class="k">do</span> <span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span> <span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">(</span><span class="n">i</span><span class="p">);</span> <span class="n">enddo</span>
-  <span class="o">!</span><span class="n">$omp</span> <span class="n">end</span> <span class="n">parallel</span>
+  !$omp parallel
+    !$omp loop
+       do i=1,N; y(i) = a*x(i) + y(i); enddo
+  !$omp end parallel
 
-  <span class="k">if</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">/=</span> <span class="n">N</span><span class="o">*</span><span class="mf">2.0e0</span><span class="p">)</span> <span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="s">&quot;Error: 2*N /= y(N); y(N)=&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
-<span class="n">end</span> <span class="n">program</span>
+  if(y(N) /= N*2.0e0) print*,&quot;Error: 2*N /= y(N); y(N)=&quot;,y(N)
+end program
 
 </pre></div>
 </div>
@@ -1335,7 +1375,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_master.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">master</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_master.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">master</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_pra_iterator.html" title="next page">Parallel Random Access Iterator Loop</a>
 
         </div>

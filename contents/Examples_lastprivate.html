@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,28 +1290,30 @@
               <div>
                 
   <div class="section" id="the-lastprivate-clause">
-<h1>The  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  Clause<a class="headerlink" href="#the-lastprivate-clause" title="Permalink to this headline">¶</a></h1>
-<p>Correct execution sometimes depends on the value that the last iteration of a loop  assigns to a variable. Such programs must list all such variables in a  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>   clause  so that the values of the variables are the same as when the loop is executed  sequentially.</p>
+<h1>The <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> Clause<a class="headerlink" href="#the-lastprivate-clause" title="Permalink to this headline">¶</a></h1>
+<p>Correct execution sometimes depends on the value that the last iteration of a loop  assigns to a variable. Such programs must list all such variables in a <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  clause  so that the values of the variables are the same as when the loop is executed  sequentially.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: lastprivate.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">*/</span>
-<span class="kt">void</span> <span class="nf">lastpriv</span> <span class="p">(</span><span class="kt">int</span> <span class="n">n</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">float</span> <span class="o">*</span><span class="n">b</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-  <span class="cp">#pragma omp parallel</span>
-  <span class="p">{</span>
-    <span class="cp">#pragma omp for lastprivate(i)</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="mi">-1</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
-      <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-  <span class="p">}</span>
+/*
+* name: lastprivate.1c
+* type: C
+*/
+void lastpriv (int n, float *a, float *b)
+{
+  int i;
 
-  <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>      <span class="cm">/* i == n-1 here */</span>
-<span class="p">}</span>
+  #pragma omp parallel
+  {
+    #pragma omp for lastprivate(i)
+    for (i=0; i&lt;n-1; i++)
+      a[i] = b[i] + b[i+1];
+  }
+
+  a[i]=b[i];      /* i == n-1 here */
+}
 
 </pre></div>
 </div>
@@ -1281,80 +1321,82 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">lastprivate</span><span class="mf">.1f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">fixed</span>
-      <span class="n">SUBROUTINE</span> <span class="n">LASTPRIV</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: lastprivate.1f
+! type: F-fixed
+      SUBROUTINE LASTPRIV(N, A, B)
 
-        <span class="n">INTEGER</span> <span class="n">N</span>
-        <span class="n">REAL</span> <span class="n">A</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">B</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
-        <span class="n">INTEGER</span> <span class="n">I</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">PARALLEL</span>
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">DO</span> <span class="n">LASTPRIVATE</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+        INTEGER N
+        REAL A(*), B(*)
+        INTEGER I
+!$OMP PARALLEL
+!$OMP DO LASTPRIVATE(I)
 
-        <span class="n">DO</span> <span class="n">I</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="mi">-1</span>
-          <span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">+</span> <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">ENDDO</span>
+        DO I=1,N-1
+          A(I) = B(I) + B(I+1)
+        ENDDO
 
-<span class="o">!</span><span class="n">$OMP</span> <span class="n">END</span> <span class="n">PARALLEL</span>
-        <span class="n">A</span><span class="p">(</span><span class="n">I</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>      <span class="o">!</span> <span class="n">I</span> <span class="n">has</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">N</span> <span class="n">here</span>
+!$OMP END PARALLEL
+        A(I) = B(I)      ! I has the value of N here
 
-      <span class="n">END</span> <span class="n">SUBROUTINE</span> <span class="n">LASTPRIV</span>
-
-</pre></div>
-</div>
-</div>
-</div>
-<p>The next example illustrates the use of the  <code class="docutils literal notranslate"><span class="pre">conditional</span></code>  modifier in a  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  clause to return the last value when it may not come from the last iteration of a loop. That is, users can preserve the serial equivalence semantics of the loop. The conditional lastprivate ensures the final value of the variable after the loop  is as if the loop iterations were executed in a sequential order.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: lastprivate.2c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-
-<span class="kt">float</span> <span class="nf">condlastprivate</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="kt">int</span> <span class="n">n</span><span class="p">)</span>
-<span class="p">{</span>
-   <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
-
-   <span class="cp">#pragma omp parallel for simd lastprivate(conditional: x)</span>
-   <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">108.5</span> <span class="o">||</span> <span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">208.5</span><span class="p">)</span> <span class="p">{</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="n">sinf</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">k</span><span class="p">]);</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
-
-   <span class="k">return</span> <span class="n">x</span><span class="p">;</span>
-<span class="p">}</span>
+      END SUBROUTINE LASTPRIV
 
 </pre></div>
 </div>
 </div>
 </div>
+<p>The next example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">conditional</span></code> modifier in a <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause to return the last value when it may not come from the last iteration of a loop. That is, users can preserve the serial equivalence semantics of the loop. The conditional lastprivate ensures the final value of the variable after the loop  is as if the loop iterations were executed in a sequential order.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="o">!</span> <span class="nl">name</span><span class="p">:</span> <span class="n">lastprivate</span><span class="mf">.2f</span>
-<span class="o">!</span> <span class="nl">type</span><span class="p">:</span> <span class="n">F</span><span class="o">-</span><span class="n">free</span>
-<span class="o">!</span> <span class="nl">version</span><span class="p">:</span> <span class="n">omp_5</span><span class="mf">.0</span>
-<span class="n">function</span> <span class="n">condlastprivate</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="n">result</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-   <span class="n">implicit</span> <span class="n">none</span>
-   <span class="n">real</span> <span class="n">a</span><span class="p">(</span><span class="o">*</span><span class="p">),</span> <span class="n">x</span>
-   <span class="n">integer</span> <span class="n">n</span><span class="p">,</span> <span class="n">k</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-   <span class="n">x</span> <span class="o">=</span> <span class="mf">0.0</span>
+/*
+* name: lastprivate.2c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;math.h&gt;
 
-   <span class="o">!</span><span class="n">$omp</span> <span class="n">parallel</span> <span class="k">do</span> <span class="n">simd</span> <span class="n">lastprivate</span><span class="p">(</span><span class="nl">conditional</span><span class="p">:</span> <span class="n">x</span><span class="p">)</span>
-   <span class="k">do</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">108.5</span> <span class="p">.</span><span class="n">or</span><span class="p">.</span> <span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">208.5</span><span class="p">)</span> <span class="n">then</span>
-         <span class="n">x</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-      <span class="n">endif</span>
-   <span class="n">end</span> <span class="k">do</span>
+float condlastprivate(float *a, int n)
+{
+   float x = 0.0f;
 
-<span class="n">end</span> <span class="n">function</span> <span class="n">condlastprivate</span>
+   #pragma omp parallel for simd lastprivate(conditional: x)
+   for (int k = 0; k &lt; n; k++) {
+      if (a[k] &lt; 108.5 || a[k] &gt; 208.5) {
+         x = sinf(a[k]);
+      }
+   }
+
+   return x;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: lastprivate.2f
+! type: F-free
+! version: omp_5.0
+function condlastprivate(a, n) result(x)
+   implicit none
+   real a(*), x
+   integer n, k
+
+   x = 0.0
+
+   !$omp parallel do simd lastprivate(conditional: x)
+   do k = 1, n
+      if (a(k) &lt; 108.5 .or. a(k) &gt; 208.5) then
+         x = sin(a(k))
+      endif
+   end do
+
+end function condlastprivate
 
 </pre></div>
 </div>
@@ -1387,7 +1429,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_carrays_fpriv.html" title="previous page">C/C++ Arrays in a  <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>  Clause</a>
+    <a class='left-prev' id="prev-link" href="Examples_carrays_fpriv.html" title="previous page">C/C++ Arrays in a <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> Clause</a>
     <a class='right-next' id="next-link" href="Examples_reduction.html" title="next page">Reduction</a>
 
         </div>

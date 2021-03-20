@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1253,66 +1291,59 @@
                 
   <div class="section" id="memory-allocators">
 <h1>Memory Allocators<a class="headerlink" href="#memory-allocators" title="Permalink to this headline">¶</a></h1>
-<p>OpenMP memory allocators can be used to allocate memory with specific allocator traits.  In the following example an OpenMP allocator is used to specify an alignment for arrays  <em>x</em>  and  <em>y</em> . The general approach for attributing traits to variables allocated by OpenMP is to create or specify a pre-defined  <em>memory space</em> , create an array of  <em>traits</em> , and then form an  <em>allocator</em>  from the memory space and trait. The allocator is then specified in an OpenMP allocation (using an API  <em>omp_alloc()</em>  function for C/C++  and an  <code class="docutils literal notranslate"><span class="pre">allocate</span></code>  directive for Fortran  in the allocators.1 example).</p>
+<p>OpenMP memory allocators can be used to allocate memory with specific allocator traits.  In the following example an OpenMP allocator is used to specify an alignment for arrays  <em>x</em>  and  <em>y</em> . The general approach for attributing traits to variables allocated by OpenMP is to create or specify a pre-defined  <em>memory space</em> , create an array of  <em>traits</em> , and then form an  <em>allocator</em>  from the memory space and trait. The allocator is then specified in an OpenMP allocation (using an API  <em>omp_alloc()</em>  function for C/C++ code and an <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive for Fortran code in the allocators.1 example).</p>
 <p>In the example below the  <em>xy_memspace</em>  variable is declared and assigned the default memory space ( <em>omp_default_mem_space</em> ). Next, an array for  <em>traits</em>  is created. Since only one trait will be used, the array size is  <em>1</em> . A trait is a structure in C/C++ and a derived type in Fortran, containing 2 components: a key and a corresponding value (key-value pair). The trait key used here is  <em>omp_atk_alignment</em>  (an enum for C/C++ and a parameter for Fortran) and the trait value of 64 is specified in the  <em>xy_traits</em>  declaration. These declarations are followed by a call to the  <em>omp_init_allocator()</em>  function to combine the memory space ( <em>xy_memspace</em> ) and the traits ( <em>xy_traits</em> ) to form an allocator ( <em>xy_alloc</em> ).</p>
-<p>In the C/C++  the API   <em>omp_allocate()</em>  function is used<br />
-to allocate space, similar to  <em>malloc</em> , except that the allocator<br />
-is specified as the second argument.<br />
-In Fortran an API allocation function is not available.<br />
-An  <code class="docutils literal notranslate"><span class="pre">allocate</span></code>  construct is used (with  <em>x</em>  and  <em>y</em><br />
-listed as the variables to be allocated), along
-with an  <code class="docutils literal notranslate"><span class="pre">allocator</span></code>  clause (specifying the  <em>xy_alloc</em>  as the allocator)
-for the following Fortran  <em>allocate</em>  statement.</p>
-<p>In the C/C++  the API   <em>omp_allocate()</em>  function is used to allocate space, similar to  <em>malloc</em> , except that the allocator is specified as the second argument. In Fortran an  <code class="docutils literal notranslate"><span class="pre">allocate</span></code>  directive is used to specify an allocator for a following Fortran  <em>allocate</em>  statement. A variable list may be supplied if the allocator is to be applied to a subset of variables in the Fortran allocate statement. Specifying the complete list is optional. Here, the  <em>xy_alloc</em>  allocator is specified in the  <code class="docutils literal notranslate"><span class="pre">allocator</span></code>  clause, and the set of all variables used in the allocate statement is specified in the list.</p>
-<p>‘for a following Fortran allocation statement’ (no using ‘immediately’ here)</p>
+<p>In the C/C++ code the API   <em>omp_allocate()</em>  function is used to allocate space, similar to  <em>malloc</em> , except that the allocator is specified as the second argument. In Fortran an <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive is used to specify an allocator for a following Fortran  <em>allocate</em>  statement. A variable list may be supplied if the allocator is to be applied to a subset of variables in the Fortran allocate statement. Specifying the complete list is optional. Here, the  <em>xy_alloc</em>  allocator is specified in the <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause, and the set of all variables used in the allocate statement is specified in the list.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: allocators.1c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span>    <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>  <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp"></span>
-<span class="cp">#define N 1000</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-   <span class="kt">float</span>  <span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">y</span><span class="p">;</span>
-   <span class="kt">float</span> <span class="n">s</span><span class="o">=</span><span class="mf">2.0</span><span class="p">;</span>
+/*
+* name: allocators.1c
+* type: C
+* version: omp_5.0
+*/
+#include    &lt;omp.h&gt;
+#include  &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+#define N 1000
 
-<span class="n">omp_memspace_handle_t</span>  <span class="n">xy_memspace</span> <span class="o">=</span> <span class="n">omp_default_mem_space</span><span class="p">;</span>
-<span class="n">omp_alloctrait_t</span>       <span class="n">xy_traits</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="p">{</span><span class="n">omp_atk_alignment</span><span class="p">,</span> <span class="mi">64</span><span class="p">};</span>
-<span class="n">omp_allocator_handle_t</span> <span class="n">xy_alloc</span>    <span class="o">=</span> <span class="n">omp_init_allocator</span><span class="p">(</span><span class="n">xy_memspace</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">xy_traits</span><span class="p">);</span>
+int main()
+{
+   float  *x, *y;
+   float s=2.0;
 
-
-   <span class="n">x</span><span class="o">=</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="n">omp_alloc</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="n">xy_alloc</span><span class="p">);</span>
-   <span class="n">y</span><span class="o">=</span><span class="p">(</span><span class="kt">float</span> <span class="o">*</span><span class="p">)</span><span class="n">omp_alloc</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="n">xy_alloc</span><span class="p">);</span>
-
-   <span class="k">if</span><span class="p">(</span> <span class="p">((</span><span class="kt">intptr_t</span><span class="p">)(</span><span class="n">y</span><span class="p">))</span><span class="o">%</span><span class="mi">64</span> <span class="o">!=</span> <span class="mi">0</span> <span class="o">||</span> <span class="p">((</span><span class="kt">intptr_t</span><span class="p">)(</span><span class="n">x</span><span class="p">))</span><span class="o">%</span><span class="mi">64</span> <span class="o">!=</span> <span class="mi">0</span> <span class="p">)</span>
-   <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;ERROR: x|y not 64-Byte aligned</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span> <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="p">}</span>
-
-   <span class="cp">#pragma omp parallel</span>
-   <span class="p">{</span>
-      <span class="cp">#pragma omp for simd simdlen(16) aligned(x,y:64)</span>
-      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="p">}</span> <span class="c1">// initialize</span>
-
-      <span class="cp">#pragma omp for simd simdlen(16) aligned(x,y:64)</span>
-      <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
-    <span class="p">}</span>
+omp_memspace_handle_t  xy_memspace = omp_default_mem_space;
+omp_alloctrait_t       xy_traits[1]={omp_atk_alignment, 64};
+omp_allocator_handle_t xy_alloc    = omp_init_allocator(xy_memspace,1,xy_traits);
 
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;y[0],y[N-1]: %5.0f %5.0f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span> <span class="c1">//output: y...   3  3000</span>
+   x=(float *)omp_alloc(N*sizeof(float), xy_alloc);
+   y=(float *)omp_alloc(N*sizeof(float), xy_alloc);
 
-   <span class="n">omp_free</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">xy_alloc</span><span class="p">);</span>
-   <span class="n">omp_free</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">xy_alloc</span><span class="p">);</span>
-   <span class="n">omp_destroy_allocator</span><span class="p">(</span><span class="n">xy_alloc</span><span class="p">);</span>
+   if( ((intptr_t)(y))%64 != 0 || ((intptr_t)(x))%64 != 0 )
+   { printf(&quot;ERROR: x|y not 64-Byte aligned\n&quot;); exit(1); }
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   #pragma omp parallel
+   {
+      #pragma omp for simd simdlen(16) aligned(x,y:64)
+      for(int i=0; i&lt;N; i++){ x[i]=i+1; y[i]=i+1; } // initialize
+
+      #pragma omp for simd simdlen(16) aligned(x,y:64)
+      for(int i=0; i&lt;N; i++) y[i] = s*x[i] + y[i];
+    }
+
+
+   printf(&quot;y[0],y[N-1]: %5.0f %5.0f\n&quot;,y[0],y[N-1]); //output: y...   3  3000
+
+   omp_free(x, xy_alloc);
+   omp_free(y, xy_alloc);
+   omp_destroy_allocator(xy_alloc);
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1320,7 +1351,7 @@ for the following Fortran  <em>allocate</em>  statement.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: allocators.1f90
 ! type: F-free
 ! version: omp_5.0

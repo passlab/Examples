@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,74 +1290,74 @@
               <div>
                 
   <div class="section" id="teams-construct-on-host">
-<h1><code class="docutils literal notranslate"><span class="pre">teams</span></code>  Construct on Host<a class="headerlink" href="#teams-construct-on-host" title="Permalink to this headline">¶</a></h1>
-<p>Originally the  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct was created for devices (such as GPUs) for independent executions of a structured block by teams within a league (on SMs). It was only available through offloading with the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct, and the execution of a  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  region could only be directed to host execution by various means such as  <code class="docutils literal notranslate"><span class="pre">if</span></code>  and  <code class="docutils literal notranslate"><span class="pre">device</span></code>  clauses, and the  <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code>  environment variable.</p>
-<p>In OpenMP 5.0 the  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct was extended to enable the host to execute a  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  region (without an associated  <code class="docutils literal notranslate"><span class="pre">target</span></code>  construct),  with anticipation of further affinity and threading controls in future OpenMP releases.
-With additional affinity controls, a team could be
-assigned to execute on a socket or use only a specified number of threads.</p>
-<p>In the example below the  <code class="docutils literal notranslate"><span class="pre">teams</span></code>  construct is used to create two teams, one to execute single precision , and the other to execute double precision . Two teams are required, and the thread limit for each team is set to 1/2 of the number of  available processors.</p>
+<h1><code class="docutils literal notranslate"><span class="pre">teams</span></code> Construct on Host<a class="headerlink" href="#teams-construct-on-host" title="Permalink to this headline">¶</a></h1>
+<p>Originally the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct was created for devices (such as GPUs) for independent executions of a structured block by teams within a league (on SMs). It was only available through offloading with the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, and the execution of a <code class="docutils literal notranslate"><span class="pre">teams</span></code> region could only be directed to host execution by various means such as <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">device</span></code> clauses, and the <code class="docutils literal notranslate"><span class="pre">OMP_TARGET_OFFLOAD</span></code> environment variable.</p>
+<p>In OpenMP 5.0 the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct was extended to enable the host to execute a <code class="docutils literal notranslate"><span class="pre">teams</span></code> region (without an associated <code class="docutils literal notranslate"><span class="pre">target</span></code> construct),  with anticipation of further affinity and threading controls in future OpenMP releases.</p>
+<p>In the example below the <code class="docutils literal notranslate"><span class="pre">teams</span></code> construct is used to create two teams, one to execute single precision code, and the other to execute double precision code. Two teams are required, and the thread limit for each team is set to 1/2 of the number of  available processors.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
-<span class="cm">/*</span>
-<span class="cm">* name: host_teams.2.c</span>
-<span class="cm">* type: C</span>
-<span class="cm">* version: omp_5.0</span>
-<span class="cm">*/</span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>  <span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
-<span class="cp">#include</span>   <span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
-<span class="cp">#define    N 1000</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
 
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-   <span class="kt">int</span>     <span class="n">nteams_required</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_thrds</span><span class="p">,</span> <span class="n">tm_id</span><span class="p">;</span>
-   <span class="kt">float</span>   <span class="n">sp_x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">sp_y</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">sp_a</span><span class="o">=</span><span class="mf">0.0001e0</span><span class="p">;</span>
-   <span class="kt">double</span>  <span class="n">dp_x</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">dp_y</span><span class="p">[</span><span class="n">N</span><span class="p">],</span> <span class="n">dp_a</span><span class="o">=</span><span class="mf">0.0001e0</span><span class="p">;</span>
+/*
+* name: host_teams.2.c
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include  &lt;math.h&gt;
+#include   &lt;omp.h&gt;
+#define    N 1000
 
-   <span class="c1">// Create 2 teams, each team works in a different precision</span>
-   <span class="cp">#pragma omp teams num_teams(nteams_required) \</span>
-<span class="cp">                     thread_limit(max_thrds)  private(tm_id)</span>
-   <span class="p">{</span>
-      <span class="n">tm_id</span> <span class="o">=</span> <span class="n">omp_get_team_num</span><span class="p">();</span>
+int main(){
+   int     nteams_required=2, max_thrds, tm_id;
+   float   sp_x[N], sp_y[N], sp_a=0.0001e0;
+   double  dp_x[N], dp_y[N], dp_a=0.0001e0;
 
-      <span class="k">if</span><span class="p">(</span> <span class="n">omp_get_num_teams</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">2</span> <span class="p">)</span>   <span class="c1">//if only getting 1, quit</span>
-      <span class="p">{</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;error: Insufficient teams on host, 2 required</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-      <span class="p">}</span>
+   // Create 2 teams, each team works in a different precision
+   #pragma omp teams num_teams(nteams_required) \
+                     thread_limit(max_thrds)  private(tm_id)
+   {
+      tm_id = omp_get_team_num();
 
-      <span class="k">if</span><span class="p">(</span><span class="n">tm_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>    <span class="c1">// Do Single Precision Work (SAXPY) with this team</span>
-      <span class="p">{</span>
-         <span class="cp">#pragma omp parallel</span>
-         <span class="p">{</span>
-            <span class="cp">#pragma omp for                             </span><span class="c1">//init</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="n">sp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="mf">0.0001</span><span class="p">;</span>  <span class="n">sp_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="p">}</span>
+      if( omp_get_num_teams() != 2 )   //if only getting 1, quit
+      { printf(&quot;error: Insufficient teams on host, 2 required\n&quot;);
+        exit(0);
+      }
 
-            <span class="cp">#pragma omp for simd simdlen(8)</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="n">sp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sp_a</span><span class="o">*</span><span class="n">sp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">sp_y</span><span class="p">[</span><span class="n">i</span><span class="p">];}</span>
-         <span class="p">}</span>
-      <span class="p">}</span>
+      if(tm_id == 0)    // Do Single Precision Work (SAXPY) with this team
+      {
+         #pragma omp parallel
+         {
+            #pragma omp for                             //init
+            for(int i=0; i&lt;N; i++){sp_x[i] = i*0.0001;  sp_y[i]=i; }
 
-      <span class="k">if</span><span class="p">(</span><span class="n">tm_id</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>    <span class="c1">// Do Double Precision Work (DAXPY) with this team</span>
-      <span class="p">{</span>
-         <span class="cp">#pragma omp parallel</span>
-         <span class="p">{</span>
-            <span class="cp">#pragma omp for                             </span><span class="c1">//init</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="n">dp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">*</span><span class="mf">0.0001</span><span class="p">;</span>  <span class="n">dp_y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span> <span class="p">}</span>
+            #pragma omp for simd simdlen(8)
+            for(int i=0; i&lt;N; i++){sp_x[i] = sp_a*sp_x[i] + sp_y[i];}
+         }
+      }
 
-            <span class="cp">#pragma omp for simd simdlen(4)</span>
-            <span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="n">dp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp_a</span><span class="o">*</span><span class="n">dp_x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp_y</span><span class="p">[</span><span class="n">i</span><span class="p">];}</span>
-         <span class="p">}</span>
-      <span class="p">}</span>
-   <span class="p">}</span>
+      if(tm_id == 1)    // Do Double Precision Work (DAXPY) with this team
+      {
+         #pragma omp parallel
+         {
+            #pragma omp for                             //init
+            for(int i=0; i&lt;N; i++){dp_x[i] = i*0.0001;  dp_y[i]=i; }
 
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;i=%d  sp|dp  %f %f </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">N</span><span class="mi">-1</span><span class="p">,</span> <span class="n">sp_x</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">],</span> <span class="n">dp_x</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span>
-   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;i=%d  sp|dp  %f %f </span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">sp_x</span><span class="p">[</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">dp_x</span><span class="p">[</span><span class="n">N</span><span class="o">/</span><span class="mi">2</span><span class="p">]);</span>
- <span class="c1">//OUTPUT1:i=999  sp|dp  999.000000 999.000010</span>
- <span class="c1">//OUTPUT2:i=500  sp|dp  500.000000 500.000005</span>
+            #pragma omp for simd simdlen(4)
+            for(int i=0; i&lt;N; i++){dp_x[i] = dp_a*dp_x[i] + dp_y[i];}
+         }
+      }
+   }
 
-   <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
+   printf(&quot;i=%d  sp|dp  %f %f \n&quot;,N-1, sp_x[N-1], dp_x[N-1]);
+   printf(&quot;i=%d  sp|dp  %f %f \n&quot;,N/2, sp_x[N/2], dp_x[N/2]);
+ //OUTPUT1:i=999  sp|dp  999.000000 999.000010
+ //OUTPUT2:i=500  sp|dp  500.000000 500.000005
+
+   return 0;
+}
 
 </pre></div>
 </div>
@@ -1327,7 +1365,7 @@ assigned to execute on a socket or use only a specified number of threads.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
 ! name: host_teams.2.f90
 ! type: F-free
 ! version: omp_5.0
@@ -1422,7 +1460,7 @@ end program
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_parallel.html" title="previous page">The  <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  Construct</a>
+    <a class='left-prev' id="prev-link" href="Examples_parallel.html" title="previous page">The <code class="docutils literal notranslate"><span class="pre">parallel</span></code> Construct</a>
     <a class='right-next' id="next-link" href="Examples_nthrs_nesting.html" title="next page">Controlling the Number of Threads on Multiple Nesting Levels</a>
 
         </div>

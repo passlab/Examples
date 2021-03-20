@@ -548,11 +548,6 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="Examples_target_unstructured_data.html#simple-target-enter-data-and-target-exit-data-constructs">
-     Simple target enter data and target exit data Constructs
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="Examples_target_update.html">
      <code class="docutils literal notranslate">
       <span class="pre">
@@ -1036,10 +1031,25 @@
      Clause
     </a>
    </li>
-   <li class="toctree-l2">
+   <li class="toctree-l2 collapsible-parent">
     <a class="reference internal" href="Examples_cpp_reference.html">
      C++ Reference in Data-Sharing Clauses
     </a>
+    <ul class="collapse-ul">
+     <li class="toctree-l3">
+      <a class="reference internal" href="Examples_associate.html">
+       Fortran
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ASSOCIATE
+        </span>
+       </code>
+       Construct
+      </a>
+     </li>
+    </ul>
+    <i class="fas fa-chevron-down">
+    </i>
    </li>
   </ul>
   <i class="fas fa-chevron-down">
@@ -1085,6 +1095,35 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="Examples_standalone.html">
+     Placement of
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       flush
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       barrier
+      </span>
+     </code>
+     ,
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskwait
+      </span>
+     </code>
+     and
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       taskyield
+      </span>
+     </code>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="Examples_cancellation.html">
      Cancellation Constructs
     </a>
@@ -1107,7 +1146,6 @@
        declare
       </span>
      </code>
-     ~
      <code class="docutils literal notranslate">
       <span class="pre">
        variant
@@ -1252,10 +1290,10 @@
               <div>
                 
   <div class="section" id="asynchronous-target-execution-and-dependences">
-<h1>Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  Execution and Dependences<a class="headerlink" href="#asynchronous-target-execution-and-dependences" title="Permalink to this headline">¶</a></h1>
-<p>Asynchronous execution of a  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region can be accomplished by creating an explicit task around the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  region. Examples with explicit tasks are shown at the beginning of this section.</p>
-<p>As of OpenMP 4.5 and beyond the  <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clause can be used on the  <code class="docutils literal notranslate"><span class="pre">target</span></code>  directive for asynchronous execution. Examples with   <code class="docutils literal notranslate"><span class="pre">nowait</span></code>  clauses follow the explicit  <code class="docutils literal notranslate"><span class="pre">task</span></code>  examples.</p>
-<p>This section also shows the use of  <code class="docutils literal notranslate"><span class="pre">depend</span></code>  clauses to order  executions through dependences.</p>
+<h1>Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> Execution and Dependences<a class="headerlink" href="#asynchronous-target-execution-and-dependences" title="Permalink to this headline">¶</a></h1>
+<p>Asynchronous execution of a <code class="docutils literal notranslate"><span class="pre">target</span></code> region can be accomplished by creating an explicit task around the <code class="docutils literal notranslate"><span class="pre">target</span></code> region. Examples with explicit tasks are shown at the beginning of this section.</p>
+<p>As of OpenMP 4.5 and beyond the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause can be used on the <code class="docutils literal notranslate"><span class="pre">target</span></code> directive for asynchronous execution. Examples with  <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clauses follow the explicit <code class="docutils literal notranslate"><span class="pre">task</span></code> examples.</p>
+<p>This section also shows the use of <code class="docutils literal notranslate"><span class="pre">depend</span></code> clauses to order  executions through dependences.</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -1283,8 +1321,8 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="Examples_teams.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">teams</span></code>  Constructs</a>
-    <a class='right-next' id="next-link" href="Examples_async_target_with_tasks.html" title="next page">Asynchronous  <code class="docutils literal notranslate"><span class="pre">target</span></code>  with Tasks</a>
+    <a class='left-prev' id="prev-link" href="Examples_teams.html" title="previous page"><code class="docutils literal notranslate"><span class="pre">teams</span></code> Constructs</a>
+    <a class='right-next' id="next-link" href="Examples_async_target_with_tasks.html" title="next page">Asynchronous <code class="docutils literal notranslate"><span class="pre">target</span></code> with Tasks</a>
 
         </div>
         
