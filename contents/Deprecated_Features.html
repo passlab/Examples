@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OpenMP Affinity &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,6 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tasking" href="Chap_tasking.html" />
-    <link rel="prev" title="Parallel Execution" href="Chap_parallel_execution.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,14 +97,14 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="Chap_parallel_execution.html">
    Parallel Execution
   </a>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
    OpenMP Affinity
   </a>
  </li>
@@ -186,7 +184,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/contents/Chap_affinity.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/contents/Deprecated_Features.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -206,7 +204,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Chap_affinity.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Deprecated_Features.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -222,28 +220,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_affinity.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,32 +240,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>OpenMP Affinity</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="openmp-affinity">
-<h1>OpenMP Affinity<a class="headerlink" href="#openmp-affinity" title="Permalink to this headline">¶</a></h1>
-<p>{affinity}</p>
-<p>OpenMP Affinity consists of a <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> policy (thread affinity policy) and a specification of places ( <strong>“</strong> location units <strong>“</strong>  or  <em>processors</em>  that may be cores, hardware threads, sockets, etc.).   OpenMP Affinity enables users to bind computations on specific places. The placement will hold for the duration of the parallel region.  However, the runtime is free to migrate the OpenMP threads  to different cores (hardware threads, sockets, etc.) prescribed within a given place,  if two or more cores (hardware threads, sockets, etc.) have been assigned to a given place.</p>
-<p>Often the binding can be managed without resorting to explicitly setting places. Without the specification of places in the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable,  the OpenMP runtime will distribute and bind threads using the entire range of processors for  the OpenMP program, according to the <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause.  When places are specified, the OMP runtime binds threads to the places according to a default distribution policy, or those specified in the <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause.</p>
-<p>In the OpenMP Specifications document a processor refers to an execution unit that is enabled for an OpenMP thread to use.  A processor is a core when there is no SMT (Simultaneous Multi-Threading) support or SMT is disabled.  When  SMT is enabled, a processor is a hardware thread (HW-thread). (This is the usual case; but actually, the execution unit is implementation defined.) Processor numbers are numbered sequentially from 0 to the number of cores less one (without SMT), or 0 to the number HW-threads less one (with SMT). OpenMP places use the processor number to designate binding locations (unless an  <strong>“</strong> abstract name <strong>“</strong>  is used.)</p>
-<p>The processors available to a process may be a subset of the system’s processors.  This restriction may be the result of a  wrapper process controlling the execution (such as <code class="docutils literal notranslate"><span class="pre">numactl</span></code> on Linux systems),  compiler options, library-specific environment variables, or default kernel settings.  For instance, the execution of multiple MPI processes, launched on a single compute node, will each have a subset of processors as determined by the MPI launcher or set by MPI affinity environment  variables for the MPI library.</p>
-<p>Threads of a team are positioned onto places in a compact manner, a  scattered distribution, or onto the primary thread’s place, by setting the  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">proc_bind</span></code> clause  to  <code class="docutils literal notranslate"><span class="pre">close</span></code>, <code class="docutils literal notranslate"><span class="pre">spread</span></code>, or <code class="docutils literal notranslate"><span class="pre">primary</span></code> (<code class="docutils literal notranslate"><span class="pre">master</span></code> has been deprecated), respectively.  When  <code class="docutils literal notranslate"><span class="pre">OMP_PROC_BIND</span></code> is set to FALSE no binding is enforced; and  when the value is TRUE, the binding is implementation defined to  a set of places in the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable or to places  defined by the implementation if the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable  is not set.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> variable can also be set to an abstract name  (<code class="docutils literal notranslate"><span class="pre">threads</span></code>, <code class="docutils literal notranslate"><span class="pre">cores</span></code>, <code class="docutils literal notranslate"><span class="pre">sockets</span></code>) to specify that a place is either a single hardware thread, a core, or a socket, respectively.  This description of the <code class="docutils literal notranslate"><span class="pre">OMP_PLACES</span></code> is most useful when the  number of threads is equal to the number of hardware thread, cores or sockets.  It can also be used with a <code class="docutils literal notranslate"><span class="pre">close</span></code> or <code class="docutils literal notranslate"><span class="pre">spread</span></code>  distribution policy when the equality doesn’t hold.</p>
-<p>../../affinity/affinity.tex</p>
-<p>../../affinity/task_affinity.tex</p>
-<p>../../affinity/affinity_display.tex</p>
-<p>../../affinity/affinity_query.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -286,36 +269,22 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
             
                 <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="Chap_parallel_execution.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Parallel Execution</p>
-        </div>
-    </a>
-    <a class='right-next' id="next-link" href="Chap_tasking.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Tasking</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
-    </a>
+<div class='prev-next-area'>
 </div>
             
         </div>
