@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parallel Execution &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="OpenMP Affinity" href="Chap_affinity.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Chap_affinity.html" />
     <link rel="prev" title="&lt;no title&gt;" href="Chap_directives.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_SIMD.html">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_synchronization.html">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_data_environment.html">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_memory_model.html">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_program_control.html">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_parallel_execution.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,66 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Parallel Execution</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="parallel-execution">
-<h1>Parallel Execution<a class="headerlink" href="#parallel-execution" title="Permalink to this headline">¶</a></h1>
-<p>{parallel_execution}</p>
-<p>A single thread, the  <em>initial thread</em> , begins sequential execution of  an OpenMP enabled program, as if the whole program is in an implicit parallel region consisting of an implicit task executed by the  <em>initial thread</em> .</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct encloses code,  forming a parallel region.  An  <em>initial thread</em>  encountering a <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region forks (creates) a team of threads at the beginning of the  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, and joins them (removes from execution) at the  end of the region.  The initial thread becomes the primary thread of the team in a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region with a  <em>thread</em>  number equal to zero, the other  threads are numbered from 1 to number of threads minus 1.  A team may be comprised of just a single thread.</p>
-<p>Each thread of a team is assigned an implicit task consisting of code within the  parallel region. The task that creates a parallel region is suspended while the tasks of the team are executed.  A thread is tied to its task; that is, only the thread assigned to the task can execute that task.  After completion  of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, the primary thread resumes execution of the generating task.</p>
-<p>Any task within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region is allowed to encounter another <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region to form a nested <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region. The  parallelism of a nested <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region (whether it forks additional  threads, or is executed serially by the encountering task) can be controlled by the <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code> environment variable or the <code class="docutils literal notranslate"><span class="pre">omp_set_nested()</span></code>  API routine with arguments indicating true or false.</p>
-<p>The number of threads of a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region can be set by the <code class="docutils literal notranslate"><span class="pre">OMP_NUM_THREADS</span></code> environment variable, the <code class="docutils literal notranslate"><span class="pre">omp_set_num_threads()</span></code> routine, or on the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  directive with the <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clause. The routine overrides the environment variable, and the clause overrides all.  Use the <code class="docutils literal notranslate"><span class="pre">OMP_DYNAMIC</span></code> or the <code class="docutils literal notranslate"><span class="pre">omp_set_dynamic()</span></code> function to specify that the OpenMP implementation dynamically adjust the number of threads for <code class="docutils literal notranslate"><span class="pre">parallel</span></code> regions.  The default setting for dynamic adjustment is implementation defined. When dynamic adjustment is on and the number of threads is specified, the number of threads becomes an upper limit for the number of threads to be provided by the OpenMP runtime.</p>
-<p>WORKSHARING CONSTRUCTS</p>
-<p>A worksharing construct distributes the execution of the associated region among the members of the team that encounter it.  There is an implied barrier at the end of the worksharing region (there is no barrier at the beginning). The worksharing constructs are:</p>
-<ul class="simple">
-<li><p>loop constructs: {<code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span></code> }</p></li>
-</ul>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">sections</span></code></p></li>
-</ul>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">single</span></code></p></li>
-</ul>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">workshare</span></code></p></li>
-</ul>
-<p>The <code class="docutils literal notranslate"><span class="pre">for</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span></code> constructs (loop constructs) create a region  consisting of a loop.  A loop controlled by a loop construct is called  an  <em>associated</em>  loop.  Nested loops can form a single region when the  <code class="docutils literal notranslate"><span class="pre">collapse</span></code> clause (with an integer argument) designates the number of   <em>associated</em>  loops to be executed in parallel, by forming a  “single iteration space” for the specified number of nested loops.   The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> clause can also control multiple associated loops.</p>
-<p>An associated loop must adhere to a “canonical form” (specified in the   <em>Canonical Loop Form</em>  of the OpenMP Specifications document) which allows the  iteration count (of all associated loops) to be computed before the  (outermost) loop is executed. Most common loops comply with the canonical form, including C++ iterators.</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">single</span></code> construct forms a region in which only one thread (any one  of the team) executes the region.  The other threads wait at the implied  barrier at the end, unless the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause is specified.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">sections</span></code> construct forms a region that contains one or more  structured blocks.  Each block of a <code class="docutils literal notranslate"><span class="pre">sections</span></code> directive is  constructed with a <code class="docutils literal notranslate"><span class="pre">section</span></code> construct, and executed once by  one of the threads (any one) in the team.  (If only one block is  formed in the region, the <code class="docutils literal notranslate"><span class="pre">section</span></code> construct, which is used to separate blocks, is not required.) The other threads wait at the implied  barrier at the end, unless the <code class="docutils literal notranslate"><span class="pre">nowait</span></code> clause is specified.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">workshare</span></code> construct is a Fortran feature that consists of a region with a single structure block (section of code). Statements in the <code class="docutils literal notranslate"><span class="pre">workshare</span></code> region are divided into units of work, and executed (once) by threads of the team.</p>
-<p>MASKED CONSTRUCT</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">masked</span></code> construct is not a worksharing construct.  The <code class="docutils literal notranslate"><span class="pre">masked</span></code> region is executed only by the primary thread. There is no implicit barrier (and flush)  at the end of the <code class="docutils literal notranslate"><span class="pre">masked</span></code> region; hence the other threads of the team continue execution beyond code statements beyond the <code class="docutils literal notranslate"><span class="pre">masked</span></code> region. The <code class="docutils literal notranslate"><span class="pre">master</span></code> construct, which has been deprecated in OpenMP 5.1, has identical semantics to the <code class="docutils literal notranslate"><span class="pre">masked</span></code> construct with no <code class="docutils literal notranslate"><span class="pre">filter</span></code> clause.</p>
-<p>../../parallel_execution/ploop.tex</p>
-<p>../../parallel_execution/parallel.tex</p>
-<p>../../parallel_execution/host_teams.tex</p>
-<p>../../parallel_execution/nthrs_nesting.tex</p>
-<p>../../parallel_execution/nthrs_dynamic.tex</p>
-<p>../../parallel_execution/fort_do.tex</p>
-<p>../../parallel_execution/nowait.tex</p>
-<p>../../parallel_execution/collapse.tex</p>
-<p>../../parallel_execution/linear_in_loop.tex</p>
-<p>../../parallel_execution/psections.tex</p>
-<p>../../parallel_execution/fpriv_sections.tex</p>
-<p>../../parallel_execution/single.tex</p>
-<p>../../parallel_execution/workshare.tex</p>
-<p>../../parallel_execution/masked.tex</p>
-<p>../../parallel_execution/loop.tex</p>
-<p>../../parallel_execution/pra_iterator.tex</p>
-<p>../../parallel_execution/set_dynamic_nthrs.tex</p>
-<p>../../parallel_execution/get_nthrs.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -320,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -346,7 +249,7 @@
     <a class='right-next' id="next-link" href="Chap_affinity.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">OpenMP Affinity</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

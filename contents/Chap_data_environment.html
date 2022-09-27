@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data Environment &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Memory Model" href="Chap_memory_model.html" />
-    <link rel="prev" title="Synchronization" href="Chap_synchronization.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Chap_memory_model.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Chap_synchronization.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_parallel_execution.html">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_SIMD.html">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_synchronization.html">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_memory_model.html">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_program_control.html">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_data_environment.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,48 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Data Environment</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="data-environment">
-<h1>Data Environment<a class="headerlink" href="#data-environment" title="Permalink to this headline">¶</a></h1>
-<p>{data_environment}  The OpenMP  <em>data environment</em>  contains data attributes of variables and objects.  Many constructs (such as <code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">simd</span></code>, <code class="docutils literal notranslate"><span class="pre">task</span></code>)  accept clauses to control  <em>data-sharing</em>  attributes of referenced variables in the construct, where  <em>data-sharing</em>  applies to whether the attribute of the variable is  <em>shared</em> ,  is  <em>private</em>  storage, or has special operational characteristics  (as found in the <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">linear</span></code>, or <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause).</p>
-<p>The data environment for a device (distinguished as a  <em>device data environment</em> ) is controlled on the host by  <em>data-mapping</em>  attributes, which determine the relationship of the data on the host, the  <em>original</em>  data, and the data on the device, the  <em>corresponding</em>  data.</p>
-<p>DATA-SHARING ATTRIBUTES</p>
-<p>Data-sharing attributes of variables can be classified as being  <em>predetermined</em> ,  <em>explicitly determined</em>  or  <em>implicitly determined</em> .</p>
-<p>Certain variables and objects have predetermined attributes.   A commonly found case is the loop iteration variable in associated loops  of a <code class="docutils literal notranslate"><span class="pre">for</span></code> or <code class="docutils literal notranslate"><span class="pre">do</span></code> construct. It has a private data-sharing attribute. Variables with predetermined data-sharing attributes cannot be listed in a data-sharing clause; but there are some exceptions (mainly concerning loop iteration variables).</p>
-<p>Variables with explicitly determined data-sharing attributes are those that are referenced in a given construct and are listed in a data-sharing attribute clause on the construct. Some of the common data-sharing clauses are: <code class="docutils literal notranslate"><span class="pre">shared</span></code>, <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>,  <code class="docutils literal notranslate"><span class="pre">linear</span></code>, and <code class="docutils literal notranslate"><span class="pre">reduction</span></code>.</p>
-<p>Variables with implicitly determined data-sharing attributes are those that are referenced in a given construct, do not have predetermined data-sharing attributes, and are not listed in a data-sharing attribute clause of an enclosing construct. For a complete list of variables and objects with predetermined and implicitly determined attributes, please refer to the  <em>Data-sharing Attribute Rules for Variables Referenced in a Construct</em>  subsection of the OpenMP Specifications document.</p>
-<p>DATA-MAPPING ATTRIBUTES</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause on a device construct explicitly specifies how the list items in the clause are mapped from the encountering task’s data environment (on the host) to the corresponding item in the device data environment (on the device). The common  <em>list items</em>  are arrays, array sections, scalars, pointers, and structure elements (members).</p>
-<p>Procedures and global variables have predetermined data mapping if they appear within the list or block of a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive. Also, a C/C++ pointer is mapped as a zero-length array section, as is a C++ variable that is a reference to a pointer.</p>
-<p>Without explicit mapping, non-scalar and non-pointer variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are implicitly mapped with a  <em>map-type</em>  of <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>. Without explicit mapping, scalar variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are not mapped, but have an implicit firstprivate data-sharing attribute. (That is, the value of the original variable is given to a private variable of the same name on the device.) This behavior can be changed with the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause can appear on <code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">data</span></code> and  <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">enter/exit</span> <span class="pre">data</span></code> constructs.  The operations of creation and removal of device storage as well as assignment of the original list item  values to the corresponding list items may be complicated when the list  item appears on multiple constructs or when the host and device storage  is shared. In these cases the item’s reference count, the number of times it has been referenced (+1 on entry and -1 on exited) in nested (structured) map regions and/or accumulative (unstructured) mappings, determines the operation. Details of the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause and reference count operation are specified  in the  <em>map Clause</em>  subsection of the OpenMP Specifications document.</p>
-<p>../../data_environment/threadprivate.tex</p>
-<p>../../data_environment/default_none.tex</p>
-<p>../../data_environment/private.tex</p>
-<p>../../data_environment/fort_loopvar.tex</p>
-<p>../../data_environment/fort_sp_common.tex</p>
-<p>../../data_environment/fort_sa_private.tex</p>
-<p>../../data_environment/carrays_fpriv.tex</p>
-<p>../../data_environment/lastprivate.tex</p>
-<p>../../data_environment/reduction.tex</p>
-<p>../../data_environment/udr.tex</p>
-<p>../../data_environment/scan.tex</p>
-<p>../../data_environment/copyin.tex</p>
-<p>../../data_environment/copyprivate.tex</p>
-<p>../../data_environment/cpp_reference.tex</p>
-<p>../../data_environment/associate.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -302,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -322,13 +243,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Synchronization</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_memory_model.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Memory Model</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

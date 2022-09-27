@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Program Control &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -55,7 +55,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="&lt;no title&gt;" href="Chap_ompt_interface.html" />
-    <link rel="prev" title="Memory Model" href="Chap_memory_model.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Chap_memory_model.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_parallel_execution.html">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_SIMD.html">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_synchronization.html">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_data_environment.html">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_memory_model.html">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_program_control.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,50 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Program Control</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="program-control">
-<h1>Program Control<a class="headerlink" href="#program-control" title="Permalink to this headline">¶</a></h1>
-<p>{program_control}</p>
-<p>Basic concepts and mechanisms for directing and controlling a program compilation and execution are provided in this introduction and illustrated in subsequent examples.</p>
-<p>CONDITIONAL COMPILATION and EXECUTION</p>
-<p>Conditional compilation can be performed with conventional #ifdef directives in C, C++, and Fortran, and additionally with OpenMP sentinel (<code class="docutils literal notranslate"><span class="pre">!$</span></code>) in Fortran.  The <code class="docutils literal notranslate"><span class="pre">if</span></code> clause on some directives can direct the runtime to ignore or alter the behavior of the construct. Of course, the base-language <code class="docutils literal notranslate"><span class="pre">if</span></code> statements can be used to control the execution of stand-alone directives (such as <code class="docutils literal notranslate"><span class="pre">flush</span></code>, <code class="docutils literal notranslate"><span class="pre">barrier</span></code>, <code class="docutils literal notranslate"><span class="pre">taskwait</span></code>,  and  <code class="docutils literal notranslate"><span class="pre">taskyield</span></code>). However, the directives must appear in a block structure, and not as a substatement. The <code class="docutils literal notranslate"><span class="pre">metadirective</span></code> and <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">variant</span></code> directives provide conditional  selection of directives and routines for compilation (and use), respectively. The <code class="docutils literal notranslate"><span class="pre">assume</span></code> and <code class="docutils literal notranslate"><span class="pre">requires</span></code> directives provide invariants for optimizing compilation, and essential features for compilation  and correct execution, respectively.</p>
-<p>CANCELLATION</p>
-<p>Cancellation (termination) of the normal sequence of execution for the threads in an OpenMP region can be  accomplished with the <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct.  The construct uses a  <em>construct-type-clause</em>  to set the region-type to activate for the cancellation.  That is, inclusion  of one of the  <em>construct-type-clause</em>  names <code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">for</span></code>,  <code class="docutils literal notranslate"><span class="pre">do</span></code>, <code class="docutils literal notranslate"><span class="pre">sections</span></code> or <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> on the directive line  activates the corresponding region.   The <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct is activated by the first encountering thread,  and it continues execution at the end of the named region. The <code class="docutils literal notranslate"><span class="pre">cancel</span></code> construct is also a cancellation point for any other thread of the team  to also continue execution at the end of the named region.</p>
-<p>Also, once the specified region has been activated for cancellation any thread that encounnters  a <code class="docutils literal notranslate"><span class="pre">cancellation</span></code> <code class="docutils literal notranslate"><span class="pre">point</span></code> construct with the same named region ( <em>construct-type-clause</em> ), continues execution at the end of the region.</p>
-<p>For an activated <code class="docutils literal notranslate"><span class="pre">cancel</span> <span class="pre">taskgroup</span></code> construct, the tasks that belong to the taskgroup set of the innermost enclosing taskgroup region will be canceled.</p>
-<p>A task that encounters a <code class="docutils literal notranslate"><span class="pre">cancel</span></code> <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct continues execution at the end of its task region. Any task of the taskgroup that has already begun execution will run to completion, unless it encounters a <code class="docutils literal notranslate"><span class="pre">cancellation</span></code> <code class="docutils literal notranslate"><span class="pre">point</span></code>; tasks that have not begun execution may be discarded as completed tasks.</p>
-<p>CONTROL VARIABLES</p>
-<p>Internal control variables (ICV) are used by implementations to hold values which control the execution   of OpenMP regions.  Control (and hence the ICVs) may be set as implementation defaults,    or set and adjusted through environment variables, clauses, and API functions.      Initial ICV values are reported by the runtime   if the <code class="docutils literal notranslate"><span class="pre">OMP_DISPLAY_ENV</span></code> environment variable has been set to <code class="docutils literal notranslate"><span class="pre">TRUE</span></code> or <code class="docutils literal notranslate"><span class="pre">VERBOSE</span></code>.</p>
-<p>NESTED CONSTRUCTS</p>
-<p>Certain combinations of nested constructs are permitted, giving rise to  <em>combined</em>  constructs consisting of two or more directives.  These can be used when the two (or several) constructs would be used immediately in succession (closely nested). A  <em>combined</em>  construct can use the clauses of the component constructs without restrictions. A  <em>composite</em>  construct is a combined construct which has one or more clauses with (an often obviously) modified or restricted meaning, relative to when the constructs are uncombined.</p>
-<p>Certain nestings are forbidden, and often the reasoning is obvious.  For example, worksharing constructs cannot be nested, and the <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct cannot be nested inside a worksharing construct, or a <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct.  Also, <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs cannot be nested, unless the nested target is a reverse offload.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct can be nested, as well as the <code class="docutils literal notranslate"><span class="pre">task</span></code> construct.   The parallel execution in the nested parallel construct(s) is controlled by the  <code class="docutils literal notranslate"><span class="pre">OMP_MAX_ACTIVE_LEVELS</span></code> environment variable, and the <code class="docutils literal notranslate"><span class="pre">omp_set_max_active_levels</span></code> routine.  Use the <code class="docutils literal notranslate"><span class="pre">omp_get_max_active_levels</span></code> routine to determine the maximum levels provided by an implementation. As of OpenMP 5.0, use of the <code class="docutils literal notranslate"><span class="pre">OMP_NESTED</span></code> environment variable and the <code class="docutils literal notranslate"><span class="pre">omp_set_nested</span></code> routine  has been deprecated.</p>
-<p>More details on nesting can be found in the  <em>Nesting of Regions</em>  of the  <em>Directives</em>   chapter in the OpenMP Specifications document.</p>
-<p>../../program_control/cond_comp.tex</p>
-<p>../../program_control/icv.tex</p>
-<p>../../program_control/standalone.tex</p>
-<p>../../program_control/cancellation.tex</p>
-<p>../../program_control/requires.tex</p>
-<p>../../program_control/variant.tex</p>
-<p>../../program_control/metadirective.tex</p>
-<p>../../program_control/nested_loop.tex</p>
-<p>../../program_control/nesting_restrict.tex</p>
-<p>../../program_control/target_offload.tex</p>
-<p>../../program_control/reproducible.tex</p>
-<p>../../program_control/interop.tex</p>
-<p>../../program_control/utilities.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -304,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -324,7 +243,7 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Memory Model</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_ompt_interface.html" title="next page">

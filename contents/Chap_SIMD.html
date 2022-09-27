@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SIMD &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Loop Transformations" href="Chap_loop_transformations.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Chap_loop_transformations.html" />
     <link rel="prev" title="&lt;no title&gt;" href="Chap_devices.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_parallel_execution.html">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_synchronization.html">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_data_environment.html">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_memory_model.html">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_program_control.html">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_SIMD.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,29 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>SIMD</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="simd">
-<h1>SIMD<a class="headerlink" href="#simd" title="Permalink to this headline">¶</a></h1>
-<p>{SIMD}</p>
-<p>Single instruction, multiple data (SIMD) is a form of parallel execution  in which the same operation is performed on multiple data elements  independently in hardware vector processing units (VPU), also called SIMD units. The addition of two vectors to form a third vector is a SIMD operation. Many processors have SIMD (vector) units that can perform simultaneously  2, 4, 8 or more executions of the same operation (by a single SIMD unit).</p>
-<p>Loops without loop-carried backward dependency (or with dependency preserved using  ordered simd) are candidates for vectorization by the compiler for  execution with SIMD units. In addition, with state-of-the-art vectorization  technology and <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> directive extensions for function vectorization in the OpenMP 4.5 specification, loops with function calls can be vectorized as well.  The basic idea is that a scalar function call in a loop can be replaced by a vector version  of the function, and the loop can be vectorized simultaneously by combining a loop  vectorization (<code class="docutils literal notranslate"><span class="pre">simd</span></code> directive on the loop) and a function  vectorization (<code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> directive on the function).</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct states that SIMD operations be performed on the data within the loop.  A number of clauses are available to provide data-sharing attributes (<code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">linear</span></code>, <code class="docutils literal notranslate"><span class="pre">reduction</span></code> and  <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>).  Other clauses provide vector length preference/restrictions  (<code class="docutils literal notranslate"><span class="pre">simdlen</span></code> / <code class="docutils literal notranslate"><span class="pre">safelen</span></code>), loop fusion (<code class="docutils literal notranslate"><span class="pre">collapse</span></code>), and data  alignment (<code class="docutils literal notranslate"><span class="pre">aligned</span></code>).</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">declare</span> <span class="pre">simd</span></code> directive designates that a vector version of the function should also be constructed for  execution within loops that contain the function and have a <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directive.  Clauses provide argument specifications (<code class="docutils literal notranslate"><span class="pre">linear</span></code>, <code class="docutils literal notranslate"><span class="pre">uniform</span></code>, and <code class="docutils literal notranslate"><span class="pre">aligned</span></code>), a requested vector length  (<code class="docutils literal notranslate"><span class="pre">simdlen</span></code>), and designate whether the function is always/never  called conditionally in a loop (<code class="docutils literal notranslate"><span class="pre">notinbranch</span></code>/<code class="docutils literal notranslate"><span class="pre">inbranch</span></code>).  The latter is for optimizing performance.</p>
-<p>Also, the <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct has been combined with the worksharing loop  constructs (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">simd</span></code> and <code class="docutils literal notranslate"><span class="pre">do</span> <span class="pre">simd</span></code>) to enable simultaneous thread  execution in different SIMD units.</p>
-<p>../../SIMD/SIMD.tex</p>
-<p>../../SIMD/linear_modifier.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -283,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -309,7 +249,7 @@
     <a class='right-next' id="next-link" href="Chap_loop_transformations.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Loop Transformations</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

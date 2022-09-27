@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Model &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Program Control" href="Chap_program_control.html" />
-    <link rel="prev" title="Data Environment" href="Chap_data_environment.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Chap_program_control.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Chap_data_environment.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_parallel_execution.html">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_SIMD.html">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_synchronization.html">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_data_environment.html">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_program_control.html">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_memory_model.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,30 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Memory Model</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="memory-model">
-<h1>Memory Model<a class="headerlink" href="#memory-model" title="Permalink to this headline">¶</a></h1>
-<p>{memory_model}</p>
-<p>OpenMP provides a shared-memory model that allows all threads on a given device shared access to <strong>memory</strong>. For a given OpenMP region that may be executed by more than one thread or SIMD lane, variables in memory may be <strong>shared</strong> or <strong>private</strong> with respect to those threads or SIMD lanes. A variable’s data-sharing attribute indicates whether it is shared (the <strong>shared</strong> attribute) or private (the <strong>private</strong>, <strong>firstprivate</strong>, <strong>lastprivate</strong>, <strong>linear</strong>, and <strong>reduction</strong> attributes) in the data environment of an OpenMP region. While private variables in an OpenMP region are new copies of the original variable (with same name) that may then be concurrently accessed or modified by their respective threads or SIMD lanes, a shared variable in an OpenMP region is the same as the variable of the same name in the enclosing region. Concurrent accesses or modifications to a shared variable may therefore require synchronization to avoid data races.</p>
-<p>OpenMP’s memory model also includes a <strong>temporary view</strong> of memory that is associated with each thread. Two different threads may see different values for a given variable in their respective temporary views. Threads may employ flush operations for the purposes of making their temporary view of a variable consistent with the value of the variable in memory. The effect of a given flush operation is characterized by its flush properties – some combination of <strong>strong</strong>, <strong>release</strong>, and <strong>acquire</strong> – and, for <strong>strong</strong> flushes, a <strong>flush-set</strong>.</p>
-<p>A <strong>strong</strong> flush will force consistency between the temporary view and the memory for all variables in its <strong>flush-set</strong>.  Furthermore, all strong flushes in a program that have intersecting flush-sets will execute in some total order, and within a thread strong flushes may not be reordered with respect to other memory operations on variables in its flush-set. <strong>Release</strong> and <strong>acquire</strong> flushes operate in pairs. A release flush may “synchronize’’ with an acquire flush, and when it does so the local memory operations that precede the release flush will appear to have been completed before the local memory operations on the same variables that follow the acquire flush.</p>
-<p>Flush operations arise from explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, implicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, and also from the execution of <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs. The <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive forces a  consistent view of local variables of the thread executing the <code class="docutils literal notranslate"><span class="pre">flush</span></code>.  When a list is supplied on the directive, only the items (variables) in the list are guaranteed to be flushed.  Implied flushes exist at prescribed locations of certain constructs. For the complete list of these locations and associated constructs, please refer to the  <em>flush Construct</em>  section of the OpenMP Specifications document.</p>
-<p>In this chapter, examples illustrate how race conditions may arise for accesses to variables with a  <em>shared</em>  data-sharing attribute when flush operations are not properly employed.  A race condition can exist when two or more threads are involved in accessing a variable and at least one of the accesses modifies the variable.  In particular, a data race will arise when conflicting accesses do not have a well-defined <strong>completion order</strong>.  The existence of data races in OpenMP programs result in undefined behavior, and so they should generally be avoided for programs to be correct.  The completion order of accesses to a shared variable is guaranteed in OpenMP through a set of memory consistency rules that are described in the  <em>OpenMP Memory Consistency</em>  section of the OpenMP Specifications document.</p>
-<p>../../memory_model/mem_model.tex</p>
-<p>../../memory_model/allocators.tex</p>
-<p>../../memory_model/fort_race.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -284,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -304,13 +243,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Data Environment</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_program_control.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Program Control</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

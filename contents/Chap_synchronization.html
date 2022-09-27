@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Synchronization &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data Environment" href="Chap_data_environment.html" />
-    <link rel="prev" title="Loop Transformations" href="Chap_loop_transformations.html" />
+    <link rel="next" title="&lt;no title&gt;" href="Chap_data_environment.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="Chap_loop_transformations.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,54 +99,6 @@
   </a>
  </li>
 </ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_parallel_execution.html">
-   Parallel Execution
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_affinity.html">
-   OpenMP Affinity
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_tasking.html">
-   Tasking
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_SIMD.html">
-   SIMD
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_loop_transformations.html">
-   Loop Transformations
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Synchronization
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_data_environment.html">
-   Data Environment
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_memory_model.html">
-   Memory Model
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Chap_program_control.html">
-   Program Control
-  </a>
- </li>
-</ul>
-
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -222,28 +174,19 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_synchronization.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -251,46 +194,26 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Synchronization</h1>
+                <h1><no title></h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="simple visible nav section-nav flex-column">
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="synchronization">
-<h1>Synchronization<a class="headerlink" href="#synchronization" title="Permalink to this headline">¶</a></h1>
-<p>{synchronization}</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct is a stand-alone directive that requires all threads of a team (within a contention group) to execute the barrier and complete execution of all tasks within the region, before continuing past the barrier.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct is a directive that contains a structured block.  The construct allows only a single thread at a time to execute the structured block (region). Multiple critical regions may exist in a parallel region, and may act cooperatively (only one thread at a time in all <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions), or separately (only one thread at a time in each <code class="docutils literal notranslate"><span class="pre">critical</span></code> regions when a unique name is supplied on each <code class="docutils literal notranslate"><span class="pre">critical</span></code> construct). An optional (lock) <code class="docutils literal notranslate"><span class="pre">hint</span></code> clause may be specified on a named <code class="docutils literal notranslate"><span class="pre">critical</span></code>  construct to provide the OpenMP runtime guidance in selection a locking  mechanism.</p>
-<p>On a finer scale the <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct allows only a single thread at  a time to have atomic access to a storage location involving a single read,  write, update or capture statement, and a limited number of combinations  when specifying the <code class="docutils literal notranslate"><span class="pre">capture</span></code>  <em>atomic-clause</em>  clause.  The  <em>atomic-clause</em>  clause is required for some expression statements, but is not required for <code class="docutils literal notranslate"><span class="pre">update</span></code> statements. The  <em>memory-order</em>  clause can be used to specify the degree of memory ordering enforced by an <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct. From weakest to strongest, they are <code class="docutils literal notranslate"><span class="pre">relaxed</span></code> (the default), acquire and/or release clauses (specified with <code class="docutils literal notranslate"><span class="pre">acquire</span></code>, <code class="docutils literal notranslate"><span class="pre">release</span></code>, or <code class="docutils literal notranslate"><span class="pre">acq_rel</span></code>), and <code class="docutils literal notranslate"><span class="pre">seq_cst</span></code>.  Please see the details in the  <em>atomic Construct</em>  subsection of the  <em>Directives</em>  chapter in the OpenMP Specifications document.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct either specifies a structured block in a loop,  simd, or loop SIMD region that will be executed in the order of the loop  iterations.  The ordered construct sequentializes and orders the execution  of ordered regions while allowing code outside the region to run in parallel.</p>
-<p>Since OpenMP 4.5 the <code class="docutils literal notranslate"><span class="pre">ordered</span></code> construct can also be a stand-alone  directive that specifies cross-iteration dependences in a doacross loop nest.   The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause uses a <code class="docutils literal notranslate"><span class="pre">sink</span></code>  <em>dependence-type</em> , along with an  iteration vector argument (vec) to indicate the iteration that satisfies the  dependence.  The <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause with a <code class="docutils literal notranslate"><span class="pre">source</span></code>  <em>dependence-type</em>  specifies dependence satisfaction.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive is a stand-alone construct for enforcing consistency between a thread’s view of memory and the view of memory for other threads (see the Memory Model chapter of this document for more details). When the construct is used with an explicit variable list, a  <em>strong flush</em>  that forces a thread’s temporary view of memory to be consistent with the actual memory is applied to all listed variables. When the construct is used without an explicit variable list and without a  <em>memory-order</em>  clause, a strong flush is applied to all locally thread-visible data as defined by the base language, and additionally the construct provides both acquire and release memory ordering semantics.  When an explicit variable list is not present and a  <em>memory-order</em>  clause is present, the construct provides acquire and/or release memory ordering semantics according to the  <em>memory-order</em>  clause, but no strong flush is performed. A resulting strong flush that applies to a set of variables effectively ensures that no memory (load or store) operation for the affected variables may be reordered across the <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive.</p>
-<p>General-purpose routines provide mutual exclusion semantics through locks,  represented by lock variables.   The semantics allows a task to  <em>set</em> , and hence   <em>own</em>  a lock, until it is  <em>unset</em>  by the task that set it. A   <em>nestable</em>  lock can be set multiple times by a task, and is used when in code requires nested control of locks.  A  <em>simple lock</em>  can only be set once by the owning task. There are specific calls for the two types of locks, and the variable of a specific lock type cannot be used by the other lock type.</p>
-<p>Any explicit task will observe the synchronization prescribed in a  <code class="docutils literal notranslate"><span class="pre">barrier</span></code> construct and an implied barrier.  Also, additional synchronizations  are available for tasks.  All children of a task will wait at a <code class="docutils literal notranslate"><span class="pre">taskwait</span></code> (for  their siblings to complete).  A <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct creates a region in which the current task is suspended at the end of the region until all sibling tasks,  and their descendants, have completed.  Scheduling constraints on task execution can be prescribed by the <code class="docutils literal notranslate"><span class="pre">depend</span></code> clause to enforce dependence on previously generated tasks. More details on controlling task executions can be found in the  <em>Tasking</em>  Chapter in the OpenMP Specifications document.</p>
-<p>../../synchronization/critical.tex</p>
-<p>../../synchronization/worksharing_critical.tex</p>
-<p>../../synchronization/barrier_regions.tex</p>
-<p>../../synchronization/atomic.tex</p>
-<p>../../synchronization/atomic_restrict.tex</p>
-<p>../../synchronization/flush_nolist.tex</p>
-<p>../../synchronization/acquire_release.tex</p>
-<p>../../synchronization/ordered.tex</p>
-<p>../../synchronization/depobj.tex</p>
-<p>../../synchronization/doacross.tex</p>
-<p>../../synchronization/locks.tex</p>
-<p>../../synchronization/init_lock.tex</p>
-<p>../../synchronization/init_lock_with_hint.tex</p>
-<p>../../synchronization/lock_owner.tex</p>
-<p>../../synchronization/simple_lock.tex</p>
-<p>../../synchronization/nestable_lock.tex</p>
-</div>
-
+  
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -300,16 +223,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "native"
+            mode: "python"
         },
         kernelOptions: {
-            kernelName: "native",
+            kernelName: "python3",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'native'</script>
+    <script>kernelName = 'python3'</script>
 
               </div>
               
@@ -320,13 +243,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Loop Transformations</p>
+            <p class="prev-next-title">&lt;no title&gt;</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_data_environment.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Data Environment</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
