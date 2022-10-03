@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Foreword &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -97,6 +97,54 @@
   </a>
  </li>
 </ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_directives.html">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -172,19 +220,28 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Foreword_Chapt.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -192,26 +249,28 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Foreword</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="foreword">
+<h1>Foreword<a class="headerlink" href="#foreword" title="Permalink to this headline">¶</a></h1>
+<p>The OpenMP Examples document has been updated with new features found in the OpenMP 5.0.1 Specification. The additional examples and updates are referenced in the Document Revision History of the Appendix on page  <strong>history</strong> .</p>
+<p>Text describing an example with a 5.0.1 feature specifically states that the feature support begins in the OpenMP 5.0.1 Specification.  Also, an <code class="docutils literal notranslate"> <span class="pre">omp_5.0.1</span></code> keyword is included in the  metadata of the source code. These distinctions are presented to remind readers that a 5.0.1 compliant  OpenMP implementation is necessary to use these features in codes.</p>
+<p>Examples for most of the 5.0.1 features are included in this document, and incremental releases will become available as more feature examples and updates are submitted and approved by the OpenMP Examples Subcommittee.</p>
+<p>Examples are accepted for this document after discussions, revisions and reviews in the Examples Subcommittee, and two reviews/discussions and two votes in the OpenMP Language Committee. Draft examples are often derived from case studies for new features in the language, and are revised to illustrate the basic application of the features with code comments, and a text description. We are grateful to the numerous members of the Language Committee  who took the time to prepare codes and descriptions, and shepherd them through the acceptance process. We sincerely appreciate the Example Subcommittee members, who  actively participated and contributed in weekly meetings over the years.</p>
+<p>Examples Subcommittee Co-chairs:</p>
+<p>Henry Jin ( <strong>NASA</strong>  Ames Research Center)</p>
+<p>Kent Milfeld ( <strong>TACC</strong> , Texas Advanced Computing Center)</p>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -221,16 +280,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               

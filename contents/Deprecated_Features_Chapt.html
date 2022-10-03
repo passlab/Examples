@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Deprecated Features &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -97,6 +97,54 @@
   </a>
  </li>
 </ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_directives.html">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -172,19 +220,28 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Deprecated_Features_Chapt.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -192,26 +249,35 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Deprecated Features</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="deprecated-features">
+<h1>Deprecated Features<a class="headerlink" href="#deprecated-features" title="Permalink to this headline">¶</a></h1>
+<p>Deprecation of features began in OpenMP 5.0.  Examples that use a deprecated feature have been updated with an equivalent replacement feature.</p>
+<p>Deprecations affecting examples are the following: [labelindent=5mm,font=
+ormalfont]</p>
+<ul class="simple">
+<li><p>[5.1] –  <code class="docutils literal notranslate"><span class="pre">masked</span></code> construct          replaces <code class="docutils literal notranslate"><span class="pre">master</span></code> construct.</p></li>
+</ul>
+<ul class="simple">
+<li><p>[5.1] –  <code class="docutils literal notranslate"><span class="pre">primary</span></code> affinity policy   replaces <code class="docutils literal notranslate"><span class="pre">master</span></code> affinity policy.</p></li>
+</ul>
+<ul class="simple">
+<li><p>[5.0] –  <code class="docutils literal notranslate"><span class="pre">omp_sync_hint_*</span></code> constants replace  <code class="docutils literal notranslate"><span class="pre">omp_lock_hint_*</span></code> constants.</p></li>
+</ul>
+<p>These replacements appear in examples that illustrate, otherwise, earlier features. When using a compiler that is compliant with a version prior to  the indicated version, the earlier form of an example is restored by a C-style conditional compilation using the <code class="docutils literal notranslate"><span class="pre">_OPENMP</span></code> macro.</p>
+<p>Since Fortran compilers do not preprocess codes by default, a Fortran preprocessor flag will be required to compile Fortran examples with the C-style conditional  compilation statements.</p>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -221,16 +287,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               

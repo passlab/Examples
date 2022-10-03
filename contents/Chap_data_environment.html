@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Data Environment &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="Chap_memory_model.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="Chap_synchronization.html" />
+    <link rel="next" title="Memory Model" href="Chap_memory_model.html" />
+    <link rel="prev" title="Synchronization" href="Chap_synchronization.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,6 +99,54 @@
   </a>
  </li>
 </ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_directives.html">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -174,6 +222,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_data_environment.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -183,7 +248,190 @@
                 <i class="fas fa-list"></i> Contents
             </div>
             <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#threadprivate-directive">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     threadprivate
+    </span>
+   </code>
+   Directive
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#default-none-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     default(none)
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#private-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-private-loop-iteration-variables">
+   Fortran Private Loop Iteration Variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-restrictions-on-shared-and-private-clauses-with-common-blocks">
+   Fortran Restrictions on
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     shared
+    </span>
+   </code>
+   and
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clauses with Common Blocks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-restrictions-on-storage-association-with-the-private-clause">
+   Fortran Restrictions on Storage Association with the
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-c-arrays-in-a-firstprivate-clause">
+   C/C++ Arrays in a
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     firstprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lastprivate-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     lastprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reduction">
+   Reduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-clause">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       reduction
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#task-reduction">
+     Task Reduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-on-combined-target-constructs">
+     Reduction on Combined Target Constructs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#task-reduction-with-target-constructs">
+     Task Reduction with Target Constructs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#taskloop-reduction">
+     Taskloop Reduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-with-the-scope-construct">
+     Reduction with the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scope
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#user-defined-reduction">
+     User-Defined Reduction
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scan-directive">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     scan
+    </span>
+   </code>
+   Directive
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copyin-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     copyin
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copyprivate-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     copyprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-reference-in-data-sharing-clauses">
+   C++ Reference in Data-Sharing Clauses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-associate-construct">
+   Fortran
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ASSOCIATE
+    </span>
+   </code>
+   Construct
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -194,7 +442,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Data Environment</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -203,7 +451,190 @@
                             <h2> Contents </h2>
                         </div>
                         <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#threadprivate-directive">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     threadprivate
+    </span>
+   </code>
+   Directive
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#default-none-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     default(none)
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#private-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-private-loop-iteration-variables">
+   Fortran Private Loop Iteration Variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-restrictions-on-shared-and-private-clauses-with-common-blocks">
+   Fortran Restrictions on
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     shared
+    </span>
+   </code>
+   and
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clauses with Common Blocks
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-restrictions-on-storage-association-with-the-private-clause">
+   Fortran Restrictions on Storage Association with the
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     private
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-c-arrays-in-a-firstprivate-clause">
+   C/C++ Arrays in a
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     firstprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lastprivate-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     lastprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reduction">
+   Reduction
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-clause">
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       reduction
+      </span>
+     </code>
+     Clause
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#task-reduction">
+     Task Reduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-on-combined-target-constructs">
+     Reduction on Combined Target Constructs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#task-reduction-with-target-constructs">
+     Task Reduction with Target Constructs
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#taskloop-reduction">
+     Taskloop Reduction
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reduction-with-the-scope-construct">
+     Reduction with the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       scope
+      </span>
+     </code>
+     Construct
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#user-defined-reduction">
+     User-Defined Reduction
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scan-directive">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     scan
+    </span>
+   </code>
+   Directive
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copyin-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     copyin
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#copyprivate-clause">
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     copyprivate
+    </span>
+   </code>
+   Clause
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-reference-in-data-sharing-clauses">
+   C++ Reference in Data-Sharing Clauses
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-associate-construct">
+   Fortran
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     ASSOCIATE
+    </span>
+   </code>
+   Construct
+  </a>
+ </li>
 </ul>
 
                         </nav>
@@ -213,7 +644,3774 @@
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="data-environment">
+<h1>Data Environment<a class="headerlink" href="#data-environment" title="Permalink to this headline">¶</a></h1>
+<p>{data_environment}  The OpenMP  <em>data environment</em>  contains data attributes of variables and objects.  Many constructs (such as <code class="docutils literal notranslate"><span class="pre">parallel</span></code>, <code class="docutils literal notranslate"><span class="pre">simd</span></code>, <code class="docutils literal notranslate"><span class="pre">task</span></code>)  accept clauses to control  <em>data-sharing</em>  attributes of referenced variables in the construct, where  <em>data-sharing</em>  applies to whether the attribute of the variable is  <em>shared</em> ,  is  <em>private</em>  storage, or has special operational characteristics  (as found in the <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">linear</span></code>, or <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause).</p>
+<p>The data environment for a device (distinguished as a  <em>device data environment</em> ) is controlled on the host by  <em>data-mapping</em>  attributes, which determine the relationship of the data on the host, the  <em>original</em>  data, and the data on the device, the  <em>corresponding</em>  data.</p>
+<p>DATA-SHARING ATTRIBUTES</p>
+<p>Data-sharing attributes of variables can be classified as being  <em>predetermined</em> ,  <em>explicitly determined</em>  or  <em>implicitly determined</em> .</p>
+<p>Certain variables and objects have predetermined attributes.   A commonly found case is the loop iteration variable in associated loops  of a <code class="docutils literal notranslate"><span class="pre">for</span></code> or <code class="docutils literal notranslate"><span class="pre">do</span></code> construct. It has a private data-sharing attribute. Variables with predetermined data-sharing attributes cannot be listed in a data-sharing clause; but there are some exceptions (mainly concerning loop iteration variables).</p>
+<p>Variables with explicitly determined data-sharing attributes are those that are referenced in a given construct and are listed in a data-sharing attribute clause on the construct. Some of the common data-sharing clauses are: <code class="docutils literal notranslate"><span class="pre">shared</span></code>, <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>,  <code class="docutils literal notranslate"><span class="pre">linear</span></code>, and <code class="docutils literal notranslate"><span class="pre">reduction</span></code>.</p>
+<p>Variables with implicitly determined data-sharing attributes are those that are referenced in a given construct, do not have predetermined data-sharing attributes, and are not listed in a data-sharing attribute clause of an enclosing construct. For a complete list of variables and objects with predetermined and implicitly determined attributes, please refer to the  <em>Data-sharing Attribute Rules for Variables Referenced in a Construct</em>  subsection of the OpenMP Specifications document.</p>
+<p>DATA-MAPPING ATTRIBUTES</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause on a device construct explicitly specifies how the list items in the clause are mapped from the encountering task’s data environment (on the host) to the corresponding item in the device data environment (on the device). The common  <em>list items</em>  are arrays, array sections, scalars, pointers, and structure elements (members).</p>
+<p>Procedures and global variables have predetermined data mapping if they appear within the list or block of a <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">target</span></code> directive. Also, a C/C++ pointer is mapped as a zero-length array section, as is a C++ variable that is a reference to a pointer.</p>
+<p>Without explicit mapping, non-scalar and non-pointer variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are implicitly mapped with a  <em>map-type</em>  of <code class="docutils literal notranslate"><span class="pre">tofrom</span></code>. Without explicit mapping, scalar variables within the scope of the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct are not mapped, but have an implicit firstprivate data-sharing attribute. (That is, the value of the original variable is given to a private variable of the same name on the device.) This behavior can be changed with the <code class="docutils literal notranslate"><span class="pre">defaultmap</span></code> clause.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">map</span></code> clause can appear on <code class="docutils literal notranslate"><span class="pre">target</span></code>, <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">data</span></code> and  <code class="docutils literal notranslate"><span class="pre">target</span> <span class="pre">enter/exit</span> <span class="pre">data</span></code> constructs.  The operations of creation and removal of device storage as well as assignment of the original list item  values to the corresponding list items may be complicated when the list  item appears on multiple constructs or when the host and device storage  is shared. In these cases the item’s reference count, the number of times it has been referenced (+1 on entry and -1 on exited) in nested (structured) map regions and/or accumulative (unstructured) mappings, determines the operation. Details of the <code class="docutils literal notranslate"><span class="pre">map</span></code> clause and reference count operation are specified  in the  <em>map Clause</em>  subsection of the OpenMP Specifications document.</p>
+<div class="section" id="threadprivate-directive">
+<h2><code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> Directive<a class="headerlink" href="#threadprivate-directive" title="Permalink to this headline">¶</a></h2>
+<p><strong>directives!threadprivate <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code></strong> <strong>threadprivate directive <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive</strong></p>
+<p>The following examples demonstrate how to use the <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive   to give each thread a separate counter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.1
+* type: C
+*/
+int counter = 0;
+#pragma omp threadprivate(counter)
+
+int increment_counter()
+{
+  counter++;
+  return(counter);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.1
+! type: F-fixed
+      INTEGER FUNCTION INCREMENT_COUNTER()
+        COMMON/INC_COMMON/COUNTER
+!$OMP   THREADPRIVATE(/INC_COMMON/)
+
+        COUNTER = COUNTER +1
+        INCREMENT_COUNTER = COUNTER
+        RETURN
+      END FUNCTION INCREMENT_COUNTER
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example uses <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> on a static variable:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.2
+* type: C
+*/
+int increment_counter_2()
+{
+  static int counter = 0;
+  #pragma omp threadprivate(counter)
+  counter++;
+  return(counter);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates unspecified behavior for the initialization  of a <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variable. A <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  variable is initialized  once at an unspecified point before its first reference. Because <code class="docutils literal notranslate"><span class="pre">a</span></code> is  constructed using the value of <code class="docutils literal notranslate"><span class="pre">x</span></code>  (which is modified by the statement  <code class="docutils literal notranslate"><span class="pre">x++</span></code>), the value of <code class="docutils literal notranslate"><span class="pre">a.val</span></code>  at the start of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region could be either 1 or 2. This problem is avoided for <code class="docutils literal notranslate"><span class="pre">b</span></code>, which uses  an auxiliary <code class="docutils literal notranslate"><span class="pre">const</span></code> variable and a copy-constructor.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.3
+* type: C++
+*/
+class T {
+  public:
+    int val;
+    T (int);
+    T (const T&amp;);
+};
+
+T :: T (int v){
+   val = v;
+}
+
+T :: T (const T&amp; t) {
+   val = t.val;
+}
+
+void g(T a, T b){
+   a.val += b.val;
+}
+
+int x = 1;
+T a(x);
+const T b_aux(x); /* Capture value of x = 1 */
+T b(b_aux);
+#pragma omp threadprivate(a, b)
+
+void f(int n) {
+   x++;
+   #pragma omp parallel for
+   /* In each thread:
+    * a is constructed from x (with value 1 or 2?)
+    * b is copy-constructed from b_aux
+    */
+
+   for (int i=0; i&lt;n; i++) {
+       g(a, b); /* Value of a is unspecified. */
+   }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following examples show non-conforming uses and correct uses of the <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>  directive.</p>
+<p>The following example is non-conforming because the common block is not declared  local to the subroutine that refers to it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.2
+! type: F-fixed
+      MODULE INC_MODULE
+        COMMON /T/ A
+      END MODULE INC_MODULE
+
+      SUBROUTINE INC_MODULE_WRONG()
+        USE INC_MODULE
+!$OMP   THREADPRIVATE(/T/)
+      !non-conforming because /T/ not declared in INC_MODULE_WRONG
+      END SUBROUTINE INC_MODULE_WRONG
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is also non-conforming because the common block is not declared  local to the subroutine that refers to it:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.3
+! type: F-fixed
+      SUBROUTINE INC_WRONG()
+        COMMON /T/ A
+!$OMP   THREADPRIVATE(/T/)
+
+        CONTAINS
+          SUBROUTINE INC_WRONG_SUB()
+!$OMP       PARALLEL COPYIN(/T/)
+      !non-conforming because /T/ not declared in INC_WRONG_SUB
+!$OMP       END PARALLEL
+          END SUBROUTINE INC_WRONG_SUB
+      END SUBROUTINE INC_WRONG
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is a correct rewrite of the previous example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.4
+! type: F-fixed
+       SUBROUTINE INC_GOOD()
+        COMMON /T/ A
+!$OMP   THREADPRIVATE(/T/)
+
+        CONTAINS
+          SUBROUTINE INC_GOOD_SUB()
+            COMMON /T/ A
+!$OMP       THREADPRIVATE(/T/)
+
+!$OMP       PARALLEL COPYIN(/T/)
+!$OMP       END PARALLEL
+         END SUBROUTINE INC_GOOD_SUB
+       END SUBROUTINE INC_GOOD
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following is an example of the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for local variables:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.5
+! type: F-fixed
+      PROGRAM INC_GOOD2
+        INTEGER, ALLOCATABLE, SAVE :: A(:)
+        INTEGER, POINTER, SAVE :: PTR
+        INTEGER, SAVE :: I
+        INTEGER, TARGET :: TARG
+        LOGICAL :: FIRSTIN = .TRUE.
+!$OMP   THREADPRIVATE(A, I, PTR)
+
+        ALLOCATE (A(3))
+        A = (/1,2,3/)
+        PTR =&gt; TARG
+        I = 5
+
+!$OMP   PARALLEL COPYIN(I, PTR)
+!$OMP     CRITICAL
+            IF (FIRSTIN) THEN
+              TARG = 4           ! Update target of ptr
+              I = I + 10
+              IF (ALLOCATED(A)) A = A + 10
+              FIRSTIN = .FALSE.
+            END IF
+
+            IF (ALLOCATED(A)) THEN
+              PRINT *, &#39;a = &#39;, A
+            ELSE
+              PRINT *, &#39;A is not allocated&#39;
+            END IF
+
+            PRINT *, &#39;ptr = &#39;, PTR
+            PRINT *, &#39;i = &#39;, I
+            PRINT *
+
+!$OMP     END CRITICAL
+!$OMP   END PARALLEL
+      END PROGRAM INC_GOOD2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The above program, if executed by two threads, will print one of the following  two sets of output:</p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">11</span> <span class="pre">12</span> <span class="pre">13</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
+<p>or</p>
+<p><code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">is</span> <span class="pre">not</span> <span class="pre">allocated</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">15</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">3</span></code>  <code class="docutils literal notranslate"><span class="pre">ptr</span> <span class="pre">=</span> <span class="pre">4</span></code>  <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">=</span> <span class="pre">5</span></code></p>
+<p>The following is an example of the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for module variables:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: threadprivate.6
+! type: F-fixed
+      MODULE INC_MODULE_GOOD3
+        REAL, POINTER :: WORK(:)
+        SAVE WORK
+!$OMP   THREADPRIVATE(WORK)
+      END MODULE INC_MODULE_GOOD3
+
+      SUBROUTINE SUB1(N)
+      USE INC_MODULE_GOOD3
+!$OMP   PARALLEL PRIVATE(THE_SUM)
+        ALLOCATE(WORK(N))
+        CALL SUB2(THE_SUM)
+       WRITE(*,*)THE_SUM
+!$OMP   END PARALLEL
+      END SUBROUTINE SUB1
+
+      SUBROUTINE SUB2(THE_SUM)
+        USE INC_MODULE_GOOD3
+        WORK(:) = 10
+        THE_SUM=SUM(WORK)
+      END SUBROUTINE SUB2
+
+      PROGRAM INC_GOOD3
+        N = 10
+        CALL SUB1(N)
+      END PROGRAM INC_GOOD3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates initialization of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> variables  for class-type <code class="docutils literal notranslate"><span class="pre">T</span></code>. <code class="docutils literal notranslate"><span class="pre">t1</span></code> is default constructed, <code class="docutils literal notranslate"><span class="pre">t2</span></code> is constructed  taking a constructor accepting one argument of integer type, <code class="docutils literal notranslate"><span class="pre">t3</span></code> is copy  constructed with argument <code class="docutils literal notranslate"><span class="pre">f()</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.4
+* type: C++
+*/
+struct T { T (); T (int); ~T (); int t; };
+int f();
+static T t1;
+#pragma omp threadprivate(t1)
+static T t2( 23 );
+#pragma omp threadprivate(t2)
+static T t3 = f();
+#pragma omp threadprivate(t3)
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates the use of <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> for static  class members. The <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive for a static class member must  be placed inside the class definition.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: threadprivate.5
+* type: C++
+*/
+class T {
+ public:
+  static int i;
+#pragma omp threadprivate(i)
+};
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/threadprivate.tex</p>
+</div>
+<div class="section" id="default-none-clause">
+<h2><code class="docutils literal notranslate"><span class="pre">default(none)</span></code> Clause<a class="headerlink" href="#default-none-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!default(none) <code class="docutils literal notranslate"><span class="pre">default(none)</span></code></strong> <strong>default(none) clause <code class="docutils literal notranslate"><span class="pre">default(none)</span></code> clause</strong></p>
+<p>The following example distinguishes the variables that are affected by the <code class="docutils literal notranslate"><span class="pre">default(none)</span></code>  clause from those that are not.</p>
+<p>Beginning with OpenMP 4.0, variables with <code class="docutils literal notranslate"><span class="pre">const</span></code>-qualified type and no mutable member  are no longer predetermined shared.  Thus, these variables (variable  <em>c</em>  in the example)  need to be explicitly listed in data-sharing attribute clauses when the <code class="docutils literal notranslate"><span class="pre">default(none)</span></code> clause is specified.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: default_none.1
+* type: C
+*/
+#include &lt;omp.h&gt;
+int x, y, z[1000];
+#pragma omp threadprivate(x)
+
+void default_none(int a) {
+  const int c = 1;
+  int i = 0;
+
+  #pragma omp parallel default(none) private(a) shared(z, c)
+  {
+     int j = omp_get_num_threads();
+          /* O.K.  - j is declared within parallel region */
+     a = z[j];   /* O.K.  - a is listed in private clause */
+                 /*       - z is listed in shared clause */
+     x = c;      /* O.K.  - x is threadprivate */
+                 /*       - c has const-qualified type and
+                              is listed in shared clause */
+     z[i] = y;   /* Error - cannot reference i or y here */
+
+  #pragma omp for firstprivate(y)
+         /* Error - Cannot reference y in the firstprivate clause */
+     for (i=0; i&lt;10 ; i++) {
+        z[i] = i; /* O.K. - i is the loop iteration variable */
+     }
+
+     z[i] = y;   /* Error - cannot reference i or y here */
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: default_none.1
+! type: F-fixed
+      SUBROUTINE DEFAULT_NONE(A)
+      INCLUDE &quot;omp_lib.h&quot;     ! or USE OMP_LIB
+
+      INTEGER A
+
+      INTEGER X, Y, Z(1000)
+      COMMON/BLOCKX/X
+      COMMON/BLOCKY/Y
+      COMMON/BLOCKZ/Z
+!$OMP THREADPRIVATE(/BLOCKX/)
+
+        INTEGER I, J
+        i = 1
+
+!$OMP   PARALLEL DEFAULT(NONE) PRIVATE(A) SHARED(Z) PRIVATE(J)
+          J = OMP_GET_NUM_THREADS();
+                   ! O.K.  - J is listed in PRIVATE clause
+          A = Z(J) ! O.K.  - A is listed in PRIVATE clause
+                   !       - Z is listed in SHARED clause
+          X = 1    ! O.K.  - X is THREADPRIVATE
+          Z(I) = Y ! Error - cannot reference I or Y here
+
+!$OMP DO firstprivate(y)
+    ! Error - Cannot reference y in the firstprivate clause
+          DO I = 1,10
+             Z(I) = I ! O.K. - I is the loop iteration variable
+          END DO
+
+
+          Z(I) = Y    ! Error - cannot reference I or Y here
+!$OMP   END PARALLEL
+      END SUBROUTINE DEFAULT_NONE
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/default_none.tex</p>
+</div>
+<div class="section" id="private-clause">
+<h2><code class="docutils literal notranslate"><span class="pre">private</span></code> Clause<a class="headerlink" href="#private-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!private <code class="docutils literal notranslate"><span class="pre">private</span></code></strong> <strong>private clause <code class="docutils literal notranslate"><span class="pre">private</span></code> clause</strong></p>
+<p>In the following example, the values of original list items  <em>i</em>  and  <em>j</em>   are retained on exit from the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region, while the private list  items  <em>i</em>  and  <em>j</em>  are modified within the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: private.1
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+
+int main()
+{
+  int i, j;
+  int *ptr_i, *ptr_j;
+
+  i = 1;
+  j = 2;
+
+  ptr_i = &amp;i;
+  ptr_j = &amp;j;
+
+  #pragma omp parallel private(i) firstprivate(j)
+  {
+    i = 3;
+    j = j + 2;
+    assert (*ptr_i == 1 &amp;&amp; *ptr_j == 2);
+  }
+
+  assert(i == 1 &amp;&amp; j == 2);
+
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.1
+! type: F-fixed
+      PROGRAM PRIV_EXAMPLE
+        INTEGER I, J
+
+        I = 1
+        J = 2
+
+!$OMP   PARALLEL PRIVATE(I) FIRSTPRIVATE(J)
+          I = 3
+          J = J + 2
+!$OMP   END PARALLEL
+
+        PRINT *, I, J  ! I .eq. 1 .and. J .eq. 2
+      END PROGRAM PRIV_EXAMPLE
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the following example, all uses of the variable  <em>a</em>  within the loop construct  in the routine  <em>f</em>  refer to a private list item  <em>a</em> , while it is  unspecified whether references to  <em>a</em>  in the routine  <em>g</em>  are to a  private list item or the original list item.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: private.2
+* type: C
+*/
+int a;
+
+void g(int k) {
+  a = k; /* Accessed in the region but outside of the construct;
+          * therefore unspecified whether original or private list
+          * item is modified. */
+}
+
+
+void f(int n) {
+  int a = 0;
+
+  #pragma omp parallel for private(a)
+   for (int i=1; i&lt;n; i++) {
+       a = i;
+       g(a*2);     /* Private copy of &quot;a&quot; */
+    }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.2
+! type: F-fixed
+      MODULE PRIV_EXAMPLE2
+        REAL A
+
+        CONTAINS
+
+          SUBROUTINE G(K)
+            REAL K
+            A = K  ! Accessed in the region but outside of the
+                   ! construct; therefore unspecified whether
+                   ! original or private list item is modified.
+          END SUBROUTINE G
+
+          SUBROUTINE F(N)
+          INTEGER N
+          REAL A
+
+            INTEGER I
+!$OMP       PARALLEL DO PRIVATE(A)
+              DO I = 1,N
+                A = I
+                CALL G(A*2)
+              ENDDO
+!$OMP       END PARALLEL DO
+          END SUBROUTINE F
+
+      END MODULE PRIV_EXAMPLE2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates that a list item that appears in a <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause in a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct may also appear in a <code class="docutils literal notranslate"><span class="pre">private</span></code>   clause in an enclosed worksharing construct, which results in an additional private  copy.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: private.3
+* type: C
+*/
+#include &lt;assert.h&gt;
+void priv_example3()
+{
+  int i, a;
+
+  #pragma omp parallel private(a)
+  {
+     a = 1;
+    #pragma omp parallel for private(a)
+      for (i=0; i&lt;10; i++)
+     {
+       a = 2;
+     }
+    assert(a == 1);
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: private.3
+! type: F-fixed
+      SUBROUTINE PRIV_EXAMPLE3()
+        INTEGER I, A
+
+!$OMP   PARALLEL PRIVATE(A)
+         A = 1
+!$OMP     PARALLEL DO PRIVATE(A)
+          DO I = 1, 10
+            A = 2
+          END DO
+!$OMP     END PARALLEL DO
+        PRINT *, A ! Outer A still has value 1
+!$OMP   END PARALLEL
+      END SUBROUTINE PRIV_EXAMPLE3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/private.tex</p>
+</div>
+<div class="section" id="fortran-private-loop-iteration-variables">
+<h2>Fortran Private Loop Iteration Variables<a class="headerlink" href="#fortran-private-loop-iteration-variables" title="Permalink to this headline">¶</a></h2>
+<p><strong>loop variables, Fortran</strong></p>
+<p>In general loop iteration variables will be private, when used in the  <em>do-loop</em>   of a <code class="docutils literal notranslate"><span class="pre">do</span></code> and <code class="docutils literal notranslate"><span class="pre">parallel</span> <span class="pre">do</span></code> construct or in sequential loops in a  <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct (see Section 2.7.1 and Section 2.14.1 of  the OpenMP 4.0 specification). In the following example of a sequential  loop in a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct the loop iteration variable  <em>I</em>  will  be private.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_loopvar.1
+! type: F-free
+SUBROUTINE PLOOP_1(A,N)
+INCLUDE &quot;omp_lib.h&quot;      ! or USE OMP_LIB
+
+REAL A(*)
+INTEGER I, MYOFFSET, N
+
+!$OMP PARALLEL PRIVATE(MYOFFSET)
+       MYOFFSET = OMP_GET_THREAD_NUM()*N
+       DO I = 1, N
+         A(MYOFFSET+I) = FLOAT(I)
+       ENDDO
+!$OMP END PARALLEL
+
+END SUBROUTINE PLOOP_1
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In exceptional cases, loop iteration variables can be made shared, as in the following  example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_loopvar.2
+! type: F-free
+SUBROUTINE PLOOP_2(A,B,N,I1,I2)
+REAL A(*), B(*)
+INTEGER I1, I2, N
+
+!$OMP PARALLEL SHARED(A,B,I1,I2)
+!$OMP SECTIONS
+!$OMP SECTION
+     DO I1 = I1, N
+       IF (A(I1).NE.0.0) EXIT
+     ENDDO
+!$OMP SECTION
+     DO I2 = I2, N
+       IF (B(I2).NE.0.0) EXIT
+     ENDDO
+!$OMP END SECTIONS
+!$OMP SINGLE
+    IF (I1.LE.N) PRINT *, &#39;ITEMS IN A UP TO &#39;, I1, &#39;ARE ALL ZERO.&#39;
+    IF (I2.LE.N) PRINT *, &#39;ITEMS IN B UP TO &#39;, I2, &#39;ARE ALL ZERO.&#39;
+!$OMP END SINGLE
+!$OMP END PARALLEL
+
+END SUBROUTINE PLOOP_2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note however that the use of shared loop iteration variables can easily lead to  race conditions.</p>
+<p>../../data_environment/fort_loopvar.tex</p>
+</div>
+<div class="section" id="fortran-restrictions-on-shared-and-private-clauses-with-common-blocks">
+<h2>Fortran Restrictions on <code class="docutils literal notranslate"><span class="pre">shared</span></code> and <code class="docutils literal notranslate"><span class="pre">private</span></code> Clauses with Common Blocks<a class="headerlink" href="#fortran-restrictions-on-shared-and-private-clauses-with-common-blocks" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!private <code class="docutils literal notranslate"><span class="pre">private</span></code></strong> <strong>clauses!shared <code class="docutils literal notranslate"><span class="pre">shared</span></code></strong> <strong>private clause <code class="docutils literal notranslate"><span class="pre">private</span></code> clause!common blocks, Fortran</strong> <strong>shared clause <code class="docutils literal notranslate"><span class="pre">shared</span></code> clause!common blocks, Fortran</strong></p>
+<p>When a named common block is specified in a <code class="docutils literal notranslate"><span class="pre">private</span></code>, <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code>,  or <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause of a construct, none of its members may be declared  in another data-sharing attribute clause on that construct. The following examples  illustrate this point.</p>
+<p>The following example is conforming:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.1
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD()
+        COMMON /C/ X,Y
+        REAL X, Y
+
+!$OMP   PARALLEL PRIVATE (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+!$OMP   PARALLEL SHARED (X,Y)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is also conforming:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.2
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD2()
+        COMMON /C/ X,Y
+        REAL X, Y
+        INTEGER I
+!$OMP   PARALLEL
+!$OMP     DO PRIVATE(/C/)
+          DO I=1,1000
+            ! do work here
+          ENDDO
+!$OMP     END DO
+!$OMP     DO PRIVATE(X)
+          DO I=1,1000
+            ! do work here
+          ENDDO
+!$OMP     END DO
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is conforming:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.3
+! type: F-fixed
+      SUBROUTINE COMMON_GOOD3()
+        COMMON /C/ X,Y
+!$OMP   PARALLEL PRIVATE (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+!$OMP   PARALLEL SHARED (/C/)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_GOOD3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is non-conforming because <code class="docutils literal notranslate"><span class="pre">x</span></code> is a constituent element  of <code class="docutils literal notranslate"><span class="pre">c</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.4
+! type: F-fixed
+      SUBROUTINE COMMON_WRONG()
+        COMMON /C/ X,Y
+! Incorrect because X is a constituent element of C
+!$OMP   PARALLEL PRIVATE(/C/), SHARED(X)
+          ! do work here
+!$OMP   END PARALLEL
+      END SUBROUTINE COMMON_WRONG
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is non-conforming because a common block may not be declared  both shared and private:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sp_common.5
+! type: F-fixed
+      SUBROUTINE COMMON_WRONG2()
+        COMMON /C/ X,Y
+! Incorrect: common block C cannot be declared both
+! shared and private
+!$OMP   PARALLEL PRIVATE (/C/), SHARED(/C/)
+          ! do work here
+!$OMP   END PARALLEL
+
+      END SUBROUTINE COMMON_WRONG2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/fort_sp_common.tex</p>
+</div>
+<div class="section" id="fortran-restrictions-on-storage-association-with-the-private-clause">
+<h2>Fortran Restrictions on Storage Association with the <code class="docutils literal notranslate"><span class="pre">private</span></code> Clause<a class="headerlink" href="#fortran-restrictions-on-storage-association-with-the-private-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!private <code class="docutils literal notranslate"><span class="pre">private</span></code></strong> <strong>private clause <code class="docutils literal notranslate"><span class="pre">private</span></code> clause!storage association, Fortran</strong></p>
+<p>The following non-conforming examples illustrate the implications of the <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause rules with regard to storage association.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.1
+! type: F-fixed
+       SUBROUTINE SUB()
+       COMMON /BLOCK/ X
+       PRINT *,X             ! X is undefined
+       END SUBROUTINE SUB
+
+       PROGRAM PRIV_RESTRICT
+         COMMON /BLOCK/ X
+         X = 1.0
+!$OMP    PARALLEL PRIVATE (X)
+         X = 2.0
+         CALL SUB()
+!$OMP    END PARALLEL
+      END PROGRAM PRIV_RESTRICT
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.2
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT2
+        COMMON /BLOCK2/ X
+        X = 1.0
+
+!$OMP   PARALLEL PRIVATE (X)
+          X = 2.0
+          CALL SUB()
+!$OMP   END PARALLEL
+
+       CONTAINS
+
+          SUBROUTINE SUB()
+          COMMON /BLOCK2/ Y
+
+          PRINT *,X               ! X is undefined
+          PRINT *,Y               ! Y is undefined
+          END SUBROUTINE SUB
+
+       END PROGRAM PRIV_RESTRICT2
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.3
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT3
+        EQUIVALENCE (X,Y)
+        X = 1.0
+
+!$OMP   PARALLEL PRIVATE(X)
+          PRINT *,Y                  ! Y is undefined
+          Y = 10
+          PRINT *,X                  ! X is undefined
+!$OMP   END PARALLEL
+      END PROGRAM PRIV_RESTRICT3
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.4
+! type: F-fixed
+      PROGRAM PRIV_RESTRICT4
+        INTEGER I, J
+        INTEGER A(100), B(100)
+        EQUIVALENCE (A(51), B(1))
+
+!$OMP PARALLEL DO DEFAULT(PRIVATE) PRIVATE(I,J) LASTPRIVATE(A)
+          DO I=1,100
+             DO J=1,100
+               B(J) = J - 1
+             ENDDO
+
+             DO J=1,100
+               A(J) = J   ! B becomes undefined at this point
+             ENDDO
+
+             DO J=1,50
+               B(J) = B(J) + 1  ! B is undefined
+                         ! A becomes undefined at this point
+             ENDDO
+          ENDDO
+!$OMP END PARALLEL DO       ! The LASTPRIVATE write for A has
+                            ! undefined results
+
+         PRINT *, B    ! B is undefined since the LASTPRIVATE
+                       ! write of A was not defined
+       END PROGRAM PRIV_RESTRICT4
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_sa_private.5
+! type: F-fixed
+! version:    omp_5.1
+      SUBROUTINE SUB1(X)
+        DIMENSION X(10)
+
+        ! This use of X does not conform to the
+        ! specification. It would be legal Fortran 90,
+        ! but the OpenMP private directive allows the
+        ! compiler to break the sequence association that
+        ! A had with the rest of the common block.
+
+        FORALL (I = 1:10) X(I) = I
+      END SUBROUTINE SUB1
+
+      PROGRAM PRIV_RESTRICT5
+        COMMON /BLOCK5/ A
+
+        DIMENSION B(10)
+        EQUIVALENCE (A,B(1))
+
+        ! the common block has to be at least 10 words
+        A = 0
+
+!$OMP   PARALLEL PRIVATE(/BLOCK5/)
+
+          ! Without the private clause,
+          ! we would be passing a member of a sequence
+          ! that is at least ten elements long.
+          ! With the private clause, A may no longer be
+          ! sequence-associated.
+
+          CALL SUB1(A)
+!$OMP     MASKED
+            PRINT *, A
+!$OMP     END MASKED
+
+!$OMP   END PARALLEL
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/fort_sa_private.tex</p>
+</div>
+<div class="section" id="c-c-arrays-in-a-firstprivate-clause">
+<h2>C/C++ Arrays in a <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> Clause<a class="headerlink" href="#c-c-arrays-in-a-firstprivate-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!firstprivate <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code></strong> <strong>firstprivate clause <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> clause!C/C++ arrays in</strong></p>
+<p>The following example illustrates the size and value of list items of array or  pointer type in a <code class="docutils literal notranslate"><span class="pre">firstprivate</span></code> clause . The size of new list items is  based on the type of the corresponding original list item, as determined by the  base language.</p>
+<p>In this example:</p>
+<ul class="simple">
+<li><p>The type of <code class="docutils literal notranslate"><span class="pre">A</span></code> is array of two arrays of two ints.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The type of <code class="docutils literal notranslate"><span class="pre">B</span></code> is adjusted to pointer to array of <code class="docutils literal notranslate"><span class="pre">n</span></code>  ints, because it is a function parameter.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The type of <code class="docutils literal notranslate"><span class="pre">C</span></code> is adjusted to pointer to int, because  it is a function parameter.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The type of <code class="docutils literal notranslate"><span class="pre">D</span></code> is array of two arrays of two ints.</p></li>
+</ul>
+<ul class="simple">
+<li><p>The type of <code class="docutils literal notranslate"><span class="pre">E</span></code> is array of <code class="docutils literal notranslate"><span class="pre">n</span></code> arrays of <code class="docutils literal notranslate"><span class="pre">n</span></code>  ints.</p></li>
+</ul>
+<p>Note that  <code class="docutils literal notranslate"><span class="pre">B</span></code> and <code class="docutils literal notranslate"><span class="pre">E</span></code> involve variable length array types.</p>
+<p>The new items of array type are initialized as if each integer element of the original  array is assigned to the corresponding element of the new array. Those of pointer  type are initialized as if by assignment from the original item to the new item.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: carrays_fpriv.1
+* type: C
+*/
+#include &lt;assert.h&gt;
+
+int A[2][2] = {1, 2, 3, 4};
+
+void f(int n, int B[n][n], int C[])
+{
+  int D[2][2] = {1, 2, 3, 4};
+  int E[n][n];
+
+  assert(n &gt;= 2);
+  E[1][1] = 4;
+
+  #pragma omp parallel firstprivate(B, C, D, E)
+  {
+    assert(sizeof(B) == sizeof(int (*)[n]));
+    assert(sizeof(C) == sizeof(int*));
+    assert(sizeof(D) == 4 * sizeof(int));
+    assert(sizeof(E) == n * n * sizeof(int));
+
+    /* Private B and C have values of original B and C. */
+    assert(&amp;B[1][1] == &amp;A[1][1]);
+    assert(&amp;C[3] == &amp;A[1][1]);
+    assert(D[1][1] == 4);
+    assert(E[1][1] == 4);
+  }
+}
+
+int main() {
+  f(2, A, A[0]);
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/carrays_fpriv.tex</p>
+</div>
+<div class="section" id="lastprivate-clause">
+<h2><code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> Clause<a class="headerlink" href="#lastprivate-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!lastprivate <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code></strong> <strong>lastprivate clause <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause</strong></p>
+<p>Correct execution sometimes depends on the value that the last iteration of a loop  assigns to a variable. Such programs must list all such variables in a <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code>  clause  so that the values of the variables are the same as when the loop is executed  sequentially.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: lastprivate.1
+* type: C
+*/
+void lastpriv (int n, float *a, float *b)
+{
+  int i;
+
+  #pragma omp parallel
+  {
+    #pragma omp for lastprivate(i)
+    for (i=0; i&lt;n-1; i++)
+      a[i] = b[i] + b[i+1];
+  }
+
+  a[i]=b[i];      /* i == n-1 here */
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: lastprivate.1
+! type: F-fixed
+      SUBROUTINE LASTPRIV(N, A, B)
+
+        INTEGER N
+        REAL A(*), B(*)
+        INTEGER I
+!$OMP PARALLEL
+!$OMP DO LASTPRIVATE(I)
+
+        DO I=1,N-1
+          A(I) = B(I) + B(I+1)
+        ENDDO
+
+!$OMP END PARALLEL
+        A(I) = B(I)      ! I has the value of N here
+
+      END SUBROUTINE LASTPRIV
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>lastprivate clause <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause!conditional modifier <code class="docutils literal notranslate"><span class="pre">conditional</span></code> modifier</strong> <strong>conditional modifier <code class="docutils literal notranslate"><span class="pre">conditional</span></code> modifier</strong> The next example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">conditional</span></code> modifier in a <code class="docutils literal notranslate"><span class="pre">lastprivate</span></code> clause to return the last value when it may not come from the last iteration of a loop. That is, users can preserve the serial equivalence semantics of the loop. The conditional lastprivate ensures the final value of the variable after the loop  is as if the loop iterations were executed in a sequential order.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: lastprivate.2
+* type: C
+* version: omp_5.0
+*/
+#include &lt;math.h&gt;
+
+float condlastprivate(float *a, int n)
+{
+   float x = 0.0f;
+
+   #pragma omp parallel for simd lastprivate(conditional: x)
+   for (int k = 0; k &lt; n; k++) {
+      if (a[k] &lt; 108.5 || a[k] &gt; 208.5) {
+         x = sinf(a[k]);
+      }
+   }
+
+   return x;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: lastprivate.2
+! type: F-free
+! version: omp_5.0
+function condlastprivate(a, n) result(x)
+   implicit none
+   real a(*), x
+   integer n, k
+
+   x = 0.0
+
+   !$omp parallel do simd lastprivate(conditional: x)
+   do k = 1, n
+      if (a(k) &lt; 108.5 .or. a(k) &gt; 208.5) then
+         x = sin(a(k))
+      endif
+   end do
+
+end function condlastprivate
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/lastprivate.tex</p>
+</div>
+<div class="section" id="reduction">
+<h2>Reduction<a class="headerlink" href="#reduction" title="Permalink to this headline">¶</a></h2>
+<p>This section covers ways to perform reductions in parallel, task, taskloop, and SIMD regions.</p>
+<div class="section" id="reduction-clause">
+<h3><code class="docutils literal notranslate"><span class="pre">reduction</span></code> Clause<a class="headerlink" href="#reduction-clause" title="Permalink to this headline">¶</a></h3>
+<p><strong>clauses!reduction <code class="docutils literal notranslate"><span class="pre">reduction</span></code></strong> <strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause</strong> <strong>reductions!reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause</strong></p>
+<p>The following example demonstrates the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause; note that some  reductions can be expressed in the loop in several ways, as shown for the <code class="docutils literal notranslate"><span class="pre">max</span></code>  and <code class="docutils literal notranslate"><span class="pre">min</span></code> reductions below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: reduction.1
+* type: C
+* version: omp_3.1
+*/
+#include &lt;math.h&gt;
+void reduction1(float *x, int *y, int n)
+{
+  int i, b, c;
+  float a, d;
+  a = 0.0;
+  b = 0;
+  c = y[0];
+  d = x[0];
+  #pragma omp parallel for private(i) shared(x, y, n) \
+                          reduction(+:a) reduction(^:b) \
+                          reduction(min:c) reduction(max:d)
+    for (i=0; i&lt;n; i++) {
+      a += x[i];
+      b ^= y[i];
+      if (c &gt; y[i]) c = y[i];
+      d = fmaxf(d,x[i]);
+    }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.1
+! type: F-free
+SUBROUTINE REDUCTION1(A, B, C, D, X, Y, N)
+    REAL :: X(*), A, D
+    INTEGER :: Y(*), N, B, C
+    INTEGER :: I
+    A = 0
+    B = 0
+    C = Y(1)
+    D = X(1)
+    !$OMP PARALLEL DO PRIVATE(I) SHARED(X, Y, N) REDUCTION(+:A) &amp;
+    !$OMP&amp; REDUCTION(IEOR:B) REDUCTION(MIN:C)  REDUCTION(MAX:D)
+      DO I=1,N
+        A = A + X(I)
+        B = IEOR(B, Y(I))
+        C = MIN(C, Y(I))
+        IF (D &lt; X(I)) D = X(I)
+      END DO
+
+END SUBROUTINE REDUCTION1
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>A common implementation of the preceding example is to treat it as if it had been  written as follows:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: reduction.2
+* type: C
+*/
+#include &lt;limits.h&gt;
+#include &lt;math.h&gt;
+void reduction2(float *x, int *y, int n)
+{
+  int i, b, b_p, c, c_p;
+  float a, a_p, d, d_p;
+  a = 0.0f;
+  b = 0;
+  c = y[0];
+  d = x[0];
+  #pragma omp parallel shared(a, b, c, d, x, y, n) \
+                          private(a_p, b_p, c_p, d_p)
+  {
+    a_p = 0.0f;
+    b_p = 0;
+    c_p = INT_MAX;
+    d_p = -HUGE_VALF;
+    #pragma omp for private(i)
+    for (i=0; i&lt;n; i++) {
+      a_p += x[i];
+      b_p ^= y[i];
+      if (c_p &gt; y[i]) c_p = y[i];
+      d_p = fmaxf(d_p,x[i]);
+    }
+    #pragma omp critical
+    {
+      a += a_p;
+      b ^= b_p;
+      if( c &gt; c_p ) c = c_p;
+      d = fmaxf(d,d_p);
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.2
+! type: F-free
+  SUBROUTINE REDUCTION2(A, B, C, D, X, Y, N)
+    REAL :: X(*), A, D
+    INTEGER :: Y(*), N, B, C
+    REAL :: A_P, D_P
+    INTEGER :: I, B_P, C_P
+    A = 0
+    B = 0
+    C = Y(1)
+    D = X(1)
+    !$OMP PARALLEL SHARED(X, Y, A, B, C, D, N) &amp;
+    !$OMP&amp;         PRIVATE(A_P, B_P, C_P, D_P)
+      A_P = 0.0
+      B_P = 0
+      C_P = HUGE(C_P)
+      D_P = -HUGE(D_P)
+      !$OMP DO PRIVATE(I)
+      DO I=1,N
+        A_P = A_P + X(I)
+        B_P = IEOR(B_P, Y(I))
+        C_P = MIN(C_P, Y(I))
+        IF (D_P &lt; X(I)) D_P = X(I)
+      END DO
+      !$OMP CRITICAL
+        A = A + A_P
+        B = IEOR(B, B_P)
+        C = MIN(C, C_P)
+        D = MAX(D, D_P)
+      !$OMP END CRITICAL
+    !$OMP END PARALLEL
+  END SUBROUTINE REDUCTION2
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following program is non-conforming because the reduction is on the  <strong>intrinsic procedure name</strong> <code class="docutils literal notranslate"><span class="pre">MAX</span></code> but that name has been redefined to be the variable  named <code class="docutils literal notranslate"><span class="pre">MAX</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.3
+! type: F-free
+ PROGRAM REDUCTION_WRONG
+ MAX = HUGE(0)
+ M = 0
+
+ !$OMP PARALLEL DO REDUCTION(MAX: M)
+! MAX is no longer the intrinsic so this is non-conforming
+ DO I = 1, 100
+    CALL SUB(M,I)
+ END DO
+
+ END PROGRAM REDUCTION_WRONG
+
+ SUBROUTINE SUB(M,I)
+    M = MAX(M,I)
+ END SUBROUTINE SUB
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following conforming program performs the reduction using the  <strong>intrinsic procedure name</strong> <code class="docutils literal notranslate"><span class="pre">MAX</span></code> even though the intrinsic <code class="docutils literal notranslate"><span class="pre">MAX</span></code> has been renamed  to <code class="docutils literal notranslate"><span class="pre">REN</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.4
+! type: F-free
+MODULE M
+   INTRINSIC MAX
+END MODULE M
+
+PROGRAM REDUCTION3
+   USE M, REN =&gt; MAX
+   N = 0
+!$OMP PARALLEL DO REDUCTION(REN: N)     ! still does MAX
+   DO I = 1, 100
+      N = MAX(N,I)
+   END DO
+END PROGRAM REDUCTION3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following conforming program performs the reduction using   <em>intrinsic procedure name</em>  <code class="docutils literal notranslate"><span class="pre">MAX</span></code> even though the intrinsic <code class="docutils literal notranslate"><span class="pre">MAX</span></code> has been renamed  to <code class="docutils literal notranslate"><span class="pre">MIN</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.5
+! type: F-free
+MODULE MOD
+   INTRINSIC MAX, MIN
+END MODULE MOD
+
+PROGRAM REDUCTION4
+   USE MOD, MIN=&gt;MAX, MAX=&gt;MIN
+   REAL :: R
+   R = -HUGE(0.0)
+
+!$OMP PARALLEL DO REDUCTION(MIN: R)     ! still does MAX
+   DO I = 1, 1000
+      R = MIN(R, SIN(REAL(I)))
+   END DO
+   PRINT *, R
+END PROGRAM REDUCTION4
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example is non-conforming because the initialization (<code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span>&#160; <span class="pre">0</span></code>) of the original list item <code class="docutils literal notranslate"><span class="pre">a</span></code> is not synchronized with the update of  <code class="docutils literal notranslate"><span class="pre">a</span></code> as a result of the reduction computation in the <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. Therefore,  the example may print an incorrect value for <code class="docutils literal notranslate"><span class="pre">a</span></code>.</p>
+<p>To avoid this problem, the initialization of the original list item <code class="docutils literal notranslate"><span class="pre">a</span></code>  should complete before any update of <code class="docutils literal notranslate"><span class="pre">a</span></code> as a result of the <code class="docutils literal notranslate"><span class="pre">reduction</span></code>  clause. This can be achieved by adding an explicit barrier after the assignment  <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code>, or by enclosing the assignment <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">=</span> <span class="pre">0</span></code> in a <code class="docutils literal notranslate"><span class="pre">single</span></code>  directive (which has an implied barrier), or by initializing <code class="docutils literal notranslate"><span class="pre">a</span></code> before  the start of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: reduction.6
+* type: C
+* version:    omp_5.1
+*/
+#include &lt;stdio.h&gt;
+
+int main (void)
+{
+  int a, i;
+
+  #pragma omp parallel shared(a) private(i)
+  {
+    #pragma omp masked
+    a = 0;
+
+    // To avoid race conditions, add a barrier here.
+
+    #pragma omp for reduction(+:a)
+    for (i = 0; i &lt; 10; i++) {
+        a += i;
+    }
+
+    #pragma omp single
+    printf (&quot;Sum is %d\n&quot;, a);
+  }
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.6
+! type: F-fixed
+! version:    omp_5.1
+      INTEGER A, I
+
+!$OMP PARALLEL SHARED(A) PRIVATE(I)
+
+!$OMP MASKED
+      A = 0
+!$OMP END MASKED
+
+      ! To avoid race conditions, add a barrier here.
+
+!$OMP DO REDUCTION(+:A)
+      DO I= 0, 9
+         A = A + I
+      END DO
+
+!$OMP SINGLE
+      PRINT *, &quot;Sum is &quot;, A
+!$OMP END SINGLE
+
+!$OMP END PARALLEL
+
+      END
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example demonstrates the reduction of array  <em>a</em> .  In C/C++ this is illustrated by the explicit use of an array section  <em>a[0:N]</em>  in the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause.  The corresponding Fortran example uses array syntax supported in the base language.  As of the OpenMP 4.5 specification the explicit use of array section in the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause in Fortran is not permitted.  But this oversight has been fixed in the OpenMP 5.0 specification.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: reduction.7
+* type: C
+* version: omp_4.5
+*/
+#include &lt;stdio.h&gt;
+
+#define N 100
+void init(int n, float (*b)[N]);
+
+int main(){
+
+  int i,j;
+  float a[N], b[N][N];
+
+  init(N,b);
+
+  for(i=0; i&lt;N; i++) a[i]=0.0e0;
+
+  #pragma omp parallel for reduction(+:a[0:N]) private(j)
+  for(i=0; i&lt;N; i++){
+    for(j=0; j&lt;N; j++){
+       a[j] +=  b[i][j];
+    }
+  }
+  printf(&quot; a[0] a[N-1]: %f %f\n&quot;, a[0], a[N-1]);
+
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: reduction.7
+! type: F-free
+program array_red
+
+  integer,parameter :: n=100
+  integer           :: j
+  real              :: a(n), b(n,n)
+
+  call init(n,b)
+
+  a(:) = 0.0e0
+
+  !$omp parallel do reduction(+:a)
+  do j = 1, n
+     a(:) = a(:) + b(:,j)
+  end do
+
+  print*, &quot; a(1) a(n): &quot;, a(1), a(n)
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="task-reduction">
+<h3>Task Reduction<a class="headerlink" href="#task-reduction" title="Permalink to this headline">¶</a></h3>
+<p><strong>clauses!task_reduction <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code></strong> <strong>task_reduction clause <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause</strong> <strong>reductions!task_reduction clause <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause</strong> <strong>clauses!in_reduction <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code></strong> <strong>in_reduction clause <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause</strong> <strong>reductions!in_reduction clause <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause</strong></p>
+<p>In OpenMP 5.0 the <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause was created for the <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct,  to allow reductions among explicit tasks that have an <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause.</p>
+<p>In the  <em>task_reduction.1</em>  example below a reduction is performed as the algorithm traverses a linked list. The reduction statement is assigned to be an explicit task using a <code class="docutils literal notranslate"><span class="pre">task</span></code> construct and is specified to be a reduction participant with  the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause. A <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct encloses the tasks participating in the reduction, and specifies, with the <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause, that the taskgroup has tasks participating in a reduction.  After the <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> region the original variable will contain  the final value of the reduction.</p>
+<p>Note: The  <em>res</em>  variable is private in the  <em>linked_list_sum</em>  routine and is not required to be shared (as in the case of a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct reduction).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       task_reduction.1
+* type:       C
+*/
+
+#include&lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+#define N 10
+
+typedef struct node_tag {
+    int val;
+    struct node_tag *next;
+} node_t;
+
+int linked_list_sum(node_t *p)
+{
+    int res = 0;
+
+    #pragma omp taskgroup task_reduction(+: res)
+    {
+        node_t* aux = p;
+        while(aux != 0)
+        {
+            #pragma omp task in_reduction(+: res)
+            res += aux-&gt;val;
+
+            aux = aux-&gt;next;
+        }
+    }
+    return res;
+}
+
+
+int main(int argc, char *argv[]) {
+    int i;
+//                           Create the root node.
+    node_t* root = (node_t*) malloc(sizeof(node_t));
+    root-&gt;val = 1;
+
+    node_t* aux = root;
+
+//                           Create N-1 more nodes.
+    for(i=2;i&lt;=N;++i){
+        aux-&gt;next = (node_t*) malloc(sizeof(node_t));
+        aux = aux-&gt;next;
+        aux-&gt;val = i;
+    }
+
+    aux-&gt;next = 0;
+
+    #pragma omp parallel
+    #pragma omp single
+    {
+        int result = linked_list_sum(root);
+        printf( &quot;Calculated: %d  Analytic:%d\n&quot;, result, (N*(N+1)/2) );
+    }
+
+    return 0;
+}
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       task_reduction.1
+! type:       F-free
+
+module m
+    type node_t
+        integer :: val
+        type(node_t), pointer :: next
+    end type
+end module m
+
+function linked_list_sum(p) result(res)
+    use m
+    implicit none
+    type(node_t), pointer :: p
+    type(node_t), pointer :: aux
+    integer :: res
+
+    res = 0
+
+    !$omp taskgroup task_reduction(+: res)
+        aux =&gt; p
+        do while (associated(aux))
+            !$omp task in_reduction(+: res)
+                res = res + aux%val
+            !$omp end task
+            aux =&gt; aux%next
+        end do
+    !$omp end taskgroup
+end function linked_list_sum
+
+
+program main
+    use m
+    implicit none
+    type(node_t), pointer :: root, aux
+    integer :: res, i
+    integer, parameter :: N=10
+
+    interface
+        function linked_list_sum(p) result(res)
+            use m
+            implicit none
+            type(node_t), pointer :: p
+            integer :: res
+        end function
+    end interface
+!                       Create the root node.
+    allocate(root)
+    root%val = 1
+    aux =&gt; root
+
+!                       Create N-1 more nodes.
+    do i = 2,N
+        allocate(aux%next)
+        aux =&gt; aux%next
+        aux%val = i
+    end do
+
+    aux%next =&gt; null()
+
+    !$omp parallel
+    !$omp single
+        res = linked_list_sum(root)
+        print *, &quot;Calculated:&quot;, res, &quot; Analytic:&quot;, (N*(N+1))/2
+    !$omp end single
+    !$omp end parallel
+
+end program main
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!task modifier <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier</strong> <strong>task modifier <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier</strong> In OpenMP 5.0 the <code class="docutils literal notranslate"><span class="pre">task</span></code>  <em>reduction-modifier</em>  for the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause was introduced to provide a means of performing reductions among implicit and explicit tasks.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause of a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> or worksharing construct may specify the <code class="docutils literal notranslate"><span class="pre">task</span></code>  <em>reduction-modifier</em>  to include explicit task reductions within their region, provided the reduction operators ( <em>reduction-identifiers</em> ) and variables ( <em>list items</em> ) of the participating tasks match those of the implicit tasks.</p>
+<p>There are 2 reduction use cases (identified by USE CASE #) in the  <em>task_reduction.2</em>  example below.</p>
+<p>In USE CASE 1 a <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier in the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause  of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct is used to include the reductions of any  participating tasks, those with an <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause and matching   <em>reduction-identifiers</em>  (<code class="docutils literal notranslate"><span class="pre">+</span></code>) and list items (<code class="docutils literal notranslate"><span class="pre">x</span></code>).</p>
+<p>Note, a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct (with a <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause) in not necessary to scope the explicit task reduction (as seen in the example above).  Hence, even without the implicit task reduction statement (without the C <code class="docutils literal notranslate"><span class="pre">x++</span></code>   and Fortran <code class="docutils literal notranslate"><span class="pre">x=x+1</span></code> statements), the <code class="docutils literal notranslate"><span class="pre">task</span></code>  <em>reduction-modifier</em>   in a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct can be used to avoid having to create a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct  (and its <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause) around the task generating structure.</p>
+<p>In USE CASE 2 tasks participating in the reduction are within a worksharing region (a parallel worksharing-loop construct). Here, too, no <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> is required, and the  <em>reduction-identifier</em>  (<code class="docutils literal notranslate"><span class="pre">+</span></code>) and list item (variable <code class="docutils literal notranslate"><span class="pre">x</span></code>) match as required.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       task_reduction.2
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+int main(void){
+   int N=100, M=10;
+   int i, x;
+
+// USE CASE 1  explicit-task reduction + parallel reduction clause
+   x=0;
+   #pragma omp parallel num_threads(M) reduction(task,+:x)
+   {
+
+     x++;                // implicit task reduction statement
+
+     #pragma omp single
+     for(i=0;i&lt;N;i++)
+       #pragma omp task in_reduction(+:x)
+       x++;
+
+   }
+   printf(&quot;x=%d  =M+N\n&quot;,x);  // x= 110  =M+N
+
+
+// USE CASE 2  task reduction +  worksharing reduction clause
+   x=0;
+   #pragma omp parallel for num_threads(M) reduction(task,+:x)
+   for(i=0; i&lt; N; i++){
+
+      x++;
+
+      if( i%2 == 0){
+       #pragma omp task in_reduction(+:x)
+       x--;
+      }
+   }
+   printf(&quot;x=%d  =N-N/2\n&quot;,x);  // x= 50  =N-N/2
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       task_reduction.2
+! type:       F-free
+! version:    omp_5.0
+
+program task_modifier
+
+   integer :: N=100, M=10
+   integer :: i, x
+
+! USE CASE 1  explicit-task reduction + parallel reduction clause
+   x=0
+   !$omp parallel num_threads(M) reduction(task,+:x)
+
+     x=x+1                   !! implicit task reduction statement
+
+     !$omp single
+       do i = 1,N
+         !$omp task in_reduction(+:x)
+           x=x+1
+         !$omp end task
+       end do
+     !$omp end single
+
+   !$omp end parallel
+   write(*,&#39;(&quot;x=&quot;,I0,&quot; =M+N&quot;)&#39;) x   ! x= 110 =M+N
+
+
+! USE CASE 2  task reduction +  worksharing reduction clause
+   x=0
+   !$omp parallel do num_threads(M) reduction(task,+:x)
+     do i = 1,N
+
+        x=x+1
+
+        if( mod(i,2) == 0) then
+           !$omp task in_reduction(+:x)
+             x=x-1
+           !$omp end task
+        endif
+
+     end do
+   write(*,&#39;(&quot;x=&quot;,I0,&quot;  =N-N/2&quot;)&#39;) x   ! x= 50 =N-N/2
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="reduction-on-combined-target-constructs">
+<h3>Reduction on Combined Target Constructs<a class="headerlink" href="#reduction-on-combined-target-constructs" title="Permalink to this headline">¶</a></h3>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!on target construct on <code class="docutils literal notranslate"><span class="pre">target</span></code> construct</strong> <strong>constructs!target <code class="docutils literal notranslate"><span class="pre">target</span></code></strong> <strong>target construct <code class="docutils literal notranslate"><span class="pre">target</span></code> construct</strong></p>
+<p>When a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause appears on a combined construct that combines  a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct with another construct, there is an implicit map  of the list items with a <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> map type for the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  Otherwise, the list items (if they are scalar variables) would be  treated as firstprivate by default in the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct, which  is unlikely to provide the intended behavior since the result of the reduction that is in the firstprivate variable would be discarded  at the end of the <code class="docutils literal notranslate"><span class="pre">target</span></code> region.</p>
+<p>In the following example, the use of the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause on <code class="docutils literal notranslate"><span class="pre">sum1</span></code> or <code class="docutils literal notranslate"><span class="pre">sum2</span></code> should, by default, result in an implicit <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> map for that variable. So long as neither <code class="docutils literal notranslate"><span class="pre">sum1</span></code> nor <code class="docutils literal notranslate"><span class="pre">sum2</span></code> were already present on the device, the mapping behavior ensures the value for <code class="docutils literal notranslate"><span class="pre">sum1</span></code> computed in the first <code class="docutils literal notranslate"><span class="pre">target</span></code> construct is used in the second <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_reduction.1
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+int f(int);
+int g(int);
+int main()
+{
+   int sum1=0, sum2=0;
+   int i;
+   const int n = 100;
+
+   #pragma omp target teams distribute reduction(+:sum1)
+   for (int i = 0; i &lt; n; i++) {
+      sum1 += f(i);
+   }
+
+   #pragma omp target teams distribute reduction(+:sum2)
+   for (int i = 0; i &lt; n; i++) {
+      sum2 += g(i) * sum1;
+   }
+
+   printf(  &quot;sum1 = %d, sum2 = %d\n&quot;, sum1, sum2);
+   //OUTPUT: sum1 = 9900, sum2 = 147015000
+   return 0;
+}
+
+int f(int res){ return res*2; }
+int g(int res){ return res*3; }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_reduction.1
+! type: F-free
+! version: omp_5.0
+program target_reduction_ex1
+   interface
+      function f(res)
+             integer :: f, res
+          end function
+      function g(res)
+             integer :: g, res
+          end function
+   end interface
+   integer :: sum1, sum2, i
+   integer, parameter :: n = 100
+   sum1 = 0
+   sum2 = 0
+   !$omp target teams distribute reduction(+:sum1)
+       do i=1,n
+          sum1 = sum1 + f(i)
+       end do
+   !$omp target teams distribute reduction(+:sum2)
+       do i=1,n
+          sum2 = sum2 + g(i)*sum1
+       end do
+   print *, &quot;sum1 = &quot;, sum1, &quot;, sum2 = &quot;, sum2
+   !!OUTPUT: sum1 =     10100 , sum2 = 153015000
+end program
+
+
+integer function f(res)
+   integer :: res
+   f = res*2
+end function
+integer function g(res)
+   integer :: res
+   g = res*3
+end function
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In next example,  the variables <code class="docutils literal notranslate"><span class="pre">sum1</span></code> and <code class="docutils literal notranslate"><span class="pre">sum2</span></code> remain on the device for the duration of the <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">data</span></code> region so that it is their device copies that are updated by the reductions. Note the significance of mapping <code class="docutils literal notranslate"><span class="pre">sum1</span></code> on the second <code class="docutils literal notranslate"><span class="pre">target</span></code> construct; otherwise, it would be treated by default as firstprivate and the result computed for <code class="docutils literal notranslate"><span class="pre">sum1</span></code> in the prior <code class="docutils literal notranslate"><span class="pre">target</span></code> region may not be used. Alternatively, a <code class="docutils literal notranslate"><span class="pre">target</span></code> <code class="docutils literal notranslate"><span class="pre">update</span></code> construct could be used between the two <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs to update the host version of <code class="docutils literal notranslate"><span class="pre">sum1</span></code> with the value that is in the corresponding device version after the completion of the first construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_reduction.2
+* type: C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+int f(int);
+int g(int);
+int main()
+{
+   int sum1=0, sum2=0;
+   int i;
+   const int n = 100;
+
+   #pragma omp target data map(sum1,sum2)
+   {
+      #pragma omp target teams distribute reduction(+:sum1)
+      for (int i = 0; i &lt; n; i++) {
+         sum1 += f(i);
+      }
+
+      #pragma omp target teams distribute map(sum1) reduction(+:sum2)
+      for (int i = 0; i &lt; n; i++) {
+         sum2 += g(i) * sum1;
+      }
+   }
+   printf(  &quot;sum1 = %d, sum2 = %d\n&quot;, sum1, sum2);
+   //OUTPUT: sum1 = 9900, sum2 = 147015000
+   return 0;
+}
+
+int f(int res){ return res*2; }
+int g(int res){ return res*3; }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_reduction.2
+! type: F-free
+! version: omp_5.0
+
+program target_reduction_ex2
+   interface
+      function f(res)
+             integer :: f, res
+          end function
+      function g(res)
+             integer :: g, res
+          end function
+   end interface
+   integer :: sum1, sum2, i
+   integer, parameter :: n = 100
+   sum1 = 0
+   sum2 = 0
+   !$omp target data map(sum1, sum2)
+       !$omp target teams distribute reduction(+:sum1)
+           do i=1,n
+              sum1 = sum1 + f(i)
+           end do
+       !$omp target teams distribute map(sum1) reduction(+:sum2)
+           do i=1,n
+              sum2 = sum2 + g(i)*sum1
+           end do
+   !$omp end target data
+   print *, &quot;sum1 = &quot;, sum1, &quot;, sum2 = &quot;, sum2
+   !!OUTPUT: sum1 =     10100 , sum2 = 153015000
+end program
+
+
+integer function f(res)
+   integer :: res
+   f = res*2
+end function
+integer function g(res)
+   integer :: res
+   g = res*3
+end function
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="task-reduction-with-target-constructs">
+<h3>Task Reduction with Target Constructs<a class="headerlink" href="#task-reduction-with-target-constructs" title="Permalink to this headline">¶</a></h3>
+<p><strong>in_reduction clause <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause</strong> <strong>constructs!target <code class="docutils literal notranslate"><span class="pre">target</span></code></strong> <strong>target construct <code class="docutils literal notranslate"><span class="pre">target</span></code> construct</strong></p>
+<p><strong>clauses!enter <code class="docutils literal notranslate"><span class="pre">enter</span></code></strong> <strong>enter clause <code class="docutils literal notranslate"><span class="pre">enter</span></code> clause</strong></p>
+<p>The following examples illustrate how task reductions can apply to target tasks that result from a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct with the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause. Here, the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause specifies that the target task participates in the task reduction defined in the scope of the enclosing <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct. Partial results from all tasks participating in the task reduction will be combined (in some order) into the original variable listed in the <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause before exiting the <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_task_reduction.1
+* type: C
+* version: omp_5.2
+*/
+
+#include &lt;stdio.h&gt;
+#pragma omp declare target enter(device_compute)
+void device_compute(int *);
+void host_compute(int *);
+int main()
+{
+   int sum = 0;
+
+   #pragma omp parallel masked
+   #pragma omp taskgroup task_reduction(+:sum)
+   {
+      #pragma omp target in_reduction(+:sum) nowait
+          device_compute(&amp;sum);
+
+      #pragma omp task in_reduction(+:sum)
+          host_compute(&amp;sum);
+   }
+   printf(  &quot;sum = %d\n&quot;, sum);
+   //OUTPUT: sum = 2
+   return 0;
+}
+
+void device_compute(int *sum){ *sum = 1; }
+void   host_compute(int *sum){ *sum = 1; }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_task_reduction.1
+! type: F-free
+! version: omp_5.2
+
+program target_task_reduction_ex1
+   interface
+      subroutine device_compute(res)
+      !$omp declare target enter(device_compute)
+        integer :: res
+      end subroutine device_compute
+      subroutine host_compute(res)
+        integer :: res
+      end subroutine host_compute
+   end interface
+   integer :: sum
+   sum = 0
+   !$omp parallel masked
+      !$omp taskgroup task_reduction(+:sum)
+         !$omp target in_reduction(+:sum) nowait
+            call device_compute(sum)
+         !$omp end target
+         !$omp task in_reduction(+:sum)
+            call host_compute(sum)
+         !$omp end task
+      !$omp end taskgroup
+   !$omp end parallel masked
+   print *, &quot;sum = &quot;, sum
+   !!OUTPUT: sum = 2
+end program
+
+subroutine device_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+subroutine host_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!task modifier <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier</strong> <strong>task modifier <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier</strong> In the next pair of examples, the task reduction is defined by a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause with the <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier, rather than a <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause on a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct. Again, the partial results from the participating tasks will be combined in some order into the original reduction variable, <code class="docutils literal notranslate"><span class="pre">sum</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_task_reduction.2a
+* type: C
+* version: omp_5.2
+*/
+#include &lt;stdio.h&gt;
+#pragma omp declare target enter(device_compute)
+extern void device_compute(int *);
+extern void host_compute(int *);
+int main()
+{
+   int sum = 0;
+
+   #pragma omp parallel sections reduction(task, +:sum)
+   {
+      #pragma omp section
+          {
+             #pragma omp target in_reduction(+:sum)
+             device_compute(&amp;sum);
+          }
+      #pragma omp section
+          {
+             host_compute(&amp;sum);
+          }
+   }
+   printf(  &quot;sum = %d\n&quot;, sum);
+   //OUTPUT: sum = 2
+   return 0;
+}
+
+void device_compute(int *sum){ *sum = 1; }
+void   host_compute(int *sum){ *sum = 1; }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_task_reduction.2a
+! type: F-free
+! version: omp_5.2
+
+program target_task_reduction_ex2
+   interface
+      subroutine device_compute(res)
+      !$omp declare target enter(device_compute)
+        integer :: res
+      end subroutine device_compute
+      subroutine host_compute(res)
+        integer :: res
+      end subroutine host_compute
+   end interface
+   integer :: sum
+   sum = 0
+   !$omp parallel sections reduction(task,+:sum)
+      !$omp section
+         !$omp target in_reduction(+:sum) nowait
+           call device_compute(sum)
+         !$omp end target
+      !$omp section
+         call host_compute(sum)
+   !$omp end parallel sections
+   print *, &quot;sum = &quot;, sum
+   !!OUTPUT: sum = 2
+end program
+
+subroutine device_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+subroutine host_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>in_reduction clause <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause!with target construct with <code class="docutils literal notranslate"><span class="pre">target</span></code> construct</strong> <strong>constructs!target <code class="docutils literal notranslate"><span class="pre">target</span></code></strong> <strong>target construct <code class="docutils literal notranslate"><span class="pre">target</span></code> construct</strong> Next, the <code class="docutils literal notranslate"><span class="pre">task</span></code> modifier is again used to define a task reduction over participating tasks. This time, the participating tasks are a target task resulting from a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct with the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause, and the implicit task (executing on the primary thread) that calls <code class="docutils literal notranslate"><span class="pre">host_compute</span></code>. As before, the partial results from these participating tasks are combined in some order into the original reduction variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: target_task_reduction.2b
+* type: C
+* version: omp_5.2
+*/
+#include &lt;stdio.h&gt;
+#pragma omp declare target enter(device_compute)
+extern void device_compute(int *);
+extern void host_compute(int *);
+int main()
+{
+   int sum = 0;
+
+   #pragma omp parallel masked reduction(task, +:sum)
+   {
+       #pragma omp target in_reduction(+:sum) nowait
+       device_compute(&amp;sum);
+
+       host_compute(&amp;sum);
+   }
+   printf(  &quot;sum = %d\n&quot;, sum);
+   //OUTPUT: sum = 2
+   return 0;
+}
+
+void device_compute(int *sum){ *sum = 1; }
+void   host_compute(int *sum){ *sum = 1; }
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: target_task_reduction.2b
+! type: F-free
+! version: omp_5.2
+
+program target_task_reduction_ex2b
+   interface
+      subroutine device_compute(res)
+      !$omp declare target enter(device_compute)
+        integer :: res
+      end subroutine device_compute
+      subroutine host_compute(res)
+        integer :: res
+      end subroutine host_compute
+   end interface
+   integer :: sum
+   sum = 0
+   !$omp parallel masked reduction(task,+:sum)
+         !$omp target in_reduction(+:sum) nowait
+           call device_compute(sum)
+         !$omp end target
+         call host_compute(sum)
+   !$omp end parallel masked
+   print *, &quot;sum = &quot;, sum
+   !!OUTPUT: sum = 2
+end program
+
+
+subroutine device_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+subroutine host_compute(sum)
+   integer :: sum
+   sum = 1
+end subroutine
+
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="taskloop-reduction">
+<h3>Taskloop Reduction<a class="headerlink" href="#taskloop-reduction" title="Permalink to this headline">¶</a></h3>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!on taskloop construct on <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct</strong> <strong>constructs!taskloop <code class="docutils literal notranslate"><span class="pre">taskloop</span></code></strong> <strong>taskloop construct <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct</strong></p>
+<p>In the OpenMP 5.0 Specification the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct was extended to include the reductions.</p>
+<p>The following two examples show how to implement a reduction over an array using taskloop reduction in two different ways. In the first example we apply the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause to the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct. As it was explained above in the task reduction examples, a reduction over tasks is divided in two components: the scope of the reduction, which is defined by a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> region, and the tasks that participate in the reduction. In this example, the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause defines both semantics. First, it specifies that the implicit <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> region associated with the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct is the scope of the reduction, and second, it defines all tasks created by the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct as participants of the reduction. About the first property, it is important to note that if we add the <code class="docutils literal notranslate"><span class="pre">nogroup</span></code> clause to the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct the code will be nonconforming, basically because we have a set of tasks that participate in a reduction that has not been defined.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       taskloop_reduction.1
+* type:       C
+* version:    omp_5.0
+*/
+#include &lt;stdio.h&gt;
+
+int array_sum(int n, int *v) {
+    int i;
+    int res = 0;
+
+    #pragma omp taskloop reduction(+: res)
+    for(i = 0; i &lt; n; ++i)
+        res += v[i];
+
+    return res;
+}
+
+int main(int argc, char *argv[]) {
+    int n = 10;
+    int v[10] = {1,2,3,4,5,6,7,8,9,10};
+
+    #pragma omp parallel
+    #pragma omp single
+    {
+        int res = array_sum(n, v);
+        printf(&quot;The result is %d\n&quot;, res);
+    }
+    return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: taskloop_reduction.1
+! type: F-free
+! version:    omp_5.0
+function array_sum(n, v) result(res)
+    implicit none
+    integer :: n, v(n), res
+    integer :: i
+
+    res = 0
+    !$omp taskloop reduction(+: res)
+    do i=1, n
+        res = res + v(i)
+    end do
+    !$omp end taskloop
+
+end function array_sum
+
+program main
+    implicit none
+    integer :: n, v(10), res
+    integer :: i
+
+    integer, external :: array_sum
+
+    n = 10
+    do i=1, n
+        v(i) = i
+    end do
+
+    !$omp parallel
+    !$omp single
+    res = array_sum(n, v)
+    print *, &quot;The result is&quot;, res
+    !$omp end single
+    !$omp end parallel
+end program main
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The second example computes exactly the same value as in the preceding  <em>taskloop_reduction.1</em>  code section, but in a very different way. First, in the  <em>array_sum</em>  function a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> region is created  that defines the scope of a new reduction using the <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause. After that, a task and also the tasks generated by a taskloop participate in  that reduction by using the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause on the <code class="docutils literal notranslate"><span class="pre">task</span></code> and <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> constructs, respectively.  Note that the <code class="docutils literal notranslate"><span class="pre">nogroup</span></code> clause was added to the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct. This is allowed because what is expressed with the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause is different from what is expressed with the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause. In one case the generated tasks are specified to participate in a previously  declared reduction (<code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause) whereas in the other case creation of a new reduction is specified and also all tasks generated  by the taskloop will participate on it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       taskloop_reduction.2
+* type:       C
+* version:    omp_5.0
+*/
+#include &lt;stdio.h&gt;
+
+int array_sum(int n, int *v) {
+    int i;
+    int res = 0;
+
+    #pragma omp taskgroup task_reduction(+: res)
+    {
+        if (n &gt; 0) {
+            #pragma omp task in_reduction(+: res)
+            res = res + v[0];
+
+            #pragma omp taskloop in_reduction(+: res) nogroup
+            for(i = 1; i &lt; n; ++i)
+                res += v[i];
+        }
+    }
+
+    return res;
+}
+
+int main(int argc, char *argv[]) {
+    int n = 10;
+    int v[10] = {1,2,3,4,5,6,7,8,9,10};
+
+    #pragma omp parallel
+    #pragma omp single
+    {
+        int res = array_sum(n, v);
+        printf(&quot;The result is %d\n&quot;, res);
+    }
+    return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: taskloop_reduction.2
+! type: F-free
+! version:    omp_5.0
+function array_sum(n, v) result(res)
+    implicit none
+    integer :: n, v(n), res
+    integer :: i
+
+    res = 0
+    !$omp taskgroup task_reduction(+: res)
+    if (n &gt; 0) then
+        !$omp task in_reduction(+: res)
+        res = res + v(1)
+        !$omp end task
+
+        !$omp taskloop in_reduction(+: res) nogroup
+        do i=2, n
+            res = res + v(i)
+        end do
+        !$omp end taskloop
+    endif
+    !$omp end taskgroup
+
+end function array_sum
+
+program main
+    implicit none
+    integer :: n, v(10), res
+    integer :: i
+
+    integer, external :: array_sum
+
+    n = 10
+    do i=1, n
+        v(i) = i
+    end do
+
+    !$omp parallel
+    !$omp single
+    res = array_sum(n, v)
+    print *, &quot;The result is&quot;, res
+    !$omp end single
+    !$omp end parallel
+end program main
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the OpenMP 5.0 Specification, <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clauses for the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"> <span class="pre">simd</span></code> construct were also added.</p>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!on taskloop simd construct on <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct</strong> <strong>combined constructs!taskloop simd <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code></strong> <strong>taskloop simd construct <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct</strong> The examples below compare reductions for the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> and the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> constructs. These examples illustrate the use of <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clauses within  “stand-alone” <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> constructs, and the use of <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clauses for tasks of taskloops to participate with other reductions within the scope of a parallel region.</p>
+<p><strong>taskloop reductions:</strong></p>
+<p>In the  <em>taskloop reductions</em>  section of the example below,   <em>taskloop 1</em>  uses the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause  in a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct for a sum reduction, accumulated in  <em>asum</em> .  The behavior is as though a <code class="docutils literal notranslate"><span class="pre">taskgroup</span></code> construct encloses the  taskloop region with a <code class="docutils literal notranslate"><span class="pre">task_reduction</span></code> clause, and each taskloop task has an <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause with the specifications  of the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause. At the end of the taskloop region  <em>asum</em>  contains the result of the reduction.</p>
+<p>The next taskloop,  <em>taskloop 2</em> , illustrates the use of the  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause to participate in a previously defined reduction scope of a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.</p>
+<p>The task reductions of  <em>task 2</em>  and  <em>taskloop 2</em>  are combined across the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct and the single <code class="docutils literal notranslate"><span class="pre">task</span></code> construct, as specified in the <code class="docutils literal notranslate"><span class="pre">reduction(task,</span></code> <code class="docutils literal notranslate"><span class="pre">+:asum)</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct. At the end of the parallel region  <em>asum</em>  contains the combined result of all reductions.</p>
+<p><strong>taskloop simd reductions:</strong></p>
+<p>Reductions for the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct are shown in the second half of the code. Since each component construct, <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> and <code class="docutils literal notranslate"><span class="pre">simd</span></code>,  can accept a reduction-type clause, the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct is a composite construct, and the specific application of the reduction clause is defined within the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct section of the OpenMP 5.0 Specification. The code below illustrates use cases for these reductions.</p>
+<p>In the  <em>taskloop simd reduction</em>  section of the example below,  <em>taskloop simd 3</em>  uses the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause  in a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct for a sum reduction within a loop. For this case a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause is used, as one would use  for a <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct. The SIMD reductions of each task are combined, and the results of these tasks are further  combined just as in the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct with the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause for  <em>taskloop 1</em> . At the end of the taskloop region  <em>asum</em>  contains the combined result of all reductions.</p>
+<p>If a <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct is to participate in a previously defined  reduction scope, the reduction participation should be specified with a <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause, as shown in the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region enclosing  <em>task 4</em>  and  <em>taskloop simd 4</em>  code sections.</p>
+<p>Here the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> construct’s  <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause specifies participation of the construct’s tasks as  a task reduction within the scope of the parallel region.   That is, the results of each task of the <code class="docutils literal notranslate"><span class="pre">taskloop</span></code> construct component  contribute to the reduction in a broader level, just as in  <em>parallel reduction a</em>  code section above. Also, each <code class="docutils literal notranslate"><span class="pre">simd</span></code>-component construct occurs as if it has a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause, and the SIMD results of each task are combined as though to form a single result for each task (that participates in the <code class="docutils literal notranslate"><span class="pre">in_reduction</span></code> clause). At the end of the parallel region  <em>asum</em>  contains the combined result of all reductions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: taskloop_simd_reduction.1
+* type: C
+* version: omp_5.1
+*/
+#include &lt;stdio.h&gt;
+#define N 100
+
+int main(){
+   int i, a[N], asum=0;
+
+   for(i=0;i&lt;N;i++) a[i]=i;
+
+   // taskloop reductions
+
+   #pragma omp parallel masked
+   #pragma omp taskloop reduction(+:asum) // taskloop 1
+      for(i=0;i&lt;N;i++){ asum += a[i]; }
+
+
+   #pragma omp parallel reduction(task, +:asum) // parallel reduction a
+   {
+      #pragma omp masked
+      #pragma omp task            in_reduction(+:asum) // task 2
+         for(i=0;i&lt;N;i++){ asum += a[i]; }
+
+      #pragma omp masked taskloop in_reduction(+:asum) // taskloop 2
+         for(i=0;i&lt;N;i++){ asum += a[i]; }
+   }
+
+   // taskloop simd reductions
+
+   #pragma omp parallel masked
+   #pragma omp taskloop simd reduction(+:asum) // taskloop simd 3
+     for(i=0;i&lt;N;i++){ asum += a[i]; }
+
+
+   #pragma omp parallel reduction(task, +:asum) // parallel reduction b
+   {
+      #pragma omp masked
+      #pragma omp task                 in_reduction(+:asum) // task 4
+         for(i=0;i&lt;N;i++){ asum += a[i]; }
+
+      #pragma omp masked taskloop simd in_reduction(+:asum) // taskloop
+         for(i=0;i&lt;N;i++){ asum += a[i]; }                  // simd 4
+
+  }
+
+  printf(&quot;asum=%d \n&quot;,asum); // output: asum=29700
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: taskloop_simd_reduction.1
+! type: F-free
+! version: omp_5.1
+program main
+
+  use omp_lib
+  integer, parameter ::  N=100
+  integer            :: i, a(N), asum=0
+
+  a = [( i, i=1,N )]    !! initialize
+
+!! taskloop reductions
+
+  !$omp parallel masked
+  !$omp taskloop reduction(+:asum)                  !! taskloop 1
+    do i=1,N;  asum = asum + a(i);  enddo
+  !$omp end taskloop
+  !$omp end parallel masked
+
+
+  !$omp parallel reduction(task, +:asum)            !! parallel reduction a
+
+     !$omp masked
+     !$omp task            in_reduction(+:asum)     !! task 2
+       do i=1,N;  asum = asum + a(i);  enddo
+     !$omp end task
+     !$omp end masked
+
+     !$omp masked taskloop in_reduction(+:asum)     !! taskloop 2
+       do i=1,N;  asum = asum + a(i);  enddo
+     !$omp end masked taskloop
+
+  !$omp end parallel
+
+!! taskloop simd reductions
+
+  !$omp parallel masked
+  !$omp taskloop simd reduction(+:asum)             !! taskloop simd 3
+    do i=1,N;  asum = asum + a(i);  enddo
+  !$omp end taskloop simd
+  !$omp end parallel masked
+
+
+  !$omp parallel reduction(task, +:asum)            !! parallel reduction b
+
+    !$omp masked
+    !$omp task                 in_reduction(+:asum) !! task 4
+       do i=1,N;  asum = asum + a(i);  enddo
+    !$omp end task
+    !$omp end masked
+
+    !$omp masked taskloop simd in_reduction(+:asum) !! taskloop simd 4
+       do i=1,N;  asum = asum + a(i);  enddo
+    !$omp end masked taskloop simd
+
+  !$omp end parallel
+
+  print*,&quot;asum=&quot;,asum   !! output: asum=30300
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="reduction-with-the-scope-construct">
+<h3>Reduction with the <code class="docutils literal notranslate"><span class="pre">scope</span></code> Construct<a class="headerlink" href="#reduction-with-the-scope-construct" title="Permalink to this headline">¶</a></h3>
+<p><strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!on scope construct on <code class="docutils literal notranslate"><span class="pre">scope</span></code> construct</strong> <strong>constructs!scope <code class="docutils literal notranslate"><span class="pre">scope</span></code></strong> <strong>scope construct <code class="docutils literal notranslate"><span class="pre">scope</span></code> construct</strong></p>
+<p>The following example illustrates the use of the <code class="docutils literal notranslate"><span class="pre">scope</span></code> construct  to perform a reduction in a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region. The case is useful for  producing a reduction and accessing reduction variables inside a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region  without using a worksharing-loop construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: scope_reduction.1
+* type: C++
+* version: omp_5.1
+*/
+#include &lt;stdio.h&gt;
+void do_work(int n, float a[], float &amp;s)
+{
+   float loc_s = 0.0f;        // local sum
+   static int nthrs;
+   #pragma omp for
+      for (int i = 0; i &lt; n; i++)
+         loc_s += a[i];
+   #pragma omp single
+   {
+      s = 0.0f;               // total sum
+      nthrs = 0;
+   }
+   #pragma omp scope reduction(+:s,nthrs)
+   {
+      s += loc_s;
+      nthrs++;
+   }
+   #pragma omp masked
+      printf(&quot;total sum = %f, nthrs = %d\n&quot;, s, nthrs);
+}
+
+float work(int n, float a[])
+{
+   float s;
+   #pragma omp parallel
+   {
+      do_work(n, a, s);
+   }
+   return s;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: scope_reduction.1
+! type: F-free
+! version: omp_5.1
+subroutine do_work(n, a, s)
+   implicit none
+   integer n, i
+   real a(*), s, loc_s
+   integer, save :: nthrs
+
+   loc_s = 0.0                ! local sum
+   !$omp do
+      do i = 1, n
+         loc_s = loc_s + a(i)
+      end do
+   !$omp single
+      s = 0.0                 ! total sum
+      nthrs = 0
+   !$omp end single
+   !$omp scope reduction(+:s,nthrs)
+      s = s + loc_s
+      nthrs = nthrs + 1
+   !$omp end scope
+   !$omp masked
+      print *, &quot;total sum = &quot;, s, &quot;, nthrs = &quot;, nthrs
+   !$omp end masked
+end subroutine
+
+function work(n, a) result(s)
+   implicit none
+   integer n
+   real a(*), s
+
+   !$omp parallel
+      call do_work(n, a, s)
+   !$omp end parallel
+end function
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/reduction.tex</p>
+</div>
+<div class="section" id="user-defined-reduction">
+<h3>User-Defined Reduction<a class="headerlink" href="#user-defined-reduction" title="Permalink to this headline">¶</a></h3>
+<p><strong>reductions!user-defined</strong> <strong>reductions!declare reduction directive <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive</strong> <strong>declare reduction directive <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive</strong> <strong>directives!declare reduction <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code></strong> <strong>declare reduction directive <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive!initializer clause <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause</strong> <strong>declare reduction directive <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive!combiner</strong> <strong>declare reduction directive <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive!OpenMP variable identifiers</strong> <strong>OpenMP variable identifiers!omp_in <code class="docutils literal notranslate"><span class="pre">omp_in</span></code></strong> <strong>OpenMP variable identifiers!omp_out <code class="docutils literal notranslate"><span class="pre">omp_out</span></code></strong> <strong>OpenMP variable identifiers!omp_priv <code class="docutils literal notranslate"><span class="pre">omp_priv</span></code></strong> <strong>combiner</strong> <strong>clauses!initializer <code class="docutils literal notranslate"><span class="pre">initializer</span></code></strong> <strong>initializer clause <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive can be used to specify  user-defined reductions (UDR) for user data types.</p>
+<p>In the following example, <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directives are used to define  <em>min</em>  and  <em>max</em>  operations for the  <em>point</em>  data structure for computing the rectangle that encloses a set of 2-D points.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive defines new reduction identifiers,  <em>min</em>  and  <em>max</em> , to be used in a <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause. The next item in the declaration list is the data type ( <em>struct</em>   <em>point</em> ) used in the reduction, followed by the combiner, here the functions  <em>minproc</em>  and  <em>maxproc</em>  perform the min and max operations, respectively, on the user data (of type  <em>struct</em>   <em>point</em> ). In the function argument list are two special OpenMP variable identifiers, <code class="docutils literal notranslate"><span class="pre">omp_in</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_out</span></code>, that denote the two values to be combined in the “real” function; the <code class="docutils literal notranslate"><span class="pre">omp_out</span></code> identifier indicates which one is to hold the result.</p>
+<p>The initializer of the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies the initial value for the private variable of each implicit task. The <code class="docutils literal notranslate"><span class="pre">omp_priv</span></code> identifier is used to denote the private variable.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: udr.1
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+struct point {
+  int x;
+  int y;
+};
+
+void minproc ( struct point *out, struct point *in )
+{
+  if ( in-&gt;x &lt; out-&gt;x ) out-&gt;x = in-&gt;x;
+  if ( in-&gt;y &lt; out-&gt;y ) out-&gt;y = in-&gt;y;
+}
+
+void maxproc ( struct point *out, struct point *in )
+{
+  if ( in-&gt;x &gt; out-&gt;x ) out-&gt;x = in-&gt;x;
+  if ( in-&gt;y &gt; out-&gt;y ) out-&gt;y = in-&gt;y;
+}
+
+#pragma omp declare reduction(min : struct point : \
+        minproc(&amp;omp_out, &amp;omp_in)) \
+ initializer( omp_priv = { INT_MAX, INT_MAX } )
+
+#pragma omp declare reduction(max : struct point : \
+        maxproc(&amp;omp_out, &amp;omp_in)) \
+ initializer( omp_priv = { 0, 0 } )
+
+void find_enclosing_rectangle ( int n, struct point points[] )
+{
+  struct point minp = { INT_MAX, INT_MAX }, maxp = {0,0};
+  int i;
+
+#pragma omp parallel for reduction(min:minp) reduction(max:maxp)
+  for ( i = 0; i &lt; n; i++ ) {
+     minproc(&amp;minp, &amp;points[i]);
+     maxproc(&amp;maxp, &amp;points[i]);
+  }
+  printf(&quot;min = (%d, %d)\n&quot;, minp.x, minp.y);
+  printf(&quot;max = (%d, %d)\n&quot;, maxp.x, maxp.y);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example shows the corresponding code in Fortran.  The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directives are specified as part of  the declaration in subroutine  <em>find_enclosing_rectangle</em>  and  the procedures that perform the min and max operations are specified as subprograms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.1
+! type: F-free
+! version: omp_4.0
+module data_type
+
+  type :: point
+    integer :: x
+    integer :: y
+  end type
+
+end module data_type
+
+subroutine find_enclosing_rectangle ( n, points )
+  use data_type
+  implicit none
+  integer :: n
+  type(point) :: points(*)
+
+  !$omp declare reduction(min : point : minproc(omp_out, omp_in)) &amp;
+  !$omp&amp;  initializer( omp_priv = point( HUGE(0), HUGE(0) ) )
+
+  !$omp declare reduction(max : point : maxproc(omp_out, omp_in)) &amp;
+  !$omp&amp;  initializer( omp_priv = point( 0, 0 ) )
+
+  type(point) :: minp = point( HUGE(0), HUGE(0) ), maxp = point( 0, 0 )
+  integer :: i
+
+  !$omp parallel do reduction(min:minp) reduction(max:maxp)
+  do i = 1, n
+     call minproc(minp, points(i))
+     call maxproc(maxp, points(i))
+  end do
+  print *, &quot;min = (&quot;, minp%x, minp%y, &quot;)&quot;
+  print *, &quot;max = (&quot;, maxp%x, maxp%y, &quot;)&quot;
+
+ contains
+  subroutine minproc ( out, in )
+    implicit none
+    type(point), intent(inout) :: out
+    type(point), intent(in) :: in
+
+    out%x = min( out%x, in%x )
+    out%y = min( out%y, in%y )
+  end subroutine minproc
+
+  subroutine maxproc ( out, in )
+    implicit none
+    type(point), intent(inout) :: out
+    type(point), intent(in) :: in
+
+    out%x = max( out%x, in%x )
+    out%y = max( out%y, in%y )
+  end subroutine maxproc
+
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example shows the same computation as  <em>udr.1</em>  but it illustrates that you can craft complex expressions in the user-defined reduction declaration. In this case, instead of calling the  <em>minproc</em>  and  <em>maxproc</em>  functions we inline the code in a single expression.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: udr.2
+* type: C
+* version: omp_4.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+struct point {
+  int x;
+  int y;
+};
+
+#pragma omp declare reduction(min : struct point : \
+        omp_out.x = omp_in.x &gt; omp_out.x  ? omp_out.x : omp_in.x, \
+        omp_out.y = omp_in.y &gt; omp_out.y  ? omp_out.y : omp_in.y ) \
+        initializer( omp_priv = { INT_MAX, INT_MAX } )
+
+#pragma omp declare reduction(max : struct point : \
+        omp_out.x = omp_in.x &lt; omp_out.x  ? omp_out.x : omp_in.x,  \
+        omp_out.y = omp_in.y &lt; omp_out.y  ? omp_out.y : omp_in.y ) \
+        initializer( omp_priv = { 0, 0 } )
+
+void find_enclosing_rectangle ( int n, struct point points[] )
+{
+  struct point minp = { INT_MAX, INT_MAX }, maxp = {0,0};
+  int i;
+
+#pragma omp parallel for reduction(min:minp) reduction(max:maxp)
+  for ( i = 0; i &lt; n; i++ ) {
+    if ( points[i].x &lt; minp.x ) minp.x = points[i].x;
+    if ( points[i].y &lt; minp.y ) minp.y = points[i].y;
+    if ( points[i].x &gt; maxp.x ) maxp.x = points[i].x;
+    if ( points[i].y &gt; maxp.y ) maxp.y = points[i].y;
+  }
+  printf(&quot;min = (%d, %d)\n&quot;, minp.x, minp.y);
+  printf(&quot;max = (%d, %d)\n&quot;, maxp.x, maxp.y);
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The corresponding code of the same example in Fortran is very similar except that the assignment expression in the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive can only be used for a single variable, in this case through a type structure constructor  <em>point( … )</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.2
+! type: F-free
+! version: omp_4.0
+module data_type
+
+  type :: point
+    integer :: x
+    integer :: y
+  end type
+
+end module data_type
+
+subroutine find_enclosing_rectangle ( n, points )
+  use data_type
+  implicit none
+  integer :: n
+  type(point) :: points(*)
+
+  !$omp declare reduction( min : point :  &amp;
+  !$omp&amp;   omp_out = point(min( omp_out%x, omp_in%x ), &amp;
+  !$omp&amp;                   min( omp_out%y, omp_in%y )) ) &amp;
+  !$omp&amp;   initializer( omp_priv = point( HUGE(0), HUGE(0) ) )
+
+  !$omp declare reduction( max : point :  &amp;
+  !$omp&amp;   omp_out = point(max( omp_out%x, omp_in%x ), &amp;
+  !$omp&amp;                   max( omp_out%y, omp_in%y )) ) &amp;
+  !$omp&amp;   initializer( omp_priv = point( 0, 0 ) )
+
+  type(point) :: minp = point( HUGE(0), HUGE(0) ), maxp = point( 0, 0 )
+  integer :: i
+
+  !$omp parallel do reduction(min: minp) reduction(max: maxp)
+  do i = 1, n
+     minp%x = min(minp%x, points(i)%x)
+     minp%y = min(minp%y, points(i)%y)
+     maxp%x = max(maxp%x, points(i)%x)
+     maxp%y = max(maxp%y, points(i)%y)
+  end do
+  print *, &quot;min = (&quot;, minp%x, minp%y, &quot;)&quot;
+  print *, &quot;max = (&quot;, maxp%x, maxp%y, &quot;)&quot;
+
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>OpenMP variable identifiers!omp_orig <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code></strong> The following example shows the use of special variables in arguments for combiner (<code class="docutils literal notranslate"><span class="pre">omp_in</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_out</span></code>) and initializer (<code class="docutils literal notranslate"><span class="pre">omp_priv</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code>) routines.  This example returns the maximum value of an array and the corresponding index value. The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies a user-defined reduction operation  <em>maxloc</em>  for data type  <em>struct</em>   <em>mx_s</em> . The function  <em>mx_combine</em>  is the combiner and the function  <em>mx_init</em>  is the initializer.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: udr.3
+* type: C
+* version: omp_4.0
+*/
+
+#include &lt;stdio.h&gt;
+#define N 100
+
+struct mx_s {
+   float value;
+   int index;
+};
+
+/* prototype functions for combiner and initializer in
+   the declare reduction */
+void mx_combine(struct mx_s *out, struct mx_s *in);
+void mx_init(struct mx_s *priv, struct mx_s *orig);
+
+#pragma omp declare reduction(maxloc: struct mx_s: \
+        mx_combine(&amp;omp_out, &amp;omp_in)) \
+        initializer(mx_init(&amp;omp_priv, &amp;omp_orig))
+
+void mx_combine(struct mx_s *out, struct mx_s *in)
+{
+   if ( out-&gt;value &lt; in-&gt;value ) {
+      out-&gt;value = in-&gt;value;
+      out-&gt;index = in-&gt;index;
+   }
+}
+
+void mx_init(struct mx_s *priv, struct mx_s *orig)
+{
+   priv-&gt;value = orig-&gt;value;
+   priv-&gt;index = orig-&gt;index;
+}
+
+int main(void)
+{
+   struct mx_s mx;
+   float val[N], d;
+   int i, count = N;
+
+   for (i = 0; i &lt; count; i++) {
+      d = (N*0.8f - i);
+      val[i] = N * N - d * d;
+   }
+
+   mx.value = val[0];
+   mx.index = 0;
+   #pragma omp parallel for reduction(maxloc: mx)
+   for (i = 1; i &lt; count; i++) {
+      if (mx.value &lt; val[i])
+      {
+         mx.value = val[i];
+         mx.index = i;
+      }
+   }
+
+   printf(&quot;max value = %g, index = %d\n&quot;, mx.value, mx.index);
+   /* prints 10000, 80 */
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Below is the corresponding Fortran version of the above example.  The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive specifies the user-defined operation  <em>maxloc</em>  for user-derived type  <em>mx_s</em> .  The combiner  <em>mx_combine</em>  and the initializer  <em>mx_init</em>  are specified as subprograms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.3
+! type: F-free
+! version: omp_4.0
+program max_loc
+   implicit none
+
+   type :: mx_s
+      real value
+      integer index
+   end type
+
+   !$omp declare reduction(maxloc: mx_s: &amp;
+   !$omp&amp;        mx_combine(omp_out, omp_in)) &amp;
+   !$omp&amp;        initializer(mx_init(omp_priv, omp_orig))
+
+   integer, parameter :: N = 100
+   type(mx_s) :: mx
+   real :: val(N), d
+   integer :: i, count
+
+   count = N
+   do i = 1, count
+      d = N*0.8 - i + 1
+      val(i) = N * N - d * d
+   enddo
+
+   mx%value = val(1)
+   mx%index = 1
+   !$omp parallel do reduction(maxloc: mx)
+   do i = 2, count
+      if (mx%value &lt; val(i)) then
+         mx%value = val(i)
+         mx%index = i
+      endif
+   enddo
+
+   print *, &#39;max value = &#39;, mx%value, &#39; index = &#39;, mx%index
+   ! prints 10000, 81
+
+ contains
+
+ subroutine mx_combine(out, in)
+   implicit none
+   type(mx_s), intent(inout) :: out
+   type(mx_s), intent(in) :: in
+
+   if ( out%value &lt; in%value ) then
+      out%value = in%value
+      out%index = in%index
+   endif
+ end subroutine mx_combine
+
+ subroutine mx_init(priv, orig)
+   implicit none
+   type(mx_s), intent(out) :: priv
+   type(mx_s), intent(in) :: orig
+
+   priv%value = orig%value
+   priv%index = orig%index
+ end subroutine mx_init
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example explains a few details of the user-defined reduction  in Fortran through modules. The <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive is declared in a module ( <em>data_red</em> ).  The reduction-identifier  <em>.add.</em>  is a user-defined operator that is to allow accessibility in the scope that performs the reduction operation. The user-defined operator  <em>.add.</em>  and the subroutine  <em>dt_init</em>  specified in the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause are defined in the same subprogram.</p>
+<p>The reduction operation (that is, the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause) is in the main program. The reduction identifier  <em>.add.</em>  is accessible by use association. Since  <em>.add.</em>  is a user-defined operator, the explicit interface should also be accessible by use association in the current program unit. Since the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> associated to this <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause has the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause, the subroutine specified on the clause must be accessible in the current scoping unit.  In this case, the subroutine  <em>dt_init</em>  is accessible by use association.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: udr.4
+! type: F-free
+! version: omp_4.0
+module data_red
+! Declare data type.
+  type dt
+    real :: r1
+    real :: r2
+  end type
+
+! Declare the user-defined operator .add.
+  interface operator(.add.)
+    module procedure addc
+  end interface
+
+! Declare the user-defined reduction operator .add.
+!$omp declare reduction(.add.:dt:omp_out=omp_out.add.omp_in) &amp;
+!$omp&amp; initializer(dt_init(omp_priv))
+
+ contains
+! Declare the initialization routine.
+  subroutine dt_init(u)
+    type(dt) :: u
+    u%r1 = 0.0
+    u%r2 = 0.0
+  end subroutine
+
+! Declare the specific procedure for the .add. operator.
+  function addc(x1, x2) result(xresult)
+    type(dt), intent(in) :: x1, x2
+    type(dt) :: xresult
+    xresult%r1 = x1%r1 + x2%r2
+    xresult%r2 = x1%r2 + x2%r1
+  end function
+
+end module data_red
+
+program main
+  use data_red, only : dt, dt_init, operator(.add.)
+
+  type(dt) :: xdt1, xdt2
+  integer :: i
+
+  xdt1 = dt(1.0,2.0)
+  xdt2 = dt(2.0,3.0)
+
+! The reduction operation
+!$omp parallel do reduction(.add.: xdt1)
+  do i = 1, 10
+    xdt1 = xdt1 .add. xdt2
+  end do
+!$omp end parallel do
+
+  print *, xdt1
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example uses user-defined reductions to declare a plus (+) reduction for a C++ class. As the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive is inside the context of the  <em>V</em>  class the expressions in the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> directive are resolved in the context of the class. Also, note that the <code class="docutils literal notranslate"><span class="pre">initializer</span></code> clause uses a copy constructor to initialize the private variables of the reduction and it uses as parameter to its original variable by using the special variable <code class="docutils literal notranslate"><span class="pre">omp_orig</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: udr.5
+* type: C++
+* version: omp_4.0
+*/
+class V {
+   float *p;
+   int n;
+
+public:
+   V( int _n )     : n(_n)  { p = new float[n]; }
+   V( const V&amp; m ) : n(m.n) { p = new float[n]; }
+   ~V() { delete[] p; }
+
+   V&amp; operator+= ( const V&amp; );
+
+   #pragma omp declare reduction( + : V : omp_out += omp_in ) \
+           initializer(omp_priv(omp_orig))
+};
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following examples shows how user-defined reductions can be defined for some STL containers. The first <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">reduction</span></code> defines the plus (+) operation for  <em>std::vector<int></em>  by making use of the  <em>std::transform</em>  algorithm. The second and third define the merge (or concatenation) operation for  <em>std::vector<int></em>  and  <em>std::list<int></em> .  It shows how the user-defined reduction operation can be applied to specific data types of an STL.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: udr.6
+* type: C++
+* version: omp_4.0
+*/
+#include &lt;algorithm&gt;
+#include &lt;list&gt;
+#include &lt;vector&gt;
+
+#pragma omp declare reduction( + : std::vector&lt;int&gt; : \
+     std::transform (omp_out.begin(), omp_out.end(),  \
+        omp_in.begin(), omp_in.end(),std::plus&lt;int&gt;()))
+
+#pragma omp declare reduction( merge : std::vector&lt;int&gt; : \
+     omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
+
+#pragma omp declare reduction( merge : std::list&lt;int&gt; : \
+     omp_out.merge(omp_in))
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/udr.tex</p>
+</div>
+</div>
+<div class="section" id="scan-directive">
+<h2><code class="docutils literal notranslate"><span class="pre">scan</span></code> Directive<a class="headerlink" href="#scan-directive" title="Permalink to this headline">¶</a></h2>
+<p><strong>directives!scan <code class="docutils literal notranslate"><span class="pre">scan</span></code></strong> <strong>scan directive <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive</strong> <strong>reduction clause <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause!inscan modifier <code class="docutils literal notranslate"><span class="pre">inscan</span></code> modifier</strong> <strong>inscan modifier <code class="docutils literal notranslate"><span class="pre">inscan</span></code> modifier</strong></p>
+<p>The following examples illustrate how to parallelize a loop that saves  the <strong>prefix sum</strong> of a reduction. This is accomplished by using  the <code class="docutils literal notranslate"><span class="pre">inscan</span></code> modifier in the <code class="docutils literal notranslate"><span class="pre">reduction</span></code> clause for the input  variable of the scan, and specifying with a <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive whether  the storage statement includes or excludes the scan input of the present  iteration ( <strong>k</strong> ).</p>
+<p><strong>scan directive <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive!inclusive clause <code class="docutils literal notranslate"><span class="pre">inclusive</span></code> clause</strong> <strong>scan directive <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive!exclusive clause <code class="docutils literal notranslate"><span class="pre">exclusive</span></code> clause</strong> <strong>clauses!inclusive <code class="docutils literal notranslate"><span class="pre">inclusive</span></code></strong> <strong>inclusive clause <code class="docutils literal notranslate"><span class="pre">inclusive</span></code> clause</strong> <strong>clauses!exclusive <code class="docutils literal notranslate"><span class="pre">exclusive</span></code></strong> <strong>exclusive clause <code class="docutils literal notranslate"><span class="pre">exclusive</span></code> clause</strong> Basically, the <code class="docutils literal notranslate"><span class="pre">inscan</span></code> modifier connects a loop and/or SIMD reduction to  the scan operation, and a <code class="docutils literal notranslate"><span class="pre">scan</span></code> construct with an <code class="docutils literal notranslate"><span class="pre">inclusive</span></code> or  <code class="docutils literal notranslate"><span class="pre">exclusive</span></code> clause specifies whether the “scan phase’’ (lexical block  before and after the directive, respectively) is to use an  <em>inclusive</em>  or   <em>exclusive</em>  scan value for the list item ( <strong>x</strong> ).</p>
+<p>The first example uses the  <em>inclusive</em>  scan operation on a composite loop-SIMD construct. The <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive separates the reduction  statement on variable  <strong>x</strong>  from the use of  <strong>x</strong>  (saving to array  <strong>b</strong> ). The order of the statements in this example indicates that value  <strong>a[k]</strong>  ( <strong>a(k)</strong>  in Fortran) is included in the computation of  the prefix sum  <strong>b[k]</strong>  ( <strong>b(k)</strong>  in Fortran) for iteration  <strong>k</strong> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       scan.1
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#define N 100
+
+int main(void)
+{
+   int a[N], b[N];
+   int x = 0;
+
+   // initialization
+   for (int k = 0; k &lt; N; k++)
+      a[k] = k + 1;
+
+   // a[k] is included in the computation of producing results in b[k]
+   #pragma omp parallel for simd reduction(inscan,+: x)
+   for (int k = 0; k &lt; N; k++) {
+      x += a[k];
+      #pragma omp scan inclusive(x)
+      b[k] = x;
+   }
+
+   printf(&quot;x = %d, b[0:3] = %d %d %d\n&quot;, x, b[0], b[1], b[2]);
+   //           5050,        1  3  6
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       scan.1
+! type:       F-free
+! version: omp_5.0
+program inclusive_scan
+   implicit none
+   integer, parameter :: n = 100
+   integer a(n), b(n)
+   integer x, k
+
+   ! initialization
+   x = 0
+   do k = 1, n
+      a(k) = k
+   end do
+
+   ! a(k) is included in the computation of producing results in b(k)
+   !$omp parallel do simd reduction(inscan,+: x)
+   do k = 1, n
+      x = x + a(k)
+      !$omp scan inclusive(x)
+      b(k) = x
+   end do
+
+   print *,&#39;x =&#39;, x, &#39;, b(1:3) =&#39;, b(1:3)
+   !           5050,            1  3  6
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The second example uses the  <em>exclusive</em>  scan operation on a composite loop-SIMD construct. The <code class="docutils literal notranslate"><span class="pre">scan</span></code> directive separates the use of  <strong>x</strong>   (saving to array  <strong>b</strong> ) from the reduction statement on variable  <strong>x</strong> . The order of the statements in this example indicates that value  <strong>a[k]</strong>  ( <strong>a(k)</strong>  in Fortran) is excluded from the computation  of the prefix sum  <strong>b[k]</strong>  ( <strong>b(k)</strong>  in Fortran) for iteration  <strong>k</strong> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       scan.2
+* type:       C
+* version: omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#define N 100
+
+int main(void)
+{
+   int a[N], b[N];
+   int x = 0;
+
+   // initialization
+   for (int k = 0; k &lt; N; k++)
+      a[k] = k + 1;
+
+   // a[k] is not included in the computation of producing
+   // results in b[k]
+   #pragma omp parallel for simd reduction(inscan,+: x)
+   for (int k = 0; k &lt; N; k++) {
+      b[k] = x;
+      #pragma omp scan exclusive(x)
+      x += a[k];
+   }
+
+   printf(&quot;x = %d, b[0:3] = %d %d %d\n&quot;, x, b[0], b[1], b[2]);
+   //           5050,        0  1  3
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       scan.2
+! type:       F-free
+! version: omp_5.0
+program exclusive_scan
+   implicit none
+   integer, parameter :: n = 100
+   integer a(n), b(n)
+   integer x, k
+
+   ! initialization
+   x = 0
+   do k = 1, n
+      a(k) = k
+   end do
+
+   ! a(k) is not included in the computation of producing results in b(k)
+   !$omp parallel do simd reduction(inscan,+: x)
+   do k = 1, n
+      b(k) = x
+      !$omp scan exclusive(x)
+      x = x + a(k)
+   end do
+
+   print *,&#39;x =&#39;, x, &#39;, b(1:3) =&#39;, b(1:3)
+   !           5050,            0  1  3
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/scan.tex</p>
+</div>
+<div class="section" id="copyin-clause">
+<h2><code class="docutils literal notranslate"><span class="pre">copyin</span></code> Clause<a class="headerlink" href="#copyin-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!copyin <code class="docutils literal notranslate"><span class="pre">copyin</span></code></strong> <strong>copyin clause <code class="docutils literal notranslate"><span class="pre">copyin</span></code> clause</strong> <strong>directives!threadprivate <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code></strong> <strong>threadprivate directive <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code> directive</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">copyin</span></code> clause is used to initialize threadprivate data upon entry  to a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region. The value of the threadprivate variable in the primary thread is copied to the threadprivate variable of each other team member.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: copyin.1
+* type: C
+*/
+#include &lt;stdlib.h&gt;
+
+float* work;
+int size;
+float tol;
+
+#pragma omp threadprivate(work,size,tol)
+
+void build()
+{
+  int i;
+  work = (float*)malloc( sizeof(float)*size );
+  for( i = 0; i &lt; size; ++i ) work[i] = tol;
+}
+
+void copyin_example( float t, int n )
+{
+  tol = t;
+  size = n;
+  #pragma omp parallel copyin(tol,size)
+  {
+    build();
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyin.1
+! type: F-fixed
+      MODULE M
+        REAL, POINTER, SAVE :: WORK(:)
+        INTEGER :: SIZE
+        REAL :: TOL
+!$OMP   THREADPRIVATE(WORK,SIZE,TOL)
+      END MODULE M
+
+      SUBROUTINE COPYIN_EXAMPLE( T, N )
+        USE M
+        REAL :: T
+        INTEGER :: N
+        TOL = T
+        SIZE = N
+!$OMP   PARALLEL COPYIN(TOL,SIZE)
+        CALL BUILD
+!$OMP   END PARALLEL
+      END SUBROUTINE COPYIN_EXAMPLE
+
+      SUBROUTINE BUILD
+        USE M
+        ALLOCATE(WORK(SIZE))
+        WORK = TOL
+      END SUBROUTINE BUILD
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/copyin.tex</p>
+</div>
+<div class="section" id="copyprivate-clause">
+<h2><code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> Clause<a class="headerlink" href="#copyprivate-clause" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!copyprivate <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code></strong> <strong>copyprivate clause <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause can be used to broadcast values acquired by a single  thread directly to all instances of the private variables in the other threads.  In this example, if the routine is called from the sequential part, its behavior  is not affected by the presence of the directives. If it is called from a <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region, then the actual arguments with which <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code> are associated  must be private.</p>
+<p><strong>constructs!single <code class="docutils literal notranslate"><span class="pre">single</span></code></strong> <strong>single construct <code class="docutils literal notranslate"><span class="pre">single</span></code> construct</strong> The thread that executes the structured block associated with the <code class="docutils literal notranslate"><span class="pre">single</span></code>   construct broadcasts the values of the private variables <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>,  <code class="docutils literal notranslate"><span class="pre">x</span></code>, and  <code class="docutils literal notranslate"><span class="pre">y</span></code> from its implicit task’s data environment to the data environments  of the other implicit tasks in the thread team. The broadcast completes before  any of the threads have left the barrier at the end of the construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: copyprivate.1
+* type: C
+*/
+#include &lt;stdio.h&gt;
+float x, y;
+#pragma omp threadprivate(x, y)
+
+void init(float a, float b ) {
+    #pragma omp single copyprivate(a,b,x,y)
+    {
+        scanf(&quot;%f %f %f %f&quot;, &amp;a, &amp;b, &amp;x, &amp;y);
+    }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.1
+! type: F-fixed
+      SUBROUTINE INIT(A,B)
+      REAL A, B
+        COMMON /XY/ X,Y
+!$OMP   THREADPRIVATE (/XY/)
+
+!$OMP   SINGLE
+          READ (11) A,B,X,Y
+!$OMP   END SINGLE COPYPRIVATE (A,B,/XY/)
+
+      END SUBROUTINE INIT
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>constructs!masked <code class="docutils literal notranslate"><span class="pre">masked</span></code></strong> <strong>masked construct <code class="docutils literal notranslate"><span class="pre">masked</span></code> construct</strong> In this example, assume that the input must be performed by the primary thread.  Since the <code class="docutils literal notranslate"><span class="pre">masked</span></code> construct does not support the <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause,  it cannot broadcast the input value that is read. However, <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code>  is used to broadcast an address where the input value is stored.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: copyprivate.2
+* type: C
+* version:    omp_5.1
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+float read_next( ) {
+  float * tmp;
+  float return_val;
+
+  #pragma omp single copyprivate(tmp)
+  {
+    tmp = (float *) malloc(sizeof(float));
+  }  /* copies the pointer only */
+
+
+  #pragma omp masked
+  {
+    scanf(&quot;%f&quot;, tmp);
+  }
+
+  #pragma omp barrier
+  return_val = *tmp;
+  #pragma omp barrier
+
+  #pragma omp single nowait
+  {
+    free(tmp);
+  }
+
+  return return_val;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.2
+! type: F-fixed
+! version:    omp_5.1
+        REAL FUNCTION READ_NEXT()
+        REAL, POINTER :: TMP
+
+!$OMP   SINGLE
+          ALLOCATE (TMP)
+!$OMP   END SINGLE COPYPRIVATE (TMP)  ! copies the pointer only
+
+!$OMP   MASKED
+          READ (11) TMP
+!$OMP   END MASKED
+
+!$OMP   BARRIER
+          READ_NEXT = TMP
+!$OMP   BARRIER
+
+!$OMP   SINGLE
+          DEALLOCATE (TMP)
+!$OMP   END SINGLE NOWAIT
+        END FUNCTION READ_NEXT
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Suppose that the number of lock variables required within a <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region  cannot easily be determined prior to entering it. The <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause  can be used to provide access to shared lock variables that are allocated within  that <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: copyprivate.3
+* type: C
+*/
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;omp.h&gt;
+
+omp_lock_t *new_lock()
+{
+  omp_lock_t *lock_ptr;
+
+  #pragma omp single copyprivate(lock_ptr)
+  {
+    lock_ptr = (omp_lock_t *) malloc(sizeof(omp_lock_t));
+    omp_init_lock( lock_ptr );
+  }
+
+  return lock_ptr;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.3
+! type: F-fixed
+      FUNCTION NEW_LOCK()
+      USE OMP_LIB       ! or INCLUDE &quot;omp_lib.h&quot;
+        INTEGER(OMP_LOCK_KIND), POINTER :: NEW_LOCK
+
+!$OMP   SINGLE
+          ALLOCATE(NEW_LOCK)
+          CALL OMP_INIT_LOCK(NEW_LOCK)
+!$OMP   END SINGLE COPYPRIVATE(NEW_LOCK)
+      END FUNCTION NEW_LOCK
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that the effect of the <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clause on a variable with the  <code class="docutils literal notranslate"><span class="pre">allocatable</span></code> attribute is different than on a variable with the <code class="docutils literal notranslate"><span class="pre">pointer</span></code>  attribute. The value of <code class="docutils literal notranslate"><span class="pre">A</span></code> is copied (as if by intrinsic assignment) and  the pointer <code class="docutils literal notranslate"><span class="pre">B</span></code> is copied (as if by pointer assignment) to the corresponding  list items in the other implicit tasks belonging to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: copyprivate.4
+! type: F-fixed
+      SUBROUTINE S(N)
+      INTEGER N
+
+        REAL, DIMENSION(:), ALLOCATABLE :: A
+        REAL, DIMENSION(:), POINTER :: B
+
+        ALLOCATE (A(N))
+!$OMP   SINGLE
+          ALLOCATE (B(N))
+          READ (11) A,B
+!$OMP   END SINGLE COPYPRIVATE(A,B)
+        ! Variable A is private and is
+        ! assigned the same value in each thread
+        ! Variable B is shared
+
+!$OMP   BARRIER
+!$OMP   SINGLE
+          DEALLOCATE (B)
+!$OMP   END SINGLE NOWAIT
+      END SUBROUTINE S
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/copyprivate.tex</p>
+</div>
+<div class="section" id="c-reference-in-data-sharing-clauses">
+<h2>C++ Reference in Data-Sharing Clauses<a class="headerlink" href="#c-reference-in-data-sharing-clauses" title="Permalink to this headline">¶</a></h2>
+<p><strong>clauses!data-sharing, C++ reference in</strong> <strong>data-sharing clauses, C++ reference in</strong></p>
+<p>C++ reference types are allowed in data-sharing attribute clauses as of OpenMP 4.5, except for the <code class="docutils literal notranslate"><span class="pre">threadprivate</span></code>, <code class="docutils literal notranslate"><span class="pre">copyin</span></code> and <code class="docutils literal notranslate"><span class="pre">copyprivate</span></code> clauses.   (See the Data-Sharing Attribute Clauses Section of the 4.5 OpenMP specification.) When a variable with C++ reference type is privatized, the object the reference refers to is privatized in addition to the reference itself. The following example shows the use of reference types in data-sharing clauses in the usual way. Additionally it shows how the data-sharing of formal arguments with a C++ reference type on an orphaned task generating construct is determined implicitly. (See the Data-sharing Attribute Rules for Variables Referenced in a Construct Section of the 4.5 OpenMP specification.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: cpp_reference.1
+* type: C++
+* version: omp_4.5
+*/
+
+void task_body (int &amp;);
+void gen_task (int &amp;x) { // on orphaned task construct reference argument
+  #pragma omp task // x is implicitly determined firstprivate(x)
+  task_body (x);
+}
+void test (int &amp;y, int &amp;z) {
+  #pragma omp parallel private(y)
+  {
+    y = z + 2;
+    gen_task (y); // no matter if the argument is determined private
+    gen_task (z); // or shared in the enclosing context.
+
+    y++;          // each thread has its own int object y refers to
+    gen_task (y);
+  }
+}
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/cpp_reference.tex</p>
+</div>
+<div class="section" id="fortran-associate-construct">
+<h2>Fortran <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> Construct<a class="headerlink" href="#fortran-associate-construct" title="Permalink to this headline">¶</a></h2>
+<p><strong>ASSOCIATE construct, Fortran <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> construct, Fortran</strong></p>
+<p>The following is an invalid example of specifying an associate name on a data-sharing attribute  clause. The constraint in the Data Sharing Attribute Rules section in the OpenMP  4.0 API Specifications states that an associate name preserves the association  with the selector established at the <code class="docutils literal notranslate"><span class="pre">ASSOCIATE</span></code> statement. The associate  name  <em>b</em>  is associated with the shared variable  <em>a</em> . With the predetermined data-sharing  attribute rule, the associate name  <em>b</em>  is not allowed to be specified on the <code class="docutils literal notranslate"><span class="pre">private</span></code>  clause.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.1
+! type: F-fixed
+! version: omp_4.0
+      program example_broken
+      real :: a, c
+      associate (b =&gt; a)
+!$omp parallel private(b, c)        ! invalid to privatize b
+      c = 2.0*b
+!$omp end parallel
+      end associate
+      end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>In next example, within the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct, the association name  <em>thread_id</em>   is associated with the private copy of  <em>i</em> . The print statement should output the  unique thread number.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.2
+! type: F-fixed
+! version: omp_4.0
+      program example
+      use omp_lib
+      integer  i
+!$omp parallel private(i)
+      i = omp_get_thread_num()
+      associate(thread_id =&gt; i)
+        print *, thread_id       ! print private i value
+      end associate
+!$omp end parallel
+      end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates the effect of specifying a selector name on a data-sharing  attribute clause. The associate name  <em>u</em>  is associated with  <em>v</em>  and the variable  <em>v</em>   is specified on the <code class="docutils literal notranslate"><span class="pre">private</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.  The construct association is established prior to the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.  The association between  <em>u</em>  and the original  <em>v</em>  is retained (see the Data Sharing  Attribute Rules section in the OpenMP 4.0 API Specifications). Inside the <code class="docutils literal notranslate"><span class="pre">parallel</span></code>  region,  <em>v</em>  has the value of -1 and  <em>u</em>  has the value of the original  <em>v</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.3
+! type: F-free
+! version: omp_4.0
+program example
+  integer :: v
+  v = 15
+associate(u =&gt; v)
+!$omp parallel private(v)
+  v = -1
+  print *, v               ! private v=-1
+  print *, u               ! original v=15
+!$omp end parallel
+end associate
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following example illustrates mapping behavior for a Fortran associate name and its selector for a <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.</p>
+<p>For the first 3 <code class="docutils literal notranslate"><span class="pre">target</span></code> constructs the associate name  <em>a_aray</em>  is associated with the selector  <em>aray</em> , an array.   For the <code class="docutils literal notranslate"><span class="pre">target</span></code> construct of code block TARGET 1 just the selector  <em>aray</em>  is used and is implicitly mapped, likewise for the associate name  <em>a_aray</em>  in the TARGET 2 block.   However, mapping an associate name and its selector is not valid for the same <code class="docutils literal notranslate"><span class="pre">target</span></code> construct.  Hence the TARGET 3 block is non-conforming.</p>
+<p>In TARGET 4, the  <em>scalr</em>  selector used in the <code class="docutils literal notranslate"><span class="pre">target</span></code> region  has an implicit data-sharing attribute of firstprivate since it is a scalar. Hence, the assigned value is not returned. In TARGET 5, the associate name  <em>a_scalr</em>  is implicitly mapped and the assigned value is returned to the host (default <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> mapping behavior). In TARGET 6, the use of the associate name and its selector in the <code class="docutils literal notranslate"><span class="pre">target</span></code> region is conforming because the scalar firstprivate behavior of the selector  and the implicit mapping of the associate name are allowed.   At the end of the <code class="docutils literal notranslate"><span class="pre">target</span></code> region only the  associate name’s value is returned to the host.  In TARGET 7, the selector and associate name appear in an explicit mapping for the same <code class="docutils literal notranslate"><span class="pre">target</span></code> construct,  hence the code block is non-conforming.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: associate.4
+! type: F-free
+! version: omp_5.1
+program main
+  integer :: scalr, aray(3)
+  scalr = -1 ; aray = -1
+
+  associate(a_scalr=&gt;scalr, a_aray=&gt;aray)
+
+ !$omp target            !! TARGET 1
+    aray = [1,2,3]
+  !$omp end target
+  print *, a_aray, aray  !!  1 2 3   1 2 3
+
+  !$omp target           !! TARGET 2
+    a_aray = [4,5,6]
+  !$omp end target
+  print *, a_aray, aray  !! 4 5 6   4 5 6
+
+!!!$omp target           !! TARGET 3
+!!                       !! mapping, in this case implicit,
+!!                       !! of aray AND a_aray NOT ALLOWED
+!!    aray = [4,5,6]
+!!  a_aray = [1,2,3]
+!!!$omp end target
+
+
+  !$omp target              !! TARGET 4
+    scalr = 1               !! scalr is firstprivate
+  !$omp end target
+  print *, a_scalr, scalr   !! -1  -1
+
+  !$omp target              !! TARGET 5
+    a_scalr = 2             !! a_scalr implicitly mapped
+  !$omp end target
+  print *, a_scalr, scalr   !!  2   2
+
+  !$omp target              !! TARGET 6
+    scalr = 3               !!          scalr is firstprivate
+    print *, a_scalr, scalr !!  2   3
+    a_scalr = 4             !!          a_scalr implicitly mapped
+    print *, a_scalr, scalr !!  4   3
+  !$omp end target
+  print *, a_scalr, scalr   !!  4   4
+
+!!!$omp target map(a_scalr,scalr)  !! TARGET 7
+                                   !! mapping, in this case explicit,
+                                   !! of scalr AND a_sclar NOT ALLOWED
+!!    scalr = 5
+!!  a_scalr = 5
+!!!$omp end target
+
+  end associate
+
+end program
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../data_environment/associate.tex</p>
+</div>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -223,16 +4421,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               
@@ -243,13 +4441,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">&lt;no title&gt;</p>
+            <p class="prev-next-title">Synchronization</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_memory_model.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Memory Model</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

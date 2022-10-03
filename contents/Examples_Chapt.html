@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Examples &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -97,6 +97,54 @@
   </a>
  </li>
 </ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_directives.html">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -172,19 +220,28 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Examples_Chapt.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-            </nav>
         </div>
     </div>
 </div>
@@ -192,26 +249,36 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Examples</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>The following are examples of the OpenMP API directives, constructs, and routines.  A statement following a directive is compound only when necessary, and a  non-compound statement is indented with respect to a directive preceding it.</p>
+<p>Each example is labeled as  <em>ename.seqno.ext</em> , where  <em>ename</em>  is  the example name,  <em>seqno</em>  is the sequence number in a section, and   <em>ext</em>  is the source file extension to indicate the code type and  source form.   <em>ext</em>  is one of the following: [noitemsep,labelindent=5mm,widest=f90]</p>
+<ul class="simple">
+<li><p>[ <em>c</em> ] –  C code,</p></li>
+</ul>
+<ul class="simple">
+<li><p>[ <em>cpp</em> ] –  C++ code,</p></li>
+</ul>
+<ul class="simple">
+<li><p>[ <em>f</em> ] –  Fortran code in fixed form, and</p></li>
+</ul>
+<ul class="simple">
+<li><p>[ <em>f90</em> ] –  Fortran code in free form.</p></li>
+</ul>
+<p>Some of the example labels may include version information  (<code class="docutils literal notranslate"><span class="pre">omp_</span> <span class="pre">_verno_</span> </code>) to indicate features that are illustrated by an example for a specific OpenMP version, such as ” <em>scan.1.c</em>   (<code class="docutils literal notranslate"><span class="pre">omp_5.0</span></code>).’’</p>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -221,16 +288,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               

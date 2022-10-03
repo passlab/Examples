@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>OpenMP Directive Syntax &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,7 +54,7 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="Chap_parallel_execution.html" />
+    <link rel="next" title="Parallel Execution" href="Chap_parallel_execution.html" />
     <link rel="prev" title="&lt;no title&gt;" href="Chap_introduction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -99,6 +99,54 @@
   </a>
  </li>
 </ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_memory_model.html">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -174,6 +222,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_directives.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -183,7 +248,27 @@
                 <i class="fas fa-list"></i> Contents
             </div>
             <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-c-pragmas">
+   C/C++ Pragmas
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-attributes">
+   C++ Attributes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-comments-fixed-source-form">
+   Fortran Comments (Fixed Source Form)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-comments-free-source-form">
+   Fortran Comments (Free Source Form)
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -194,7 +279,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>OpenMP Directive Syntax</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -203,7 +288,27 @@
                             <h2> Contents </h2>
                         </div>
                         <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-c-pragmas">
+   C/C++ Pragmas
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#c-attributes">
+   C++ Attributes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-comments-fixed-source-form">
+   Fortran Comments (Fixed Source Form)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fortran-comments-free-source-form">
+   Fortran Comments (Free Source Form)
+  </a>
+ </li>
 </ul>
 
                         </nav>
@@ -213,7 +318,375 @@
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="openmp-directive-syntax">
+<h1>OpenMP Directive Syntax<a class="headerlink" href="#openmp-directive-syntax" title="Permalink to this headline">¶</a></h1>
+<p>{directives}  <strong>directive syntax</strong></p>
+<p>OpenMP <strong>directives</strong> use base-language mechanisms to specify OpenMP program behavior. In C code, the directives are formed exclusively with pragmas, whereas in C++ code, directives are formed from either pragmas or attributes. Fortran directives are formed with comments in free form and fixed form sources (codes). All of these mechanisms allow the compilation to ignore the OpenMP directives if OpenMP is not supported or enabled.</p>
+<p>The OpenMP directive is a combination of the base-language mechanism and a  <em>directive-specification</em> , as shown below. The  <em>directive-specification</em>  consists of the  <em>directive-name</em>  which may seldomly have arguments,  followed by optional  <em>clauses</em> . Full details of the syntax can be found in the OpenMP Specification. Illustrations of the syntax is given in the examples.</p>
+<p>The formats for combining a base-language mechanism and a  <em>directive-specification</em>  are:</p>
+<p>C/C++ pragmas  <code class="docutils literal notranslate"><span class="pre">#pragma</span> <span class="pre">omp</span></code>  <em>directive-specification</em></p>
+<p>C++ attributes  <code class="docutils literal notranslate"><span class="pre">[[omp</span> <span class="pre">::</span> <span class="pre">directive(</span></code>  <em>directive-specification</em>  <code class="docutils literal notranslate"><span class="pre">)]]</span></code> <code class="docutils literal notranslate"><span class="pre">[[using</span> <span class="pre">omp</span> <span class="pre">:</span> <span class="pre">directive(</span></code>  <em>directive-specification</em>  <code class="docutils literal notranslate"><span class="pre">)]]</span></code></p>
+<p>Fortran comments  <code class="docutils literal notranslate"><span class="pre">!$omp</span></code>  <em>directive-specification</em></p>
+<p>where <code class="docutils literal notranslate"><span class="pre">c$omp</span></code> and <code class="docutils literal notranslate"><span class="pre">*$omp</span></code> may be used in Fortran fixed form sources.</p>
+<p>Most OpenMP directives accept clauses that alter the semantics of the directive in some way,  and some directives also accept parenthesized arguments that follow the directive name.  A clause may just be a keyword (e.g., <code class="docutils literal notranslate"><span class="pre">untied</span></code>) or it may also accept argument lists  (e.g., <code class="docutils literal notranslate"><span class="pre">shared(x,y,z)</span></code>) and/or optional modifiers (e.g., <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> in  <code class="docutils literal notranslate"><span class="pre">map(tofrom:</span></code> <code class="docutils literal notranslate"><span class="pre">x,y,z)</span></code>). Clause modifiers may be “simple” or “complex” – a complex modifier consists of a  keyword followed by one or more parameters, bracketed by parentheses, while a simple  modifier does not. An example of a complex modifier is the <code class="docutils literal notranslate"><span class="pre">iterator</span></code> modifier,  as in <code class="docutils literal notranslate"><span class="pre">map(iterator(i=0:n),</span></code> <code class="docutils literal notranslate"><span class="pre">tofrom:</span></code> <code class="docutils literal notranslate"><span class="pre">p[i])</span></code>, or the <code class="docutils literal notranslate"><span class="pre">step</span></code> modifier, as in  <code class="docutils literal notranslate"><span class="pre">linear(x:</span></code> <code class="docutils literal notranslate"><span class="pre">ref,</span></code> <code class="docutils literal notranslate"><span class="pre">step(4))</span></code>.  In the preceding examples, <code class="docutils literal notranslate"><span class="pre">tofrom</span></code> and <code class="docutils literal notranslate"><span class="pre">ref</span></code> are simple modifiers.</p>
+<div class="section" id="c-c-pragmas">
+<h2>C/C++ Pragmas<a class="headerlink" href="#c-c-pragmas" title="Permalink to this headline">¶</a></h2>
+<p><strong>directive syntax!pragma, C/C++</strong> <strong>pragma syntax, C/C++</strong></p>
+<p>OpenMP C and C++ directives can be specified with the C/C++ <code class="docutils literal notranslate"><span class="pre">#pragma</span></code> directive. An OpenMP directive begins with <code class="docutils literal notranslate"><span class="pre">#pragma</span></code> <code class="docutils literal notranslate"><span class="pre">omp</span></code> and is followed by the  OpenMP directive name, and required and optional clauses. Lines are continued in the  usual manner, and comments may be included at the end. Directives are case sensitive.</p>
+<p>The example below illustrates the use of the OpenMP pragma form. The first pragma (PRAG 1) specifies a combined <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for</span></code>  directive, with a <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clause, and a comment.  The second pragma (PRAG 2) shows the same directive split across two lines. The next nested pragmas (PRAG 3 and 4) show the previous combined directive as  two separate directives. The executable directives above all apply to the next  statement. The <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive can be applied to a  <em>structured</em>   <em>block</em>  as shown in PRAG 5.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       directive_syntax_pragma.1
+* type:       C
+*/
+#include   &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+#define NT 4
+#define thrd_no omp_get_thread_num
+
+int main(){
+    #pragma omp parallel for num_threads(NT)                 // PRAG 1
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+    #pragma omp parallel for \
+                num_threads(NT)                              // PRAG 2
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+    #pragma omp parallel num_threads(NT)                     // PRAG 3-4
+    #pragma omp for
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+    #pragma omp parallel num_threads(NT)                     // PRAG 5
+    {
+       int no = thrd_no();
+       if (no%2) { printf(&quot;thrd no %d is Odd \n&quot;,no);}
+       else      { printf(&quot;thrd no %d is Even\n&quot;,no);}
+
+       #pragma omp for
+       for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+    }
+}
+/*
+      repeated 4 times, any order
+      OUTPUT: thrd no 0
+      OUTPUT: thrd no 1
+      OUTPUT: thrd no 2
+      OUTPUT: thrd no 3
+
+      any order
+      OUTPUT: thrd no 0 is Even
+      OUTPUT: thrd no 2 is Even
+      OUTPUT: thrd no 1 is Odd
+      OUTPUT: thrd no 3 is Odd
+*/
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../directives/pragmas.tex</p>
+</div>
+<div class="section" id="c-attributes">
+<h2>C++ Attributes<a class="headerlink" href="#c-attributes" title="Permalink to this headline">¶</a></h2>
+<p><strong>directive syntax!attribute, C++</strong> <strong>attribute syntax, C++</strong></p>
+<p>OpenMP directives for C++ can also be specified with  the <code class="docutils literal notranslate"><span class="pre">directive</span></code> extension for the C++11 standard  <em>attributes</em> .</p>
+<p>The C++ example below shows two ways to parallelize a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop using the <code class="docutils literal notranslate"><span class="pre">#pragma</span></code> syntax. The first pragma uses the combined <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">for</span></code> directive, and the second applies the uncombined closely nested directives, <code class="docutils literal notranslate"><span class="pre">parallel</span></code> and <code class="docutils literal notranslate"><span class="pre">for</span></code>, directly to the same statement.  These are labeled PRAG 1-3.</p>
+<p>Using the attribute syntax, the same construct in PRAG 1 is applied two different ways in attribute form, as shown in the ATTR 1 and ATTR 2 sections. In ATTR 1 the attribute syntax is used with the <code class="docutils literal notranslate"><span class="pre">omp</span> <span class="pre">::</span></code> namespace form. In ATTR 2 the attribute syntax is used with the <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">omp</span> <span class="pre">:</span></code> namespace form.</p>
+<p>Next, parallelization is attempted by applying directives using two different syntaxes. For ATTR 3 and PRAG 4, the loop parallelization will fail to compile because multiple directives that apply to the same statement must all use either the attribute syntax or the pragma syntax. The lines have been commented out and labeled INVALID.</p>
+<p>While multiple attributes may be applied to the same statement, compilation may fail if the ordering of the directive matters. For the ATTR 4-5 loop parallelization, the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive precedes  the <code class="docutils literal notranslate"><span class="pre">for</span></code> directive, but the compiler may reorder consecutive attributes. If the directives are reversed, compilation will fail.</p>
+<p>The attribute directive of the ATTR 6 section resolves the previous problem (in ATTR 4-5). Here, the <code class="docutils literal notranslate"><span class="pre">sequence</span></code> attribute is used to apply ordering to the directives of ATTR 4-5, using the <code class="docutils literal notranslate"><span class="pre">omp</span></code> <code class="docutils literal notranslate"><span class="pre">::</span></code> namespace qualifier. (The <code class="docutils literal notranslate"><span class="pre">using</span> <span class="pre">omp</span> <span class="pre">:</span></code> namespace form is not available for the <code class="docutils literal notranslate"><span class="pre">sequence</span></code> attribute.)  Note, for the <code class="docutils literal notranslate"><span class="pre">sequence</span></code> attribute a comma must separate the <code class="docutils literal notranslate"><span class="pre">directive</span></code> extensions.</p>
+<p>The last 3 pairs of sections (PRAG DECL 1-2, 3-4, and 5-6) show cases where  directive ordering does not matter for <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directives.</p>
+<p>In section PRAG DECL 1-2, the two loops use different SIMD forms of the  <em>P</em>  function (one with <code class="docutils literal notranslate"><span class="pre">simdlen(4)</span></code> and the other with <code class="docutils literal notranslate"><span class="pre">simdlen(8)</span></code>),  as prescribed by the two different <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directives applied to the  <em>P</em>  function definitions (at the beginning of the code).  The directives use the pragma syntax, and order is not important.  For the next set of loops  (PRAG DECL 3-4) that use the  <em>Q</em>  function, the attribute syntax is  used for the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code> directives.  The result is compliant code since directive order is irrelevant. Sections ATTR DECL 5-6 are included for completeness. Here, the attribute  form of the <code class="docutils literal notranslate"><span class="pre">simd</span></code> directive is used for loops calling the  <em>Q</em>  function,  in combination with the attribute form of the <code class="docutils literal notranslate"><span class="pre">declare</span></code> <code class="docutils literal notranslate"><span class="pre">simd</span></code>  directives declaring the variants for  <em>Q</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name:       directive_syntax_attribute.1
+* type:       C++
+* version:    omp_5.0
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
+#define NT 4
+#define thrd_no omp_get_thread_num
+
+#pragma omp declare simd linear(i) simdlen(4)
+#pragma omp declare simd linear(i) simdlen(8)
+double P(int i){ return (double)i * (double)i; }
+
+[[omp::directive(declare simd linear(i) simdlen(4))]]
+[[omp::directive(declare simd linear(i) simdlen(8))]]
+double Q(int i){ return (double)i * (double)i; }
+
+int main() {
+
+    #pragma omp parallel for num_threads(NT)                 // PRAG 1
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+    #pragma omp parallel num_threads(NT)                     // PRAG 2
+    #pragma omp for                                          // PRAG 3
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+                                                             // ATTR 1
+    [[omp::directive( parallel for num_threads(NT))]]
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+                                                             // ATTR 2
+    [[using omp : directive( parallel for num_threads(NT))]]
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+ // INVALID-- attribute and non-attribute on same statement
+ // [[ omp :: directive( parallel num_threads(NT) ) ]]          ATTR 3
+ // #pragma omp for                                             PRAG 4
+ // for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+
+ // INVALID-- directive order not guaranteed
+ // [[ omp :: directive( parallel num_threads(NT) ) ]]          ATTR 4
+ // [[ omp :: directive( for                      ) ]]          ATTR 5
+ // for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+                                                             // ATTR 6
+    [[omp::sequence(directive(parallel num_threads(NT)),directive(for))]]
+    for(int i=0; i&lt;NT; i++) printf(&quot;thrd no %d\n&quot;,thrd_no());
+
+    double tmp=0.0f;
+    #pragma omp simd reduction(+:tmp) simdlen(4)
+    for(int i=0;i&lt;100;i++) tmp += P(i);                 // PRAG DECL 1
+    #pragma omp simd reduction(+:tmp) simdlen(8)
+    for(int i=0;i&lt;100;i++) tmp += P(i);                 // PRAG DECL 2
+    printf(&quot;%f\n&quot;,tmp);
+
+    tmp=0.0f;
+    #pragma omp simd reduction(+:tmp) simdlen(4)
+    for(int i=0;i&lt;100;i++) tmp += Q(i);                 // ATTR DECL 3
+    #pragma omp simd reduction(+:tmp) simdlen(8)
+    for(int i=0;i&lt;100;i++) tmp += Q(i);                 // ATTR DECL 4
+    printf(&quot;%f\n&quot;,tmp);
+
+    tmp=0.0f;
+    [[ omp :: directive(simd reduction(+:tmp) simdlen(4))]]
+    for(int i=0;i&lt;100;i++) tmp += Q(i);                 // ATTR DECL 5
+    [[ omp :: directive(simd reduction(+:tmp) simdlen(8))]]
+    for(int i=0;i&lt;100;i++) tmp += Q(i);                 // ATTR DECL 6
+    printf(&quot;%f\n&quot;,tmp);
+}
+//    repeated 5 times, any order:
+//    OUTPUT: thrd no  0
+//    OUTPUT: thrd no  1
+//    OUTPUT: thrd no  2
+//    OUTPUT: thrd no  3
+
+//    repeated 3 time:
+//    OUTPUT: 656700.000000
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../directives/attributes.tex</p>
+</div>
+<div class="section" id="fortran-comments-fixed-source-form">
+<h2>Fortran Comments (Fixed Source Form)<a class="headerlink" href="#fortran-comments-fixed-source-form" title="Permalink to this headline">¶</a></h2>
+<p><strong>directive syntax!fixed form, Fortran</strong> <strong>fixed form syntax, Fortran</strong></p>
+<p>OpenMP directives in Fortran codes with fixed source form are specified as comments with one of the <code class="docutils literal notranslate"><span class="pre">!$omp</span></code>, <code class="docutils literal notranslate"><span class="pre">c$omp</span></code>, and <code class="docutils literal notranslate"><span class="pre">*$omp</span></code> sentinels, followed by a directive name, and required and optional clauses.  The sentinel must begin in column 1.</p>
+<p>In the example below the first directive (DIR 1) specifies the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">do</span></code> combined directive, with a <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clause, and a comment. The second directive (DIR 2) shows the same directive split across two lines. The next nested directives (DIR 3 and 4) show the previous combined directive as two separate directives.  Here, an <code class="docutils literal notranslate"><span class="pre">end</span></code> directive (<code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code>) must be specified to demarcate the range (region) of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       directive_syntax_F_fixed_comment.1
+! type:       F-fixed
+      program main
+      include &#39;omp_lib.h&#39;
+      integer NT
+
+      NT =4
+
+c     sentinel c$omp or *$omp can also be used
+
+c$omp parallel do num_threads(NT) !comments allowed here   DIR 1
+      do i = 1,NT
+        write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+      end do
+
+!$omp parallel do
+!$omp+ num_threads(NT)          !cont. w. char in col. 6   DIR 2
+      do i = 1,NT
+        write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+      end do
+
+*$omp parallel num_threads(NT)  !multi-directive form      DIR 3
+*$omp do                        !                          DIR 4
+      do i = 1,NT
+         write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+      end do
+*$omp end parallel
+      end
+!     repeated 3 times, any order
+!     OUTPUT: thrd no  0
+!     OUTPUT: thrd no  1
+!     OUTPUT: thrd no  2
+!     OUTPUT: thrd no  3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../directives/fixed_format_comments.tex</p>
+</div>
+<div class="section" id="fortran-comments-free-source-form">
+<h2>Fortran Comments (Free Source Form)<a class="headerlink" href="#fortran-comments-free-source-form" title="Permalink to this headline">¶</a></h2>
+<p><strong>directive syntax!free form, Fortran</strong> <strong>free form syntax, Fortran</strong></p>
+<p>OpenMP directives in Fortran codes with free source form are specified as comments that use the <code class="docutils literal notranslate"><span class="pre">!$omp</span></code> sentinel, followed by the directive name, and required and optional clauses.  Lines are continued with an ending ampersand (<code class="docutils literal notranslate"><span class="pre">&amp;</span></code>), and the continued line begins with <code class="docutils literal notranslate"><span class="pre">!$omp</span></code> or <code class="docutils literal notranslate"><span class="pre">!$omp&amp;</span></code>. Comments may appear on the same line as the directive.  Directives are case insensitive.</p>
+<p>In the example below the first directive (DIR 1) specifies the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> <code class="docutils literal notranslate"><span class="pre">do</span></code> combined directive, with a <code class="docutils literal notranslate"><span class="pre">num_threads</span></code> clause, and a comment. The second directive (DIR 2) shows the same directive split across two lines.  The next nested directives (DIR 3 and 4) show the previous combined directive as two separate directives.  Here, an <code class="docutils literal notranslate"><span class="pre">end</span></code> directive (<code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code>) must be specified to demarcate the range (region) of the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       directive_syntax_F_free_comment.1
+! type:       F-free
+  program main
+     use omp_lib
+     integer,parameter :: NT = 4
+
+     !$omp parallel do num_threads(NT)                !DIR 1
+     do i = 1,NT
+       write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+     end do
+
+     !$omp  parallel do  &amp;     !continue line         !DIR 2
+     !$omp num_threads(NT)     !or !$omp&amp;
+     do i = 1,NT
+       write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+     end do
+
+     !$omp parallel num_threads(NT)                   !DIR 3
+     !$omp do                                         !DIR 4
+     do i = 1,NT
+        write(*,&#39;(&quot;thrd no&quot;, i2)&#39;) omp_get_thread_num()
+     end do
+     !$omp end parallel
+
+  end program
+
+!     repeated 3 times, any order
+!     OUTPUT: thrd no  0
+!     OUTPUT: thrd no  1
+!     OUTPUT: thrd no  2
+!     OUTPUT: thrd no  3
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>As of OpenMP 5.1, <code class="docutils literal notranslate"><span class="pre">block</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">block</span></code> statements can be used to designate  a structured block for an OpenMP region, and any paired OpenMP <code class="docutils literal notranslate"><span class="pre">end</span></code> directive becomes optional, as shown in the next example.  Note, the variables  <em>i</em>  and  <em>thrd_no</em>  are declared within the  block structure and are hence private. It was necessary to explicitly declare the  <em>i</em>  variable, due to the <code class="docutils literal notranslate"><span class="pre">implicit</span> <span class="pre">none</span></code> statement;  it could have also been declared outside the structured block.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       directive_syntax_F_block.1
+! type:       F-free
+! version:    omp_5.1
+  program main
+
+     use omp_lib
+     implicit none
+     integer,parameter :: NT = 2, chunks=3
+
+    !$omp parallel num_threads(NT)
+     block                          ! Fortran 2008 OMP 5.1
+       integer :: thrd_no,i
+       thrd_no= omp_get_thread_num()
+        !$omp do schedule(static,chunks)
+        do i = 1,NT*chunks
+           write(*,&#39;(&quot;ndx=&quot;,i0.2,&quot; thrd_no=&quot;, i0.2)&#39;) i,thrd_no
+        end do
+     end block
+  end program
+
+! any order
+! OUTPUT: ndx=01 thrd_no=00
+! OUTPUT: ndx=02 thrd_no=00
+! OUTPUT: ndx=03 thrd_no=00
+! OUTPUT: ndx=04 thrd_no=01
+! OUTPUT: ndx=05 thrd_no=01
+! OUTPUT: ndx=06 thrd_no=01
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>A Fortran BLOCK construct may eliminate the need for a paired <code class="docutils literal notranslate"><span class="pre">end</span></code> directive for an OpenMP construct,  as illustrated in the following example.</p>
+<p>The first <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct is specified with an OpenMP loosely structured block  (where the first executable construct is not a Fortran 2008 BLOCK construct).  A paired <code class="docutils literal notranslate"><span class="pre">end</span></code> directive must end the OpenMP construct. The second <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct is specified with an OpenMP strictly structured block  (consists only of a single Fortran BLOCK construct).  The paired <code class="docutils literal notranslate"><span class="pre">end</span></code> directive is optional in this case, and is not used here.</p>
+<p>The next two <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directives form an enclosing outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct  and a nested inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct. The first <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive that subsequently appears terminates the inner <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct,  because a paired <code class="docutils literal notranslate"><span class="pre">end</span></code> directive immediately following a BLOCK construct that is  a strictly structured block of an OpenMP construct is treated as the terminating end directive  of that construct.  The next <code class="docutils literal notranslate"><span class="pre">end</span></code> <code class="docutils literal notranslate"><span class="pre">parallel</span></code> directive is required to terminate the outer <code class="docutils literal notranslate"><span class="pre">parallel</span></code> construct.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name:       directive_syntax_F_block.2
+! type:       F-free
+! version:    omp_5.1
+program main
+
+   use omp_lib
+   implicit none
+
+  !$omp parallel num_threads(2)
+     if( omp_get_thread_num() == 0 ) &amp;
+         print*, &quot;Loosely  structured block  -- end required.&quot;
+     block                                ! BLOCK Fortran 2008
+       if( omp_get_thread_num() == 0 ) &amp;
+           print*, &quot;                           --&quot;
+     end block
+  !$omp end parallel
+
+  !$omp parallel num_threads(2)
+     block
+       if( omp_get_thread_num() == 0 ) &amp;
+           print*, &quot;Strictly structured block  -- end not required.&quot;
+     end block
+ !!$omp end parallel !is optional for strictly structured block
+
+  print*, &quot;Sequential part&quot;
+
+  !$omp parallel num_threads(2)                      !outer parallel
+     if( omp_get_thread_num() == 0 ) &amp;
+         print*, &quot;Outer, loosely  structured block.&quot;
+     !$omp parallel num_threads(2)                   !inner parallel
+        block
+          if( omp_get_thread_num() == 0 ) &amp;
+          print*, &quot;Inner, strictly structured block.&quot;
+        end block
+     !$omp end parallel
+  !$omp end parallel
+  ! Two end directives are required here.
+  ! A single &quot;!$omp end parallel&quot; terminator will fail.
+  ! 1st end directive is assumed to be for inner parallel construct.
+  ! 2nd end directive applies to outer parallel construct.
+
+end program
+
+!OUTPUT, in order:
+! Loosely  structured block  -- end required.
+!                            --
+! Strictly structured block  -- end not required.
+! Sequential part
+! Outer, loosely  structured block.
+! Inner, strictly structured block.
+! Inner, strictly structured block.
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../directives/free_format_comments.tex</p>
+</div>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -223,16 +696,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               
@@ -249,7 +722,7 @@
     <a class='right-next' id="next-link" href="Chap_parallel_execution.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Parallel Execution</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

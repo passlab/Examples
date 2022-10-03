@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt; &#8212; OpenMP Application Programming Interface Examples</title>
+    <title>Memory Model &#8212; OpenMP Application Programming Interface Examples</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -54,8 +54,8 @@
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="Chap_program_control.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="Chap_data_environment.html" />
+    <link rel="next" title="Program Control" href="Chap_program_control.html" />
+    <link rel="prev" title="Data Environment" href="Chap_data_environment.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -99,6 +99,54 @@
   </a>
  </li>
 </ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_directives.html">
+   OpenMP Directive Syntax
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_parallel_execution.html">
+   Parallel Execution
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_affinity.html">
+   OpenMP Affinity
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_tasking.html">
+   Tasking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_SIMD.html">
+   SIMD
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_synchronization.html">
+   Synchronization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_data_environment.html">
+   Data Environment
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Memory Model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="Chap_program_control.html">
+   Program Control
+  </a>
+ </li>
+</ul>
+
     </div>
 </nav> <!-- To handle the deprecated key -->
 
@@ -174,6 +222,23 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_memory_model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
@@ -183,7 +248,22 @@
                 <i class="fas fa-list"></i> Contents
             </div>
             <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="simple visible nav section-nav flex-column">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#openmp-memory-model">
+   OpenMP Memory Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#memory-allocators">
+   Memory Allocators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#race-conditions-caused-by-implied-copies-of-shared-variables-in-fortran">
+   Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -194,7 +274,7 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>Memory Model</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -203,7 +283,22 @@
                             <h2> Contents </h2>
                         </div>
                         <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#openmp-memory-model">
+   OpenMP Memory Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#memory-allocators">
+   Memory Allocators
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#race-conditions-caused-by-implied-copies-of-shared-variables-in-fortran">
+   Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+  </a>
+ </li>
 </ul>
 
                         </nav>
@@ -213,7 +308,878 @@
             
               <div>
                 
-  
+  <div class="tex2jax_ignore mathjax_ignore section" id="memory-model">
+<h1>Memory Model<a class="headerlink" href="#memory-model" title="Permalink to this headline">¶</a></h1>
+<p>{memory_model}</p>
+<p>OpenMP provides a shared-memory model that allows all threads on a given device shared access to <strong>memory</strong>. For a given OpenMP region that may be executed by more than one thread or SIMD lane, variables in memory may be <strong>shared</strong> or <strong>private</strong> with respect to those threads or SIMD lanes. A variable’s data-sharing attribute indicates whether it is shared (the <strong>shared</strong> attribute) or private (the <strong>private</strong>, <strong>firstprivate</strong>, <strong>lastprivate</strong>, <strong>linear</strong>, and <strong>reduction</strong> attributes) in the data environment of an OpenMP region. While private variables in an OpenMP region are new copies of the original variable (with same name) that may then be concurrently accessed or modified by their respective threads or SIMD lanes, a shared variable in an OpenMP region is the same as the variable of the same name in the enclosing region. Concurrent accesses or modifications to a shared variable may therefore require synchronization to avoid data races.</p>
+<p>OpenMP’s memory model also includes a <strong>temporary view</strong> of memory that is associated with each thread. Two different threads may see different values for a given variable in their respective temporary views. Threads may employ flush operations for the purposes of making their temporary view of a variable consistent with the value of the variable in memory. The effect of a given flush operation is characterized by its flush properties – some combination of <strong>strong</strong>, <strong>release</strong>, and <strong>acquire</strong> – and, for <strong>strong</strong> flushes, a <strong>flush-set</strong>.</p>
+<p>A <strong>strong</strong> flush will force consistency between the temporary view and the memory for all variables in its <strong>flush-set</strong>.  Furthermore, all strong flushes in a program that have intersecting flush-sets will execute in some total order, and within a thread strong flushes may not be reordered with respect to other memory operations on variables in its flush-set. <strong>Release</strong> and <strong>acquire</strong> flushes operate in pairs. A release flush may “synchronize’’ with an acquire flush, and when it does so the local memory operations that precede the release flush will appear to have been completed before the local memory operations on the same variables that follow the acquire flush.</p>
+<p>Flush operations arise from explicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, implicit <code class="docutils literal notranslate"><span class="pre">flush</span></code> directives, and also from the execution of <code class="docutils literal notranslate"><span class="pre">atomic</span></code> constructs. The <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive forces a  consistent view of local variables of the thread executing the <code class="docutils literal notranslate"><span class="pre">flush</span></code>.  When a list is supplied on the directive, only the items (variables) in the list are guaranteed to be flushed.  Implied flushes exist at prescribed locations of certain constructs. For the complete list of these locations and associated constructs, please refer to the  <em>flush Construct</em>  section of the OpenMP Specifications document.</p>
+<p>In this chapter, examples illustrate how race conditions may arise for accesses to variables with a  <em>shared</em>  data-sharing attribute when flush operations are not properly employed.  A race condition can exist when two or more threads are involved in accessing a variable and at least one of the accesses modifies the variable.  In particular, a data race will arise when conflicting accesses do not have a well-defined <strong>completion order</strong>.  The existence of data races in OpenMP programs result in undefined behavior, and so they should generally be avoided for programs to be correct.  The completion order of accesses to a shared variable is guaranteed in OpenMP through a set of memory consistency rules that are described in the  <em>OpenMP Memory Consistency</em>  section of the OpenMP Specifications document.</p>
+<div class="section" id="openmp-memory-model">
+<h2>OpenMP Memory Model<a class="headerlink" href="#openmp-memory-model" title="Permalink to this headline">¶</a></h2>
+<p>The following examples illustrate two major concerns for concurrent thread execution: ordering of thread execution and memory accesses that may or may not lead to race conditions.</p>
+<p>In the following example, at Print 1, the value of <code class="docutils literal notranslate"><span class="pre">xval</span></code> could be either 2 or 5, depending on the timing of the threads. The <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directives are necessary for the accesses to <code class="docutils literal notranslate"><span class="pre">x</span></code> by threads 1 and 2 to avoid a data race. If the atomic write completes before the atomic read, thread 1 is guaranteed to see 5 in <code class="docutils literal notranslate"><span class="pre">xval</span></code>. Otherwise, thread 1 is guaranteed to see 2 in <code class="docutils literal notranslate"><span class="pre">xval</span></code>.</p>
+<p><strong>flushes!implicit</strong> <strong>atomic construct <code class="docutils literal notranslate"><span class="pre">atomic</span></code> construct</strong> <strong>constructs!atomic <code class="docutils literal notranslate"><span class="pre">atomic</span></code></strong> The barrier after Print 1 contains implicit flushes on all threads, as well as a thread synchronization, so the programmer is guaranteed that the value 5 will be printed by both Print 2 and Print 3. Since neither Print 2 or Print 3 are modifying <code class="docutils literal notranslate"><span class="pre">x</span></code>, they may concurrently access <code class="docutils literal notranslate"><span class="pre">x</span></code> without requiring <code class="docutils literal notranslate"><span class="pre">atomic</span></code> directives to avoid a data race.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.1
+* type: C
+* version: omp_3.1
+*/
+#include &lt;stdio.h&gt;
+#include &lt;omp.h&gt;
+
+int main(){
+  int x;
+
+  x = 2;
+  #pragma omp parallel num_threads(2) shared(x)
+  {
+
+    if (omp_get_thread_num() == 0) {
+       #pragma omp atomic write
+       x = 5;
+    } else {
+      int xval;
+      #pragma omp atomic read
+      xval = x;
+    /* Print 1: xval can be 2 or 5 */
+      printf(&quot;1: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), xval);
+    }
+
+    #pragma omp barrier
+
+    if (omp_get_thread_num() == 0) {
+    /* Print 2 */
+      printf(&quot;2: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), x);
+    } else {
+    /* Print 3 */
+      printf(&quot;3: Thread# %d: x = %d\n&quot;, omp_get_thread_num(), x);
+    }
+  }
+  return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.1
+! type: F-free
+! version: omp_3.1
+PROGRAM MEMMODEL
+  INCLUDE &quot;omp_lib.h&quot;      ! or USE OMP_LIB
+  INTEGER X, XVAL
+
+  X = 2
+!$OMP PARALLEL NUM_THREADS(2) SHARED(X)
+
+    IF (OMP_GET_THREAD_NUM() .EQ. 0) THEN
+    !$OMP ATOMIC WRITE
+       X = 5
+    ELSE
+    !$OMP ATOMIC READ
+      XVAL = X
+    ! PRINT 1: XVAL can be 2 or 5
+      PRINT *,&quot;1: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, XVAL
+    ENDIF
+
+ !$OMP BARRIER
+
+    IF (OMP_GET_THREAD_NUM() .EQ. 0) THEN
+    ! PRINT 2
+      PRINT *,&quot;2: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, X
+    ELSE
+    ! PRINT 3
+      PRINT *,&quot;3: THREAD# &quot;, OMP_GET_THREAD_NUM(), &quot;X = &quot;, X
+    ENDIF
+
+!$OMP END PARALLEL
+
+END PROGRAM MEMMODEL
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>flushes!flush construct <code class="docutils literal notranslate"><span class="pre">flush</span></code> construct</strong> <strong>flush construct <code class="docutils literal notranslate"><span class="pre">flush</span></code> construct</strong> <strong>constructs!flush <code class="docutils literal notranslate"><span class="pre">flush</span></code></strong> The following example demonstrates why synchronization is difficult to perform correctly through variables. The write to <code class="docutils literal notranslate"><span class="pre">flag</span></code> on thread 0 and the read from <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the loop on thread 1 must be atomic to avoid a data race. When thread 1 breaks out of the loop, <code class="docutils literal notranslate"><span class="pre">flag</span></code> will have the value of 1. However, <code class="docutils literal notranslate"><span class="pre">data</span></code> will still be undefined at the first print statement. Only after the flush of both <code class="docutils literal notranslate"><span class="pre">flag</span></code> and <code class="docutils literal notranslate"><span class="pre">data</span></code> after the first print statement will <code class="docutils literal notranslate"><span class="pre">data</span></code> have the well-defined value of 42.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.2
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+int main()
+{
+    int data;
+    int flag=0;
+    #pragma omp parallel num_threads(2)
+    {
+      if (omp_get_thread_num()==0)
+      {
+      /* Write to the data buffer that will be
+       * read by thread */
+          data = 42;
+      /* Flush data to thread 1 and strictly order
+       * the write to data relative to the write to the flag */
+          #pragma omp flush(flag, data)
+      /* Set flag to release thread 1 */
+          #pragma omp atomic write
+          flag = 1;
+      }
+      else if(omp_get_thread_num()==1)
+      {
+      /* Loop until we see the update to the flag */
+          #pragma omp flush(flag, data)
+          int flag_val = 0;
+          while (flag_val &lt; 1)
+          {
+             #pragma omp atomic read
+             flag_val = flag;
+          }
+      /* Value of flag is 1; value of data is undefined */
+          printf(&quot;flag=%d data=%d\n&quot;, flag, data);
+          #pragma omp flush(flag, data)
+      /* Value of flag is 1; value of data is 42 */
+          printf(&quot;flag=%d data=%d\n&quot;, flag, data);
+      }
+    }
+    return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.2
+! type: F-fixed
+! version: omp_3.1
+       PROGRAM EXAMPLE
+       INCLUDE &quot;omp_lib.h&quot; ! or USE OMP_LIB
+       INTEGER DATA
+       INTEGER FLAG, FLAG_VAL
+
+       FLAG = 0
+!$OMP  PARALLEL NUM_THREADS(2)
+         IF(OMP_GET_THREAD_NUM() .EQ. 0) THEN
+         ! Write to the data buffer that will be read by thread 1
+            DATA = 42
+
+         ! Flush DATA to thread 1 and strictly order the write to DATA
+         ! relative to the write to the FLAG
+!$OMP       FLUSH(FLAG, DATA)
+
+         ! Set FLAG to release thread 1
+!$OMP       ATOMIC WRITE
+            FLAG = 1
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 1) THEN
+         ! Loop until we see the update to the FLAG
+!$OMP       FLUSH(FLAG, DATA)
+            FLAG_VAL = 0
+            DO WHILE(FLAG_VAL .LT. 1)
+!$OMP          ATOMIC READ
+               FLAG_VAL = FLAG
+            ENDDO
+
+         ! Value of FLAG is 1; value of DATA is undefined
+            PRINT *, &#39;FLAG=&#39;, FLAG, &#39; DATA=&#39;, DATA
+
+!$OMP       FLUSH(FLAG, DATA)
+         ! Value of FLAG is 1; value of DATA is 42
+            PRINT *, &#39;FLAG=&#39;, FLAG, &#39; DATA=&#39;, DATA
+
+         ENDIF
+!$OMP  END PARALLEL
+       END
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>flushes!flush with a list</strong> The next example demonstrates why synchronization is difficult to perform correctly through variables. As in the preceding example, the updates to <code class="docutils literal notranslate"><span class="pre">flag</span></code> and the reading of <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the loops on threads 1 and 2 are performed atomically to avoid data races on <code class="docutils literal notranslate"><span class="pre">flag</span></code>. However, the code still contains data race due to the incorrect use of “flush with a list’’ after the assignment to <code class="docutils literal notranslate"><span class="pre">data1</span></code> on thread 1. By not including <code class="docutils literal notranslate"><span class="pre">flag</span></code> in the flush-set of that <code class="docutils literal notranslate"><span class="pre">flush</span></code> directive, the assignment can be reordered with respect to the subsequent atomic update to <code class="docutils literal notranslate"><span class="pre">flag</span></code>. Consequentially, <code class="docutils literal notranslate"><span class="pre">data1</span></code> is undefined at the print statement on thread 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.3
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+
+int data0 = 0, data1 = 0;
+
+int main()
+{
+   int flag=0;
+
+   #pragma omp parallel num_threads(3)
+   {
+      if(omp_get_thread_num()==0)
+      {
+         data0 = 17;
+         #pragma omp flush
+         /* Set flag to release thread 1 */
+         #pragma omp atomic update
+         flag++;
+         /* Flush of flag is implied by the atomic directive */
+      }
+      else if(omp_get_thread_num()==1)
+      {
+         int flag_val = 0;
+         /* Loop until we see that flag reaches 1*/
+         while(flag_val &lt; 0)
+         {
+            #pragma omp atomic read
+            flag_val = flag;
+         }
+         #pragma omp flush(data0)
+         /* data0 is 17 here */
+         printf(&quot;Thread 1 awoken (data0 = %d)\n&quot;, data0);
+         data1 = 42;
+         #pragma omp flush(data1)
+         /* Set flag to release thread 2 */
+         #pragma omp atomic update
+         flag++;
+         /* Flush of flag is implied by the atomic directive */
+      }
+      else if(omp_get_thread_num()==2)
+      {
+         int flag_val = 0;
+         /* Loop until we see that flag reaches 2 */
+         while(flag_val &lt; 2)
+         {
+            #pragma omp atomic read
+            flag_val = flag;
+         }
+         #pragma omp flush(data0,data1)
+         /* there is a data race here;
+            data0 is 17 and data1 is undefined */
+         printf(&quot;Thread 2 awoken (data0 = %d, data1 = %d)\n&quot;,
+               data0, data1);
+      }
+   }
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.3
+! type: F-fixed
+! version: omp_3.1
+       PROGRAM EXAMPLE
+       INCLUDE &quot;omp_lib.h&quot; ! or USE OMP_LIB
+       INTEGER FLAG, FLAG_VAL
+       INTEGER DATA0, DATA1
+
+       FLAG = 0
+!$OMP  PARALLEL NUM_THREADS(3)
+         IF(OMP_GET_THREAD_NUM() .EQ. 0) THEN
+             DATA0 = 17
+!$OMP        FLUSH
+
+         ! Set flag to release thread 1
+!$OMP        ATOMIC UPDATE
+             FLAG = FLAG + 1
+         ! Flush of FLAG is implied by the atomic directive
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 1) THEN
+         ! Loop until we see that FLAG reaches 1
+!$OMP        FLUSH(FLAG, DATA)
+             FLAG_VAL = 0
+             DO WHILE(FLAG_VAL .LT. 1)
+!$OMP           ATOMIC READ
+                FLAG_VAL = FLAG
+             ENDDO
+!$OMP        FLUSH
+
+         ! DATA0 is 17 here
+             PRINT *, &#39;Thread 1 awoken. DATA0 = &#39;, DATA0
+
+             DATA1 = 42
+!$OMP        FLUSH(DATA1)
+
+         ! Set FLAG to release thread 2
+!$OMP        ATOMIC UPDATE
+             FLAG = FLAG + 1
+         ! Flush of FLAG is implied by the atomic directive
+
+         ELSE IF(OMP_GET_THREAD_NUM() .EQ. 2) THEN
+         ! Loop until we see that FLAG reaches 2
+             FLAG_VAL = 0
+             DO WHILE(FLAG_VAL .LT. 2)
+!$OMP           ATOMIC READ
+                FLAG_VAL = FLAG
+             ENDDO
+!$OMP        FLUSH(DATA0, DATA1)
+
+         ! There is a data race here; data0 is 17 and data1 is undefined
+             PRINT *, &#39;Thread 2 awoken. DATA0 = &#39;, DATA0,
+     &amp;                &#39; and DATA1 = &#39;, DATA1
+
+         ENDIF
+!$OMP  END PARALLEL
+       END
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following two examples illustrate the ordering properties of  the  <em>flush</em>  operation. The  <em>flush</em>  operations are strong flushes  that are applied to the specified flush lists.  However, use of a <code class="docutils literal notranslate"><span class="pre">flush</span></code> construct with a list is extremely error  prone and users are strongly discouraged from attempting it.  In the codes the programmer intends to prevent simultaneous  execution of the protected section by the two threads. The atomic directives in the codes ensure that the accesses to shared variables  <em>a</em>  and  <em>b</em>  are atomic write and atomic read operations. Otherwise both examples would contain data races and automatically result  in unspecified behavior.</p>
+<p>In the following incorrect code example, operations on variables  <em>a</em>  and  <em>b</em>  are not ordered with respect to each other. For instance, nothing prevents the compiler from moving the flush of  <em>b</em>  on thread 0 or the flush of  <em>a</em>  on thread 1 to a position completely after the protected section (assuming that the protected section on thread 0 does not reference  <em>b</em>  and the protected section on thread 1 does not reference  <em>a</em> ). If either re-ordering happens, both threads can simultaneously execute the protected section. Any shared data accessed in the protected section is not guaranteed to  be current or consistent during or after the protected section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.4a
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+
+void flush_incorrect()
+{
+  int a, b;
+  a = b = 0;
+  #pragma omp parallel num_threads(2)
+  {
+    int myid = omp_get_thread_num();
+    int tmp;
+
+    if ( myid == 0 ) {        // thread 0
+      #pragma omp atomic write
+        b = 1;
+      #pragma omp flush(b)    // flushes are not ordered
+      #pragma omp flush(a)    // compiler may move them around
+      #pragma omp atomic read
+        tmp = a;
+    }
+    else {                    // thread 1
+      #pragma omp atomic write
+        a = 1;
+      #pragma omp flush(a)    // flushes are not ordered
+      #pragma omp flush(b)    // compiler may move them around
+      #pragma omp atomic read
+        tmp = b;
+    }
+    if ( tmp == 0 ) {         // exclusive access not guaranteed
+      /* protected section */
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.4a
+! type: F-free
+! version: omp_3.1
+subroutine flush_incorrect
+  use omp_lib
+  implicit none
+  integer a, b, tmp
+  integer myid
+
+  a = 0; b = 0
+  !$omp parallel private(myid,tmp) num_threads(2)
+    myid = omp_get_thread_num()
+
+    if ( myid == 0 ) then     ! thread 0
+      !$omp atomic write
+        b = 1
+      !$omp flush(b)          ! flushes are not ordered
+      !$omp flush(a)          ! compiler may move them around
+      !$omp atomic read
+        tmp = a
+    else                      ! thread 1
+      !$omp atomic write
+        a = 1
+      !$omp flush(a)          ! flushes are not ordered
+      !$omp flush(b)          ! compiler may move them around
+      !$omp atomic read
+        tmp = b
+    endif
+    if ( tmp == 0 ) then      ! exclusive access not guaranteed
+      !! protected section
+    endif
+  !$omp end parallel
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>The following code example correctly ensures that the protected section is executed by only one thread at a time. Execution of the protected section by neither thread is considered correct in this example. This occurs if both flushes complete prior to either thread executing its <code class="docutils literal notranslate"><span class="pre">if</span></code> statement for the protected section. The compiler is prohibited from moving the flush at all for either thread, ensuring that the respective assignment is complete and the data is flushed before the <code class="docutils literal notranslate"><span class="pre">if</span></code> statement is executed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: mem_model.4b
+* type: C
+* version: omp_3.1
+*/
+#include &lt;omp.h&gt;
+
+void flush_correct()
+{
+  int a, b;
+  a = b = 0;
+  #pragma omp parallel num_threads(2)
+  {
+    int myid = omp_get_thread_num();
+    int tmp;
+
+    if ( myid == 0 ) {          // thread 0
+      #pragma omp atomic write
+        b = 1;
+      #pragma omp flush(a,b)    // flushes are ordered
+      #pragma omp atomic read
+        tmp = a;
+    }
+    else {                      // thread 1
+      #pragma omp atomic write
+        a = 1;
+      #pragma omp flush(a,b)    // flushes are ordered
+      #pragma omp atomic read
+        tmp = b;
+    }
+    if ( tmp == 0 ) {           // access by single thread
+      /* protected section */
+    }
+  }
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: mem_model.4b
+! type: F-free
+! version: omp_3.1
+subroutine flush_correct
+  use omp_lib
+  implicit none
+  integer a, b, tmp
+  integer myid
+
+  a = 0; b = 0
+  !$omp parallel private(myid,tmp) num_threads(2)
+    myid = omp_get_thread_num()
+
+    if ( myid == 0 ) then     ! thread 0
+      !$omp atomic write
+        b = 1
+      !$omp flush(a,b)        ! flushes are ordered
+      !$omp atomic read
+        tmp = a
+    else                      ! thread 1
+      !$omp atomic write
+        a = 1
+      !$omp flush(a,b)        ! flushes are ordered
+      !$omp atomic read
+        tmp = b
+    endif
+    if ( tmp == 0 ) then      ! access by single thread
+      !! protected section
+    endif
+  !$omp end parallel
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../memory_model/mem_model.tex</p>
+</div>
+<div class="section" id="memory-allocators">
+<h2>Memory Allocators<a class="headerlink" href="#memory-allocators" title="Permalink to this headline">¶</a></h2>
+<p><strong>memory allocators!allocator traits</strong> <strong>memory allocators!memory space</strong> <strong>memory allocators!omp_alloc routine <code class="docutils literal notranslate"><span class="pre">omp_alloc</span></code> routine</strong> <strong>memory allocators!allocators directive <code class="docutils literal notranslate"><span class="pre">allocators</span></code> directive</strong></p>
+<p><strong>omp_alloc routine <code class="docutils literal notranslate"><span class="pre">omp_alloc</span></code> routine</strong> <strong>routines!omp_alloc <code class="docutils literal notranslate"><span class="pre">omp_alloc</span></code></strong></p>
+<p><strong>directives!allocators <code class="docutils literal notranslate"><span class="pre">allocators</span></code></strong> <strong>allocators directive <code class="docutils literal notranslate"><span class="pre">allocators</span></code> directive</strong> <strong>allocators directive <code class="docutils literal notranslate"><span class="pre">allocators</span></code> directive!allocator clause <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause</strong></p>
+<p><strong>clauses!allocator <code class="docutils literal notranslate"><span class="pre">allocator</span></code></strong> <strong>allocator clause <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause</strong> <strong>omp_init_allocator routine <code class="docutils literal notranslate"><span class="pre">omp_init_allocator</span></code> routine</strong> <strong>routines!omp_init_allocator <code class="docutils literal notranslate"><span class="pre">omp_init_allocator</span></code></strong></p>
+<p>OpenMP memory allocators can be used to allocate memory with specific allocator traits.  In the following example an OpenMP allocator is used to specify an alignment for arrays  <em>x</em>  and  <em>y</em> . The general approach for attributing traits to variables allocated by OpenMP is to create or specify a pre-defined  <em>memory space</em> , create an array of  <em>traits</em> , and then form an  <em>allocator</em>  from the memory space and trait. The allocator is then specified in an OpenMP allocation (using an API  <em>omp_alloc()</em>  function for C/C++ code and an <code class="docutils literal notranslate"><span class="pre">allocators</span></code> directive for Fortran code in the  <em>allocators.1</em>  example).</p>
+<p>In the example below the  <em>xy_memspace</em>  variable is declared and assigned the default memory space ( <em>omp_default_mem_space</em> ). Next, an array for  <em>traits</em>  is created. Since only one trait will be used, the array size is  <em>1</em> . A trait is a structure in C/C++ and a derived type in Fortran, containing 2 components: a key and a corresponding value (key-value pair). The trait key used here is  <em>omp_atk_alignment</em>  (an enum for C/C++ and a parameter for Fortran) and the trait value of 64 is specified in the  <em>xy_traits</em>  declaration. These declarations are followed by a call to the  <em>omp_init_allocator()</em>  function to combine the memory space ( <em>xy_memspace</em> ) and the traits ( <em>xy_traits</em> ) to form an allocator ( <em>xy_alloc</em> ).</p>
+<p>In the C/C++ code the API   <em>omp_allocate()</em>  function is used to allocate space, similar to  <em>malloc</em> , except that the allocator is specified as the second argument. In Fortran an <code class="docutils literal notranslate"><span class="pre">allocators</span></code> directive is used to specify an allocator for the following Fortran  <em>allocate</em>  statement. A variable list in the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> clause may be supplied if the allocator is to be applied to a subset of variables in the Fortran allocate statement. Here, the  <em>xy_alloc</em>  allocator is specified in the modifier of the <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause, and the set of all variables used in the  <em>allocate</em>  statement is specified in the list.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: allocators.1
+* type: C
+* version: omp_5.0
+*/
+#include    &lt;omp.h&gt;
+#include  &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+#define N 1000
+
+int main()
+{
+   float  *x, *y;
+   float s=2.0;
+
+   omp_memspace_handle_t  xy_memspace = omp_default_mem_space;
+   omp_alloctrait_t       xy_traits[1]= {omp_atk_alignment, 64};
+   omp_allocator_handle_t xy_alloc    =
+                           omp_init_allocator(xy_memspace,1,xy_traits);
+
+
+   x=(float *)omp_alloc(N*sizeof(float), xy_alloc);
+   y=(float *)omp_alloc(N*sizeof(float), xy_alloc);
+
+   if( ((intptr_t)(y))%64 != 0 || ((intptr_t)(x))%64 != 0 )
+   { printf(&quot;ERROR: x|y not 64-Byte aligned\n&quot;); exit(1); }
+
+   #pragma omp parallel
+   {
+      #pragma omp for simd simdlen(16) aligned(x,y:64)
+      for(int i=0; i&lt;N; i++){ x[i]=i+1; y[i]=i+1; } // initialize
+
+      #pragma omp for simd simdlen(16) aligned(x,y:64)
+      for(int i=0; i&lt;N; i++) y[i] = s*x[i] + y[i];
+    }
+
+   printf(&quot;y[0],y[N-1]: %5.0f %5.0f\n&quot;,y[0],y[N-1]);
+   // output y[0],y[N-1]: 3 3000
+
+   omp_free(x, xy_alloc);
+   omp_free(y, xy_alloc);
+   omp_destroy_allocator(xy_alloc);
+
+   return 0;
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: allocators.1
+! type: F-free
+! version: omp_5.2
+program main
+ use omp_lib
+
+ integer, parameter :: N=1000
+ real, allocatable  :: x(:),y(:)
+ real               :: s = 2.0e0
+ integer            :: i
+
+ integer(omp_memspace_handle_kind ) :: xy_memspace = omp_default_mem_space
+ type(   omp_alloctrait           ) :: xy_traits(1) = &amp;
+                                    [omp_alloctrait(omp_atk_alignment,64)]
+ integer(omp_allocator_handle_kind) :: xy_alloc
+
+   xy_alloc   =    omp_init_allocator(   xy_memspace, 1, xy_traits)
+
+   !$omp allocators allocate(allocator(xy_alloc): x, y)
+   allocate(x(N),y(N))
+                         !! loc is non-standard, but found everywhere
+                         !! remove these lines if not available
+   if(modulo(loc(x),64) /= 0 .and. modulo(loc(y),64) /=0 ) then
+      print*,&quot;ERROR: x|y not 64-byte aligned&quot;; stop
+   endif
+
+   !$omp parallel
+
+      !$omp do simd simdlen(16) aligned(x,y: 64) !! 64B aligned
+      do i=1,N  !! initialize
+        x(i)=i
+        y(i)=i
+      end do
+
+      !$omp do simd simdlen(16) aligned(x,y: 64) !! 64B aligned
+      do i = 1,N
+         y(i) = s*x(i) + y(i)
+      end do
+
+   !$omp end parallel
+
+   write(*,&#39;(&quot;y(1),y(N):&quot;,2f6.0)&#39;) y(1),y(N) !!output: y... 3. 3000.
+
+   deallocate(x,y)
+   call omp_destroy_allocator(xy_alloc)
+
+end program
+
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">allocators</span></code> construct with optional clauses in Fortran code,  users should be aware of the behavior of a reallocation.</p>
+<p>In the following example, the  <em>a</em>  variable is allocated with 64-byte alignment through the <code class="docutils literal notranslate"><span class="pre">align</span></code> clause of the <code class="docutils literal notranslate"><span class="pre">allocators</span></code> construct. The alignment of the newly allocated object,  <em>a</em> , in the (reallocation) assignment  <em>a = b</em>  will not be reallocated with the 64-byte alignment, but with the 32-byte alignment prescribed by the trait of the  <em>my_alloctr</em>   allocator. It is best to avoid this problem by constructing and using an allocator (not the <code class="docutils literal notranslate"><span class="pre">align</span></code> clause) with the required alignment in  the <code class="docutils literal notranslate"><span class="pre">allocators</span></code> construct. Note that in the subsequent deallocation of  <em>a</em>  the deallocation must precede the destruction of the allocator used in the allocation of  <em>a</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: allocators.2
+! type: F-free
+! version: omp_5.2
+program main
+   use omp_lib
+   implicit none
+
+   integer, parameter :: align_32=32
+   real, allocatable  :: a(:,:)
+   real               :: b(10,10)
+
+   integer(omp_memspace_handle_kind ) :: my_memspace
+   type(   omp_alloctrait           ) :: my_traits(1)
+   integer(omp_allocator_handle_kind) :: my_alloctr
+
+   my_memspace  =  omp_default_mem_space
+   my_traits    = [omp_alloctrait(omp_atk_alignment,align_32)]
+!                                     allocator alignment ^^
+   my_alloctr   =  omp_init_allocator(my_memspace, 1, my_traits)
+
+   !$omp allocators allocate(allocator(my_alloctr), align(64): a)
+   allocate(a(5,5)) ! 64-byte aligned by clause &lt;---------^^
+
+   a = b  ! reallocation occurs with 32-byte alignment
+          ! uses just my_alloctr (32-byte align from allocator)
+
+   deallocate(a)  ! Uses my_alloctr in deallocation.
+   call omp_destroy_allocator(my_alloctr)
+
+end program main
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>When creating and using an <code class="docutils literal notranslate"><span class="pre">allocators</span></code> construct within a Fortran procedure for allocating storage (and subsequently freeing the allocator storage with an  <code class="docutils literal notranslate"><span class="pre">omp_destroy_allocator</span></code> construct), users should be aware of the necessity of using an explicit Fortran deallocation instead of relying on auto-deallocation.</p>
+<p>In the following example, a user-defined allocator is used in the allocation of the  <em>c</em>  variable, and then the allocator is destroyed. Auto-deallocation at the end of the  <em>broken_auto_deallocation</em>  procedure will fail without the allocator, hence an explicit deallocation should be used  (before the <code class="docutils literal notranslate"><span class="pre">omp_destroy_allocator</span></code> construct). Note that an allocator may be specified directly in the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> clause without using the <code class="docutils literal notranslate"><span class="pre">allocator</span></code> complex modifier, so long as no other modifier  is specified in the clause.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: allocators.3
+! type: F-free
+! version: omp_5.2
+subroutine broken_auto_deallocation
+   use omp_lib
+   implicit none
+   integer, parameter :: align_32=32
+   real, allocatable  :: c(:)
+
+   integer(omp_memspace_handle_kind ) :: my_memspace
+   type(   omp_alloctrait           ) :: my_traits(1)
+   integer(omp_allocator_handle_kind) :: my_alloctr
+
+   my_memspace  =  omp_default_mem_space
+   my_traits    = [omp_alloctrait(omp_atk_alignment,align_32)]
+   my_alloctr   =  omp_init_allocator(my_memspace, 1, my_traits)
+
+   !$omp allocators allocate(my_alloctr: c)
+   allocate(c(100))
+
+   !...
+
+   call omp_destroy_allocator(my_alloctr)
+   ! Auto-deallocation of c fails,
+   ! because my_alloctr is no longer available.
+
+end subroutine
+
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>directives!allocate <code class="docutils literal notranslate"><span class="pre">allocate</span></code></strong> <strong>allocate directive <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive</strong> <strong>allocate directive <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive!allocator clause <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause</strong></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive is a convenient way to apply an OpenMP  allocator to the allocation of declared variables.</p>
+<p>This example illustrates the allocation of specific types of storage in a program  for use in libraries, privatized variables, and with offloading.</p>
+<p>Two groups of variables, { <em>v1, v2</em> } and { <em>v3, v4</em> }, are used with the <code class="docutils literal notranslate"><span class="pre">allocate</span></code>  directive, and the { <em>v5, v6</em> } pair is used with the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> clause.  Here we explicitly use predefined allocators <code class="docutils literal notranslate"><span class="pre">omp_high_bw_mem_alloc</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_default_mem_alloc</span></code> with the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive in CASE 1. Similar effects are achieved for private variables of a task by using the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> clause, as shown in CASE 2.</p>
+<p>Note, when the <code class="docutils literal notranslate"><span class="pre">allocate</span></code> directive does not specify an <code class="docutils literal notranslate"><span class="pre">allocator</span></code> clause, an implementation-defined default, stored in the  <em>def-allocator-var</em>  ICV, is used (not illustrated here). Users can set and get the default allocator with the <code class="docutils literal notranslate"><span class="pre">omp_set_default_allocator</span></code> and <code class="docutils literal notranslate"><span class="pre">omp_get_default_allocator</span></code> API routines.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>//%compiler: clang
+//%cflags: -fopenmp
+
+/*
+* name: allocators.4
+* type: C
+* version: omp_5.1
+*/
+#include &lt;omp.h&gt;
+#include &lt;stdio.h&gt;
+
+void my_init(double *,double *,int, double *,double *,int, \
+             double *,double *,int);
+void lib_saxpy(double *,double *,double,int);
+void my_gather(double *,double *,int);
+
+#pragma omp begin declare target
+void my_gpu_vxv(double *, double *, int);
+#pragma omp end  declare target
+
+#define Nhb 1024*1024      // high bandwith
+#define Nbg 1024*1024*64   // big memory, default
+#define Nll 1024*1024      // low latency memory
+
+void test_allocate() {
+
+  double  v1[Nhb], v2[Nhb];
+  double  v3[Nbg], v4[Nbg];
+  double  v5[Nll], v6[Nll];
+
+/*** CASE 1: USING ALLOCATE DIRECTIVE ***/
+  #pragma omp allocate(v1,v2) allocator(omp_high_bw_mem_alloc)
+  #pragma omp allocate(v3,v4) allocator(omp_default_mem_alloc)
+
+  my_init(v1,v2,Nhb, v3,v4,Nbg, v5,v6,Nll);
+
+  lib_saxpy(v1,v2,5.0,Nhb);
+
+  #pragma omp target map(to: v3[0:Nbg], v4[0:Nbg]) map(from:v3[0:Nbg])
+  my_gpu_vxv(v3,v4,Nbg);
+
+/*** CASE 2: USING ALLOCATE CLAUSE ***/
+  #pragma omp task private(v5,v6) \
+                   allocate(allocator(omp_low_lat_mem_alloc): v5,v6)
+  {
+    my_gather(v5,v6,Nll);
+  }
+
+}
+
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: allocators.4
+! type: F-free
+! version: omp_5.1
+subroutine test_allocate
+   use omp_lib
+
+   interface
+     subroutine my_gpu_vxv(va,vb,n)
+     !$omp declare target
+     integer :: n
+     double precision  :: va(n), vb(n)
+     end subroutine
+   end interface
+
+   integer,parameter :: Nhb=1024*1024,   &amp; !! high bandwith
+                        Nbg=1024*1024*64,&amp; !! big memory, default
+                        Nll=1024*1024      !! low latency memory
+
+   double precision  ::  v1(Nhb), v2(Nhb)
+   double precision  ::  v3(Nbg), v4(Nbg)
+   double precision  ::  v5(Nll), v6(Nll)
+
+ !*** CASE 1: USING ALLOCATE DIRECTIVE ***!
+   !$omp allocate(v1,v2) allocator(omp_high_bw_mem_alloc)
+   !$omp allocate(v3,v4) allocator(omp_default_mem_alloc)
+
+   call my_init(v1,v2,Nhb, v3,v4,Nbg, v5,v6,Nll)
+
+   call lib_saxpy(v1,v2,5.0,Nhb)
+
+   !$omp target map(to: v3, v4) map(from:v3)
+      call my_gpu_vxv(v3,v4,Nbg)
+   !$omp end target
+
+ !*** CASE 2: USING ALLOCATE CLAUSE ***!
+   !$omp task private(v5,v6) &amp;
+   !$omp&amp;     allocate(allocator(omp_low_lat_mem_alloc): v5,v6)
+      call my_gather(v5,v6,Nll)
+   !$omp end task
+
+end subroutine test_allocate
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../memory_model/allocators.tex</p>
+</div>
+<div class="section" id="race-conditions-caused-by-implied-copies-of-shared-variables-in-fortran">
+<h2>Race Conditions Caused by Implied Copies of Shared Variables in Fortran<a class="headerlink" href="#race-conditions-caused-by-implied-copies-of-shared-variables-in-fortran" title="Permalink to this headline">¶</a></h2>
+<p><strong>shared variables!race conditions</strong></p>
+<p>The following example contains a race condition, because the shared variable, which  is an array section, is passed as an actual argument to a routine that has an assumed-size  array as its dummy argument. The subroutine call passing an array section argument  may cause the compiler to copy the argument into a temporary location prior to  the call and copy from the temporary location into the original variable when the  subroutine returns. This copying would cause races in the <code class="docutils literal notranslate"><span class="pre">parallel</span></code> region.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>
+! name: fort_race.1
+! type: F-free
+SUBROUTINE SHARED_RACE
+
+  INCLUDE &quot;omp_lib.h&quot;      ! or USE OMP_LIB
+
+  REAL A(20)
+  INTEGER MYTHREAD
+
+!$OMP PARALLEL SHARED(A) PRIVATE(MYTHREAD)
+
+  MYTHREAD = OMP_GET_THREAD_NUM()
+  IF (MYTHREAD .EQ. 0) THEN
+     CALL SUB(A(1:10)) ! compiler may introduce writes to A(6:10)
+  ELSE
+     A(6:10) = 12
+  ENDIF
+
+!$OMP END PARALLEL
+
+END SUBROUTINE SHARED_RACE
+
+SUBROUTINE SUB(X)
+  REAL X(*)
+  X(1:5) = 4
+END SUBROUTINE SUB
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>../../memory_model/fort_race.tex</p>
+</div>
+</div>
+
     <script type="text/x-thebe-config">
     {
         requestKernel: true,
@@ -223,16 +1189,16 @@
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "python"
+            mode: "native"
         },
         kernelOptions: {
-            kernelName: "python3",
+            kernelName: "native",
             path: "./contents"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'python3'</script>
+    <script>kernelName = 'native'</script>
 
               </div>
               
@@ -243,13 +1209,13 @@
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">&lt;no title&gt;</p>
+            <p class="prev-next-title">Data Environment</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="Chap_program_control.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">&lt;no title&gt;</p>
+        <p class="prev-next-title">Program Control</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
