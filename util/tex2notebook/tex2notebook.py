@@ -3,6 +3,7 @@
 
 import re
 import os
+import glob
 import sys
 import argparse
 
@@ -51,6 +52,12 @@ E2 = '"\n   ]\n  }\n'
 ########################
 # Handling LaTeX marks #
 ########################
+## miscs
+def replace_miscs(Str):
+    Str = re.sub('\\\ ', ' ', Str)
+    Str = re.sub('@', ' ', Str)
+    return Str
+
 ## \code
 def rep_code(match):
     val = match.group()
@@ -61,7 +68,18 @@ def replace_code(Str):
     Str = re.sub(r'\\code\{[^\{\}]*\}', rep_code, Str)
     Str = re.sub(r'\\code', '', Str)
     return Str
-    
+
+## \scode
+def rep_scode(match):
+    val = match.group()
+    l = len(val)
+    out = '`' + val[7 :(l - 1)] + '`'
+    return out
+def replace_scode(Str):
+    Str = re.sub(r'\\scode\{[^\{\}]*\}', rep_scode, Str)
+    Str = re.sub(r'\\scode', '', Str)
+    return Str
+
 ## \plc
 def rep_plc(match):
     val = match.group()
@@ -70,6 +88,16 @@ def rep_plc(match):
     return out
 def replace_plc(Str):
     Str = re.sub(r'\\plc\{[^\{\}]*\}', rep_plc, Str)
+    return Str
+    
+## \splc
+def rep_splc(match):
+    val = match.group()
+    l = len(val)
+    out = ' _' + val[6 :(l - 1)] + '_ '
+    return out
+def replace_splc(Str):
+    Str = re.sub(r'\\splc\{[^\{\}]*\}', rep_splc, Str)
     return Str
 
 ## \texttt
@@ -113,6 +141,16 @@ def replace_emph(Str):
 def replace_item(Str):
     Str = re.sub(r'\\item', '\n* ', Str)
     return Str
+    
+## \index
+def rep_index(match):
+    val = match.group()
+    l = len(val)
+    out = '**' + val[7 :(l - 1)] + '**'
+    return out
+def replace_index(Str):
+    Str = re.sub(r'\\index\{[^\{\}]*\}', rep_index, Str)
+    return Str
 
 ## $ $
 def rep_math(match):
@@ -144,6 +182,12 @@ def rep_link2(match):
     return out
 def replace_link2(Str):
     Str = re.sub(r'\\specref\{subsec:[\s\w_-]+\}', rep_link2, Str)
+    return Str
+
+## ref
+def replace_ref(Str):
+    Str = re.sub(r'\\ref\{[^\{\}]*\}', '', Str)
+    Str = re.sub(r'\\specref\{[^\{\}]*\}', '', Str)
     return Str
 
 ## \pageref
@@ -221,7 +265,7 @@ def replace_input2(Str):
     #Str = "../../" + Str + ".tex"
     #print(Str)
     return Str
-    
+
 ## sections
 ### \chapter
 def rep_chapter(match):
@@ -229,17 +273,37 @@ def rep_chapter(match):
     l = len(val)
     out = '\n# ' + val[9 :(l - 1)] + '\n'
     return out
+def replace_chapter(Str):
+    Str = re.sub(r'\\chapter\{[^\{\}]*\}', rep_chapter, Str)
+    return Str
+### \chapter*
+def rep_chapter_star(match):
+    val = match.group()
+    l = len(val)
+    out = '\n# ' + val[10 :(l - 1)] + '\n'
+    return out
+def replace_chapter_star(Str):
+    Str = re.sub(r'\\chapter\*\{[^\{\}]*\}', rep_chapter_star, Str)
+    return Str
+### \bchapter
+def rep_bchapter(match):
+    val = match.group()
+    l = len(val)
+    out = '\n# ' + val[10 :(l - 1)] + '\n'
+    return out
+def replace_bchapter(Str):
+    Str = re.sub(r'\\bchapter\{[^\{\}]*\}', rep_bchapter, Str)
+    return Str
 ### \cchapter
 def rep_cchapter(match):
     val = match.group()
     l = len(val)
     out = '\n# ' + val[10 :(l - 1)] + '\n'
     return out
-def replace_chapter(Str):
-    Str = re.sub('\\\\chapter\*', '\\\\chapter', Str)
-    Str = re.sub(r'\\chapter\{[^\{\}]*\}', rep_chapter, Str)
+def replace_cchapter(Str):
     Str = re.sub(r'\\cchapter\{[^\{\}]*\}', rep_cchapter, Str)
     return Str
+
 ### \section
 def rep_section(match):
     val = match.group()
@@ -261,6 +325,9 @@ def replace_subsec(Str):
 
 def replace_sections(Str):
     Str = replace_chapter(Str)
+    Str = replace_chapter_star(Str)
+    Str = replace_bchapter(Str)
+    Str = replace_cchapter(Str)
     Str = replace_section(Str)
     Str = replace_subsec(Str)
 ### \ keep in line show be removed
@@ -442,8 +509,12 @@ def gen_cells(Str):
     Str = delete_marks(Str)
 ## \plc
     Str = replace_plc(Str)
+## \splc
+    Str = replace_splc(Str)
 ## \code
     Str = replace_code(Str)
+## \scode
+    Str = replace_scode(Str)
 ## \texttt
     Str = replace_texttt(Str)
 ## \_
@@ -452,6 +523,8 @@ def gen_cells(Str):
     Str = replace_emph(Str)
 ## \item
     Str = replace_item(Str)
+## \index
+    Str = replace_index(Str)
 ## $ $
     Str = replace_math(Str)
 ## link
@@ -459,7 +532,8 @@ def gen_cells(Str):
     Str = replace_link2(Str)
 ## \pageref
     Str = replace_pageref(Str)
-## \href
+## \ref
+    Str = replace_ref(Str)
     Str = replace_href(Str)
     Str = replace_web(Str)
 ## replace sections
@@ -468,6 +542,8 @@ def gen_cells(Str):
     Str = replace_examples(Str)
 ## quote
     Str = replace_quote(Str)
+## miscs
+    Str = replace_miscs(Str)
     return Str
 
 ######################################
@@ -760,6 +836,12 @@ for FileName in mylists:
 #os.remove(contents_folder + "Title_Page.ipynb")
 #os.remove(contents_folder + "openmp-example.ipynb")
 #os.remove(contents_folder + "openmp-examples.ipynb")
+
+# remove temprary files
+for filename in glob.glob("../../*_tmp.tex"):
+    os.remove(filename)
+for filename in glob.glob("../../*_tmp.txt"):
+    os.remove(filename)
 
 #####################
 # Generate _toc.yml #
