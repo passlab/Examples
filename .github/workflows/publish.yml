@@ -24,14 +24,6 @@ jobs:
       run: |
         pip install -r ./notebook/requirements.txt
 
-    - name: Commit the latest notebooks
-      uses: EndBug/add-and-commit@v7
-      with:
-        author_name: github-actions
-        author_email: 41898282+github-actions[bot]@users.noreply.github.com
-        message: 'Regenerate notebooks by GitHub Actions'
-        add: 'notebook'
-
     # Build the book
     - name: Build the book
       run: |
