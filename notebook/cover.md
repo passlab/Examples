@@ -1,0 +1,5 @@
+# OpenMP Programming Book
+
+======================================
+
+Authors:

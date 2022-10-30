@@ -1,16 +1,139 @@
-format: jb-article
+# Table of content
+# Learn more at https://jupyterbook.org/customize/toc.html
+#
+format: jb-book
 root: intro
-sections:
-- file: contents/Chap_introduction
-- file: contents/Chap_directives
-- file: contents/Chap_parallel_execution
-- file: contents/Chap_affinity
-- file: contents/Chap_tasking
-- file: contents/Chap_devices
-- file: contents/Chap_SIMD
-- file: contents/Chap_loop_transformations
-- file: contents/Chap_synchronization
-- file: contents/Chap_data_environment
-- file: contents/Chap_memory_model
-- file: contents/Chap_program_control
-- file: contents/Chap_ompt_interface
+parts:
+  - chapters:
+    - file: contents/Title_Page.ipynb
+    - file: contents/Foreword_Chapt.ipynb
+  - numbered: True
+    chapters:
+      - file: contents/Chap_introduction/0_Chap_introduction.ipynb
+        sections:
+        - file: contents/Chap_introduction/1_Examples_Organization.ipynb
+      - file: contents/Chap_directives/0_Chap_directives.ipynb
+        sections:
+        - file: contents/Chap_directives/1_C_C++_Pragmas.ipynb
+        - file: contents/Chap_directives/2_C++_Attributes.ipynb
+        - file: contents/Chap_directives/3_Fortran_Comments_Fixed_Source_Form.ipynb
+        - file: contents/Chap_directives/4_Fortran_Comments_Free_Source_Form.ipynb
+      - file: contents/Chap_parallel_execution/0_Chap_parallel_execution.ipynb
+        sections:
+        - file: contents/Chap_parallel_execution/1_A_Simple_Parallel_Loop.ipynb
+        - file: contents/Chap_parallel_execution/2_parallel_Construct.ipynb
+        - file: contents/Chap_parallel_execution/3_teams_Construct_on_Host.ipynb
+        - file: contents/Chap_parallel_execution/4_Controlling_the_Number_of_Threads_on_Multiple_Nesting_Levels.ipynb
+        - file: contents/Chap_parallel_execution/5_Interaction_Between_the_num_threads_Clause_and_omp_set_dynamic.ipynb
+        - file: contents/Chap_parallel_execution/6_Fortran_Restrictions_on_the_do_Construct.ipynb
+        - file: contents/Chap_parallel_execution/7_nowait_Clause.ipynb
+        - file: contents/Chap_parallel_execution/8_collapse_Clause.ipynb
+        - file: contents/Chap_parallel_execution/9_linear_Clause_in_Loop_Constructs.ipynb
+        - file: contents/Chap_parallel_execution/10_parallel_sections_Construct.ipynb
+        - file: contents/Chap_parallel_execution/11_firstprivate_Clause_and_sections_Construct.ipynb
+        - file: contents/Chap_parallel_execution/12_single_Construct.ipynb
+        - file: contents/Chap_parallel_execution/13_workshare_Construct.ipynb
+        - file: contents/Chap_parallel_execution/14_masked_Construct.ipynb
+        - file: contents/Chap_parallel_execution/15_loop_Construct.ipynb
+        - file: contents/Chap_parallel_execution/16_Parallel_Random_Access_Iterator_Loop.ipynb
+        - file: contents/Chap_parallel_execution/17_omp_set_dynamic_and_omp_set_num_threads_Routines.ipynb
+        - file: contents/Chap_parallel_execution/18_omp_get_num_threads_Routine.ipynb
+      - file: contents/Chap_affinity/0_Chap_affinity.ipynb
+        sections:
+        - file: contents/Chap_affinity/1_proc_bind_Clause.ipynb
+        - file: contents/Chap_affinity/2_Task_Affinity.ipynb
+        - file: contents/Chap_affinity/3_Affinity_Display.ipynb
+        - file: contents/Chap_affinity/4_Affinity_Query_Func.ipynb
+      - file: contents/Chap_tasking/0_Chap_tasking.ipynb
+        sections:
+        - file: contents/Chap_tasking/1_task_and_taskwait_Constructs.ipynb
+        - file: contents/Chap_tasking/2_Task_Priority.ipynb
+        - file: contents/Chap_tasking/3_Task_Dependences.ipynb
+        - file: contents/Chap_tasking/4_Task_Detachment.ipynb
+        - file: contents/Chap_tasking/5_taskgroup_Construct.ipynb
+        - file: contents/Chap_tasking/6_taskyield_Construct.ipynb
+        - file: contents/Chap_tasking/7_taskloop_Construct.ipynb
+        - file: contents/Chap_tasking/8_Combined_parallel_masked_and_taskloop_Constructs.ipynb
+      - file: contents/Chap_devices/0_Chap_devices.ipynb
+        sections:
+        - file: contents/Chap_devices/0_Devices.ipynb
+        - file: contents/Chap_devices/1_target_Construct.ipynb
+        - file: contents/Chap_devices/2_defaultmap_Clause.ipynb
+        - file: contents/Chap_devices/3_Pointer_Mapping.ipynb
+        - file: contents/Chap_devices/4_Structure_Mapping.ipynb
+        - file: contents/Chap_devices/5_Fortran_Allocatable_Array_Mapping.ipynb
+        - file: contents/Chap_devices/6_Array_Sections_in_Device_Constructs.ipynb
+        - file: contents/Chap_devices/7_C++_Virtual_Functions.ipynb
+        - file: contents/Chap_devices/8_Array_Shaping.ipynb
+        - file: contents/Chap_devices/9_declare_mapper_Directive.ipynb
+        - file: contents/Chap_devices/10_target_data_Construct.ipynb
+        - file: contents/Chap_devices/11_target_enter_data_and_target_exit_data_Constructs.ipynb
+        - file: contents/Chap_devices/12_target_update_Construct.ipynb
+        - file: contents/Chap_devices/13_Declare_Target_Directive.ipynb
+        - file: contents/Chap_devices/14_Lambda_Expressions.ipynb
+        - file: contents/Chap_devices/15_teams_Construct_and_Related_Combined_Constructs.ipynb
+        - file: contents/Chap_devices/16_Asynchronous_target_Execution_and_Dependences.ipynb
+        - file: contents/Chap_devices/17_Device_Routines.ipynb
+      - file: contents/Chap_SIMD/0_Chap_SIMD.ipynb
+        sections:
+        - file: contents/Chap_SIMD/1_simd_and_declare_simd_Directives.ipynb
+        - file: contents/Chap_SIMD/2_inbranch_and_notinbranch_Clauses.ipynb
+        - file: contents/Chap_SIMD/3_Loop-Carried_Lexical_Forward_Dependence.ipynb
+        - file: contents/Chap_SIMD/4_ref_val_uvalModifiers_for_linear_Clause.ipynb
+      - file: contents/Chap_loop_transformations/0_Chap_loop_transformations.ipynb
+        sections:
+        - file: contents/Chap_loop_transformations/1_tile_Construct.ipynb
+        - file: contents/Chap_loop_transformations/2_unroll_Construct.ipynb
+        - file: contents/Chap_loop_transformations/3_Incomplete_Tiles.ipynb
+      - file: contents/Chap_synchronization/0_Chap_synchronization.ipynb
+        sections:
+        - file: contents/Chap_synchronization/1_critical_Construct.ipynb
+        - file: contents/Chap_synchronization/2_Worksharing_Constructs_Inside_a_critical_Construct.ipynb
+        - file: contents/Chap_synchronization/3_Binding_of_barrier_Regions.ipynb
+        - file: contents/Chap_synchronization/4_atomic_Construct.ipynb
+        - file: contents/Chap_synchronization/5_Restrictions_on_the_atomic_Construct.ipynb
+        - file: contents/Chap_synchronization/6_flush_Construct_without_a_List.ipynb
+        - file: contents/Chap_synchronization/7_Synchronization_Based_on_Acquire_Release_Semantics.ipynb
+        - file: contents/Chap_synchronization/8_ordered_Clause_and_ordered_Construct.ipynb
+        - file: contents/Chap_synchronization/9_depobj_Construct.ipynb
+        - file: contents/Chap_synchronization/10_Doacross_Loop_Nest.ipynb
+        - file: contents/Chap_synchronization/11_Lock_Routines.ipynb
+      - file: contents/Chap_data_environment/0_Chap_data_environment.ipynb
+        sections:
+        - file: contents/Chap_data_environment/1_threadprivate_Directive.ipynb
+        - file: contents/Chap_data_environment/2_default_none_Clause.ipynb
+        - file: contents/Chap_data_environment/3_private_Clause.ipynb
+        - file: contents/Chap_data_environment/4_Fortran_Private_Loop_Iteration_Variables.ipynb
+        - file: contents/Chap_data_environment/5_Fortran_Restrictions_on_shared_and_private_Clauses_with_Common_Blocks.ipynb
+        - file: contents/Chap_data_environment/6_Fortran_Restrictions_on_Storage_Association_with_the_private_Clause.ipynb
+        - file: contents/Chap_data_environment/7_C_C++_Arrays_in_a_firstprivate_Clause.ipynb
+        - file: contents/Chap_data_environment/8_lastprivate_Clause.ipynb
+        - file: contents/Chap_data_environment/9_Reduction.ipynb
+        - file: contents/Chap_data_environment/10_scan_Directive.ipynb
+        - file: contents/Chap_data_environment/11_copyin_Clause.ipynb
+        - file: contents/Chap_data_environment/12_copyprivate_Clause.ipynb
+        - file: contents/Chap_data_environment/13_C++_Reference_in_Data-Sharing_Clauses.ipynb
+        - file: contents/Chap_data_environment/14_Fortran_ASSOCIATE_Construct.ipynb
+      - file: contents/Chap_memory_model/0_Chap_memory_model.ipynb
+        sections:
+        - file: contents/Chap_memory_model/1_OpenMP_Memory_Model.ipynb
+        - file: contents/Chap_memory_model/2_Memory_Allocators.ipynb
+        - file: contents/Chap_memory_model/3_Race_Conditions_Caused_by_Implied_Copies_of_Shared_Variables_in_Fortran.ipynb
+      - file: contents/Chap_program_control/0_Chap_program_control.ipynb
+        sections:
+        - file: contents/Chap_program_control/1_Conditional_Compilation.ipynb
+        - file: contents/Chap_program_control/2_Internal_Control_Variables_ICVs.ipynb
+        - file: contents/Chap_program_control/3_Placement_of_flush,_barrier_taskwait_and_taskyield_Directives.ipynb
+        - file: contents/Chap_program_control/4_Cancellation_Constructs.ipynb
+        - file: contents/Chap_program_control/5_requires_Directive.ipynb
+        - file: contents/Chap_program_control/6_declare_variant_Directive.ipynb
+        - file: contents/Chap_program_control/7_Metadirectives.ipynb
+        - file: contents/Chap_program_control/8_Nested_Loop_Constructs.ipynb
+        - file: contents/Chap_program_control/9_Restrictions_on_Nesting_of_Regions.ipynb
+        - file: contents/Chap_program_control/10_Target_Offload.ipynb
+        - file: contents/Chap_program_control/11_Controlling_Concurrency_and_Reproducibility_with_the_order_Clause.ipynb
+        - file: contents/Chap_program_control/12_interop_Construct.ipynb
+        - file: contents/Chap_program_control/13_Utilities.ipynb
+      - file: contents/Chap_ompt_interface/0_Chap_ompt_interface.ipynb
+        sections:
+        - file: contents/Chap_ompt_interface/1_OMPT_Start.ipynb
