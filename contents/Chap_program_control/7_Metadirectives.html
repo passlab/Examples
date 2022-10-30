@@ -1,0 +1,1730 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>12.7. Metadirectives &#8212; OpenMP Application Programming Interface Examples</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
+    <script>
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="copyright" title="Copyright" href="../../copyright.html" />
+    <link rel="next" title="12.8. Nested Loop Constructs" href="8_Nested_Loop_Constructs.html" />
+    <link rel="prev" title="12.6. declare variant Directive" href="6_declare_variant_Directive.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">OpenMP Application Programming Interface Examples</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../intro.html">
+   Welcome to OMP Jupyter Book
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Title_Page.html">
+   Cover
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../Foreword_Chapt.html">
+   Foreword
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_introduction/0_Chap_introduction.html">
+   1. Introduction
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_introduction/1_Examples_Organization.html">
+     1.1. Examples Organization
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_directives/0_Chap_directives.html">
+   2. OpenMP Directive Syntax
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_directives/1_C_C%2B%2B_Pragmas.html">
+     2.1. C/C++ Pragmas
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_directives/2_C%2B%2B_Attributes.html">
+     2.2. C++ Attributes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_directives/3_Fortran_Comments_Fixed_Source_Form.html">
+     2.3. Fortran Comments (Fixed Source Form)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_directives/4_Fortran_Comments_Free_Source_Form.html">
+     2.4. Fortran Comments (Free Source Form)
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_parallel_execution/0_Chap_parallel_execution.html">
+   3. Parallel Execution
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/1_A_Simple_Parallel_Loop.html">
+     3.1. A Simple Parallel Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/2_parallel_Construct.html">
+     3.2.
+     <strong>
+      parallel
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/3_teams_Construct_on_Host.html">
+     3.3.
+     <strong>
+      teams
+     </strong>
+     Construct on Host
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/4_Controlling_the_Number_of_Threads_on_Multiple_Nesting_Levels.html">
+     3.4. Controlling the Number of Threads on Multiple Nesting Levels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/5_Interaction_Between_the_num_threads_Clause_and_omp_set_dynamic.html">
+     3.5. Interaction Between the
+     <strong>
+      num_threads
+     </strong>
+     Clause and
+     <strong>
+      omp_set_dynamic
+     </strong>
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/6_Fortran_Restrictions_on_the_do_Construct.html">
+     3.6. Fortran Restrictions on the
+     <strong>
+      do
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/7_nowait_Clause.html">
+     3.7.
+     <strong>
+      nowait
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/8_collapse_Clause.html">
+     3.8.
+     <strong>
+      collapse
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/9_linear_Clause_in_Loop_Constructs.html">
+     3.9.
+     <strong>
+      linear
+     </strong>
+     Clause in Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/10_parallel_sections_Construct.html">
+     3.10.
+     <strong>
+      parallel
+     </strong>
+     <strong>
+      sections
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/11_firstprivate_Clause_and_sections_Construct.html">
+     3.11.
+     <strong>
+      firstprivate
+     </strong>
+     Clause and
+     <strong>
+      sections
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/12_single_Construct.html">
+     3.12.
+     <strong>
+      single
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/13_workshare_Construct.html">
+     3.13.
+     <strong>
+      workshare
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/14_masked_Construct.html">
+     3.14.
+     <strong>
+      masked
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/15_loop_Construct.html">
+     3.15.
+     <strong>
+      loop
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/16_Parallel_Random_Access_Iterator_Loop.html">
+     3.16. Parallel Random Access Iterator Loop
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/17_omp_set_dynamic_and_omp_set_num_threads_Routines.html">
+     3.17.
+     <strong>
+      omp_set_dynamic
+     </strong>
+     and
+     <strong>
+      omp_set_num_threads
+     </strong>
+     Routines
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_parallel_execution/18_omp_get_num_threads_Routine.html">
+     3.18.
+     <strong>
+      omp_get_num_threads
+     </strong>
+     Routine
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_affinity/0_Chap_affinity.html">
+   4. OpenMP Affinity
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_affinity/1_proc_bind_Clause.html">
+     4.1.
+     <strong>
+      proc_bind
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_affinity/2_Task_Affinity.html">
+     4.2. Task Affinity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_affinity/3_Affinity_Display.html">
+     4.3. Affinity Display
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_affinity/4_Affinity_Query_Func.html">
+     4.4. Affinity Query Functions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_tasking/0_Chap_tasking.html">
+   5. Tasking
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/1_task_and_taskwait_Constructs.html">
+     5.1.
+     <strong>
+      task
+     </strong>
+     and
+     <strong>
+      taskwait
+     </strong>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/2_Task_Priority.html">
+     5.2. Task Priority
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/3_Task_Dependences.html">
+     5.3. Task Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/4_Task_Detachment.html">
+     5.4. Task Detachment
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/5_taskgroup_Construct.html">
+     5.5.
+     <strong>
+      taskgroup
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/6_taskyield_Construct.html">
+     5.6.
+     <strong>
+      taskyield
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/7_taskloop_Construct.html">
+     5.7.
+     <strong>
+      taskloop
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_tasking/8_Combined_parallel_masked_and_taskloop_Constructs.html">
+     5.8. Combined
+     <strong>
+      parallel
+     </strong>
+     <strong>
+      masked
+     </strong>
+     and
+     <strong>
+      taskloop
+     </strong>
+     Constructs
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_devices/0_Chap_devices.html">
+   6. Devices
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/1_target_Construct.html">
+     6.1.
+     <strong>
+      target
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/2_defaultmap_Clause.html">
+     6.2.
+     <strong>
+      defaultmap
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/3_Pointer_Mapping.html">
+     6.3. Pointer Mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/4_Structure_Mapping.html">
+     6.4. Structure Mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/5_Fortran_Allocatable_Array_Mapping.html">
+     6.5. Fortran Allocatable Array Mapping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/6_Array_Sections_in_Device_Constructs.html">
+     6.6. Array Sections in Device Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/7_C%2B%2B_Virtual_Functions.html">
+     6.7. C++ Virtual Functions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/8_Array_Shaping.html">
+     6.8. Array Shaping
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/9_declare_mapper_Directive.html">
+     6.9.
+     <strong>
+      declare mapper
+     </strong>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/10_target_data_Construct.html">
+     6.10.
+     <strong>
+      target
+     </strong>
+     <strong>
+      data
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/11_target_enter_data_and_target_exit_data_Constructs.html">
+     6.11.
+     <strong>
+      target
+     </strong>
+     <strong>
+      enter
+     </strong>
+     <strong>
+      data
+     </strong>
+     and
+     <strong>
+      target
+     </strong>
+     <strong>
+      exit
+     </strong>
+     <strong>
+      data
+     </strong>
+     Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/12_target_update_Construct.html">
+     6.12.
+     <strong>
+      target
+     </strong>
+     <strong>
+      update
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/13_Declare_Target_Directive.html">
+     6.13. Declare Target Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/14_Lambda_Expressions.html">
+     6.14. Lambda Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/15_teams_Construct_and_Related_Combined_Constructs.html">
+     6.15.
+     <strong>
+      teams
+     </strong>
+     Construct and Related Combined Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/16_Asynchronous_target_Execution_and_Dependences.html">
+     6.16. Asynchronous
+     <strong>
+      target
+     </strong>
+     Execution and Dependences
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_devices/17_Device_Routines.html">
+     6.17. Device Routines
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_SIMD/0_Chap_SIMD.html">
+   7. SIMD
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_SIMD/1_simd_and_declare_simd_Directives.html">
+     7.1.
+     <strong>
+      simd
+     </strong>
+     and
+     <strong>
+      declare
+     </strong>
+     <strong>
+      simd
+     </strong>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_SIMD/2_inbranch_and_notinbranch_Clauses.html">
+     7.2.
+     <strong>
+      inbranch
+     </strong>
+     and
+     <strong>
+      notinbranch
+     </strong>
+     Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_SIMD/3_Loop-Carried_Lexical_Forward_Dependence.html">
+     7.3. Loop-Carried Lexical Forward Dependence
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_SIMD/4_ref_val_uvalModifiers_for_linear_Clause.html">
+     7.4.
+     <strong>
+      ref
+     </strong>
+     ,
+     <strong>
+      val
+     </strong>
+     ,
+     <strong>
+      uval
+     </strong>
+     Modifiers for
+     <strong>
+      linear
+     </strong>
+     Clause
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_loop_transformations/0_Chap_loop_transformations.html">
+   8. Loop Transformations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_loop_transformations/1_tile_Construct.html">
+     8.1.
+     <strong>
+      tile
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_loop_transformations/2_unroll_Construct.html">
+     8.2.
+     <strong>
+      unroll
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_loop_transformations/3_Incomplete_Tiles.html">
+     8.3. Incomplete Tiles
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_synchronization/0_Chap_synchronization.html">
+   9. Synchronization
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/1_critical_Construct.html">
+     9.1.
+     <strong>
+      critical
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/2_Worksharing_Constructs_Inside_a_critical_Construct.html">
+     9.2. Worksharing Constructs Inside a
+     <strong>
+      critical
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/3_Binding_of_barrier_Regions.html">
+     9.3. Binding of
+     <strong>
+      barrier
+     </strong>
+     Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/4_atomic_Construct.html">
+     9.4.
+     <strong>
+      atomic
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/5_Restrictions_on_the_atomic_Construct.html">
+     9.5. Restrictions on the
+     <strong>
+      atomic
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/6_flush_Construct_without_a_List.html">
+     9.6.
+     <strong>
+      flush
+     </strong>
+     Construct without a List
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/7_Synchronization_Based_on_Acquire_Release_Semantics.html">
+     9.7. Synchronization Based on Acquire/Release Semantics
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/8_ordered_Clause_and_ordered_Construct.html">
+     9.8.
+     <strong>
+      ordered
+     </strong>
+     Clause and
+     <strong>
+      ordered
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/9_depobj_Construct.html">
+     9.9.
+     <strong>
+      depobj
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/10_Doacross_Loop_Nest.html">
+     9.10. Doacross Loop Nest
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_synchronization/11_Lock_Routines.html">
+     9.11. Lock Routines
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_data_environment/0_Chap_data_environment.html">
+   10. Data Environment
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/1_threadprivate_Directive.html">
+     10.1.
+     <strong>
+      threadprivate
+     </strong>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/2_default_none_Clause.html">
+     10.2.
+     <strong>
+      default(none)
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/3_private_Clause.html">
+     10.3.
+     <strong>
+      private
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/4_Fortran_Private_Loop_Iteration_Variables.html">
+     10.4. Fortran Private Loop Iteration Variables
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/5_Fortran_Restrictions_on_shared_and_private_Clauses_with_Common_Blocks.html">
+     10.5. Fortran Restrictions on
+     <strong>
+      shared
+     </strong>
+     and
+     <strong>
+      private
+     </strong>
+     Clauses with Common Blocks
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/6_Fortran_Restrictions_on_Storage_Association_with_the_private_Clause.html">
+     10.6. Fortran Restrictions on Storage Association with the
+     <strong>
+      private
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/7_C_C%2B%2B_Arrays_in_a_firstprivate_Clause.html">
+     10.7. C/C++ Arrays in a
+     <strong>
+      firstprivate
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/8_lastprivate_Clause.html">
+     10.8.
+     <strong>
+      lastprivate
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/9_Reduction.html">
+     10.9. Reduction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/10_scan_Directive.html">
+     10.10.
+     <strong>
+      scan
+     </strong>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/11_copyin_Clause.html">
+     10.11.
+     <strong>
+      copyin
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/12_copyprivate_Clause.html">
+     10.12.
+     <strong>
+      copyprivate
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/13_C%2B%2B_Reference_in_Data-Sharing_Clauses.html">
+     10.13. C++ Reference in Data-Sharing Clauses
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_data_environment/14_Fortran_ASSOCIATE_Construct.html">
+     10.14. Fortran
+     <strong>
+      ASSOCIATE
+     </strong>
+     Construct
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_memory_model/0_Chap_memory_model.html">
+   11. Memory Model
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+  <label for="toctree-checkbox-11">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_memory_model/1_OpenMP_Memory_Model.html">
+     11.1. OpenMP Memory Model
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_memory_model/2_Memory_Allocators.html">
+     11.2. Memory Allocators
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_memory_model/3_Race_Conditions_Caused_by_Implied_Copies_of_Shared_Variables_in_Fortran.html">
+     11.3. Race Conditions Caused by Implied Copies of Shared Variables in Fortran
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="0_Chap_program_control.html">
+   12. Program Control
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+  <label for="toctree-checkbox-12">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="1_Conditional_Compilation.html">
+     12.1. Conditional Compilation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2_Internal_Control_Variables_ICVs.html">
+     12.2. Internal Control Variables (ICVs)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3_Placement_of_flush%2C_barrier_taskwait_and_taskyield_Directives.html">
+     12.3. Placement of
+     <strong>
+      flush
+     </strong>
+     ,
+     <strong>
+      barrier
+     </strong>
+     ,
+     <strong>
+      taskwait
+     </strong>
+     and
+     <strong>
+      taskyield
+     </strong>
+     Directives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4_Cancellation_Constructs.html">
+     12.4. Cancellation Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="5_requires_Directive.html">
+     12.5.
+     <strong>
+      requires
+     </strong>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="6_declare_variant_Directive.html">
+     12.6.
+     <strong>
+      declare
+     </strong>
+     <strong>
+      variant
+     </strong>
+     Directive
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     12.7. Metadirectives
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="8_Nested_Loop_Constructs.html">
+     12.8. Nested Loop Constructs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="9_Restrictions_on_Nesting_of_Regions.html">
+     12.9. Restrictions on Nesting of Regions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="10_Target_Offload.html">
+     12.10. Target Offload
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="11_Controlling_Concurrency_and_Reproducibility_with_the_order_Clause.html">
+     12.11. Controlling Concurrency and Reproducibility with  the
+     <strong>
+      order
+     </strong>
+     Clause
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="12_interop_Construct.html">
+     12.12.
+     <strong>
+      interop
+     </strong>
+     Construct
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="13_Utilities.html">
+     12.13. Utilities
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../Chap_ompt_interface/0_Chap_ompt_interface.html">
+   13. OMPT Interface
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+  <label for="toctree-checkbox-13">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../Chap_ompt_interface/1_OMPT_Start.html">
+     13.1. OMPT Start
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/contents/Chap_program_control/7_Metadirectives.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/passlab/Examples"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Chap_program_control/7_Metadirectives.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_program_control/7_Metadirectives.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Metadirectives</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <div class="section" id="metadirectives">
+<h1><span class="section-number">12.7. </span>Metadirectives<a class="headerlink" href="#metadirectives" title="Permalink to this headline">¶</a></h1>
+<p>A <strong>metadirective</strong> directive provides a mechanism to select a directive in a <strong>when</strong> clause to be used, depending upon one or more contexts:   implementation, available devices and the present enclosing construct.  The directive in an <strong>otherwise</strong> clause is used when a directive of the  <strong>when</strong> clause is not selected.</p>
+<p>In the <strong>when</strong> clause the  <em>context selector</em>  (or just  <em>selector</em> ) defines traits that are evaluated for selection of the directive that follows the selector.  This “selectable” directive is called a  <em>directive variant</em> . Traits are grouped by  <em>construct</em> ,  <em>implementation</em>  and   <em>device</em>   <em>sets</em>  to be used by a selector of the same name.</p>
+<p>In the first example the architecture trait  <em>arch</em>  of the   <em>device</em>  selector set specifies that if an  <em>nvptx</em>  architecture is active in the OpenMP context, then the <strong>teams</strong> <strong>loop</strong>   <em>directive variant</em>  is selected as the directive; otherwise, the <strong>parallel</strong> <strong>loop</strong>  <em>directive variant</em>  of the <strong>otherwise</strong> clause is selected as the directive. That is, if a  <em>device</em>  of  <em>nvptx</em>  architecture is supported by the implementation within the enclosing <strong>target</strong> construct, its  <em>directive variant</em>  is selected. The architecture names, such as  <em>nvptx</em> , are implementation defined. Also, note that  <em>device</em>  as used in a <strong>target</strong> construct specifies a device number, while  <em>device</em> , as used in the <strong>metadirective</strong> directive as selector set, has traits of  <em>kind</em> ,  <em>isa</em>  and  <em>arch</em> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//%compiler: clang</span>
+<span class="c1">//%cflags: -fopenmp</span>
+
+<span class="cm">/*</span>
+<span class="cm">* name: metadirective.1</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.2</span>
+<span class="cm">*/</span><span class="w"></span>
+
+<span class="cp">#define N 100</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">v1</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="n">v2</span><span class="p">[</span><span class="n">N</span><span class="p">],</span><span class="w"> </span><span class="n">v3</span><span class="p">[</span><span class="n">N</span><span class="p">];</span><span class="w"></span>
+<span class="w">   </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">){</span><span class="w"> </span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=-</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">   </span><span class="cp">#pragma omp target map(to:v1,v2) map(from:v3) device(0)</span>
+<span class="w">   </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">                   when(     device={arch(&quot;nvptx&quot;)}: teams loop) \</span>
+<span class="cp">                   otherwise(                     parallel loop)</span>
+<span class="w">     </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">  </span><span class="n">v3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v2</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+
+<span class="w">   </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot; %d  %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">v3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">v3</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span><span class="w"> </span><span class="c1">//output: -1  -10000</span>
+
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">!!%</span><span class="n">compiler</span><span class="o">:</span><span class="w"> </span><span class="n">gfortran</span><span class="w"></span>
+<span class="o">!!%</span><span class="n">cflags</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">fopenmp</span><span class="w"></span>
+
+<span class="o">!</span><span class="w"> </span><span class="n">name</span><span class="o">:</span><span class="w"> </span><span class="n">metadirective</span><span class="mf">.1</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="n">F</span><span class="o">-</span><span class="n">free</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="n">omp_5</span><span class="mf">.2</span><span class="w"></span>
+<span class="n">program</span><span class="w"> </span><span class="n">main</span><span class="w"></span>
+<span class="w">   </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">N</span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"></span>
+<span class="w">   </span><span class="n">integer</span><span class="w"> </span><span class="o">::</span><span class="w">  </span><span class="n">v1</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="w"> </span><span class="n">v2</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="w"> </span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span><span class="w">  </span><span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">=-</span><span class="n">i</span><span class="p">;</span><span class="w">  </span><span class="n">enddo</span><span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">initialize</span><span class="w"></span>
+
+<span class="w">   </span><span class="o">!</span><span class="n">$omp</span><span class="w">  </span><span class="n">target</span><span class="w"> </span><span class="n">map</span><span class="p">(</span><span class="n">to</span><span class="o">:</span><span class="n">v1</span><span class="p">,</span><span class="n">v2</span><span class="p">)</span><span class="w"> </span><span class="n">map</span><span class="p">(</span><span class="n">from</span><span class="o">:</span><span class="n">v3</span><span class="p">)</span><span class="w"> </span><span class="n">device</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="n">$omp</span><span class="w">  </span><span class="n">metadirective</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">     </span><span class="n">when</span><span class="p">(</span><span class="w">     </span><span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;nvptx&quot;</span><span class="p">)}</span><span class="o">:</span><span class="w"> </span><span class="n">teams</span><span class="w"> </span><span class="n">loop</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">     </span><span class="n">otherwise</span><span class="p">(</span><span class="w">                     </span><span class="n">parallel</span><span class="w"> </span><span class="n">loop</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">v3</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v2</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="n">enddo</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="n">$omp</span><span class="w">  </span><span class="n">end</span><span class="w"> </span><span class="n">target</span><span class="w"></span>
+
+<span class="w">   </span><span class="n">print</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="n">v3</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">v3</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="o">!!</span><span class="n">output</span><span class="o">:</span><span class="w"> </span><span class="mi">-1</span><span class="w">  </span><span class="mi">-10000</span><span class="w"></span>
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the second example, the  <em>implementation</em>  selector set is specified in the <strong>when</strong> clause to distinguish between platforms.  Additionally, specific architectures are specified with the  <em>device</em>   selector set.</p>
+<p>In the code, different <strong>teams</strong> constructs are employed as determined by the <strong>metadirective</strong> directive. The number of teams is restricted by a <strong>num_teams</strong> clause and a thread limit is also set by a <strong>thread_limit</strong> clause for   <em>vendor</em>  platforms and specific architecture traits.  Otherwise, just the <strong>teams</strong> construct is used without any clauses, as prescribed by the <strong>otherwise</strong> clause.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//%compiler: clang</span>
+<span class="c1">//%cflags: -fopenmp</span>
+
+<span class="cm">/*</span>
+<span class="cm">* name: metadirective.2</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.2</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="cp">#define N 100</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">work_on_chunk</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">idev</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w">                    </span><span class="c1">//Driver</span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">idev</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">idev</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">idev</span><span class="o">&lt;</span><span class="n">omp_get_num_devices</span><span class="p">();</span><span class="w"> </span><span class="n">idev</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="cp">#pragma omp target device(idev)</span>
+<span class="w">      </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">               when( implementation={vendor(nvidia)},            \</span>
+<span class="cp">                                       device={arch(&quot;kepler&quot;)}:  \</span>
+<span class="cp">                     teams num_teams(512) thread_limit(32) )     \</span>
+<span class="cp">               when( implementation={vendor(amd)},               \</span>
+<span class="cp">                                       device={arch(&quot;fiji&quot;  )}:  \</span>
+<span class="cp">                     teams num_teams(512) thread_limit(64) )     \</span>
+<span class="cp">               otherwise(                                        \</span>
+<span class="cp">                     teams)</span>
+<span class="w">      </span><span class="cp">#pragma omp distribute parallel for</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">work_on_chunk</span><span class="p">(</span><span class="n">idev</span><span class="p">,</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">   </span><span class="p">}</span><span class="w"></span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">!!%</span><span class="n">compiler</span><span class="o">:</span><span class="w"> </span><span class="n">gfortran</span><span class="w"></span>
+<span class="o">!!%</span><span class="n">cflags</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">fopenmp</span><span class="w"></span>
+
+<span class="o">!</span><span class="w"> </span><span class="n">name</span><span class="o">:</span><span class="w"> </span><span class="n">metadirective</span><span class="mf">.2</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="n">F</span><span class="o">-</span><span class="n">free</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="n">omp_5</span><span class="mf">.2</span><span class="w"></span>
+<span class="n">program</span><span class="w"> </span><span class="n">main</span><span class="w">                    </span><span class="o">!!</span><span class="n">Driver</span><span class="w"></span>
+<span class="w">  </span><span class="n">use</span><span class="w"> </span><span class="n">omp_lib</span><span class="w"></span>
+<span class="w">  </span><span class="n">implicit</span><span class="w"> </span><span class="n">none</span><span class="w"></span>
+<span class="w">  </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="w"></span>
+<span class="w">  </span><span class="n">external</span><span class="w">           </span><span class="o">::</span><span class="w"> </span><span class="n">work_on_chunk</span><span class="w"></span>
+<span class="w">  </span><span class="n">integer</span><span class="w">            </span><span class="o">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="n">idev</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">do</span><span class="w"> </span><span class="n">idev</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">omp_get_num_devices</span><span class="p">()</span><span class="mi">-1</span><span class="w"></span>
+
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="n">device</span><span class="p">(</span><span class="n">idev</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">begin</span><span class="w"> </span><span class="n">metadirective</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="w"> </span><span class="n">implementation</span><span class="o">=</span><span class="p">{</span><span class="n">vendor</span><span class="p">(</span><span class="n">nvidia</span><span class="p">)},</span><span class="w">        </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">           </span><span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;kepler&quot;</span><span class="p">)}</span><span class="o">:</span><span class="w">             </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">        </span><span class="n">teams</span><span class="w"> </span><span class="n">num_teams</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span><span class="w"> </span><span class="n">thread_limit</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">  </span><span class="n">when</span><span class="p">(</span><span class="w"> </span><span class="n">implementation</span><span class="o">=</span><span class="p">{</span><span class="n">vendor</span><span class="p">(</span><span class="n">amd</span><span class="p">)},</span><span class="w">           </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">           </span><span class="n">device</span><span class="o">=</span><span class="p">{</span><span class="n">arch</span><span class="p">(</span><span class="s">&quot;fiji&quot;</span><span class="w">  </span><span class="p">)}</span><span class="o">:</span><span class="w">             </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">        </span><span class="n">teams</span><span class="w"> </span><span class="n">num_teams</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span><span class="w"> </span><span class="n">thread_limit</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">  </span><span class="n">otherwise</span><span class="p">(</span><span class="w"> </span><span class="n">teams</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">distribute</span><span class="w"> </span><span class="n">parallel</span><span class="w"> </span><span class="k">do</span><span class="w"></span>
+<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">N</span><span class="w"></span>
+<span class="w">       </span><span class="n">call</span><span class="w"> </span><span class="n">work_on_chunk</span><span class="p">(</span><span class="n">idev</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">end</span><span class="w"> </span><span class="k">do</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="n">metadirective</span><span class="w"></span>
+<span class="w">    </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="n">target</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">end</span><span class="w"> </span><span class="k">do</span><span class="w"></span>
+
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the third example, a  <em>construct</em>  selector set is specified in the <strong>when</strong> clause.   Here, a <strong>metadirective</strong> directive is used within a function that is also compiled as a function for a target device as directed by a declare target directive. The  <em>target</em>  directive name of the <strong>construct</strong> selector ensures that the <strong>distribute</strong> <strong>parallel</strong> <strong>for/do</strong> construct is employed for the target compilation. Otherwise, for the host-compiled version the <strong>parallel</strong> <strong>for/do</strong> <strong>simd</strong> construct is used.</p>
+<p>In the first call to the  <em>exp_pi_diff()</em>  routine the context is a <strong>target</strong> <strong>teams</strong> construct and the <strong>distribute</strong> <strong>parallel</strong> <strong>for/do</strong> construct version of the function is invoked, while in the second call the <strong>parallel</strong> <strong>for/do</strong> <strong>simd</strong> construct version is used.</p>
+<p>This case illustrates an important point for users that may want to hoist the  <strong>target</strong> directive out of a function that contains the usual  <strong>target</strong> <strong>teams</strong> <strong>distribute</strong> <strong>parallel</strong> <strong>for/do</strong> construct (for providing alternate constructs through the <strong>metadirective</strong> directive as here). While this combined construct can be decomposed into a <strong>target</strong> and <strong>teams distribute parallel for/do</strong> constructs, the OpenMP 5.0 specification has the restriction: “If a <strong>teams</strong> construct is nested within a <strong>target</strong> construct, that <strong>target</strong> construct must contain no statements, declarations or directives outside of the <strong>teams</strong> construct’’. So, the <strong>teams</strong> construct must immediately follow the <strong>target</strong> construct without any intervening code statements (which includes function calls).   Since the <strong>target</strong> construct alone cannot be hoisted out of a function,  the <strong>target</strong> <strong>teams</strong> construct has been hoisted out of the function, and the  <strong>distribute</strong> <strong>parallel</strong> <strong>for/do</strong> construct is used as the  <em>variant</em>  directive of the <strong>metadirective</strong> directive within the function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//%compiler: clang</span>
+<span class="c1">//%cflags: -fopenmp</span>
+
+<span class="cm">/*</span>
+<span class="cm">* name: metadirective.3</span>
+<span class="cm">* type: C</span>
+<span class="cm">* version: omp_5.2</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w">  </span><span class="cpf">&lt;math.h&gt;</span><span class="cp"></span>
+<span class="cp">#define      N 1000</span>
+
+<span class="cp">#pragma omp begin declare target</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">exp_pi_diff</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">d</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">my_pi</span><span class="p">){</span><span class="w"></span>
+<span class="w">   </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">               when(   construct={target}: distribute parallel for ) \</span>
+<span class="cp">               otherwise(                  parallel for simd )</span>
+<span class="w">   </span><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="cp">#pragma omp end declare target</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">//Calculates sequence of exponentials: (M_PI-my_pi) * index</span>
+<span class="w">  </span><span class="c1">//M_PI is from math.h, and my_pi is user provided.</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="p">];</span><span class="w"></span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">my_pi</span><span class="o">=</span><span class="mf">3.14159265358979e0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">      </span><span class="cp">#pragma omp target teams map(tofrom: d[0:N])</span>
+<span class="w">      </span><span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">);</span><span class="w"></span>
+<span class="w">                                           </span><span class="c1">// value should be near 1</span>
+<span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;d[N-1] = %20.14f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span><span class="w"> </span><span class="c1">// ...= 1.00000000000311</span>
+
+<span class="w">      </span><span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">);</span><span class="w">                </span><span class="c1">// value should be near 1</span>
+<span class="w">      </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;d[N-1] = %20.14f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">N</span><span class="mi">-1</span><span class="p">]);</span><span class="w"> </span><span class="c1">// ...= 1.00000000000311</span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="o">!!%</span><span class="n">compiler</span><span class="o">:</span><span class="w"> </span><span class="n">gfortran</span><span class="w"></span>
+<span class="o">!!%</span><span class="n">cflags</span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">fopenmp</span><span class="w"></span>
+
+<span class="o">!</span><span class="w"> </span><span class="n">name</span><span class="o">:</span><span class="w"> </span><span class="n">metadirective</span><span class="mf">.3</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">type</span><span class="o">:</span><span class="w"> </span><span class="n">F</span><span class="o">-</span><span class="n">free</span><span class="w"></span>
+<span class="o">!</span><span class="w"> </span><span class="n">version</span><span class="o">:</span><span class="w"> </span><span class="n">omp_5</span><span class="mf">.2</span><span class="w"></span>
+<span class="n">module</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="w">   </span><span class="n">integer</span><span class="p">,</span><span class="w"> </span><span class="n">parameter</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="n">N</span><span class="o">=</span><span class="mi">1000</span><span class="w"></span>
+<span class="w">   </span><span class="n">DOUBLE</span><span class="w"> </span><span class="n">PRECISION</span><span class="p">,</span><span class="w"> </span><span class="n">PARAMETER</span><span class="o">::</span><span class="n">M_PI</span><span class="o">=</span><span class="mf">4.0</span><span class="n">d0</span><span class="o">*</span><span class="n">DATAN</span><span class="p">(</span><span class="mf">1.0</span><span class="n">d0</span><span class="p">)</span><span class="w"></span>
+<span class="w">                                     </span><span class="o">!</span><span class="w"> </span><span class="mf">3.1415926535897932</span><span class="n">_8</span><span class="w"></span>
+<span class="n">end</span><span class="w"> </span><span class="n">module</span><span class="w"></span>
+
+
+<span class="n">subroutine</span><span class="w"> </span><span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="w">    </span><span class="n">my_pi</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">use</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="w">  </span><span class="n">implicit</span><span class="w"> </span><span class="n">none</span><span class="w"></span>
+<span class="w">  </span><span class="n">integer</span><span class="w">          </span><span class="o">::</span><span class="w">  </span><span class="n">i</span><span class="w"></span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">precision</span><span class="w"> </span><span class="o">::</span><span class="w">  </span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">),</span><span class="w"> </span><span class="n">my_pi</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">declare</span><span class="w"> </span><span class="n">target</span><span class="w"></span>
+
+<span class="w">  </span><span class="o">!</span><span class="n">$omp</span><span class="w">   </span><span class="n">metadirective</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">      </span><span class="n">when</span><span class="p">(</span><span class="w"> </span><span class="n">construct</span><span class="o">=</span><span class="p">{</span><span class="n">target</span><span class="p">}</span><span class="o">:</span><span class="w"> </span><span class="n">distribute</span><span class="w"> </span><span class="n">parallel</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="p">)</span><span class="w">  </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="n">$omp</span><span class="o">&amp;</span><span class="w">      </span><span class="n">otherwise</span><span class="p">(</span><span class="w">                </span><span class="n">parallel</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="n">simd</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">do</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">d</span><span class="p">)</span><span class="w"></span>
+<span class="w">     </span><span class="n">d</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="n">end</span><span class="w"> </span><span class="k">do</span><span class="w"></span>
+
+<span class="n">end</span><span class="w"> </span><span class="n">subroutine</span><span class="w"></span>
+
+<span class="n">program</span><span class="w"> </span><span class="n">main</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="w"> </span><span class="n">Calculates</span><span class="w"> </span><span class="n">sequence</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">exponentials</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">-</span><span class="n">my_pi</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">index</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="w"> </span><span class="n">M_PI</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">usual</span><span class="w"> </span><span class="n">way</span><span class="p">,</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">my_pi</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="n">user</span><span class="w"> </span><span class="n">provided</span><span class="p">.</span><span class="w"></span>
+<span class="w">  </span><span class="o">!</span><span class="w"> </span><span class="n">Fortran</span><span class="w"> </span><span class="n">Standard</span><span class="w"> </span><span class="n">does</span><span class="w"> </span><span class="n">not</span><span class="w"> </span><span class="n">provide</span><span class="w"> </span><span class="n">PI</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">use</span><span class="w"> </span><span class="n">params</span><span class="w"></span>
+<span class="w">  </span><span class="n">implicit</span><span class="w"> </span><span class="n">none</span><span class="w"></span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">precision</span><span class="w">   </span><span class="o">::</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w"></span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">precision</span><span class="w">   </span><span class="o">::</span><span class="w"> </span><span class="n">my_pi</span><span class="o">=</span><span class="mf">3.14159265358979</span><span class="n">d0</span><span class="w"></span>
+
+<span class="w">      </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="n">teams</span><span class="w"> </span><span class="n">map</span><span class="p">(</span><span class="n">from</span><span class="o">:</span><span class="w"> </span><span class="n">d</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="o">!</span><span class="n">$omp</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="n">target</span><span class="w"> </span><span class="n">teams</span><span class="w"></span>
+<span class="w">                                  </span><span class="o">!</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">near</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d(N) = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="mf">1.00000000000311</span><span class="w"></span>
+
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">exp_pi_diff</span><span class="p">(</span><span class="n">d</span><span class="p">,</span><span class="n">my_pi</span><span class="p">)</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">should</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">near</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">      </span><span class="n">print</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;d(N) = &quot;</span><span class="p">,</span><span class="n">d</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="mf">1.00000000000311</span><span class="w"></span>
+
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <strong>user</strong> selector set can be used in a metadirective to select directives at execution time when the  <strong>condition(</strong>  <em>boolean-expr</em>  <strong>)</strong> selector expression is not a constant expression. In this case it is a  <em>dynamic</em>  trait set, and the selection is made at run time, rather than at compile time.</p>
+<p>In the following example the  <em>foo</em>  function employs the <strong>condition</strong> selector to choose a device for execution at run time.  In the  <em>bar</em>  routine metadirectives are nested. At the outer level a selection between serial and parallel execution in performed at run time, followed by another run time selection on the schedule kind in the inner level when the active  <em>construct</em>  trait is <strong>parallel</strong>.</p>
+<p>(Note, the variable  <em>b</em>  in two of the “selected’’ constructs is declared private for the sole purpose  of detecting and reporting that the construct is used. Since the variable is private, its value  is unchanged outside of the construct region, whereas it is changed if the “unselected’’ construct is used.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//%compiler: clang</span>
+<span class="c1">//%cflags: -fopenmp</span>
+
+<span class="cm">/*</span>
+<span class="cm">* name:       metadirective.4</span>
+<span class="cm">* type:       C</span>
+<span class="cm">* version:    omp_5.2</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="cp">#define N 100</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdbool.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w">   </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w">     </span><span class="cpf">&lt;omp.h&gt;</span><span class="cp"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_gpu</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w">   </span><span class="c1">//  use b to detect if run on gpu</span>
+
+<span class="w">   </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">               when( user={condition(use_gpu)}:           \</span>
+<span class="cp">                     target teams distribute parallel for \</span>
+<span class="cp">                     private(b) map(from:a[0:n]) )        \</span>
+<span class="cp">               otherwise(                                 \</span>
+<span class="cp">                     parallel for )</span>
+<span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">;}</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">b</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PASSED 1 of 3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">bar</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">run_parallel</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">unbalanced</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">               when(user={condition(run_parallel)}: parallel)</span>
+<span class="w">   </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">omp_in_parallel</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">omp_get_thread_num</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PASSED 2 of 3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);}</span><span class="w"></span>
+
+<span class="w">      </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">          when( construct={parallel}, \</span>
+<span class="cp">                user={condition(unbalanced)}: for schedule(guided) \</span>
+<span class="cp">                                                  private(b)) \</span>
+<span class="cp">          when( construct={parallel}        : for schedule(static))</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">n</span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="n">b</span><span class="o">=</span><span class="mi">1</span><span class="p">;}</span><span class="w"></span>
+<span class="w">   </span><span class="p">}</span><span class="w"></span>
+<span class="w">   </span><span class="c1">// if guided b=0, because b is private</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">b</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;PASSED 3 of 3</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">foo</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_gpu</span><span class="p">);</span><span class="w"></span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">bar</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">run_parallel</span><span class="p">,</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">unbalanced</span><span class="p">);</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(){</span><span class="w"></span>
+
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="p">[</span><span class="n">N</span><span class="p">];</span><span class="w"></span>
+<span class="w">   </span><span class="c1">// App normally sets these, dependent on input parameters</span>
+<span class="w">   </span><span class="kt">bool</span><span class="w"> </span><span class="n">use_gpu</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">run_parallel</span><span class="o">=</span><span class="nb">true</span><span class="p">,</span><span class="w"> </span><span class="n">unbalanced</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">   </span><span class="c1">// Testing: set Env Var MK_FAIL to anything to fail tests</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;MK_FAIL&quot;</span><span class="p">)</span><span class="o">!=</span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">use_gpu</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="n">run_parallel</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span><span class="w"> </span><span class="n">unbalanced</span><span class="o">=</span><span class="nb">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">   </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">   </span><span class="n">foo</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">use_gpu</span><span class="p">);</span><span class="w"></span>
+<span class="w">   </span><span class="n">bar</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">run_parallel</span><span class="p">,</span><span class="n">unbalanced</span><span class="p">);</span><span class="w"></span>
+
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span>!!%compiler: gfortran
+!!%cflags: -fopenmp
+
+! name: metadirective.4
+! type: F-free
+! version: omp_5.2
+subroutine foo(a, n, use_gpu)
+   integer :: n, a(n)
+   logical :: use_gpu
+
+   integer :: b=0   !! use b to detect if run on gpu
+
+   !$omp metadirective &amp;
+   !$omp&amp;            when(user={condition(use_gpu)}:           &amp;
+   !$omp&amp;                 target teams distribute parallel for &amp;
+   !$omp&amp;                 private(b) map(from:a(1:n)) )        &amp;
+   !$omp&amp;            otherwise(                                &amp;
+   !$omp&amp;                 parallel do)
+   do i = 1,n; a(i)=i; if(i==n) b=1; end do
+
+   if(b==0) print *, &quot;PASSED 1 of 3&quot;  ! bc b is firstprivate for gpu run
+end subroutine
+
+subroutine bar (a, n, run_parallel, unbalanced)
+   use omp_lib, only : omp_get_thread_num
+   integer :: n, a(n)
+   logical :: run_parallel, unbalanced
+
+   integer :: b=0
+   !$omp begin metadirective when(user={condition(run_parallel)}: parallel)
+
+    if(omp_in_parallel() == 1 .and. omp_get_thread_num() == 0) &amp;
+       print *,&quot;PASSED 2 of 3&quot;
+
+    !$omp metadirective &amp;
+    !$omp&amp;  when(construct={parallel}, user={condition(unbalanced)}: &amp;
+    !$omp&amp;         for schedule(guided) private(b)) &amp;
+    !$omp&amp;  when(construct={parallel}: for schedule(static))
+    do i = 1,n; a(i)=i; if(i==n) b=1; end do
+
+   !$omp end metadirective
+
+   if(b==0) print *, &quot;PASSED 3 of 3&quot;   !!if guided, b=0 since b is private
+end subroutine
+
+program meta
+   use omp_lib
+   integer, parameter :: N=100
+   integer :: p(N)
+   integer :: env_stat
+                !! App normally sets these, dependent on input parameters
+   logical ::  use_gpu=.true., run_parallel=.true., unbalanced=.true.
+
+                !! Testing: set Env Var MK_FAIL to anything to fail tests
+   call get_environment_variable(&#39;MK_FAIL&#39;,status=env_stat)
+   if(env_stat /= 1) then                ! status =1 when not set!
+      use_gpu=.false.; run_parallel=.false.; unbalanced=.false.
+   endif
+
+
+   call foo(p, N, use_gpu)
+   call bar(p, N, run_parallel,unbalanced)
+
+end program
+</pre></div>
+</div>
+</div>
+</div>
+<p>Metadirectives can be used in conjunction with templates as shown in the C++ code below. Here the template definition generates two versions of the Fibonacci function. The  <em>tasking</em>  boolean is used in the <strong>condition</strong> selector to enable tasking. The true form implements a parallel version with <strong>task</strong> and <strong>taskwait</strong> constructs as in the  <em>tasking.4.c</em>  code in Section 5.1. The false form implements a serial version without any tasking constructs. Note that the serial version is used in the parallel function for optimally processing numbers less than 8.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">//%compiler: clang</span>
+<span class="c1">//%cflags: -fopenmp</span>
+
+<span class="cm">/*</span>
+<span class="cm">* name:       metadirective.5</span>
+<span class="cm">* type:       C++</span>
+<span class="cm">* version:    omp_5.0</span>
+<span class="cm">*/</span><span class="w"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="c1">// revised Fibonacci from tasking.4.c example</span>
+
+<span class="n">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">bool</span><span class="w"> </span><span class="n">tasking</span><span class="o">&gt;</span><span class="w"></span>
+<span class="kt">int</span><span class="w"> </span><span class="n">fib</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">tasking</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">n</span><span class="o">&lt;</span><span class="mi">8</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// serial/taskless cutoff for n&lt;8</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">fib</span><span class="o">&lt;</span><span class="nb">false</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">                when(user={condition(tasking)}: task shared(i))</span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">i</span><span class="o">=</span><span class="n">fib</span><span class="o">&lt;</span><span class="n">tasking</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="mi">-1</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">                when(user={condition(tasking)}: task shared(j))</span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="n">j</span><span class="o">=</span><span class="n">fib</span><span class="o">&lt;</span><span class="n">tasking</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="mi">-2</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="w">    </span><span class="cp">#pragma omp metadirective \</span>
+<span class="cp">                when(user={condition(tasking)}: taskwait)</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="cp">#pragma omp parallel</span>
+<span class="w">  </span><span class="cp">#pragma omp single</span>
+<span class="w">  </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;fib(%i) = %i</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">fib</span><span class="o">&lt;</span><span class="nb">true</span><span class="o">&gt;</span><span class="p">(</span><span class="n">n</span><span class="p">));</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+<span class="c1">// OUTPUT:</span>
+<span class="c1">// fib(15) = 610</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "native"
+        },
+        kernelOptions: {
+            kernelName: "native",
+            path: "./contents/Chap_program_control"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'native'</script>
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="6_declare_variant_Directive.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">12.6. </span><strong>declare</strong> <strong>variant</strong> Directive</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="8_Nested_Loop_Constructs.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">12.8. </span>Nested Loop Constructs</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By The OpenMP Community<br/>
+    
+        &copy; <a href="../../copyright.html">Copyright</a> 2021.<br/>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
