@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>5.3. Task Dependences &#8212; OpenMP Application Programming Interface Examples</title>
     
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -39,18 +37,18 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
     <script src="../../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
-    <script async="async" src="https://unpkg.com/thebe@0.5.1/lib/index.js"></script>
-    <script>
-        const thebe_selector = ".thebe"
-        const thebe_selector_input = "pre"
-        const thebe_selector_output = ".output"
-    </script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -64,7 +62,21 @@
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -73,9 +85,10 @@
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -93,14 +106,15 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Welcome to OMP Jupyter Book
+                </a>
+            </li>
+        </ul>
         <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../../intro.html">
-   Welcome to OMP Jupyter Book
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="../Title_Page.html">
    Cover
@@ -1102,107 +1116,209 @@
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/contents/Chap_tasking/3_Task_Dependences.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/passlab/Examples"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Chap_tasking/3_Task_Dependences.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_tasking/3_Task_Dependences.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="../../_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/passlab/Examples/main?urlpath=lab/tree/notebook/contents/Chap_tasking/3_Task_Dependences.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/passlab/Examples"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/passlab/Examples/issues/new?title=Issue%20on%20page%20%2Fcontents/Chap_tasking/3_Task_Dependences.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/contents/Chap_tasking/3_Task_Dependences.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#flow-dependence">
    5.3.1. Flow Dependence
@@ -1254,12 +1370,11 @@
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Task Dependences</h1>
@@ -1327,13 +1442,14 @@
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="section" id="task-dependences">
-<h1><span class="section-number">5.3. </span>Task Dependences<a class="headerlink" href="#task-dependences" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="flow-dependence">
-<h2><span class="section-number">5.3.1. </span>Flow Dependence<a class="headerlink" href="#flow-dependence" title="Permalink to this headline">¶</a></h2>
+  <section id="task-dependences">
+<h1><span class="section-number">5.3. </span>Task Dependences<a class="headerlink" href="#task-dependences" title="Permalink to this headline">#</a></h1>
+<section id="flow-dependence">
+<h2><span class="section-number">5.3.1. </span>Flow Dependence<a class="headerlink" href="#flow-dependence" title="Permalink to this headline">#</a></h2>
 <p>This example shows a simple flow dependence using a <strong>depend</strong>  clause on the <strong>task</strong> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1390,9 +1506,9 @@
 </div>
 </div>
 <p>The program will always print  <strong>“</strong> x = 2 <strong>“</strong> , because the <strong>depend</strong>  clauses enforce the ordering of the tasks. If the <strong>depend</strong> clauses had been  omitted, then the tasks could execute in any order and the program and the program  would have a race condition.</p>
-</div>
-<div class="section" id="anti-dependence">
-<h2><span class="section-number">5.3.2. </span>Anti-dependence<a class="headerlink" href="#anti-dependence" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="anti-dependence">
+<h2><span class="section-number">5.3.2. </span>Anti-dependence<a class="headerlink" href="#anti-dependence" title="Permalink to this headline">#</a></h2>
 <p>This example shows an anti-dependence using the <strong>depend</strong>  clause on the <strong>task</strong> construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1449,9 +1565,9 @@
 </div>
 </div>
 <p>The program will always print  <strong>“</strong> x = 1 <strong>“</strong> , because the <strong>depend</strong>  clauses enforce the ordering of the tasks. If the <strong>depend</strong> clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
-</div>
-<div class="section" id="output-dependence">
-<h2><span class="section-number">5.3.3. </span>Output Dependence<a class="headerlink" href="#output-dependence" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="output-dependence">
+<h2><span class="section-number">5.3.3. </span>Output Dependence<a class="headerlink" href="#output-dependence" title="Permalink to this headline">#</a></h2>
 <p><strong>task dependences!output dependence</strong></p>
 <p>This example shows an output dependence using the <strong>depend</strong>  clause on the <strong>task</strong> construct.</p>
 <div class="cell docutils container">
@@ -1511,9 +1627,9 @@
 </div>
 </div>
 <p>The program will always print  <strong>“</strong> x = 2 <strong>“</strong> , because the <strong>depend</strong>  clauses enforce the ordering of the tasks. If the <strong>depend</strong> clauses had been  omitted, then the tasks could execute in any order and the program would have a  race condition.</p>
-</div>
-<div class="section" id="concurrent-execution-with-dependences">
-<h2><span class="section-number">5.3.4. </span>Concurrent Execution with Dependences<a class="headerlink" href="#concurrent-execution-with-dependences" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="concurrent-execution-with-dependences">
+<h2><span class="section-number">5.3.4. </span>Concurrent Execution with Dependences<a class="headerlink" href="#concurrent-execution-with-dependences" title="Permalink to this headline">#</a></h2>
 <p>In this example we show potentially concurrent execution of tasks using multiple  flow dependences expressed using the <strong>depend</strong> clause on the <strong>task</strong>  construct.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1581,9 +1697,9 @@
 </div>
 </div>
 <p>The last two tasks are dependent on the first task. However, there is no dependence  between the last two tasks, which may execute in any order (or concurrently if  more than one thread is available). Thus, the possible outputs are  <strong>“</strong> x  + 1 = 3. x + 2 = 4.  <strong>“</strong>  and  <strong>“</strong> x + 2 = 4. x + 1 = 3.  <strong>“</strong> .  If the <strong>depend</strong> clauses had been omitted, then all of the tasks could execute  in any order and the program would have a race condition.</p>
-</div>
-<div class="section" id="matrix-multiplication">
-<h2><span class="section-number">5.3.5. </span>Matrix multiplication<a class="headerlink" href="#matrix-multiplication" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="matrix-multiplication">
+<h2><span class="section-number">5.3.5. </span>Matrix multiplication<a class="headerlink" href="#matrix-multiplication" title="Permalink to this headline">#</a></h2>
 <p>This example shows a task-based blocked matrix multiplication. Matrices are of  NxN elements, and the multiplication is implemented using blocks of BSxBS elements.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1658,9 +1774,9 @@
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="taskwait-with-dependences">
-<h2><span class="section-number">5.3.6. </span><strong>taskwait</strong> with Dependences<a class="headerlink" href="#taskwait-with-dependences" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="taskwait-with-dependences">
+<h2><span class="section-number">5.3.6. </span><strong>taskwait</strong> with Dependences<a class="headerlink" href="#taskwait-with-dependences" title="Permalink to this headline">#</a></h2>
 <p>In this subsection three examples illustrate how the <strong>depend</strong> clause can be applied to a <strong>taskwait</strong> construct to make the generating task wait for specific child tasks to complete. This is an OpenMP 5.0 feature.  In the same manner that dependences can order executions among child tasks with <strong>depend</strong> clauses on <strong>task</strong> constructs, the generating task can be scheduled to wait on child tasks at a <strong>taskwait</strong> before it can proceed.</p>
 <p>Note: Since the <strong>depend</strong> clause on a <strong>taskwait</strong> construct relaxes the default synchronization behavior (waiting for all children to finish), it is important to realize that child tasks that are not predecessor tasks, as determined by the <strong>depend</strong> clause of the <strong>taskwait</strong> construct, may be running concurrently while the generating task is executing after the taskwait.</p>
 <p>In the first example the generating task waits at the <strong>taskwait</strong> construct for the completion of the first child task because a dependence on the first task is produced by  <em>x</em>  with an <strong>in</strong> dependence type within the <strong>depend</strong> clause of the <strong>taskwait</strong> construct. Immediately after the first <strong>taskwait</strong> construct it is safe to access the  <em>x</em>  variable by the generating task, as shown in the print statement. There is no completion restraint on the second child task. Hence, immediately after the first <strong>taskwait</strong> it is unsafe to access the  <em>y</em>  variable since the second child task may still be executing. The second <strong>taskwait</strong> ensures that the second child task has completed; hence it is safe to access the  <em>y</em>  variable in the following print statement.</p>
@@ -1940,9 +2056,9 @@
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="mutually-exclusive-execution-with-dependences">
-<h2><span class="section-number">5.3.7. </span>Mutually Exclusive Execution with Dependences<a class="headerlink" href="#mutually-exclusive-execution-with-dependences" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="mutually-exclusive-execution-with-dependences">
+<h2><span class="section-number">5.3.7. </span>Mutually Exclusive Execution with Dependences<a class="headerlink" href="#mutually-exclusive-execution-with-dependences" title="Permalink to this headline">#</a></h2>
 <p>In this example we show a series of tasks, including mutually exclusive tasks, expressing dependences using the <strong>depend</strong> clause on the <strong>task</strong> construct.</p>
 <p>The program will always print 6. Tasks T1, T2 and T3 will be scheduled first, in any order. Task T4 will be scheduled after tasks T1 and T2 are completed. T5 will be scheduled after tasks T1 and T3 are completed. Due to the <strong>mutexinoutset</strong> dependence type on <strong>c</strong>, T4 and T5 may be scheduled in any order with respect to each other, but not at the same time. Tasks T6 will be scheduled after both T4 and T5 are completed.</p>
 <div class="cell docutils container">
@@ -2086,9 +2202,9 @@
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="multidependences-using-iterators">
-<h2><span class="section-number">5.3.8. </span>Multidependences Using Iterators<a class="headerlink" href="#multidependences-using-iterators" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="multidependences-using-iterators">
+<h2><span class="section-number">5.3.8. </span>Multidependences Using Iterators<a class="headerlink" href="#multidependences-using-iterators" title="Permalink to this headline">#</a></h2>
 <p>The following example uses an iterator to define a dynamic number of dependences.</p>
 <p>In the <strong>single</strong> construct of a parallel region a loop generates n tasks and each task has an <strong>out</strong> dependence specified through an element of the  <em>v</em>  array.  This is followed by a single task that defines an <strong>in</strong> dependence on each element of the array.  This is accomplished by using the <strong>iterator</strong> modifier in the <strong>depend</strong> clause, supporting a dynamic number of dependences ( <em>n</em>  here).</p>
 <p>The task for the  <em>print_all_elements</em>  function is not executed until all dependences prescribed (or registered) by the iterator are fulfilled; that is, after all the tasks generated by the loop have completed.</p>
@@ -2188,9 +2304,9 @@
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="dependence-for-undeferred-tasks">
-<h2><span class="section-number">5.3.9. </span>Dependence for Undeferred Tasks<a class="headerlink" href="#dependence-for-undeferred-tasks" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="dependence-for-undeferred-tasks">
+<h2><span class="section-number">5.3.9. </span>Dependence for Undeferred Tasks<a class="headerlink" href="#dependence-for-undeferred-tasks" title="Permalink to this headline">#</a></h2>
 <p>In the following example, we show that even if a task is undeferred as specified by an <strong>if</strong> clause that evaluates to  <em>false</em> , task dependences are still honored.</p>
 <p>The <strong>depend</strong> clauses of the first and second explicit tasks specify that the first task is completed before the second task.</p>
 <p>The second explicit task has an <strong>if</strong> clause that evaluates to  <em>false</em> . This means that the execution of the generating task (the implicit task of the <strong>single</strong> region) must be suspended until the second explicit task is completed. But, because of the dependence, the first explicit task must complete first, then the second explicit task can execute and complete, and only then  the generating task can resume to the print statement. Thus, the program will always print ” <strong>x = 2</strong> “.</p>
@@ -2376,8 +2492,8 @@ end program
 </div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -2401,9 +2517,11 @@ end program
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="2_Task_Priority.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -2419,24 +2537,28 @@ end program
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By The OpenMP Community<br/>
+  
+      &copy; <a href="../../copyright.html">Copyright</a> 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By The OpenMP Community<br/>
-    
-        &copy; <a href="../../copyright.html">Copyright</a> 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
